@@ -39,6 +39,7 @@ const key = computed(() => {
   .app-main {
     /* 84 = navbar + tags-view = 50 + 34 */
     min-height: calc(100vh - 84px);
+    padding: 0 20px;
   }
   .fixed-header + .app-main {
     padding-top: 84px;

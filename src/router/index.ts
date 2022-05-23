@@ -1,4 +1,3 @@
-import { fa } from 'element-plus/lib/locale'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
 const Layout = () => import("@/layout/index.vue")
 
@@ -38,7 +37,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
           icon: "dashboard",
           affix: true
         }
-      },
+      }
     ]
   },
   {
@@ -59,18 +58,35 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   },
 
   {
-    path: "/firstForm",
-    redirect: "/firstForm/index",
+    path: "/demandApply",
+    redirect: "/demandApply/index",
     component: Layout,
-    children:[
+    children: [
       {
-        path: "/firstForm/index",
-        component: () => import("@/views/FirstForm/index.vue"),
-        name: "firstForm",
+        path: "/demandApply/index",
+        component: () => import("@/views/demandApply/index.vue"),
+        name: "demandApply",
         meta: {
-          title: "第一个表单",
+          title: "需求申请",
           affix: true,
-          icon: "firstform"
+          icon: "demandApply"
+        }
+      }
+    ]
+  },
+  {
+    path: "/secondForm",
+    redirect: "/secondForm/index",
+    component: Layout,
+    children: [
+      {
+        path: "/secondForm/index",
+        component: () => import("@/views/secondForm/index.vue"),
+        name: "secondForm",
+        meta: {
+          title: "核价处理",
+          affix: true,
+          icon: "secondForm"
         }
       }
     ]
