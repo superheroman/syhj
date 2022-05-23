@@ -1,3 +1,4 @@
+import { fa } from 'element-plus/lib/locale'
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router"
 const Layout = () => import("@/layout/index.vue")
 
@@ -37,7 +38,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
           icon: "dashboard",
           affix: true
         }
-      }
+      },
     ]
   },
   {
@@ -52,6 +53,24 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "unocss",
           icon: "unocss"
+        }
+      }
+    ]
+  },
+
+  {
+    path: "/firstForm",
+    redirect: "/firstForm/index",
+    component: Layout,
+    children:[
+      {
+        path: "/firstForm/index",
+        component: () => import("@/views/FirstForm/index.vue"),
+        name: "firstForm",
+        meta: {
+          title: "第一个表单",
+          affix: true,
+          icon: "firstform"
         }
       }
     ]
