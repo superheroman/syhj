@@ -92,6 +92,57 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/electronicImport",
+    redirect: "/electronicImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/electronicImport/index",
+        component: () => import("@/views/electronicImport/index.vue"),
+        name: "electronicImport",
+        meta: {
+          title: "电子料导入",
+          affix: true,
+          icon: "electronicImport"
+        }
+      }
+    ]
+  },
+  {
+    path: "/otherImport",
+    redirect: "/otherImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/otherImport/index",
+        component: () => import("@/views/otherImport/index.vue"),
+        name: "otherImport",
+        meta: {
+          title: "其它导入",
+          affix: true,
+          icon: "otherImport"
+        }
+      }
+    ]
+  },
+  {
+    path: "/structuralMaterialImport",
+    redirect: "/structuralMaterialImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/structuralMaterialImport/index",
+        component: () => import("@/views/structuralMaterialImport/index.vue"),
+        name: "structuralMaterialImport",
+        meta: {
+          title: "结构料导入",
+          affix: true,
+          icon: "structuralMaterialImport"
+        }
+      }
+    ]
+  },
+  {
     path: "/link",
     component: Layout,
     children: [
