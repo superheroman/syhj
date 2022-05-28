@@ -1,5 +1,12 @@
 <template>
   <div class="demand-apply">
+    <div class="demand-apply__step">
+      <el-steps :active="1">
+        <el-step title="Step 1" description="Some description" />
+        <el-step title="Step 2" description="Some description" />
+        <el-step title="Step 3" description="Some description" />
+      </el-steps>
+    </div>
     <el-form>
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
@@ -432,6 +439,9 @@ const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
 
 <style lang="scss" scoped>
 .demand-apply {
+  &__step {
+    margin: 20px 0;
+  }
   &__card {
     margin: 10px 0;
   }
