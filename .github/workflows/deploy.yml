@@ -28,7 +28,7 @@ jobs:
         run: npm install && pnpm build:prod
 
       - name: Deploy
-        uses: NBSeven/syhj
+        uses: JamesIves/github-pages-deploy-action@releases/v3
         with:
           BRANCH: main
           FOLDER: dist
