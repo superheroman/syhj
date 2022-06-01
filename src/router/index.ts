@@ -34,8 +34,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "Dashboard",
         meta: {
           title: "首页",
-          icon: "dashboard",
-          affix: true
+          icon: "dashboard"
+          // affix: true
         }
       }
     ]
@@ -68,7 +68,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "demandApply",
         meta: {
           title: "需求申请",
-          affix: true,
           icon: "demandApply"
         }
       }
@@ -85,7 +84,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "secondForm",
         meta: {
           title: "核价处理",
-          affix: true,
           icon: "secondForm"
         }
       }
@@ -102,7 +100,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "electronicImport",
         meta: {
           title: "电子料导入",
-          affix: true,
           icon: "electronicImport"
         }
       }
@@ -119,7 +116,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "otherImport",
         meta: {
           title: "其它导入",
-          affix: true,
           icon: "otherImport"
         }
       }
@@ -136,7 +132,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "structuralMaterialImport",
         meta: {
           title: "结构料导入",
-          affix: true,
           icon: "structuralMaterialImport"
         }
       }
@@ -153,7 +148,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "processManagement",
         meta: {
           title: "工序管理",
-          affix: true,
           icon: "processManagement"
         }
       }
@@ -170,7 +164,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "todoCenter",
         meta: {
           title: "待办中心",
-          affix: true,
           icon: "todoCenter"
         }
       }

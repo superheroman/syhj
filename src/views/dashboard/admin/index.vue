@@ -56,6 +56,10 @@
 </template>
 <script setup lang="ts">
 import { reactive, ref, onMounted } from "vue"
+import iconBlue from "/src/assets/layout/dashboard-icon-blue.svg"
+import iconRed from "/src/assets/layout/dashboard-icon-red.svg"
+import iconGreen from "/src/assets/layout/dashboard-icon-green.svg"
+import iconYellow from "/src/assets/layout/dashboard-icon-yellow.svg"
 import * as echarts from "echarts"
 // import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive } from "vue"
 let data1 = {
@@ -193,25 +197,25 @@ let dashboardPannel = reactive([
     title: "BOM成本（含损耗）",
     value: "34",
     percentage: "+25%",
-    img: "/src/assets/layout/dashboard-icon-blue.svg"
+    img: iconBlue
   },
   {
     title: "制造成本",
     value: "34",
     percentage: "+25%",
-    img: "/src/assets/layout/dashboard-icon-red.svg"
+    img: iconRed
   },
   {
     title: "物流成本",
     value: "34",
     percentage: "+25%",
-    img: "/src/assets/layout/dashboard-icon-green.svg"
+    img: iconGreen
   },
   {
     title: "质量成本",
     value: "34",
     percentage: "+25%",
-    img: "/src/assets/layout/dashboard-icon-yellow.svg"
+    img: iconYellow
   }
 ])
 </script>
