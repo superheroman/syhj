@@ -118,6 +118,11 @@ const objectSpanMethod = ({ rowIndex, columnIndex }: SpanMethodProps) => {
         colspan: 0
       }
     }
+  } else {
+    return {
+      rowspan: 0,
+      colspan: 0
+    }
   }
 }
 const tableData: User[] = reactive([
