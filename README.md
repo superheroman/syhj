@@ -1,11 +1,3 @@
-## ⚡️ 简介
-
-一个免费开源的中后台管理系统基础解决方案，基于 Vue3、TypeScript、Element-Plus、Pinia 和 Vite 等主流技术.
-
-模板代码是从 [v3-admin](https://github.com/un-pany/v3-admin) 迁移而来，脚手架从 vue-cli 5.x 切换到了 vite 2.9.x，并作了一些繁琐的适配.
-
-更推荐大家使用该 vite 版本！以后的重心也会从 [v3-admin](https://github.com/un-pany/v3-admin) 偏向本仓库.
-
 ## 特性
 
 - **Vue3**：采用 Vue3 + script setup 最新的 Vue3 组合式 API
@@ -31,20 +23,6 @@
 - **错误页面**: 401、404
 - **Dashboard**：根据不同用户显示不同的 Dashboard 页面
 - **其他内置功能**：SVG、动态侧边栏、动态面包屑、标签页快捷导航、Screenfull 全屏、自适应收缩侧边栏（兼容移动端）
-
-## 📚 文档
-
-[简体中文](https://juejin.cn/post/7089377403717287972)
-
-## 国内仓库
-
-[Gitee](https://gitee.com/un-pany/v3-admin-vite)
-
-## 预览
-
-| 位置         | 账号            | 链接                                            |
-| ------------ | --------------- | ----------------------------------------------- |
-| github-pages | admin 或 editor | [链接](https://un-pany.github.io/v3-admin-vite) |
 
 ## 🚀 开发
 
@@ -112,16 +90,3 @@ pnpm lint
 - `types` 类型定义文件更改
 - `wip` 开发中
 - `mod` 不确定分类的修改
-
-## 可有可无的群
-
-QQ 群：1014374415（左）&& 加我微信，拉你进微信群（右）
-
-![qq.png](https://github.com/un-pany/v3-admin-vite/blob/main/src/assets/docs/qq.png)
-![wechat.png](https://github.com/un-pany/v3-admin-vite/blob/main/src/assets/docs/wechat.png)
-
-## 📄 License
-
-[MIT](https://github.com/un-pany/v3-admin-vite/blob/main/LICENSE)
-
-Copyright (c) 2022 pany
