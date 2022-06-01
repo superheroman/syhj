@@ -143,11 +143,45 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/processManagement",
+    redirect: "/processManagement/index",
+    component: Layout,
+    children: [
+      {
+        path: "/processManagement/index",
+        component: () => import("@/views/processManagement/index.vue"),
+        name: "processManagement",
+        meta: {
+          title: "工序管理",
+          affix: true,
+          icon: "processManagement"
+        }
+      }
+    ]
+  },
+  {
+    path: "/todoCenter",
+    redirect: "/todoCenter/index",
+    component: Layout,
+    children: [
+      {
+        path: "/todoCenter/index",
+        component: () => import("@/views/todoCenter/index.vue"),
+        name: "todoCenter",
+        meta: {
+          title: "待办中心",
+          affix: true,
+          icon: "todoCenter"
+        }
+      }
+    ]
+  },
+  {
     path: "/link",
     component: Layout,
     children: [
       {
-        path: "https://juejin.cn/post/7089377403717287972",
+        path: "https://www.baidu.com",
         component: () => {},
         name: "Link",
         meta: {

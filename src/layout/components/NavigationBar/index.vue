@@ -49,7 +49,7 @@ const state = reactive({
         <el-avatar :icon="UserFilled" :size="34" />
         <template #dropdown>
           <el-dropdown-menu>
-            <a target="_blank" href="https://juejin.cn/post/7089377403717287972">
+            <!-- <a target="_blank" href="https://juejin.cn/post/7089377403717287972">
               <el-dropdown-item>V3-Admin-Vite 中文文档</el-dropdown-item>
             </a>
             <a target="_blank" href="https://github.com/un-pany/v3-admin-vite">
@@ -69,7 +69,7 @@ const state = reactive({
             </a>
             <a target="_blank" href="https://gitee.com/un-pany/v3-admin">
               <el-dropdown-item>V3-Admin Gitee</el-dropdown-item>
-            </a>
+            </a> -->
             <el-dropdown-item divided @click="state.logout">
               <span style="display: block">退出登录</span>
             </el-dropdown-item>

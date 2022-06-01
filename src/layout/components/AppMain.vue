@@ -10,13 +10,15 @@ const key = computed(() => {
 
 <template>
   <section class="app-main">
-    <router-view v-slot="{ Component }">
-      <transition name="fade-transform" mode="out-in">
-        <!-- <keep-alive> -->
-        <component :is="Component" :key="key" />
-        <!-- </keep-alive> -->
-      </transition>
-    </router-view>
+    <el-scrollbar style="height: 100%">
+      <router-view v-slot="{ Component }">
+        <transition name="fade-transform" mode="out-in">
+          <!-- <keep-alive> -->
+          <component :is="Component" :key="key" />
+          <!-- </keep-alive> -->
+        </transition>
+      </router-view>
+    </el-scrollbar>
   </section>
 </template>
 

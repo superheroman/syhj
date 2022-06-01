@@ -80,9 +80,10 @@ const state = reactive({
   <div class="login-container">
     <ThemeSwitch class="theme-switch" />
     <div class="login-card">
-      <div class="title">
+      <!-- <div class="title">
         <img src="@/assets/layout/logo-text-2.png" />
-      </div>
+      </div> -->
+      <h1 style="text-align: center; width: 100%">核价系统</h1>
       <div class="content">
         <el-form ref="loginFormDom" :model="state.loginForm" :rules="state.loginRules" @keyup.enter="state.handleLogin">
           <el-form-item prop="username">
