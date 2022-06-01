@@ -25,11 +25,10 @@ jobs:
           version: latest
 
       - name: Build
-        run: pnpm install && pnpm build:prod
+        run: npm install && pnpm build:prod
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: NBSeven/syhj
         with:
-          ACCESS_TOKEN: ${{ secrets.V3_ADMIN_VITE }}
-          BRANCH: gh-pages
+          BRANCH: main
           FOLDER: dist
