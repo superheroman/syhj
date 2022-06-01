@@ -28,7 +28,7 @@ jobs:
         run: npm install && pnpm build:prod
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
+        uses: JamesIves/github-pages-deploy-action@4.2.0
         with:
           ACCESS_TOKEN: ${{ secrets.V3_ADMIN_VITE }}
           BRANCH: main
