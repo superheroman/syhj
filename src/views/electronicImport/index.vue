@@ -106,10 +106,10 @@ interface User {
 }
 
 const objectSpanMethod = ({ rowIndex, columnIndex }: SpanMethodProps) => {
-  if (columnIndex === 1) {
-    if (rowIndex % 3 === 0) {
+  if (columnIndex === 0) {
+    if (rowIndex % 2 === 0) {
       return {
-        rowspan: 3,
+        rowspan: 2,
         colspan: 1
       }
     } else {
@@ -117,6 +117,11 @@ const objectSpanMethod = ({ rowIndex, columnIndex }: SpanMethodProps) => {
         rowspan: 0,
         colspan: 0
       }
+    }
+  } else {
+    return {
+      rowspan: 0,
+      colspan: 0
     }
   }
 }
