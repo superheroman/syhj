@@ -1,13 +1,7 @@
 <template>
   <div class="demand-apply">
-    <div class="demand-apply__step">
-      <el-steps :active="1">
-        <el-step title="Step 1" description="Some description" />
-        <el-step title="Step 2" description="Some description" />
-        <el-step title="Step 3" description="Some description" />
-      </el-steps>
-    </div>
     <el-form>
+      <!-- 拟稿人信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="24">
@@ -36,21 +30,32 @@
           </el-col>
           <el-col :span="4">
             <el-form-item label="拟稿部门:">
-              <el-date-picker type="date" placeholder="Pick a day" />
+              <el-input />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="拟稿日期:"> <el-input /> </el-form-item
           ></el-col>
           <el-col :span="4">
-            <el-form-item label="流程编号:">
+            <el-form-item label="单据编号:">
               <el-input />
             </el-form-item>
           </el-col>
         </el-row>
       </el-card>
+      <!-- 项目信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="项目名称:">
+              <el-input />
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="客户名称:">
+              <el-input />
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
             <el-form-item label="客户性质:">
               <el-select v-model="value" placeholder="Select">
@@ -59,7 +64,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="终端:">
+            <el-form-item label="终端名称:">
               <el-input />
             </el-form-item>
           </el-col>
@@ -73,105 +78,161 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-form-item label="客户指定:">
-              <el-radio-group v-model="radio1" class="ml-4">
-                <el-radio label="1">是</el-radio>
-                <el-radio label="2">否</el-radio>
-              </el-radio-group>
+            <el-form-item label="报价形式:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="品牌:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="型号:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="价格:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="客户供应:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="客户目标价:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="20">
-            <el-form-item label="客户特殊性要求:">
-              <el-input type="textarea" :rows="10" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-card>
-      <el-card class="demand-apply__card">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <el-form-item label="年份:">
-              <el-input />
+            <el-form-item label="样品报价类型:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="核价梯度:">
-              <el-input />
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <el-form-item label="车厂/车型:">
-              <el-tree-select v-model="value1" :data="data" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="7">
-            <el-form-item label="产品类别:">
-              <el-checkbox-group v-model="checkList">
-                <el-checkbox label="前视感知" />
-                <el-checkbox label="外摄显像" />
-                <el-checkbox label="舱内监测" />
-                <el-checkbox label="其它类别" />
-              </el-checkbox-group>
+            <el-form-item label="SOP时间:">
+              <el-date-picker type="date" placeholder="Pick a day" />
             </el-form-item>
           </el-col>
           <el-col :span="4">
             <el-form-item label="项目周期:">
-              <el-input />
+              <el-date-picker type="date" placeholder="Pick a day" />
             </el-form-item>
           </el-col>
         </el-row>
-        <div class="demand-apply__mass-production-table">
-          <h4>量产7年内信息</h4>
-          <el-table :data="tableData" style="width: 100%" border>
-            <el-table-column label="年份" width="180">
-              <template #default="scope">
-                <div style="display: flex; align-items: center">
-                  <el-icon><timer /></el-icon>
-                  <span style="margin-left: 10px">{{ scope.row.date }}</span>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="终端走量(K)" />
-            <el-table-column prop="name" label="终端走量(%)" />
-            <el-table-column prop="name" label="年度返利要求" />
-            <el-table-column prop="name" label="一次性折让率" />
-            <!-- <el-table-column label="Name" width="180">
-              <template #default="scope">
-                <el-popover effect="light" trigger="hover" placement="top" width="auto">
-                  <template #default>
-                    <div>name: {{ scope.row.name }}</div>
-                    <div>address: {{ scope.row.address }}</div>
-                  </template>
-                  <template #reference>
-                    <el-tag>{{ scope.row.name }}</el-tag>
-                  </template>
-                </el-popover>
-              </template>
-            </el-table-column> -->
-            <!-- <el-table-column label="Operations">
-              <template #default="scope">
-                <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
-              </template>
-            </el-table-column> -->
-          </el-table>
-        </div>
+        <h5>项目走量</h5>
+        <h6>终端走量</h6>
+        <el-table :data="tableData" style="width: 100%" border :summary-method="getSummaries">
+          <el-table-column label="车厂" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="车型" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="合计" />
+        </el-table>
+        <h6>模组数量</h6>
+        <el-table :data="tableData" style="width: 100%" border :summary-method="getSummaries">
+          <el-table-column type="index" width="50" />
+          <el-table-column label="零件号" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.number" />
+            </template>
+          </el-table-column>
+          <el-table-column label="零件名称" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.name" />
+            </template>
+          </el-table-column>
+          <el-table-column label="车型总量" width="180" prop="name" />
+          <el-table-column label="模组搭载率" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.name" />
+            </template>
+          </el-table-column>
+          <el-table-column label="单车产品数量" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.name" />
+            </template>
+          </el-table-column>
+          <el-table-column label="模组总量" prop="name" />
+        </el-table>
+        <h6>要求</h6>
+        <el-table :data="tableData" style="width: 100%" border>
+          <el-table-column label="车厂" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+        </el-table>
         <el-row :gutter="20">
+          <el-col :span="4">
+            <el-form-item label="模具费分摊:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="治具费分摊:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="设备费分摊:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="信赖性费用分摊:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="开发费分摊:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="落地工厂:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
+      <!-- 产品信息 -->
+      <el-card class="demand-apply__card">
+        <h6>产品信息</h6>
+        <h6>excel空余</h6>
+        <h6>客户指定/供应详情</h6>
+        <el-table :data="tableData" style="width: 100%" border>
+          <el-table-column prop="name" label="类型" />
+          <el-table-column prop="name" label="零件名称" />
+          <el-table-column prop="name" label="核心部件" />
+          <el-table-column prop="name" label="品牌/型号" />
+          <el-table-column label="单价">
+            <template #default="{ row }">
+              <el-input v-model="row.prize" />
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-card>
+      <!-- 商务需求 -->
+      <el-card class="demand-apply__card">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <el-form-item label="贸易方式:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
             <el-form-item label="销售类型:">
               <el-select v-model="value" placeholder="Select">
@@ -180,46 +241,43 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="贸易方式:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="付款方式:"> <el-input /> </el-form-item
-          ></el-col>
+            <el-form-item label="付款类型:"> <el-input /> </el-form-item>
+          </el-col>
           <el-col :span="4">
             <el-form-item label="报价币种:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select> </el-form-item
-          ></el-col>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="4">
-            <el-form-item label="汇率:"> <el-input /> </el-form-item
-          ></el-col>
+            <el-form-item label="客户目标价:"> <el-input /> </el-form-item>
+          </el-col>
           <el-col :span="4">
-            <el-form-item label="产品名称:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="模组搭载率:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="单台车搭载数量:"> <el-input /> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="开发模具是否分摊:">
-              <el-select v-model="value" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select> </el-form-item
-          ></el-col>
-          <el-col :span="4">
-            <el-form-item label="落地工厂:"> <el-input /> </el-form-item
-          ></el-col>
+            <el-form-item label="汇率:"> <el-input /> </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="客户特殊性要求:">
               <el-input type="textarea" :rows="10" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="交货地点:">
-              <el-input type="textarea" :rows="10" />
+        </el-row>
+      </el-card>
+      <!-- 其它 -->
+      <el-card class="demand-apply__card">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <el-form-item label="运输方式:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="包装方式:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -228,8 +286,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="4">
-            <el-form-item label="项目经理:"> <el-input :suffix-icon="Search" /> </el-form-item
-          ></el-col>
+            <el-form-item label="项目经理:"> <el-input :suffix-icon="Search" /> </el-form-item>
+          </el-col>
           <el-col :span="4">
             <el-form-item>
               <el-upload
@@ -241,27 +299,84 @@
                 :limit="1"
               >
                 <el-button type="primary">SOR文件上传</el-button>
-                <!-- <template #tip>
-                  <div class="el-upload__tip">jpg/png files with a size less than 500KB.</div>
-                </template> -->
               </el-upload>
-            </el-form-item></el-col
-          >
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="交货地点:">
+              <el-input type="textarea" :rows="10" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-card>
     </el-form>
+    <div class="demand-apply__step">
+      <el-steps :active="1" direction="vertical">
+        <el-step title="Step 1" description="Some description" />
+        <el-step title="Step 2" description="Some description" />
+        <el-step title="Step 3" description="Some description" />
+      </el-steps>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
 // import { reactive, ref } from "vue"
-import { ref } from "vue"
+import { ref, reactive } from "vue"
 // import { useRouter } from "vue-router"
-import { Timer, Search } from "@element-plus/icons-vue"
+import { Search } from "@element-plus/icons-vue"
 // import type { UploadProps, UploadUserFile, ElMessage, ElMessageBox } from "element-plus"
 import type { UploadProps } from "element-plus"
+import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 
+interface Product {
+  id: string
+  name: string
+  amount1: string
+  amount2: string
+  amount3: number
+}
+interface SummaryMethodProps<T = Product> {
+  columns: TableColumnCtx<T>[]
+  data: T[]
+}
+
+const getSummaries = (param: SummaryMethodProps) => {
+  const { columns, data } = param
+  const sums: string[] = []
+  columns.forEach((column, index) => {
+    if (index === 0) {
+      sums[index] = "Total Cost"
+      return
+    }
+    const values = data.map((item) => Number(item[column.property]))
+    if (!values.every((value) => Number.isNaN(value))) {
+      sums[index] = `$ ${values.reduce((prev, curr) => {
+        const value = Number(curr)
+        if (!Number.isNaN(value)) {
+          return prev + curr
+        } else {
+          return prev
+        }
+      }, 0)}`
+    } else {
+      sums[index] = "N/A"
+    }
+  })
+
+  return sums
+}
 const value = ref("")
-const radio1 = ref("")
+
+const colYears = reactive([
+  {
+    year: 2022,
+    value: ""
+  },
+  {
+    year: 2023,
+    value: ""
+  }
+])
 const options = [
   {
     value: "Option1",
@@ -327,80 +442,80 @@ const tableData: User[] = [
     address: "No. 189, Grove St, Los Angeles"
   }
 ]
-const checkList = ref(["selected and disabled", "Option A"])
+// const checkList = ref(["selected and disabled", "Option A"])
 
-const value1 = ref()
+// const value1 = ref()
 
-const data = [
-  {
-    value: "1",
-    label: "Level one 1",
-    children: [
-      {
-        value: "1-1",
-        label: "Level two 1-1",
-        children: [
-          {
-            value: "1-1-1",
-            label: "Level three 1-1-1"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "2",
-    label: "Level one 2",
-    children: [
-      {
-        value: "2-1",
-        label: "Level two 2-1",
-        children: [
-          {
-            value: "2-1-1",
-            label: "Level three 2-1-1"
-          }
-        ]
-      },
-      {
-        value: "2-2",
-        label: "Level two 2-2",
-        children: [
-          {
-            value: "2-2-1",
-            label: "Level three 2-2-1"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    value: "3",
-    label: "Level one 3",
-    children: [
-      {
-        value: "3-1",
-        label: "Level two 3-1",
-        children: [
-          {
-            value: "3-1-1",
-            label: "Level three 3-1-1"
-          }
-        ]
-      },
-      {
-        value: "3-2",
-        label: "Level two 3-2",
-        children: [
-          {
-            value: "3-2-1",
-            label: "Level three 3-2-1"
-          }
-        ]
-      }
-    ]
-  }
-]
+// const data = [
+//   {
+//     value: "1",
+//     label: "Level one 1",
+//     children: [
+//       {
+//         value: "1-1",
+//         label: "Level two 1-1",
+//         children: [
+//           {
+//             value: "1-1-1",
+//             label: "Level three 1-1-1"
+//           }
+//         ]
+//       }
+//     ]
+//   },
+//   {
+//     value: "2",
+//     label: "Level one 2",
+//     children: [
+//       {
+//         value: "2-1",
+//         label: "Level two 2-1",
+//         children: [
+//           {
+//             value: "2-1-1",
+//             label: "Level three 2-1-1"
+//           }
+//         ]
+//       },
+//       {
+//         value: "2-2",
+//         label: "Level two 2-2",
+//         children: [
+//           {
+//             value: "2-2-1",
+//             label: "Level three 2-2-1"
+//           }
+//         ]
+//       }
+//     ]
+//   },
+//   {
+//     value: "3",
+//     label: "Level one 3",
+//     children: [
+//       {
+//         value: "3-1",
+//         label: "Level two 3-1",
+//         children: [
+//           {
+//             value: "3-1-1",
+//             label: "Level three 3-1-1"
+//           }
+//         ]
+//       },
+//       {
+//         value: "3-2",
+//         label: "Level two 3-2",
+//         children: [
+//           {
+//             value: "3-2-1",
+//             label: "Level three 3-2-1"
+//           }
+//         ]
+//       }
+//     ]
+//   }
+// ]
 
 // const fileList = ref<UploadUserFile[]>([
 //   {
@@ -441,6 +556,7 @@ const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
 .demand-apply {
   &__step {
     margin: 20px 0;
+    height: 400px;
   }
   &__card {
     margin: 10px 0;
