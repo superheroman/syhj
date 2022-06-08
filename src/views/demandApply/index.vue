@@ -210,6 +210,36 @@
       <el-card class="demand-apply__card">
         <h6>产品信息</h6>
         <h6>excel空余</h6>
+        <el-table :data="tableData" style="width: 100%" border>
+          <el-table-column label="零件名称" />
+          <el-table-column label="指定类型">
+            <template #default="{ row }">
+              <el-select v-model="row.type">
+                <el-option value="1">我司推荐</el-option>
+                <el-option value="2">客户指定</el-option>
+                <el-option value="3">客户供应</el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="Sensor" />
+          <el-table-column prop="name" label="Lens" />
+          <el-table-column prop="name" label="ISP" />
+          <el-table-column prop="name" label="串行芯片" />
+          <el-table-column prop="name" label="线缆" />
+          <el-table-column prop="name" label="LED" />
+          <el-table-column prop="name" label="制程" />
+          <el-table-column prop="name" label="安装位置" />
+          <el-table-column label="单价">
+            <template #default="{ row }">
+              <el-input v-model="row.prize" />
+            </template>
+          </el-table-column>
+          <el-table-column label="备注">
+            <template #default="{ row }">
+              <el-input v-model="row.prize" />
+            </template>
+          </el-table-column>
+        </el-table>
         <h6>客户指定/供应详情</h6>
         <el-table :data="tableData" style="width: 100%" border>
           <el-table-column prop="name" label="类型" />
