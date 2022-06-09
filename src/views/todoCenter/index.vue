@@ -25,8 +25,18 @@
         <el-tab-pane label="转发" name="second">Config</el-tab-pane>
         <el-tab-pane label="抄送" name="third">Role</el-tab-pane>
         <el-tab-pane label="已办" name="fourth">Task</el-tab-pane>
+        <el-tab-pane label="跟踪" name="fifth">Task</el-tab-pane>
       </el-tabs>
     </div>
+    <el-table :data="tableData" style="width: 100%" border>
+      <el-table-column label="零件名称" prop="name" />
+
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <el-link type="primary" :href="row.id">点击进入</el-link>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
@@ -41,6 +51,43 @@ import type { TabsPaneContext } from "element-plus"
 // import { Edit, View as IconView } from "@element-plus/icons-vue"
 
 const activeName = ref("first")
+interface User {
+  date: string
+  name: string
+  address: string
+}
+const tableData: User[] = [
+  {
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  },
+  {
+    date: "2023",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  },
+  {
+    date: "2024",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  },
+  {
+    date: "2025",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  },
+  {
+    date: "2026",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  },
+  {
+    date: "2027",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  }
+]
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
