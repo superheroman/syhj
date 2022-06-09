@@ -9,34 +9,34 @@
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="拟稿人:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="拟稿人工号:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="拟稿公司:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="拟稿部门:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="拟稿日期:"> <el-input /> </el-form-item
           ></el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="单据编号:">
               <el-input />
             </el-form-item>
@@ -46,29 +46,34 @@
       <!-- 项目信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
-          <el-col :span="8">
+          <el-col :span="6">
             <el-form-item label="项目名称:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
+            <el-form-item label="项目代码:">
+              <el-input />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="客户名称:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="客户性质:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="终端名称:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="终端性质:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -77,33 +82,33 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="报价形式:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="样品报价类型:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="SOP时间:">
               <el-date-picker type="date" placeholder="Pick a day" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="项目周期:">
               <el-date-picker type="date" placeholder="Pick a day" />
             </el-form-item>
           </el-col>
         </el-row>
         <h5>项目走量</h5>
-        <h6>终端走量</h6>
+        <h6>终端走量（PCS）</h6>
         <el-table :data="tableData" style="width: 100%" border :summary-method="getSummaries">
           <el-table-column label="车厂" width="180">
             <template #default="{ row }">
@@ -125,17 +130,24 @@
         <h6>模组数量</h6>
         <el-table :data="tableData" style="width: 100%" border :summary-method="getSummaries">
           <el-table-column type="index" width="50" />
-          <el-table-column label="零件号" width="180">
+          <el-table-column label="客户零件号" width="180">
             <template #default="{ row }">
               <el-input v-model="row.number" />
             </template>
           </el-table-column>
-          <el-table-column label="零件名称" width="180">
+          <el-table-column label="产品名称" width="180">
             <template #default="{ row }">
               <el-input v-model="row.name" />
             </template>
           </el-table-column>
-          <el-table-column label="车型总量" width="180" prop="name" />
+          <el-table-column label="产品小类" width="180">
+            <template #default="{ row }">
+              <el-select v-model="row.value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column label="市场份额" width="180" prop="name" />
           <el-table-column label="模组搭载率" width="180">
             <template #default="{ row }">
               <el-input v-model="row.name" />
@@ -150,7 +162,22 @@
         </el-table>
         <h6>要求</h6>
         <el-table :data="tableData" style="width: 100%" border>
-          <el-table-column label="车厂" width="180">
+          <el-table-column label="年份" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="年降率" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="年度返利要求" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="一次性折让率" width="180">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
@@ -162,42 +189,42 @@
           </el-table-column>
         </el-table>
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="模具费分摊:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="治具费分摊:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="设备费分摊:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="信赖性费用分摊:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="开发费分摊:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="落地工厂:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -210,31 +237,118 @@
       <el-card class="demand-apply__card">
         <h6>产品信息</h6>
         <h6>excel空余</h6>
+        <div class="demand-apply__btn-container">
+          <el-button type="primary" class="demand-apply__add-btn">新增产品</el-button>
+        </div>
         <el-table :data="tableData" style="width: 100%" border>
-          <el-table-column label="零件名称" />
-          <el-table-column label="指定类型">
+          <el-table-column label="产品名称" width="180" fixed="left" />
+          <el-table-column label="Sensor" width="400">
             <template #default="{ row }">
-              <el-select v-model="row.type">
-                <el-option value="1">我司推荐</el-option>
-                <el-option value="2">客户指定</el-option>
-                <el-option value="3">客户供应</el-option>
-              </el-select>
+              <el-input v-model="row.value" placeholder="名称">
+                <template #prepend>
+                  <el-select v-model="row.type">
+                    <el-option value="1">我司推荐</el-option>
+                    <el-option value="2">客户指定</el-option>
+                    <el-option value="3">客户供应</el-option>
+                  </el-select>
+                </template>
+                <template #append>
+                  <el-input v-model="row.value" placeholder="单价" />
+                </template>
+              </el-input>
             </template>
           </el-table-column>
-          <el-table-column prop="name" label="Sensor" />
-          <el-table-column prop="name" label="Lens" />
-          <el-table-column prop="name" label="ISP" />
-          <el-table-column prop="name" label="串行芯片" />
-          <el-table-column prop="name" label="线缆" />
-          <el-table-column prop="name" label="LED" />
-          <el-table-column prop="name" label="制程" />
-          <el-table-column prop="name" label="安装位置" />
-          <el-table-column label="单价">
+          <el-table-column label="Lens" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.prize" />
+              <el-input v-model="row.value" placeholder="名称">
+                <template #prepend>
+                  <el-select v-model="row.type">
+                    <el-option value="1">我司推荐</el-option>
+                    <el-option value="2">客户指定</el-option>
+                    <el-option value="3">客户供应</el-option>
+                  </el-select>
+                </template>
+                <template #append>
+                  <el-input v-model="row.value" placeholder="单价" />
+                </template>
+              </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="备注">
+          <el-table-column label="ISP" width="400">
+            <template #default="{ row }">
+              <el-input v-model="row.value" placeholder="名称">
+                <template #prepend>
+                  <el-select v-model="row.type">
+                    <el-option value="1">我司推荐</el-option>
+                    <el-option value="2">客户指定</el-option>
+                    <el-option value="3">客户供应</el-option>
+                  </el-select>
+                </template>
+                <template #append>
+                  <el-input v-model="row.value" placeholder="单价" />
+                </template>
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="串行芯片" width="400">
+            <template #default="{ row }">
+              <el-input v-model="row.value" placeholder="名称">
+                <template #prepend>
+                  <el-select v-model="row.type">
+                    <el-option value="1">我司推荐</el-option>
+                    <el-option value="2">客户指定</el-option>
+                    <el-option value="3">客户供应</el-option>
+                  </el-select>
+                </template>
+                <template #append>
+                  <el-input v-model="row.value" placeholder="单价" />
+                </template>
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="线缆" width="400">
+            <template #default="{ row }">
+              <el-input v-model="row.value" placeholder="名称">
+                <template #prepend>
+                  <el-select v-model="row.type">
+                    <el-option value="1">我司推荐</el-option>
+                    <el-option value="2">客户指定</el-option>
+                    <el-option value="3">客户供应</el-option>
+                  </el-select>
+                </template>
+                <template #append>
+                  <el-input v-model="row.value" placeholder="单价" />
+                </template>
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="LED" width="400">
+            <template #default="{ row }">
+              <el-input v-model="row.value" placeholder="名称">
+                <template #prepend>
+                  <el-select v-model="row.type">
+                    <el-option value="1">我司推荐</el-option>
+                    <el-option value="2">客户指定</el-option>
+                    <el-option value="3">客户供应</el-option>
+                  </el-select>
+                </template>
+                <template #append>
+                  <el-input v-model="row.value" placeholder="单价" />
+                </template>
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="制程" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="安装位置" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="备注" width="250">
             <template #default="{ row }">
               <el-input v-model="row.prize" />
             </template>
@@ -256,34 +370,34 @@
       <!-- 商务需求 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="贸易方式:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="销售类型:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="付款类型:"> <el-input /> </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="报价币种:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="客户目标价:"> <el-input /> </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="汇率:"> <el-input /> </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -296,29 +410,29 @@
       <!-- 其它 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="运输方式:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="包装方式:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="核价要求完成时间:">
               <el-date-picker type="date" placeholder="Pick a day" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="项目经理:"> <el-input :suffix-icon="Search" /> </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item>
               <el-upload
                 class="upload-demo"
@@ -593,6 +707,15 @@ const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
   }
   &__mass-production-table {
     margin: 20px 0;
+  }
+  &__btn-container {
+    height: 60px;
+    position: relative;
+  }
+  &__add-btn {
+    position: absolute;
+    right: 0px;
+    top: 15px;
   }
 }
 </style>
