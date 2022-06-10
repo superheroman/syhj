@@ -74,6 +74,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/partEntry",
+    redirect: "/partEntry/managerOperate",
+    component: Layout,
+    children: [
+      {
+        path: "/partEntry/managerOperate",
+        component: () => import("@/views/partEntry/managerOperate.vue"),
+        name: "managerOperate",
+        meta: {
+          title: "项目经理操作",
+          icon: "managerOperate"
+        }
+      }
+    ]
+  },
+  {
     path: "/secondForm",
     redirect: "/secondForm/index",
     component: Layout,
