@@ -327,6 +327,7 @@ import { Search } from "@element-plus/icons-vue"
 // import type { UploadProps, UploadUserFile, ElMessage, ElMessageBox } from "element-plus"
 import type { UploadProps } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
+import type { User } from "./data.type"
 
 interface Product {
   id: string
@@ -348,7 +349,7 @@ const getSummaries = (param: SummaryMethodProps) => {
       sums[index] = "Total Cost"
       return
     }
-    const values = data.map((item) => Number(item[column.property]))
+    const values = data.map((item) => Number(item.name))
     if (!values.every((value) => Number.isNaN(value))) {
       sums[index] = `$ ${values.reduce((prev, curr) => {
         const value = Number(curr)
@@ -399,11 +400,11 @@ const options = [
     label: "Option5"
   }
 ]
-interface User {
-  date: string
-  name: string
-  address: string
-}
+// interface User {
+//   date: string
+//   name: string
+//   address: string
+// }
 // const handleEdit = (index: number, row: User) => {
 //   console.log(index, row)
 // }

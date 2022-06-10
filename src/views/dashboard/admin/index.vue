@@ -55,7 +55,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref, onMounted } from "vue"
+import { reactive, ref, onMounted, onBeforeUnmount } from "vue"
 import iconBlue from "/src/assets/layout/dashboard-icon-blue.svg"
 import iconRed from "/src/assets/layout/dashboard-icon-red.svg"
 import iconGreen from "/src/assets/layout/dashboard-icon-green.svg"
@@ -154,6 +154,9 @@ let data3 = {
     }
   ]
 }
+let chart1 = null
+let chart2 = null
+let chart3 = null
 const initCharts = (id: string, chartOption: any) => {
   // 基于准备好的dom，初始化echarts实例
   let chartEl: HTMLElement | null = document.getElementById(id)
@@ -161,13 +164,20 @@ const initCharts = (id: string, chartOption: any) => {
     var chart = echarts.init(chartEl)
     // 绘制图表
     chart.setOption(chartOption)
+    return chart
   }
 }
 onMounted(() => {
   console.log("onMounted")
-  initCharts("costChart", data1)
-  initCharts("selectCostChart", data2)
-  initCharts("percentageCostChart", data3)
+  chart1 = initCharts("costChart", data1)
+  chart2 = initCharts("selectCostChart", data2)
+  chart3 = initCharts("percentageCostChart", data3)
+})
+onBeforeUnmount(() => {
+  console.log("destory")
+  chart1.dispose()
+  chart2.dispose()
+  chart3.dispose()
 })
 const value = ref("")
 const options = [
