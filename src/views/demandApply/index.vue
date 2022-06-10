@@ -1,6 +1,6 @@
 <template>
   <div class="demand-apply">
-    <el-form>
+    <el-form :model="form" ref="refForm">
       <!-- 拟稿人信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
@@ -109,7 +109,7 @@
         </el-row>
         <h5>项目走量</h5>
         <h6>终端走量（PCS）</h6>
-        <el-table :data="tableData" style="width: 100%" border :summary-method="getSummaries">
+        <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries">
           <el-table-column label="车厂" width="180">
             <template #default="{ row }">
               <el-input v-model="row.a" />
@@ -128,7 +128,7 @@
           <el-table-column prop="name" label="合计" />
         </el-table>
         <h6>模组数量</h6>
-        <el-table :data="tableData" style="width: 100%" border :summary-method="getSummaries">
+        <el-table :data="moduleTableData" style="width: 100%" border :summary-method="getSummaries">
           <el-table-column type="index" width="50" />
           <el-table-column label="客户零件号" width="180">
             <template #default="{ row }">
@@ -161,7 +161,7 @@
           <el-table-column label="模组总量" prop="name" />
         </el-table>
         <h6>要求</h6>
-        <el-table :data="tableData" style="width: 100%" border>
+        <el-table :data="requireTableData" style="width: 100%" border>
           <el-table-column label="年份" width="180">
             <template #default="{ row }">
               <el-input v-model="row.a" />
@@ -236,12 +236,15 @@
       <!-- 产品信息 -->
       <el-card class="demand-apply__card">
         <h6>产品信息</h6>
-        <h6>excel空余</h6>
         <div class="demand-apply__btn-container">
-          <el-button type="primary" class="demand-apply__add-btn">新增产品</el-button>
+          <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增产品</el-button>
         </div>
-        <el-table :data="tableData" style="width: 100%" border>
-          <el-table-column label="产品名称" width="180" fixed="left" />
+        <el-table :data="productTableData" style="width: 100%" border>
+          <el-table-column label="产品名称" width="180" fixed="left">
+            <template #default="{ row }">
+              <el-input v-model="row.name" />
+            </template>
+          </el-table-column>
           <el-table-column label="Sensor" width="400">
             <template #default="{ row }">
               <el-input v-model="row.value" placeholder="名称">
@@ -353,9 +356,14 @@
               <el-input v-model="row.prize" />
             </template>
           </el-table-column>
+          <el-table-column label="操作" width="150" fixed="right">
+            <template #default="{ $index }">
+              <el-button @click="deleteProduct($index)" type="danger">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <h6>客户指定/供应详情</h6>
-        <el-table :data="tableData" style="width: 100%" border>
+        <el-table :data="specifyTableData" style="width: 100%" border>
           <el-table-column prop="name" label="类型" />
           <el-table-column prop="name" label="零件名称" />
           <el-table-column prop="name" label="核心部件" />
@@ -511,7 +519,7 @@ const getSummaries = (param: SummaryMethodProps) => {
   return sums
 }
 const value = ref("")
-
+const form = reactive({})
 const colYears = reactive([
   {
     year: 2022,
@@ -544,49 +552,62 @@ const options = [
     label: "Option5"
   }
 ]
-// interface User {
-//   date: string
-//   name: string
-//   address: string
-// }
+//终端走量（PCS）
+const pcsTableData: User[] = reactive([
+  {
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  }
+])
+//模组数量
+const moduleTableData: User[] = reactive([
+  {
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  }
+])
+//要求
+const requireTableData: User[] = reactive([
+  {
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  }
+])
+//产品零件
+const productTableData: User[] = reactive([
+  {
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  }
+])
+//指定
+const specifyTableData: User[] = reactive([
+  {
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  }
+])
+const addProduct = () => {
+  productTableData.push({
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  })
+}
+const deleteProduct = (i: number) => {
+  productTableData.splice(i, 1)
+}
 // const handleEdit = (index: number, row: User) => {
 //   console.log(index, row)
 // }
 // const handleDelete = (index: number, row: User) => {
 //   console.log(index, row)
 // }
-const tableData: User[] = [
-  {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2023",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2024",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2025",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2026",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2027",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  }
-]
 // const checkList = ref(["selected and disabled", "Option A"])
 
 // const value1 = ref()

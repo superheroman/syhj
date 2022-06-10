@@ -38,16 +38,25 @@
           </el-col>
         </el-row>
       </el-card>
+      <el-card class="manager-operate__card">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <el-form-item label="是否为首款产品:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item label="T-R主方案:">
+              <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
+                <el-button type="primary">文件上传</el-button>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-card>
     </el-form>
-    <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column label="零件名称" prop="name" />
-
-      <el-table-column label="操作">
-        <template #default="{ row }">
-          <el-link type="primary" :href="'URL' + row.id">点击进入</el-link>
-        </template>
-      </el-table-column>
-    </el-table>
     <el-steps :active="1" direction="vertical">
       <el-step title="Step 1" description="Some description" />
       <el-step title="Step 2" description="Some description" />
