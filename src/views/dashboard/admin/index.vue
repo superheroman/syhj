@@ -154,9 +154,9 @@ let data3 = {
     }
   ]
 }
-let chart1 = null
-let chart2 = null
-let chart3 = null
+let chart1: any = null
+let chart2: any = null
+let chart3: any = null
 const initCharts = (id: string, chartOption: any) => {
   // 基于准备好的dom，初始化echarts实例
   let chartEl: HTMLElement | null = document.getElementById(id)
