@@ -46,12 +46,12 @@
       <!-- 项目信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
-          <el-col :span="6">
+          <el-col :span="12">
             <el-form-item label="项目名称:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="12">
             <el-form-item label="项目代码:">
               <el-input />
             </el-form-item>
@@ -96,38 +96,53 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="SOP时间:">
               <el-date-picker type="date" placeholder="Pick a day" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="6">
             <el-form-item label="项目周期:">
-              <el-date-picker type="date" placeholder="Pick a day" />
+              <el-date-picker type="year" placeholder="Pick a year" v-model="year" @change="yearChange" />
             </el-form-item>
           </el-col>
         </el-row>
         <h5>项目走量</h5>
         <h6>终端走量（PCS）</h6>
+        <div class="demand-apply__btn-container">
+          <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
+        </div>
         <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries">
-          <el-table-column label="车厂" width="180">
+          <el-table-column type="expand">
+            <template #default="props">
+              <div>
+                <div v-for="year in yearCount" :key="year">
+                  {{ new Date().getFullYear() + year }}:<el-input v-model="props.val" />
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column label="车厂">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
           </el-table-column>
-          <el-table-column label="车型" width="180">
+          <el-table-column label="车型">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
           </el-table-column>
-          <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
+          <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column prop="name" label="合计" />
         </el-table>
         <h6>模组数量</h6>
+        <div class="demand-apply__btn-container">
+          <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增模组</el-button>
+        </div>
         <el-table :data="moduleTableData" style="width: 100%" border :summary-method="getSummaries">
           <el-table-column type="index" width="50" />
           <el-table-column label="客户零件号" width="180">
@@ -158,7 +173,12 @@
               <el-input v-model="row.name" />
             </template>
           </el-table-column>
-          <el-table-column label="模组总量" prop="name" />
+          <el-table-column label="模组总量" prop="name" width="180" />
+          <el-table-column label="操作" width="150" fixed="right">
+            <template #default="{ $index }">
+              <el-button @click="deleteProduct($index)" type="danger">删除</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <h6>要求</h6>
         <el-table :data="requireTableData" style="width: 100%" border>
@@ -240,10 +260,10 @@
           <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增产品</el-button>
         </div>
         <el-table :data="productTableData" style="width: 100%" border>
-          <el-table-column label="产品名称" width="180" fixed="left">
-            <template #default="{ row }">
+          <el-table-column label="产品名称" width="180" fixed="left" prop="name">
+            <!-- <template #default="{ row }">
               <el-input v-model="row.name" />
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="Sensor" width="400">
             <template #default="{ row }">
@@ -365,7 +385,7 @@
         <h6>客户指定/供应详情</h6>
         <el-table :data="specifyTableData" style="width: 100%" border>
           <el-table-column prop="name" label="类型" />
-          <el-table-column prop="name" label="零件名称" />
+          <el-table-column prop="name" label="产品名称" />
           <el-table-column prop="name" label="核心部件" />
           <el-table-column prop="name" label="品牌/型号" />
           <el-table-column label="单价">
@@ -520,6 +540,8 @@ const getSummaries = (param: SummaryMethodProps) => {
 }
 const value = ref("")
 const form = reactive({})
+const year = ref("")
+const yearCount = ref(0)
 const colYears = reactive([
   {
     year: 2022,
@@ -593,14 +615,26 @@ const specifyTableData: User[] = reactive([
   }
 ])
 const addProduct = () => {
-  productTableData.push({
+  moduleTableData.push({
     date: "2022",
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles"
   })
 }
+const addPCS = () => {
+  pcsTableData.push({
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles"
+  })
+}
+
+const yearChange = (val: Date) => {
+  yearCount.value = val.getFullYear() - new Date().getFullYear()
+  console.log(val, yearCount)
+}
 const deleteProduct = (i: number) => {
-  productTableData.splice(i, 1)
+  moduleTableData.splice(i, 1)
 }
 // const handleEdit = (index: number, row: User) => {
 //   console.log(index, row)

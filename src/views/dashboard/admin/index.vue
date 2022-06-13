@@ -6,7 +6,7 @@
           <el-card
             shadow="always"
             class="dashboard__header__item"
-            :body-style="{ display: 'flex', 'align-items': 'center' }"
+            :body-style="{ display: 'flex', 'align-items': 'center', width: '100%' }"
           >
             <img :src="item.img" class="dashboard__header__item__icon" />
             <div class="dashboard__header__item__content">
@@ -24,8 +24,8 @@
       <div id="costChart" />
     </div>
     <div class="dashboard__footer">
-      <el-row :gutter="12">
-        <el-col :span="16">
+      <el-row :gutter="100">
+        <el-col :span="14">
           <!-- 成本图根据时间 -->
           <div class="dashboard__footer__line-chart">
             <el-form inline>
@@ -47,7 +47,7 @@
           <!-- 饼图和生成按钮 -->
           <div class="dashboard__footer__pie-chart">
             <div id="percentageCostChart" />
-            <el-button type="primary" round size="large">生成核价表</el-button>
+            <el-button type="primary" round size="large" style="width: 300px">生成核价表</el-button>
           </div></el-col
         >
       </el-row>
@@ -204,7 +204,7 @@ const options = [
 ]
 let dashboardPannel = reactive([
   {
-    title: "BOM成本（含损耗）",
+    title: "BOM成本",
     value: "34",
     percentage: "+25%",
     img: iconBlue
@@ -236,6 +236,8 @@ let dashboardPannel = reactive([
     &__item {
       &__content {
         margin-left: 15px;
+        min-width: 100px;
+        // min-width: 120px;
         &__title {
           font-size: 14px;
           color: grey;
