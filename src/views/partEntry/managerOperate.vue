@@ -4,34 +4,34 @@
       <el-card class="manager-operate__card">
         <h4>核价团队</h4>
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="电子工程师:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="结构工程师:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="资源管理部:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="工程技术部:">
               <el-input />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="财务部:"> <el-input /> </el-form-item
           ></el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="生产管理部:">
               <el-input />
             </el-form-item>
@@ -40,14 +40,14 @@
       </el-card>
       <el-card class="manager-operate__card">
         <el-row :gutter="20">
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="是否为首款产品:">
               <el-select v-model="value" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="T-R主方案:">
               <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
                 <el-button type="primary">文件上传</el-button>

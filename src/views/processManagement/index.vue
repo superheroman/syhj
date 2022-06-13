@@ -1,18 +1,61 @@
 <template>
   <div class="process-management">
-    <el-button type="primary">工序添加</el-button>
-    <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="date" label="Date" width="180" />
-      <el-table-column prop="name" label="Name" width="180" />
+    <div class="process-management__btn-container">
+      <el-button type="primary" @click="dialogFormVisible = true">添加工序</el-button>
+      <el-button type="danger" @click="patchDelete">批量删除</el-button>
+      <el-button type="text">结构bom</el-button>
+      <el-button type="text">3d爆炸图</el-button>
+    </div>
+    <el-table :data="tableData" border style="width: 100%" @selection-change="selectionChange">
+      <el-table-column type="selection" width="55" />
+      <el-table-column prop="date" label="工序名称" width="180" />
+      <el-table-column prop="name" label="设备总金额" width="180" />
+      <el-table-column prop="date" label="机器工时" width="180" />
+      <el-table-column prop="name" label="人工工时" width="180" />
+      <el-table-column prop="date" label="换线工时" width="180" />
+      <el-table-column prop="name" label="人员数量" width="180" />
       <el-table-column prop="address" label="Address" />
     </el-table>
+    <el-dialog v-model="dialogFormVisible" title="工序添加">
+      <el-form :model="form">
+        <el-form-item label="选择工序" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off" />
+        </el-form-item>
+        <el-form-item label="设备" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="Please select a zone">
+            <el-option label="Zone No.1" value="shanghai" />
+            <el-option label="Zone No.2" value="beijing" />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="dialogFormVisible = false">提交</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
+import { ElMessage, ElMessageBox } from "element-plus"
 
+const dialogFormVisible = ref(false)
+const formLabelWidth = "140px"
+
+const form = reactive({
+  name: "",
+  region: "",
+  date1: "",
+  date2: "",
+  delivery: false,
+  type: [],
+  resource: "",
+  desc: ""
+})
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
 /**
@@ -60,10 +103,33 @@ onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
+const selectionChange = (selection: any) => {
+  console.log(selection)
+}
+const patchDelete = () => {
+  ElMessageBox.confirm("确定删除?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  })
+    .then(() => {})
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "Delete canceled"
+      })
+    })
+}
 // 使用toRefs解构
 // let { } = { ...toRefs(data) }
 // defineExpose({
 //   ...toRefs(data)
 // })
 </script>
-<style scoped lang="less"></style>
+<style lang="scss" scoped>
+.process-management {
+  &__btn-container {
+    margin: 20px 0;
+  }
+}
+</style>
