@@ -116,8 +116,11 @@
           <el-table-column type="expand">
             <template #default="props">
               <div>
-                <div v-for="year in yearCount" :key="year">
-                  {{ new Date().getFullYear() + year }}:<el-input v-model="props.val" />
+                <div v-for="yearItem in props.row.list" :key="yearItem.year" style="margin: 20px 0">
+                  <div style="display: inline">
+                    <span style="margin: 0 20px">{{ yearItem.year }}:</span>
+                    <el-input v-model="yearItem.value" style="width: 200px" />
+                  </div>
                 </div>
               </div>
             </template>
@@ -181,12 +184,24 @@
           </el-table-column>
         </el-table>
         <h6>要求</h6>
-        <el-table :data="requireTableData" style="width: 100%" border>
-          <el-table-column label="年份" width="180">
+        <el-table :data="requireTableData" style="width: 100%; margin: 20px 0" border>
+          <el-table-column type="expand">
+            <template #default="props">
+              <div>
+                <div v-for="yearItem in props.row.list" :key="yearItem.year" style="margin: 20px 0">
+                  <div style="display: inline">
+                    <span style="margin: 0 20px">{{ yearItem.year }}:</span>
+                    <el-input v-model="yearItem.value" style="width: 200px" />
+                  </div>
+                </div>
+              </div>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column label="年份" width="180">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column label="年降率" width="180">
             <template #default="{ row }">
               <el-input v-model="row.a" />
@@ -256,9 +271,9 @@
       <!-- 产品信息 -->
       <el-card class="demand-apply__card">
         <h6>产品信息</h6>
-        <div class="demand-apply__btn-container">
+        <!-- <div class="demand-apply__btn-container">
           <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增产品</el-button>
-        </div>
+        </div> -->
         <el-table :data="productTableData" style="width: 100%" border>
           <el-table-column label="产品名称" width="180" fixed="left" prop="name">
             <!-- <template #default="{ row }">
@@ -376,11 +391,11 @@
               <el-input v-model="row.prize" />
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="150" fixed="right">
+          <!-- <el-table-column label="操作" width="150" fixed="right">
             <template #default="{ $index }">
               <el-button @click="deleteProduct($index)" type="danger">删除</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <h6>客户指定/供应详情</h6>
         <el-table :data="specifyTableData" style="width: 100%" border>
@@ -460,6 +475,11 @@
           <el-col :span="6">
             <el-form-item label="项目经理:"> <el-input :suffix-icon="Search" /> </el-form-item>
           </el-col>
+          <el-col :span="12">
+            <el-form-item label="交货地点:">
+              <el-input type="textarea" :rows="10" />
+            </el-form-item>
+          </el-col>
           <el-col :span="6">
             <el-form-item>
               <el-upload
@@ -472,11 +492,6 @@
               >
                 <el-button type="primary">SOR文件上传</el-button>
               </el-upload>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="交货地点:">
-              <el-input type="textarea" :rows="10" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -579,7 +594,8 @@ const pcsTableData: User[] = reactive([
   {
     date: "2022",
     name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    address: "No. 189, Grove St, Los Angeles",
+    list: []
   }
 ])
 //模组数量
@@ -595,7 +611,8 @@ const requireTableData: User[] = reactive([
   {
     date: "2022",
     name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    address: "No. 189, Grove St, Los Angeles",
+    list: []
   }
 ])
 //产品零件
@@ -620,21 +637,45 @@ const addProduct = () => {
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles"
   })
-}
-const addPCS = () => {
-  pcsTableData.push({
+  productTableData.push({
     date: "2022",
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles"
   })
 }
+const addPCS = () => {
+  pcsTableData.push({
+    date: "2022",
+    name: "Tom",
+    address: "No. 189, Grove St, Los Angeles",
+    list: []
+  })
+}
 
 const yearChange = (val: Date) => {
   yearCount.value = val.getFullYear() - new Date().getFullYear()
+  debugger
+  pcsTableData.forEach((item) => {
+    //判断时间长度
+    if (item.list) {
+      debugger
+      let i = yearCount.value - item.list.length
+      item.list = []
+      if (i > 0) {
+        for (let j = 0; j < i + 1; j++) {
+          item.list.push({
+            year: new Date().getFullYear() + j,
+            value: ""
+          })
+        }
+      }
+    }
+  })
   console.log(val, yearCount)
 }
 const deleteProduct = (i: number) => {
   moduleTableData.splice(i, 1)
+  productTableData.splice(i, 1)
 }
 // const handleEdit = (index: number, row: User) => {
 //   console.log(index, row)

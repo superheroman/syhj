@@ -47,7 +47,7 @@
           <!-- 饼图和生成按钮 -->
           <div class="dashboard__footer__pie-chart">
             <div id="percentageCostChart" />
-            <el-button type="primary" round size="large" style="width: 300px">生成核价表</el-button>
+            <el-button type="primary" round size="large" style="width: 400px">生成核价表</el-button>
           </div></el-col
         >
       </el-row>
@@ -130,7 +130,8 @@ let data3 = {
   },
   legend: {
     orient: "vertical",
-    left: "left"
+    left: "left",
+    show: false
   },
   series: [
     {
