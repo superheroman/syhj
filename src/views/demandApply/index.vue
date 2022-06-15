@@ -202,26 +202,26 @@
               <el-input v-model="row.a" />
             </template>
           </el-table-column> -->
-          <el-table-column label="年降率" width="180">
+          <el-table-column label="年降率">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
           </el-table-column>
-          <el-table-column label="年度返利要求" width="180">
+          <el-table-column label="年度返利要求">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
           </el-table-column>
-          <el-table-column label="一次性折让率" width="180">
+          <el-table-column label="一次性折让率">
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
           </el-table-column>
-          <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
+          <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
             <template #default="{ row }">
               <el-input v-model="row.a" />
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <el-row :gutter="20">
           <el-col :span="6">
@@ -557,16 +557,16 @@ const value = ref("")
 const form = reactive({})
 const year = ref("")
 const yearCount = ref(0)
-const colYears = reactive([
-  {
-    year: 2022,
-    value: ""
-  },
-  {
-    year: 2023,
-    value: ""
-  }
-])
+// const colYears = reactive([
+//   {
+//     year: 2022,
+//     value: ""
+//   },
+//   {
+//     year: 2023,
+//     value: ""
+//   }
+// ])
 const options = [
   {
     value: "Option1",

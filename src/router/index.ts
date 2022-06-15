@@ -74,6 +74,38 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/productList",
+    redirect: "/productList/index",
+    component: Layout,
+    children: [
+      {
+        path: "/productList/index",
+        component: () => import("@/views/productList/index.vue"),
+        name: "productList",
+        meta: {
+          title: "零件列表",
+          icon: "productList"
+        }
+      }
+    ]
+  },
+  {
+    path: "/pmDepartment",
+    redirect: "/pmDepartment/index",
+    component: Layout,
+    children: [
+      {
+        path: "/pmDepartment/index",
+        component: () => import("@/views/pmDepartment/index.vue"),
+        name: "pmDepartment",
+        meta: {
+          title: "生管部录入",
+          icon: "pmDepartment"
+        }
+      }
+    ]
+  },
+  {
     path: "/partEntry",
     redirect: "/partEntry/managerOperate",
     component: Layout,
@@ -83,76 +115,76 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/partEntry/managerOperate.vue"),
         name: "managerOperate",
         meta: {
-          title: "项目经理操作",
+          title: "项目经理录入",
           icon: "managerOperate"
         }
       }
     ]
   },
-  {
-    path: "/secondForm",
-    redirect: "/secondForm/index",
-    component: Layout,
-    children: [
-      {
-        path: "/secondForm/index",
-        component: () => import("@/views/secondForm/index.vue"),
-        name: "secondForm",
-        meta: {
-          title: "核价处理",
-          icon: "secondForm"
-        }
-      }
-    ]
-  },
-  {
-    path: "/electronicImport",
-    redirect: "/electronicImport/index",
-    component: Layout,
-    children: [
-      {
-        path: "/electronicImport/index",
-        component: () => import("@/views/electronicImport/index.vue"),
-        name: "electronicImport",
-        meta: {
-          title: "电子料导入",
-          icon: "electronicImport"
-        }
-      }
-    ]
-  },
-  {
-    path: "/otherImport",
-    redirect: "/otherImport/index",
-    component: Layout,
-    children: [
-      {
-        path: "/otherImport/index",
-        component: () => import("@/views/otherImport/index.vue"),
-        name: "otherImport",
-        meta: {
-          title: "其它导入",
-          icon: "otherImport"
-        }
-      }
-    ]
-  },
-  {
-    path: "/structuralMaterialImport",
-    redirect: "/structuralMaterialImport/index",
-    component: Layout,
-    children: [
-      {
-        path: "/structuralMaterialImport/index",
-        component: () => import("@/views/structuralMaterialImport/index.vue"),
-        name: "structuralMaterialImport",
-        meta: {
-          title: "结构料导入",
-          icon: "structuralMaterialImport"
-        }
-      }
-    ]
-  },
+  // {
+  //   path: "/secondForm",
+  //   redirect: "/secondForm/index",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "/secondForm/index",
+  //       component: () => import("@/views/secondForm/index.vue"),
+  //       name: "secondForm",
+  //       meta: {
+  //         title: "核价处理",
+  //         icon: "secondForm"
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/electronicImport",
+  //   redirect: "/electronicImport/index",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "/electronicImport/index",
+  //       component: () => import("@/views/electronicImport/index.vue"),
+  //       name: "electronicImport",
+  //       meta: {
+  //         title: "电子料导入",
+  //         icon: "electronicImport"
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/otherImport",
+  //   redirect: "/otherImport/index",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "/otherImport/index",
+  //       component: () => import("@/views/otherImport/index.vue"),
+  //       name: "otherImport",
+  //       meta: {
+  //         title: "其它导入",
+  //         icon: "otherImport"
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/structuralMaterialImport",
+  //   redirect: "/structuralMaterialImport/index",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "/structuralMaterialImport/index",
+  //       component: () => import("@/views/structuralMaterialImport/index.vue"),
+  //       name: "structuralMaterialImport",
+  //       meta: {
+  //         title: "结构料导入",
+  //         icon: "structuralMaterialImport"
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: "/processManagement",
     redirect: "/processManagement/index",
