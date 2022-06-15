@@ -177,7 +177,7 @@
             </template>
           </el-table-column>
           <el-table-column label="模组总量" prop="name" width="180" />
-          <el-table-column label="操作" width="150" fixed="right">
+          <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
               <el-button @click="deleteProduct($index)" type="danger">删除</el-button>
             </template>

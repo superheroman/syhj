@@ -202,6 +202,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/fnDepartment",
+    redirect: "/fnDepartment/index",
+    component: Layout,
+    children: [
+      {
+        path: "/fnDepartment/index",
+        component: () => import("@/views/fnDepartment/index.vue"),
+        name: "fnDepartment",
+        meta: {
+          title: "财务部录入",
+          icon: "fnDepartment"
+        }
+      }
+    ]
+  },
+  {
     path: "/todoCenter",
     redirect: "/todoCenter/index",
     component: Layout,
