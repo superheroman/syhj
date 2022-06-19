@@ -250,6 +250,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/user",
+    redirect: "/user/index",
+    component: Layout,
+    children: [
+      {
+        path: "/user/index",
+        component: () => import("@/views/user/index.vue"),
+        name: "user",
+        meta: {
+          title: "用户管理",
+          icon: "user"
+        }
+      }
+    ]
+  },
+  {
     path: "/link",
     component: Layout,
     children: [
