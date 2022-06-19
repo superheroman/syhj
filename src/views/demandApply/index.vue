@@ -1,44 +1,42 @@
 <template>
   <div class="demand-apply">
-    <el-form :model="form" ref="refForm">
+    <el-form :model="quoteForm" ref="refForm">
       <!-- 拟稿人信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="标题:">
-              <el-input />
+              <el-input v-model="quoteForm.title" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿人:">
-              <el-select v-model="value" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
+              <el-input v-model="quoteForm.drafter" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿人工号:">
-              <el-input />
+              <el-input v-model="quoteForm.drafterNumber" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿公司:">
-              <el-select v-model="value" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
+              <el-input v-model="quoteForm.draftingCompany" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿部门:">
-              <el-input />
+              <el-input v-model="quoteForm.draftingDepartment" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="拟稿日期:"> <el-input /> </el-form-item
-          ></el-col>
+            <el-form-item label="拟稿日期:">
+              <el-date-picker v-model="quoteForm.draftDate" />
+            </el-form-item>
+          </el-col>
           <el-col :span="6">
             <el-form-item label="单据编号:">
-              <el-input />
+              <el-input v-model="quoteForm.number" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -48,34 +46,34 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="项目名称:">
-              <el-input />
+              <el-input v-model="quoteForm.projectName" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目代码:">
-              <el-input />
+              <el-input v-model="quoteForm.projectCode" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户名称:">
-              <el-input />
+              <el-input v-model="quoteForm.customerName" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户性质:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="quoteForm.customerNature" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="终端名称:">
-              <el-input />
+              <el-input v-model="quoteForm.terminalName" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="终端性质:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="quoteForm.terminalNature" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -84,14 +82,14 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="报价形式:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="quoteForm.quotationType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="样品报价类型:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="quoteForm.sampleQuotationType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -103,7 +101,7 @@
           </el-col> -->
           <el-col :span="6">
             <el-form-item label="项目周期:">
-              <el-date-picker type="year" placeholder="Pick a year" v-model="year" @change="yearChange" />
+              <el-date-picker type="year" placeholder="Pick a year" v-model="quoteForm.sopTime" @change="yearChange" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -554,8 +552,37 @@ const getSummaries = (param: SummaryMethodProps) => {
   return sums
 }
 const value = ref("")
-const form = reactive({})
-const year = ref("")
+const quoteForm = reactive({
+  title: "",
+  drafter: "",
+  drafterNumber: "",
+  draftingDepartment: "",
+  draftingCompany: "",
+  draftDate: "",
+  number: "",
+  projectName: "",
+  projectCode: "",
+  customerName: "",
+  customerNature: "",
+  terminalName: "",
+  terminalNature: "",
+  quotationType: "",
+  sampleQuotationType: "",
+  sopTime: "",
+  projectCycle: "",
+  terminalQuantity: "",
+  modelCount: "",
+  requirement: "",
+  productInfo: "",
+  tradeMode: "",
+  salesType: "",
+  paymentMethod: "",
+  customerTargetPrice: "",
+  exchangeRate: "",
+  placeOfDelivery: "",
+  projectManager: "",
+  sorFile: []
+})
 const yearCount = ref(0)
 // const colYears = reactive([
 //   {

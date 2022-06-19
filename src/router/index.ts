@@ -234,6 +234,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/role",
+    redirect: "/role/index",
+    component: Layout,
+    children: [
+      {
+        path: "/role/index",
+        component: () => import("@/views/role/index.vue"),
+        name: "role",
+        meta: {
+          title: "角色管理",
+          icon: "role"
+        }
+      }
+    ]
+  },
+  {
     path: "/link",
     component: Layout,
     children: [
