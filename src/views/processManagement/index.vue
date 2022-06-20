@@ -8,24 +8,68 @@
     </div>
     <el-table :data="tableData" border style="width: 100%" @selection-change="selectionChange">
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="date" label="工序名称" width="180" />
-      <el-table-column prop="name" label="设备总金额" width="180" />
-      <el-table-column prop="date" label="机器工时" width="180" />
-      <el-table-column prop="name" label="人工工时" width="180" />
-      <el-table-column prop="date" label="换线工时" width="180" />
-      <el-table-column prop="name" label="人员数量" width="180" />
-      <el-table-column prop="address" label="Address" />
+
+      <el-table-column type="expand">
+        <template #default="props">
+          <el-form inline>
+            <el-form-item label="2022" />
+            <el-form-item label="机器工时">
+              <el-input />
+            </el-form-item>
+            <el-form-item label="人工工时">
+              <el-input />
+            </el-form-item>
+            <el-form-item label="人员数量">
+              <el-input />
+            </el-form-item>
+          </el-form>
+          <el-form inline>
+            <el-form-item label="2023" />
+            <el-form-item label="机器工时">
+              <el-input />
+            </el-form-item>
+            <el-form-item label="人工工时">
+              <el-input />
+            </el-form-item>
+            <el-form-item label="人员数量">
+              <el-input />
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column prop="date" label="工序名称" />
+      <el-table-column prop="date" label="工位" />
+      <el-table-column prop="name" label="设备总金额" />
     </el-table>
+    <div>
+      <span>UPX（自动计算）：</span>
+      <el-input />
+    </div>
     <el-dialog v-model="dialogFormVisible" title="工序添加">
       <el-form :model="form">
         <el-form-item label="选择工序" :label-width="formLabelWidth">
-          <el-input v-model="form.name" autocomplete="off" />
+          <el-input v-model="form.name" autocomplete="off" style="width: 200px" />
         </el-form-item>
         <el-form-item label="设备" :label-width="formLabelWidth">
           <el-select v-model="form.region" placeholder="Please select a zone">
             <el-option label="Zone No.1" value="shanghai" />
             <el-option label="Zone No.2" value="beijing" />
           </el-select>
+        </el-form-item>
+        <el-form-item label="设备" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="Please select a zone">
+            <el-option label="Zone No.1" value="shanghai" />
+            <el-option label="Zone No.2" value="beijing" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="设备" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="Please select a zone">
+            <el-option label="Zone No.1" value="shanghai" />
+            <el-option label="Zone No.2" value="beijing" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工位" :label-width="formLabelWidth" style="width: 200px">
+          <el-input v-model="form.name" autocomplete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
