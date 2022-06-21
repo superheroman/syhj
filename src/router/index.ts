@@ -61,14 +61,26 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/demandApply",
     redirect: "/demandApply/index",
     component: Layout,
+    meta: {
+      title: "营销部"
+    },
     children: [
       {
         path: "/demandApply/index",
         component: () => import("@/views/demandApply/index.vue"),
         name: "demandApply",
         meta: {
-          title: "需求申请",
+          title: "营销部录入",
           icon: "demandApply"
+        }
+      },
+      {
+        path: "/demandApply/result",
+        component: () => import("@/views/demandApply/result.vue"),
+        name: "demandApplyResult",
+        meta: {
+          title: "营销部报价表",
+          icon: "demandApplyResult"
         }
       }
     ]
