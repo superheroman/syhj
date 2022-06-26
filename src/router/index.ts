@@ -24,45 +24,37 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/",
+    path: "/todoCenter",
+    redirect: "/todoCenter/index",
     component: Layout,
-    redirect: "/dashboard",
+    meta: {
+      title: "首页"
+    },
     children: [
       {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index.vue"),
-        name: "Dashboard",
+        path: "/todoCenter/index",
+        component: () => import("@/views/todoCenter/index.vue"),
+        name: "todoCenter",
         meta: {
-          title: "首页",
-          icon: "dashboard"
-          // affix: true
+          title: "待办中心"
+        }
+      },
+      {
+        path: "/productList/index",
+        component: () => import("@/views/productList/index.vue"),
+        name: "productList",
+        meta: {
+          title: "零件列表"
         }
       }
     ]
   },
-  // {
-  //   path: "/unocss",
-  //   component: Layout,
-  //   redirect: "/unocss/index",
-  //   children: [
-  //     {
-  //       path: "index",
-  //       component: () => import("@/views/unocss/index.vue"),
-  //       name: "Unocss",
-  //       meta: {
-  //         title: "unocss",
-  //         icon: "unocss"
-  //       }
-  //     }
-  //   ]
-  // },
-
   {
-    path: "/demandApply",
+    path: "/nupriceManagement",
     redirect: "/demandApply/index",
     component: Layout,
     meta: {
-      title: "营销部"
+      title: "核价管理"
     },
     children: [
       {
@@ -70,8 +62,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/demandApply/index.vue"),
         name: "demandApply",
         meta: {
-          title: "营销部录入",
-          icon: "demandApply"
+          title: "营销部录入"
         }
       },
       {
@@ -79,60 +70,36 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/demandApply/result.vue"),
         name: "demandApplyResult",
         meta: {
-          title: "营销部报价表",
-          icon: "demandApplyResult"
+          title: "营销部报价表"
         }
-      }
-    ]
-  },
-  {
-    path: "/productList",
-    redirect: "/productList/index",
-    component: Layout,
-    children: [
-      {
-        path: "/productList/index",
-        component: () => import("@/views/productList/index.vue"),
-        name: "productList",
-        meta: {
-          title: "零件列表",
-          icon: "productList"
-        }
-      }
-    ]
-  },
-  {
-    path: "/pmDepartment",
-    redirect: "/pmDepartment/index",
-    component: Layout,
-    children: [
-      {
-        path: "/pmDepartment/index",
-        component: () => import("@/views/pmDepartment/index.vue"),
-        name: "pmDepartment",
-        meta: {
-          title: "生管部录入",
-          icon: "pmDepartment"
-        }
-      }
-    ]
-  },
-  {
-    path: "/partEntry",
-    redirect: "/partEntry/managerOperate",
-    component: Layout,
-    children: [
+      },
       {
         path: "/partEntry/managerOperate",
         component: () => import("@/views/partEntry/managerOperate.vue"),
         name: "managerOperate",
         meta: {
-          title: "项目经理录入",
-          icon: "managerOperate"
+          title: "项目经理录入"
+        }
+      },
+      {
+        path: "/pmDepartment/index",
+        component: () => import("@/views/pmDepartment/index.vue"),
+        name: "pmDepartment",
+        meta: {
+          title: "生管部录入"
+        }
+      },
+      {
+        path: "dashboard",
+        component: () => import("@/views/dashboard/index.vue"),
+        name: "Dashboard",
+        meta: {
+          title: "核价看板"
         }
       }
     ]
   },
+
   // {
   //   path: "/secondForm",
   //   redirect: "/secondForm/index",
@@ -207,8 +174,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/processManagement/index.vue"),
         name: "processManagement",
         meta: {
-          title: "工序管理",
-          icon: "processManagement"
+          title: "工序工时库管理"
         }
       }
     ]
@@ -223,28 +189,12 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/fnDepartment/index.vue"),
         name: "fnDepartment",
         meta: {
-          title: "财务部录入",
-          icon: "fnDepartment"
+          title: "财务参数管理"
         }
       }
     ]
   },
-  {
-    path: "/todoCenter",
-    redirect: "/todoCenter/index",
-    component: Layout,
-    children: [
-      {
-        path: "/todoCenter/index",
-        component: () => import("@/views/todoCenter/index.vue"),
-        name: "todoCenter",
-        meta: {
-          title: "待办中心",
-          icon: "todoCenter"
-        }
-      }
-    ]
-  },
+
   {
     path: "/role",
     redirect: "/role/index",
@@ -255,8 +205,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/role/index.vue"),
         name: "role",
         meta: {
-          title: "角色管理",
-          icon: "role"
+          title: "角色管理"
         }
       }
     ]
@@ -271,8 +220,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/user/index.vue"),
         name: "user",
         meta: {
-          title: "用户管理",
-          icon: "user"
+          title: "用户管理"
         }
       }
     ]
