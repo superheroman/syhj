@@ -116,22 +116,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   //     }
   //   ]
   // },
-  // {
-  //   path: "/electronicImport",
-  //   redirect: "/electronicImport/index",
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: "/electronicImport/index",
-  //       component: () => import("@/views/electronicImport/index.vue"),
-  //       name: "electronicImport",
-  //       meta: {
-  //         title: "电子料导入",
-  //         icon: "electronicImport"
-  //       }
-  //     }
-  //   ]
-  // },
+  {
+    path: "/electronicImport",
+    redirect: "/electronicImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/electronicImport/index",
+        component: () => import("@/views/electronicImport/index.vue"),
+        name: "electronicImport",
+        meta: {
+          title: "电子料导入"
+        }
+      }
+    ]
+  },
   // {
   //   path: "/otherImport",
   //   redirect: "/otherImport/index",

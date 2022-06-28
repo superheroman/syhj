@@ -1,6 +1,6 @@
 <template>
   <div class="manager-operate">
-    <el-form>
+    <el-form :model="formData">
       <el-card class="manager-operate__card">
         <h4>核价团队</h4>
         <el-row :gutter="20">
@@ -36,6 +36,13 @@
               <el-input />
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="品保部:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-card>
       <el-card class="manager-operate__card">
@@ -54,9 +61,19 @@
               </el-upload>
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="是否NRE核价:">
+              <el-select v-model="value" placeholder="Select">
+                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-card>
     </el-form>
+    <div>
+      <el-button @click="save" type="primary" size="large">保存录入</el-button>
+    </div>
     <el-steps :active="1" direction="vertical">
       <el-step title="Step 1" description="Some description" />
       <el-step title="Step 2" description="Some description" />
@@ -67,36 +84,38 @@
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { SearchPerson } from "@/components/SearchPerson"
-
+import { PostManagement } from "@/api/partEntry"
+import { ApifoxModal } from "./data.type"
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
 
 // import type { TabsPaneContext } from "element-plus"
 // import { Edit, View as IconView } from "@element-plus/icons-vue"
 const value = ref("")
+const formData: ApifoxModal = reactive({
+  electronicEngineerNum: "1",
+  engineeringTechnologyNum: "1",
+  fileId: 1,
+  financeNum: "1",
+  // id?: number
+  isFirst: "1",
+  isNRE: "1",
+  productionManagementNum: "1",
+  qualityNum: "1",
+  resourceManagementNum: "1",
+  structureEngineerNum: "1"
+})
 // const one = ref("")
 const options = [
   {
-    value: "Option1",
-    label: "Option1"
+    value: "1",
+    label: "是"
   },
   {
-    value: "Option2",
-    label: "Option2"
-  },
-  {
-    value: "Option3",
-    label: "Option3"
-  },
-  {
-    value: "Option4",
-    label: "Option4"
-  },
-  {
-    value: "Option5",
-    label: "Option5"
+    value: "2",
+    label: "否"
   }
 ]
 // interface User {
@@ -140,6 +159,11 @@ const options = [
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
 // }
+const save = async () => {
+  console.log("123")
+  let res = await PostManagement(formData)
+  console.log(res)
+}
 /**
  * 仓库
  */
