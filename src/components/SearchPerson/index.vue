@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-select
-      :value="modelValue"
+      :value="value"
       :multiple="multiple"
       filterable
       remote
@@ -24,22 +24,24 @@ defineProps({
   multiple: {
     type: Boolean,
     default: false
-  },
-  modelValue: {
-    type: [Array, String, Number, Boolean, Object],
-    default: void 0
   }
+  // modelValue: {
+  //   type: String,
+  //   default: void 0
+  // }
 })
 const emit = defineEmits(["update:modelValue"])
 
-const change = () => {
-  emit("update:modelValue")
+const change = (val: any) => {
+  console.log(val, typeof val)
+  emit("update:modelValue", val)
 }
 interface ListItem {
   value: string
   label: string
 }
 
+const value = ref("")
 const list = ref<ListItem[]>([])
 const options = ref<ListItem[]>([])
 // const value = ref<string[]>([])

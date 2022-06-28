@@ -13,7 +13,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="结构工程师:">
-              <el-input />
+              <SearchPerson />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -68,6 +68,7 @@
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
+import { SearchPerson } from "@/components/SearchPerson"
 
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
@@ -75,6 +76,7 @@ import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
 // import type { TabsPaneContext } from "element-plus"
 // import { Edit, View as IconView } from "@element-plus/icons-vue"
 const value = ref("")
+// const one = ref("")
 const options = [
   {
     value: "Option1",
@@ -97,43 +99,43 @@ const options = [
     label: "Option5"
   }
 ]
-interface User {
-  date: string
-  name: string
-  address: string
-}
-const tableData: User[] = [
-  {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2023",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2024",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2025",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2026",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  },
-  {
-    date: "2027",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  }
-]
+// interface User {
+//   date: string
+//   name: string
+//   address: string
+// }
+// const tableData: User[] = [
+//   {
+//     date: "2022",
+//     name: "Tom",
+//     address: "No. 189, Grove St, Los Angeles"
+//   },
+//   {
+//     date: "2023",
+//     name: "Tom",
+//     address: "No. 189, Grove St, Los Angeles"
+//   },
+//   {
+//     date: "2024",
+//     name: "Tom",
+//     address: "No. 189, Grove St, Los Angeles"
+//   },
+//   {
+//     date: "2025",
+//     name: "Tom",
+//     address: "No. 189, Grove St, Los Angeles"
+//   },
+//   {
+//     date: "2026",
+//     name: "Tom",
+//     address: "No. 189, Grove St, Los Angeles"
+//   },
+//   {
+//     date: "2027",
+//     name: "Tom",
+//     address: "No. 189, Grove St, Los Angeles"
+//   }
+// ]
 
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
