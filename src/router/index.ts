@@ -24,7 +24,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: "/todoCenter",
+    path: "/",
     redirect: "/todoCenter/index",
     component: Layout,
     meta: {
