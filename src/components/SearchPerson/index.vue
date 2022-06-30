@@ -1,15 +1,15 @@
+/* eslint-disable vue/no-mutating-props */
 <template>
   <div>
     <el-select
-      :value="value"
+      v-model="value"
       :multiple="multiple"
       filterable
       remote
       reserve-keyword
-      placeholder="Please enter a keyword"
+      placeholder="请输入姓名"
       :remote-method="remoteMethod"
       :loading="loading"
-      @change="change"
     >
       <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
     </el-select>
@@ -17,34 +17,31 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
 // import { useRoute, useRouter } from "vue-router"
-
-defineProps({
+// import { GetUserInput } from "@/api/partEntry"
+const value = ref("")
+const props = defineProps({
   multiple: {
     type: Boolean,
     default: false
+  },
+  modelValue: {
+    type: String,
+    default: ""
   }
-  // modelValue: {
-  //   type: String,
-  //   default: void 0
-  // }
 })
 const emit = defineEmits(["update:modelValue"])
-
-const change = (val: any) => {
-  console.log(val, typeof val)
+watch(value, (val) => {
+  console.log(val, props)
   emit("update:modelValue", val)
-}
+})
 interface ListItem {
   value: string
   label: string
 }
-
-const value = ref("")
 const list = ref<ListItem[]>([])
 const options = ref<ListItem[]>([])
-// const value = ref<string[]>([])
 const loading = ref(false)
 
 // /**
@@ -118,7 +115,7 @@ const states = [
   "Wisconsin",
   "Wyoming"
 ]
-const remoteMethod = (query: string) => {
+const remoteMethod = async (query: string) => {
   if (query) {
     loading.value = true
     setTimeout(() => {
@@ -127,6 +124,8 @@ const remoteMethod = (query: string) => {
         return item.label.toLowerCase().includes(query.toLowerCase())
       })
     }, 200)
+    // let res = await GetUserInput()
+    // console.log(res)
   } else {
     options.value = []
   }

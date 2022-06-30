@@ -7,11 +7,17 @@
       <el-table-column label="id" prop="id" />
       <el-table-column label="用户名" prop="userName" />
       <el-table-column label="姓名" prop="name" />
-      <el-table-column label="surname" prop="surname" />
+      <!-- <el-table-column label="surname" prop="surname" /> -->
       <el-table-column label="邮箱" prop="emailAddress" />
       <el-table-column label="激活状态" prop="isActive">
         <template #default="scope">
-          <el-switch v-model="scope.row.isActive" size="large" active-text="激活" inactive-text="关闭" />
+          <el-switch
+            v-model="scope.row.isActive"
+            size="large"
+            active-text="激活"
+            inactive-text="关闭"
+            @change="(val) => activeChange(val, scope.row)"
+          />
         </template>
       </el-table-column>
       <el-table-column label="角色名称" prop="roleNames" />
@@ -26,13 +32,13 @@
       </el-table-column>
     </el-table>
     <el-dialog v-model="data.dialogVisible" title="用户信息">
-      <el-form :model="data.userForm">
+      <el-form :model="data.userForm" ref="userForm">
         <el-form-item label="姓名" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="surname" :label-width="data.formLabelWidth">
+        <!-- <el-form-item label="surname" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.surname" autocomplete="off" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="用户名" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.userName" autocomplete="off" />
         </el-form-item>
@@ -46,7 +52,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="data.dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="data.dialogVisible = false">保存</el-button>
+          <el-button type="primary" @click="saveUser">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -89,6 +95,8 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
+// import { updateUser, deleteUser, activateUser, deActivateUser, changePassword, changePasswordAd } from "@/api/user"
+import { updateUser, deleteUser, activateUser, deActivateUser } from "@/api/user"
 
 /**
  * 路由对象
@@ -109,13 +117,13 @@ const data = reactive({
   psResetVisible: false,
   formLabelWidth: "140px",
   userForm: {
-    id: "1",
+    id: 1,
     name: "Tom",
     surname: "No. 189, Grove St, Los Angeles",
     userName: "222",
     emailAddress: "123123",
     isActive: true,
-    roleNames: "超级管理员",
+    roleNames: ["超级管理员"],
     password: "123456"
   },
   psForm: {
@@ -133,6 +141,11 @@ const handleEdit = (index: number, row: User) => {
   data.userForm = row
   data.dialogVisible = true
 }
+const saveUser = async () => {
+  let res = await updateUser(data.userForm)
+  console.log(res)
+  data.dialogVisible = false
+}
 const handlePsEdit = (index: number, row: User) => {
   console.log(index, row)
   data.psVisible = true
@@ -149,7 +162,9 @@ const handleDelete = (index: number, row: User) => {
     cancelButtonText: "取消",
     type: "warning"
   })
-    .then(() => {
+    .then(async () => {
+      let res = await deleteUser(row.id)
+      console.log(res)
       ElMessage({
         type: "success",
         message: "删除成功"
@@ -162,8 +177,16 @@ const handleDelete = (index: number, row: User) => {
       })
     })
 }
+
+const activeChange = (val: boolean, row: User) => {
+  if (val) {
+    activateUser(row.id)
+  } else {
+    deActivateUser(row.id)
+  }
+}
 interface User {
-  id?: string
+  id: number
   name: string
   surname: string
   userName: string
@@ -175,7 +198,7 @@ interface User {
 
 const tableData: User[] = [
   {
-    id: "1",
+    id: 1,
     name: "Tom",
     surname: "No. 189, Grove St, Los Angeles",
     userName: "222",

@@ -1,16 +1,16 @@
 /**
  * UserInputInfo
  */
-export interface ApifoxModal {
-  electronicEngineerNum?: null | string
-  engineeringTechnologyNum?: null | string
+export interface UserInputInfo {
+  electronicEngineerNum?: string
+  engineeringTechnologyNum?: string
   fileId?: number
-  financeNum?: null | string
+  financeNum?: string
   id?: number
-  isFirst?: null | string
-  isNRE?: null | string
-  productionManagementNum?: null | string
-  qualityNum?: null | string
-  resourceManagementNum?: null | string
-  structureEngineerNum?: null | string
+  isFirst?: string
+  isNRE?: string
+  productionManagementNum?: string
+  qualityNum?: string
+  resourceManagementNum?: string
+  structureEngineerNum?: string
 }

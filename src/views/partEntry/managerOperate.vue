@@ -6,41 +6,37 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="电子工程师:">
-              <el-select v-model="value" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
+              <SearchPerson v-model="formData.electronicEngineerNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="结构工程师:">
-              <SearchPerson />
+              <SearchPerson v-model="formData.structureEngineerNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="资源管理部:">
-              <el-select v-model="value" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
+              <SearchPerson v-model="formData.resourceManagementNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="工程技术部:">
-              <el-input />
+              <SearchPerson v-model="formData.engineeringTechnologyNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="财务部:"> <el-input /> </el-form-item
-          ></el-col>
+            <el-form-item label="财务部:">
+              <SearchPerson v-model="formData.financeNum" />
+            </el-form-item>
+          </el-col>
           <el-col :span="6">
             <el-form-item label="生产管理部:">
-              <el-input />
+              <SearchPerson v-model="formData.productionManagementNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="品保部:">
-              <el-select v-model="value" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
+              <SearchPerson v-model="formData.qualityNum" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -49,7 +45,7 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="是否为首款产品:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="formData.isFirst" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -63,7 +59,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="是否NRE核价:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="formData.isNRE" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -84,83 +80,39 @@
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { SearchPerson } from "@/components/SearchPerson"
 import { PostManagement } from "@/api/partEntry"
-import { ApifoxModal } from "./data.type"
+import { UserInputInfo } from "./data.type"
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
-
 // import type { TabsPaneContext } from "element-plus"
 // import { Edit, View as IconView } from "@element-plus/icons-vue"
-const value = ref("")
-const formData: ApifoxModal = reactive({
-  electronicEngineerNum: "1",
-  engineeringTechnologyNum: "1",
+const formData: UserInputInfo = reactive({
+  electronicEngineerNum: "",
+  engineeringTechnologyNum: "",
   fileId: 1,
-  financeNum: "1",
+  financeNum: "",
   // id?: number
   isFirst: "1",
   isNRE: "1",
-  productionManagementNum: "1",
-  qualityNum: "1",
-  resourceManagementNum: "1",
-  structureEngineerNum: "1"
+  productionManagementNum: "",
+  qualityNum: "",
+  resourceManagementNum: "",
+  structureEngineerNum: ""
 })
-// const one = ref("")
 const options = [
   {
     value: "1",
     label: "是"
   },
   {
-    value: "2",
+    value: "0",
     label: "否"
   }
 ]
-// interface User {
-//   date: string
-//   name: string
-//   address: string
-// }
-// const tableData: User[] = [
-//   {
-//     date: "2022",
-//     name: "Tom",
-//     address: "No. 189, Grove St, Los Angeles"
-//   },
-//   {
-//     date: "2023",
-//     name: "Tom",
-//     address: "No. 189, Grove St, Los Angeles"
-//   },
-//   {
-//     date: "2024",
-//     name: "Tom",
-//     address: "No. 189, Grove St, Los Angeles"
-//   },
-//   {
-//     date: "2025",
-//     name: "Tom",
-//     address: "No. 189, Grove St, Los Angeles"
-//   },
-//   {
-//     date: "2026",
-//     name: "Tom",
-//     address: "No. 189, Grove St, Los Angeles"
-//   },
-//   {
-//     date: "2027",
-//     name: "Tom",
-//     address: "No. 189, Grove St, Los Angeles"
-//   }
-// ]
-
-// const handleClick = (tab: TabsPaneContext, event: Event) => {
-//   console.log(tab, event)
-// }
 const save = async () => {
-  console.log("123")
+  console.log(formData)
   let res = await PostManagement(formData)
   console.log(res)
 }
