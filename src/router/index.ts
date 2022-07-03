@@ -131,6 +131,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  {
+    path: "/departmentManage",
+    redirect: "/departmentManage/index",
+    component: Layout,
+    children: [
+      {
+        path: "/departmentManage/index",
+        component: () => import("@/views/departmentManage/index.vue"),
+        name: "departmentManage",
+        meta: {
+          title: "部门管理"
+        }
+      }
+    ]
+  },
   // {
   //   path: "/otherImport",
   //   redirect: "/otherImport/index",
