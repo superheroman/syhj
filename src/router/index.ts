@@ -146,6 +146,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  {
+    path: "/dictionary",
+    redirect: "/dictionary/index",
+    component: Layout,
+    children: [
+      {
+        path: "/dictionary/index",
+        component: () => import("@/views/dictionary/index.vue"),
+        name: "dictionary",
+        meta: {
+          title: "字典管理"
+        }
+      }
+    ]
+  },
   // {
   //   path: "/otherImport",
   //   redirect: "/otherImport/index",
