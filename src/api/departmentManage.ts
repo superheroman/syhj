@@ -17,7 +17,7 @@ export interface DepartmentInfo {
  * UpdateDerpartmentInput，部门更新
  */
 export interface UpdateDepartmentInfo {
-  id?: number
+  id?: number | null | undefined
   /**
    * 部门名称
    */
@@ -43,7 +43,7 @@ export function updateDepartment(data: UpdateDepartmentInfo) {
 /** 删除部门 */
 export function deleteDerpartment(id: number) {
   return request({
-    url: "/api/services/app/Hr/DeleteDerpartment",
+    url: "/api/services/app/Hr/DeleteDepartment",
     method: "delete",
     data: {
       id

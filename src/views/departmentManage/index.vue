@@ -2,6 +2,7 @@
   <div class="departmentManage">
     <div class="departmentManage__btn-container">
       <el-button type="primary" @click="data.dialogVisible = true">创建部门</el-button>
+      <!-- <el-button type="primary" @click="clearNode">清除已选</el-button> -->
     </div>
     <el-tree :data="data.treeData" :props="defaultProps" @node-click="handleNodeClick" :load="loadNode" lazy>
       <template #default="{ node, data }">
@@ -9,14 +10,14 @@
           <span>{{ node.label }}</span>
           <span>
             <el-button style="margin-left: 8px" @click="editNode(node, data)" type="text"> 修改 </el-button>
-            <el-button style="margin-left: 8px" @click="remove(node, data)" type="text"> 删除 </el-button>
+            <el-button style="margin-left: 8px" @click="removeNode(node, data)" type="text"> 删除 </el-button>
           </span>
         </span>
       </template>
     </el-tree>
-    <el-dialog v-model="data.dialogVisible" title="部门编辑">
+    <el-dialog v-model="data.dialogVisible" title="部门编辑" @close="clearNode">
       <el-form :model="data.addForm" ref="addForm">
-        <el-form-item label="父级部门" v-if="clickTreeNode.name">
+        <el-form-item label="父级部门" v-if="!data.isEdit">
           <el-input v-model="clickTreeNode.name" disabled />
         </el-form-item>
         <el-form-item label="部门名称">
@@ -98,8 +99,15 @@ const editNode = (node: Node, nodeData: Tree[]) => {
 }
 const handleNodeClick = (node: Tree) => {
   clickTreeNode.name = node.name
-  data.addForm.fid = node.id
-  console.log(clickTreeNode)
+  data.addForm.fid = node.fid
+  data.addForm.id = node.id
+}
+const clearNode = () => {
+  clickTreeNode.name = ""
+  data.addForm.fid = 0
+  data.addForm.id = 0
+  data.addForm.name = ""
+  data.isEdit = false
 }
 const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
   console.log(node)
@@ -107,7 +115,7 @@ const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
   if (node.level === 0) {
     return resolve([])
   }
-  getDepartmentChildren(node.id)
+  getDepartmentChildren(node.data.id)
     .then((res: any) => {
       resolve(res.result.items)
     })
@@ -134,50 +142,50 @@ let data = reactive({
   isEdit: false
 })
 let saveDepartment = async () => {
-  console.log("save")
   let res: any = null
-  if (data.addForm.fid && !data.isEdit) {
-    res = await addDepartment(data.addForm)
+  if (data.addForm.id && !data.isEdit) {
+    //未点击编辑按钮，但存在ID时为子节点添加
+    let params: any = {}
+    params.fid = data.addForm.id
+    params.name = data.addForm.name
+    res = await addDepartment(params)
+  } else if (data.isEdit) {
+    //编辑
+    res = await updateDepartment(data.addForm)
   } else {
     res = await addDepartment({
       name: data.addForm.name
     })
   }
-  if (data.isEdit) {
-    res = await updateDepartment(data.addForm)
+  if (res.success) {
+    data.isEdit = false
+    data.dialogVisible = false
+    ElMessage({
+      type: "success",
+      message: "保存成功"
+    })
+    getNodes()
   }
-  console.log(res)
-  ElMessage({
-    type: "success",
-    message: "保存成功"
-  })
 }
-const remove = (node: Node, data: Tree[]) => {
+const removeNode = (node: Node, data: Tree[]) => {
   console.log(node, data)
   ElMessageBox.confirm("确定删除该部门?", "警告", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  })
-    .then(async () => {
-      let res = await deleteDerpartment(node.id)
-      console.log(res)
+  }).then(async () => {
+    let res: any = await deleteDerpartment(node.data.id)
+    console.log(res)
+    if (res.success) {
       ElMessage({
         type: "success",
         message: "删除成功"
       })
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "取消成功"
-      })
-    })
+      getNodes()
+    }
+  })
 }
-onBeforeMount(() => {
-  //console.log('2.组件挂载页面之前执行----onBeforeMount')
-})
-onMounted(async () => {
+const getNodes = async () => {
   // 获取根节点
   try {
     let res: any = await getRootDepartment()
@@ -188,20 +196,16 @@ onMounted(async () => {
     console.log(error)
   }
 
-  let arr: Tree[] = [
-    // {
-    //   name: "Level one 1"
-    // },
-    // {
-    //   name: "Level one 2"
-    // },
-    // {
-    //   name: "Level one 3"
-    // }
-  ]
+  let arr: Tree[] = []
   arr.forEach((item) => {
     data.treeData.push(item)
   })
+}
+onBeforeMount(() => {
+  //console.log('2.组件挂载页面之前执行----onBeforeMount')
+})
+onMounted(() => {
+  getNodes()
 })
 watchEffect(() => {})
 // 使用toRefs解构

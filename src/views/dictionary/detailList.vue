@@ -33,6 +33,7 @@
         background
         layout="prev, pager, next"
         :total="data.total"
+        :page-size="20"
         v-model:currentPage="data.pageNo"
         @update:current-page="handlePageChange"
       />
@@ -135,14 +136,14 @@ const getList = async () => {
     displayName: "",
     remark: "",
     maxResultCount: 20,
-    skipCount: 1,
+    skipCount: 0,
     name: null,
     financeDictionaryId: 0
   }
   // params.name = data.searchForm.name
   params.displayName = data.searchForm.displayName
   params.remark = data.searchForm.remark
-  params.skipCount = data.pageNo
+  params.skipCount = (data.pageNo - 1) * data.pageSize
   params.maxResultCount = data.pageSize
   params.financeDictionaryId = Number(route.query.id)
   let res: any = await getDictionaryDetail(params)
@@ -179,6 +180,7 @@ const saveDictionary = async () => {
       type: "success",
       message: "保存成功"
     })
+    data.dialogVisible = false
     getList()
   }
 }
