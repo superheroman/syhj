@@ -1,42 +1,42 @@
 <template>
   <div class="demand-apply">
-    <el-form :model="quoteForm" ref="refForm">
+    <el-form :model="state.quoteForm" ref="refForm">
       <!-- 拟稿人信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="标题:">
-              <el-input v-model="quoteForm.title" />
+              <el-input v-model="title" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿人:">
-              <el-input v-model="quoteForm.drafter" />
+              <el-input v-model="state.quoteForm.drafter" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿人工号:">
-              <el-input v-model="quoteForm.drafterNumber" />
+              <el-input v-model="state.quoteForm.drafterNumber" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿公司:">
-              <el-input v-model="quoteForm.draftingCompany" />
+              <el-input v-model="state.quoteForm.draftingCompany" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿部门:">
-              <el-input v-model="quoteForm.draftingDepartment" />
+              <el-input v-model="state.quoteForm.draftingDepartment" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿日期:">
-              <el-date-picker v-model="quoteForm.draftDate" />
+              <el-date-picker v-model="state.quoteForm.draftDate" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="单据编号:">
-              <el-input v-model="quoteForm.number" />
+              <el-input v-model="state.quoteForm.number" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -46,34 +46,34 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="项目名称:">
-              <el-input v-model="quoteForm.projectName" />
+              <el-input v-model="state.quoteForm.projectName" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目代码:">
-              <el-input v-model="quoteForm.projectCode" />
+              <el-input v-model="state.quoteForm.projectCode" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户名称:">
-              <el-input v-model="quoteForm.customerName" />
+              <el-input v-model="state.quoteForm.customerName" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户性质:">
-              <el-select v-model="quoteForm.customerNature" placeholder="Select">
+              <el-select v-model="state.quoteForm.customerNature" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="终端名称:">
-              <el-input v-model="quoteForm.terminalName" />
+              <el-input v-model="state.quoteForm.terminalName" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="终端性质:">
-              <el-select v-model="quoteForm.terminalNature" placeholder="Select">
+              <el-select v-model="state.quoteForm.terminalNature" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -82,14 +82,14 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="报价形式:">
-              <el-select v-model="quoteForm.quotationType" placeholder="Select">
+              <el-select v-model="state.quoteForm.quotationType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="样品报价类型:">
-              <el-select v-model="quoteForm.sampleQuotationType" placeholder="Select">
+              <el-select v-model="state.quoteForm.sampleQuotationType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -101,7 +101,12 @@
           </el-col> -->
           <el-col :span="6">
             <el-form-item label="项目周期:">
-              <el-date-picker type="year" placeholder="Pick a year" v-model="quoteForm.sopTime" @change="yearChange" />
+              <el-date-picker
+                type="year"
+                placeholder="Pick a year"
+                v-model="state.quoteForm.sopTime"
+                @change="yearChange"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -125,12 +130,12 @@
           </el-table-column>
           <el-table-column label="车厂">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
+              <el-input v-model="row.carFactory" />
             </template>
           </el-table-column>
           <el-table-column label="车型">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
+              <el-input v-model="row.carModel" />
             </template>
           </el-table-column>
           <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
@@ -148,33 +153,33 @@
           <el-table-column type="index" width="50" />
           <el-table-column label="客户零件号" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.number" />
+              <el-input v-model="row.partNumber" />
             </template>
           </el-table-column>
           <el-table-column label="产品名称" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.name" />
+              <el-input v-model="row.product" />
             </template>
           </el-table-column>
           <el-table-column label="产品小类" width="180">
             <template #default="{ row }">
-              <el-select v-model="row.value" placeholder="Select">
+              <el-select v-model="row.productType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="市场份额" width="180" prop="name" />
+          <el-table-column label="市场份额" width="180" prop="marketShare" />
           <el-table-column label="模组搭载率" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.name" />
+              <el-input v-model="row.moduleCarryingRate" />
             </template>
           </el-table-column>
           <el-table-column label="单车产品数量" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.name" />
+              <el-input v-model="row.singleCarProductsQuantity" />
             </template>
           </el-table-column>
-          <el-table-column label="模组总量" prop="name" width="180" />
+          <el-table-column label="模组总量" prop="modelTotal" width="180" />
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
               <el-button @click="deleteProduct($index)" type="danger">删除</el-button>
@@ -202,17 +207,17 @@
           </el-table-column> -->
           <el-table-column label="年降率">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
+              <el-input v-model="row.annualDeclineRate" />
             </template>
           </el-table-column>
           <el-table-column label="年度返利要求">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
+              <el-input v-model="row.annualRebateRequirements" />
             </template>
           </el-table-column>
           <el-table-column label="一次性折让率">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
+              <el-input v-model="row.oneTimeDiscountRate" />
             </template>
           </el-table-column>
           <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
@@ -224,42 +229,42 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="模具费分摊:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.allocationOfMouldCost" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="治具费分摊:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.allocationOfFixtureCost" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="设备费分摊:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.allocationOfEquipmentCost" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="信赖性费用分摊:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.reliabilityCost" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="开发费分摊:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.developmentCost" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="落地工厂:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.landingFactory" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -289,7 +294,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.value" placeholder="单价" />
+                  <el-input v-model="row.price" placeholder="单价" />
                 </template>
               </el-input>
             </template>
@@ -305,7 +310,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.value" placeholder="单价" />
+                  <el-input v-model="row.price" placeholder="单价" />
                 </template>
               </el-input>
             </template>
@@ -413,37 +418,39 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="贸易方式:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.tradeMode" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="销售类型:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.salesType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="付款类型:"> <el-input /> </el-form-item>
+            <el-form-item label="付款方式:"> <el-input v-model="state.quoteForm.paymentMethod" /> </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="报价币种:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.currency" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="客户目标价:"> <el-input /> </el-form-item>
+            <el-form-item label="客户目标价:">
+              <el-input v-model="state.quoteForm.customerTargetPrice" />
+            </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="汇率:"> <el-input /> </el-form-item>
+            <el-form-item label="汇率:"> <el-input v-model="state.quoteForm.exchangeRate" /> </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="客户特殊性要求:">
-              <el-input type="textarea" :rows="10" />
+              <el-input type="textarea" :rows="10" v-model="state.quoteForm.customerSpecialRequest" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -453,40 +460,40 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="运输方式:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.shippingType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="包装方式:">
-              <el-select v-model="value" placeholder="Select">
+              <el-select v-model="state.quoteForm.packagingType" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="核价要求完成时间:">
-              <el-date-picker type="date" placeholder="Pick a day" />
+              <el-date-picker type="date" placeholder="Pick a day" v-model="state.quoteForm.deadline" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="项目经理:"> <el-input :suffix-icon="Search" /> </el-form-item>
+            <el-form-item label="项目经理:">
+              <el-input :suffix-icon="Search" v-model="state.quoteForm.projectManager" />
+            </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="交货地点:">
-              <el-input type="textarea" :rows="10" />
+              <el-input type="textarea" :rows="10" v-model="state.quoteForm.placeOfDelivery" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item>
               <el-upload
-                class="upload-demo"
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="/api/services/app/FileCommonService/UploadFile"
                 :on-preview="handlePreview"
                 :on-remove="handleRemove"
                 multiple
-                :limit="1"
               >
                 <el-button type="primary">SOR文件上传</el-button>
               </el-upload>
@@ -506,7 +513,7 @@
 </template>
 <script lang="ts" setup>
 // import { reactive, ref } from "vue"
-import { ref, reactive } from "vue"
+import { ref, reactive, onMounted, computed, toRefs } from "vue"
 // import { useRouter } from "vue-router"
 import { Search } from "@element-plus/icons-vue"
 // import SearchPerson from '@/components/SearchPerson'
@@ -514,6 +521,12 @@ import { Search } from "@element-plus/icons-vue"
 import type { UploadProps } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 import type { User } from "./data.type"
+
+// import type { User, InputModal } from "./data.type"
+// import { saveApplyInfo } from "@/api/demandApply"
+// import { getDictionaryAndDetail } from "@/api/dictionary"
+
+import dayjs from "dayjs"
 
 interface Product {
   id: string
@@ -552,38 +565,51 @@ const getSummaries = (param: SummaryMethodProps) => {
 
   return sums
 }
-const value = ref("")
-const quoteForm = reactive({
-  title: "",
-  drafter: "",
-  drafterNumber: "",
-  draftingDepartment: "",
-  draftingCompany: "",
-  draftDate: "",
-  number: "",
-  projectName: "",
-  projectCode: "",
-  customerName: "",
-  customerNature: "",
-  terminalName: "",
-  terminalNature: "",
-  quotationType: "",
-  sampleQuotationType: "",
-  sopTime: "",
-  projectCycle: "",
-  terminalQuantity: "",
-  modelCount: "",
-  requirement: "",
-  productInfo: "",
-  tradeMode: "",
-  salesType: "",
-  paymentMethod: "",
-  customerTargetPrice: "",
-  exchangeRate: "",
-  placeOfDelivery: "",
-  projectManager: "",
-  sorFile: []
+const state = reactive({
+  quoteForm: {
+    title: "" as any,
+    drafter: "",
+    drafterNumber: "",
+    draftingDepartment: "",
+    draftingCompany: "",
+    draftDate: "",
+    number: "",
+    projectName: "",
+    projectCode: "",
+    customerName: "",
+    customerNature: "",
+    terminalName: "",
+    terminalNature: "",
+    quotationType: "",
+    sampleQuotationType: "",
+    sopTime: "",
+    projectCycle: "",
+    pcs: [],
+    modelCount: [],
+    requirement: [],
+    allocationOfMouldCost: 0,
+    allocationOfFixtureCost: 0,
+    allocationOfEquipmentCost: 0,
+    reliabilityCost: 0,
+    developmentCost: 0,
+    landingFactory: 0,
+    productInformation: [],
+    tradeMode: "",
+    salesType: 0,
+    paymentMethod: "",
+    currency: 0,
+    customerTargetPrice: 0,
+    exchangeRate: 0,
+    customerSpecialRequest: "",
+    shippingType: 0,
+    packagingType: 0,
+    placeOfDelivery: "",
+    deadline: "",
+    projectManager: 0,
+    sorFile: []
+  }
 })
+// let customerNatureOptions: any = []
 const yearCount = ref(0)
 // const colYears = reactive([
 //   {
@@ -804,7 +830,32 @@ const handleRemove: UploadProps["onRemove"] = (file, uploadFiles) => {
 const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
   console.log(uploadFile)
 }
+let userStorage = window.sessionStorage.getItem("user")
+let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
+let title = computed({
+  get() {
+    console.log(userInfo)
+    let nowDate = dayjs(new Date()).format("YYYY-MM-DD")
+    let userDepartment = userInfo.userDepartment
+    let title = `${nowDate + userDepartment}关于${
+      state.quoteForm.customerName + state.quoteForm.projectName
+    }的核价报价申请`
+    return title
+  },
+  set(val) {
+    return val
+  }
+})
 
+onMounted(async () => {
+  state.quoteForm.drafter = userInfo.name
+  state.quoteForm.drafterNumber = userInfo.userNumber
+  state.quoteForm.draftingCompany = userInfo.userCompany
+  state.quoteForm.draftingDepartment = userInfo.userDepartment
+
+  // let customerNatureOptions: any = await getDictionaryAndDetail("customerNature")
+  // debugger
+})
 // const handleExceed: UploadProps["onExceed"] = (files, uploadFiles) => {
 //   ElMessage.warning(
 //     `The limit is 3, you selected ${files.length} files this time, add up to ${
@@ -819,6 +870,10 @@ const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
 //     () => false
 //   )
 // }
+defineExpose({
+  ...toRefs(state),
+  title
+})
 </script>
 
 <style lang="scss" scoped>

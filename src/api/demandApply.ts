@@ -1,10 +1,7 @@
-export interface User {
-  date: string
-  name: string
-  address: string
-  list?: Array<Object>
-}
-
+import { request } from "@/utils/service"
+/**
+ * PriceEvaluationStartInput，PriceEvaluationStart 方法的输入参数
+ */
 export interface InputModal {
   /**
    *
@@ -327,4 +324,12 @@ export interface CreateRequirementDto {
    * 年份
    */
   year: number
+}
+/** 录入 */
+export function saveApplyInfo(data: InputModal) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/PriceEvaluationStart",
+    method: "post",
+    data
+  })
 }

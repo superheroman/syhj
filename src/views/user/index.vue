@@ -1,7 +1,17 @@
 <template>
   <div class="user">
     <div class="user__btn-container">
-      <!-- <el-button type="primary" @click="data.dialogVisible = true">创建角色</el-button> -->
+      <el-form :model="data.searchForm" inline>
+        <el-form-item label="关键字">
+          <el-input v-model="data.searchForm.keyword" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search">搜索</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="user__btn-container">
+      <!-- <el-button type="primary" @click="search"></el-button> -->
     </div>
     <el-table :data="tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
@@ -31,6 +41,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <div class="dictionary__btn-container">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="data.total"
+        v-model:currentPage="data.pageNo"
+        @update:current-page="handlePageChange"
+      />
+    </div>
     <el-dialog v-model="data.dialogVisible" title="用户信息">
       <el-form :model="data.userForm" ref="userForm">
         <el-form-item label="姓名" :label-width="data.formLabelWidth">
@@ -68,7 +87,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="data.psVisible = false">取消</el-button>
-          <el-button type="primary" @click="data.psVisible = false">保存</el-button>
+          <el-button type="primary" @click="updatePassword">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -84,7 +103,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="data.psResetVisible = false">取消</el-button>
-          <el-button type="primary" @click="data.psResetVisible = false">保存</el-button>
+          <el-button type="primary" @click="resetPassword">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -96,7 +115,16 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
 // import { updateUser, deleteUser, activateUser, deActivateUser, changePassword, changePasswordAd } from "@/api/user"
-import { updateUser, deleteUser, activateUser, deActivateUser } from "@/api/user"
+import {
+  updateUser,
+  deleteUser,
+  activateUser,
+  deActivateUser,
+  getUserList,
+  UserParams,
+  changePassword,
+  changePasswordAd
+} from "@/api/user"
 
 /**
  * 路由对象
@@ -116,6 +144,13 @@ const data = reactive({
   psVisible: false,
   psResetVisible: false,
   formLabelWidth: "140px",
+  searchForm: {
+    keyword: ""
+  },
+  pageNo: 1,
+  maxResultCount: 20,
+  total: 0,
+  rowSelect: {} as User,
   userForm: {
     id: 1,
     name: "Tom",
@@ -152,6 +187,7 @@ const handlePsEdit = (index: number, row: User) => {
 }
 const handlePsResetEdit = (index: number, row: User) => {
   console.log(index, row)
+  data.rowSelect = row
   data.psResetVisible = true
 }
 
@@ -177,7 +213,46 @@ const handleDelete = (index: number, row: User) => {
       })
     })
 }
+const handlePageChange = () => {
+  getList()
+}
+const updatePassword = async () => {
+  let res: any = await changePassword(data.psForm)
+  if (res.success) {
+    data.psVisible = false
+  }
+}
+const resetPassword = async () => {
+  let params = Object.assign(
+    {
+      userId: data.rowSelect.id
+    },
+    data.psResetForm
+  )
 
+  let res: any = await changePasswordAd(params)
+  if (res.success) {
+    data.psVisible = false
+  }
+}
+const search = () => {
+  getList()
+}
+const getList = async () => {
+  let params: UserParams = {
+    keyword: "",
+    maxResultCount: 20,
+    skipCount: 1
+  }
+  params.keyword = data.searchForm.keyword
+  params.skipCount = data.pageNo
+  params.maxResultCount = data.maxResultCount
+
+  let res: any = await getUserList(params)
+  // console.log(res)
+  data.tableData = res.result.items
+  data.total = res.result.totalCount
+}
 const activeChange = (val: boolean, row: User) => {
   if (val) {
     activateUser(row.id)

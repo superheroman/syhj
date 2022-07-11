@@ -2,9 +2,6 @@
   <div class="dictionary">
     <div class="dictionary__btn-container">
       <el-form :model="data.searchForm" inline>
-        <!-- <el-form-item label="字典名">
-          <el-input v-model="data.searchForm.name" />
-        </el-form-item> -->
         <el-form-item label="字典显示名">
           <el-input v-model="data.searchForm.displayName" />
         </el-form-item>
@@ -12,22 +9,21 @@
           <el-input v-model="data.searchForm.remark" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="data.dialogVisible = true">搜索</el-button>
+          <el-button type="primary" @click="search">搜索</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="dictionary__btn-container">
-      <el-button type="primary" @click="data.dialogVisible = true">创建字典</el-button>
+      <el-button type="primary" @click="data.dialogVisible = true">创建字典明细</el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="data.tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
-      <el-table-column label="字典名" prop="name" />
-      <el-table-column label="字典显示名" prop="displayName" />
+      <el-table-column label="字典明细名" prop="name" />
+      <el-table-column label="字典明细显示名" prop="displayName" />
       <el-table-column label="备注" prop="remark" />
       <el-table-column label="操作">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">详情列表</el-button>
           <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -41,12 +37,12 @@
         @update:current-page="handlePageChange"
       />
     </div>
-    <el-dialog v-model="data.dialogVisible" title="字典编辑">
+    <el-dialog v-model="data.dialogVisible" title="字典明细编辑">
       <el-form :model="data.editForm">
-        <el-form-item label="字典名" :label-width="data.formLabelWidth">
+        <el-form-item label="字典明细名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.name" />
         </el-form-item>
-        <el-form-item label="字典显示名" :label-width="data.formLabelWidth">
+        <el-form-item label="字典明细显示名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.displayName" />
         </el-form-item>
         <el-form-item label="备注" :label-width="data.formLabelWidth">
@@ -66,7 +62,12 @@
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { useRoute } from "vue-router"
-import { addDictionary, editDictionary, deleteDictionary, getDictionary } from "@/api/dictionary"
+import {
+  addDictionaryDetail,
+  editDictionaryDetail,
+  deleteDictionaryDetail,
+  getDictionaryDetail
+} from "@/api/dictionary"
 
 import { ElMessage, ElMessageBox } from "element-plus"
 interface dictionary {
@@ -93,7 +94,7 @@ interface DictionarySearch {
   remark?: null | string
   maxResultCount: number
   skipCount: number
-  financeDictionaryId: number
+  financeDictionaryId: number | null
 }
 /**
  * 路由对象
@@ -118,16 +119,17 @@ const data = reactive({
     remark: ""
   },
   editForm: {
-    id: -1,
     name: "",
     displayName: "",
     remark: ""
-  },
+  } as dictionary,
   pageNo: 1,
   pageSize: 20,
   total: 0
 })
-
+const search = () => {
+  getList()
+}
 const getList = async () => {
   let params: DictionarySearch = {
     displayName: "",
@@ -142,10 +144,10 @@ const getList = async () => {
   params.remark = data.searchForm.remark
   params.skipCount = data.pageNo
   params.maxResultCount = data.pageSize
-
-  let res: any = getDictionary(params)
-  data.tableData = res.data.list
-  data.total = res.data.totalCount
+  params.financeDictionaryId = Number(route.query.id)
+  let res: any = await getDictionaryDetail(params)
+  data.tableData = res.result.items
+  data.total = res.result.totalCount
 }
 const handleEdit = (index: number, row: tableRow) => {
   console.log(index, row)
@@ -158,15 +160,17 @@ const handlePageChange = () => {
 }
 const saveDictionary = async () => {
   let res: any = null
-  if (!data.editForm.id) {
-    res = await addDictionary(data.editForm)
+  if (data.editForm.id) {
+    res = await editDictionaryDetail(data.editForm)
   } else {
-    res = await editDictionary(data.editForm)
+    interface saveData extends dictionary {
+      financeDictionaryId: number
+    }
+    let newData: saveData = Object.assign({ financeDictionaryId: Number(route.query.id) }, data.editForm)
+    res = await addDictionaryDetail(newData)
   }
-
-  if (res.code === "200") {
+  if (res.success) {
     data.editForm = {
-      id: -1,
       name: "",
       displayName: "",
       remark: ""
@@ -186,7 +190,7 @@ const handleDelete = (index: number, row: tableRow) => {
     type: "warning"
   })
     .then(async () => {
-      let res: any = await deleteDictionary(row.id)
+      let res: any = await deleteDictionaryDetail(row.id)
       if (res.code === "200") {
         ElMessage({
           type: "success",
@@ -202,18 +206,11 @@ const handleDelete = (index: number, row: tableRow) => {
     })
 }
 
-const tableData: tableRow[] = [
-  {
-    id: 1,
-    name: "Tom",
-    displayName: "No. 189, Grove St, Los Angeles",
-    remark: "123123"
-  }
-]
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  search()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

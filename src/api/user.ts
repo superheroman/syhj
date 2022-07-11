@@ -103,6 +103,12 @@ export interface ResetPasswordAd {
    */
   userId: number
 }
+export interface UserParams {
+  keyword?: string
+  isActive?: string
+  skipCount: number
+  maxResultCount: number
+}
 /** 创建用户 */
 export function createUser(data: CreateUserDto) {
   return request({
@@ -163,8 +169,16 @@ export function changePassword(data: PasswordInfo) {
 /** 管理员修改密码 */
 export function changePasswordAd(data: ResetPasswordAd) {
   return request({
-    url: "/api/services/app/User/ChangePassword",
+    url: "/api/services/app/User/ResetPassword",
     method: "post",
+    data
+  })
+}
+/** 用户列表 */
+export function getUserList(data: UserParams) {
+  return request({
+    url: "/api/services/app/User/GetAll",
+    method: "get",
     data
   })
 }

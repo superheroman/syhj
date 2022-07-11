@@ -20,25 +20,31 @@ function createService() {
       // apiData 是 api 返回的数据
       const apiData = response.data as any
       // 这个 code 是和后端约定的业务 code
-      const code = apiData.code
+      // const code = apiData.code
       // 如果没有 code, 代表这不是项目后端开发的 api
-      if (code === undefined) {
-        ElMessage.error("非本系统的接口")
-        return Promise.reject(new Error("非本系统的接口"))
-      } else {
-        switch (code) {
-          case 0:
-            // code === 0 代表没有错误
-            return apiData
-          case 20000:
-            // code === 20000 代表没有错误
-            return apiData
-          default:
-            // 不是正确的 code
-            ElMessage.error(apiData.msg || "Error")
-            return Promise.reject(new Error("Error"))
-        }
+      // if (code === undefined) {
+      //   ElMessage.error("非本系统的接口")
+      //   return Promise.reject(new Error("非本系统的接口"))
+      // } else {
+      //   switch (code) {
+      //     case 0:
+      //       // code === 0 代表没有错误
+      //       return apiData
+      //     case 20000:
+      //       // code === 20000 代表没有错误
+      //       return apiData
+      //     default:
+      //       // 不是正确的 code
+      //       ElMessage.error(apiData.msg || "Error")
+      //       return Promise.reject(new Error("Error"))
+      //   }
+      // }
+      const error = apiData.error
+      if (error) {
+        ElMessage.error(error)
+        // return Promise.reject(new Error(error))
       }
+      return apiData
     },
     (error) => {
       // status 是 HTTP 状态码
@@ -101,6 +107,10 @@ function createRequestFunction(service: AxiosInstance) {
       timeout: 5000,
       baseURL: import.meta.env.VITE_BASE_API,
       data: {}
+    }
+    if (config.method === "get" || config.method === "delete") {
+      config.params = Object.assign({}, config.data)
+      delete config.data
     }
     return service(Object.assign(configDefault, config))
   }

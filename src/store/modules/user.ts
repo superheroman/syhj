@@ -3,20 +3,22 @@ import { defineStore } from "pinia"
 import { usePermissionStore } from "./permission"
 import { getToken, removeToken, setToken } from "@/utils/cookies"
 import router, { resetRouter } from "@/router"
-import { accountLogin, userInfoRequest } from "@/api/login"
+import { userInfoRequest, login } from "@/api/login"
 import { RouteRecordRaw } from "vue-router"
 
 interface IUserState {
   token: string
   roles: string[]
+  userInfo: Object
 }
 
 export const useUserStore = defineStore({
   id: "user",
   state: (): IUserState => {
     return {
-      token: getToken() || "",
-      roles: []
+      token: getToken() || "admin-token", //login 获取token accessToken:"admin-token"
+      roles: ["admin"], // 保存角色 ['admin']
+      userInfo: {}
     }
   },
   actions: {
@@ -25,15 +27,35 @@ export const useUserStore = defineStore({
       this.roles = roles
     },
     /** 登录 */
-    login(userInfo: { username: string; password: string }) {
+    // login(userInfo: { username: string; password: string }) {
+    //   return new Promise((resolve, reject) => {
+    //     accountLogin({
+    //       username: userInfo.username.trim(),
+    //       password: userInfo.password
+    //     })
+    //       .then((res: any) => {
+    //         setToken(res.data.accessToken)
+    //         this.token = res.data.accessToken
+    //         resolve(true)
+    //       })
+    //       .catch((error) => {
+    //         reject(error)
+    //       })
+    //   })
+    // },
+
+    login(userInfo: { userNameOrEmailAddress: string; password: string; rememberClient: boolean }) {
       return new Promise((resolve, reject) => {
-        accountLogin({
-          username: userInfo.username.trim(),
-          password: userInfo.password
+        login({
+          userNameOrEmailAddress: userInfo.userNameOrEmailAddress.trim(),
+          password: userInfo.password,
+          rememberClient: true
         })
           .then((res: any) => {
-            setToken(res.data.accessToken)
-            this.token = res.data.accessToken
+            setToken(res.result.accessToken)
+            this.token = res.result.accessToken
+            this.userInfo = res.result.user
+            window.sessionStorage.setItem("user", JSON.stringify(res.result.user))
             resolve(true)
           })
           .catch((error) => {
@@ -55,6 +77,7 @@ export const useUserStore = defineStore({
       })
     },
     /** 切换角色 */
+    /** 该项目无需使用 */
     async changeRoles(role: string) {
       const token = role + "-token"
       this.token = token

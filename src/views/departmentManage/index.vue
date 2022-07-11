@@ -41,7 +41,8 @@ import {
   updateDepartment,
   getRootDepartment,
   getDepartmentChildren,
-  deleteDerpartment
+  deleteDerpartment,
+  DepartmentInfo
 } from "@/api/departmentManage"
 import { ElMessage, ElMessageBox } from "element-plus"
 
@@ -88,14 +89,16 @@ let clickTreeNode: Tree = reactive({
   name: ""
 })
 const editNode = (node: Node, nodeData: Tree[]) => {
-  console.log(nodeData)
-  data.addForm.name = "123" // 暂时
-  data.addForm.fid = node.id || -1
+  console.log(nodeData, node)
+  data.isEdit = true
+  data.addForm.name = node.data.name // 暂时
+  data.addForm.fid = node.data.fid
+  data.addForm.id = node.data.id
   data.dialogVisible = true
 }
 const handleNodeClick = (node: Tree) => {
   clickTreeNode.name = node.name
-  data.addForm.fid = node.id || -1
+  data.addForm.fid = node.id
   console.log(clickTreeNode)
 }
 const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
@@ -105,8 +108,8 @@ const loadNode = (node: Node, resolve: (data: Tree[]) => void) => {
     return resolve([])
   }
   getDepartmentChildren(node.id)
-    .then((res) => {
-      resolve(res.data)
+    .then((res: any) => {
+      resolve(res.result.items)
     })
     .catch(() => {
       resolve([])
@@ -126,17 +129,22 @@ let data = reactive({
   treeData,
   dialogVisible: false,
   addForm: {
-    fid: -1,
     name: ""
-  }
+  } as DepartmentInfo,
+  isEdit: false
 })
-let saveDepartment = () => {
+let saveDepartment = async () => {
   console.log("save")
-  let res = null
-  if (data.addForm.fid) {
-    res = updateDepartment(data.addForm)
+  let res: any = null
+  if (data.addForm.fid && !data.isEdit) {
+    res = await addDepartment(data.addForm)
   } else {
-    res = addDepartment(data.addForm)
+    res = await addDepartment({
+      name: data.addForm.name
+    })
+  }
+  if (data.isEdit) {
+    res = await updateDepartment(data.addForm)
   }
   console.log(res)
   ElMessage({
@@ -172,8 +180,8 @@ onBeforeMount(() => {
 onMounted(async () => {
   // 获取根节点
   try {
-    let res = await getRootDepartment()
-    res.data.forEach((item: Tree) => {
+    let res: any = await getRootDepartment()
+    res.result.items.forEach((item: Tree) => {
       data.treeData.push(item)
     })
   } catch (error) {
@@ -181,15 +189,15 @@ onMounted(async () => {
   }
 
   let arr: Tree[] = [
-    {
-      name: "Level one 1"
-    },
-    {
-      name: "Level one 2"
-    },
-    {
-      name: "Level one 3"
-    }
+    // {
+    //   name: "Level one 1"
+    // },
+    // {
+    //   name: "Level one 2"
+    // },
+    // {
+    //   name: "Level one 3"
+    // }
   ]
   arr.forEach((item) => {
     data.treeData.push(item)

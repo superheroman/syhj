@@ -150,6 +150,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/dictionary",
     redirect: "/dictionary/index",
     component: Layout,
+    // meta: {
+    //   title: "字典管理"
+    // },
     children: [
       {
         path: "/dictionary/index",
@@ -157,6 +160,15 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "dictionary",
         meta: {
           title: "字典管理"
+        }
+      },
+      {
+        path: "/dictionary/detailList",
+        component: () => import("@/views/dictionary/detailList.vue"),
+        name: "detailList",
+        meta: {
+          title: "字典管理明细表",
+          hidden: true
         }
       }
     ]

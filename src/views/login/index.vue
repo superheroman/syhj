@@ -7,11 +7,9 @@ import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 
 interface ILoginForm {
   /** admin 或 editor */
-  username: string
+  userNameOrEmailAddress: string
   /** 密码 */
   password: string
-  /** 验证码 */
-  code: string
 }
 
 const router = useRouter()
@@ -24,18 +22,16 @@ const state = reactive({
   codeUrl: "",
   /** 登录表单 */
   loginForm: {
-    username: "admin",
-    password: "12345678",
-    code: "abcd"
+    userNameOrEmailAddress: "admin",
+    password: "123qwe"
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
-    username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
+    userNameOrEmailAddress: [{ required: true, message: "请输入用户名", trigger: "blur" }],
     password: [
       { required: true, message: "请输入密码", trigger: "blur" },
-      { min: 8, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
-    ],
-    code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+      { min: 6, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
+    ]
   },
   /** 登录逻辑 */
   handleLogin: () => {
@@ -44,8 +40,9 @@ const state = reactive({
         state.loading = true
         useUserStore()
           .login({
-            username: state.loginForm.username,
-            password: state.loginForm.password
+            userNameOrEmailAddress: state.loginForm.userNameOrEmailAddress,
+            password: state.loginForm.password,
+            rememberClient: true
           })
           .then(() => {
             state.loading = false
@@ -55,8 +52,12 @@ const state = reactive({
           })
           .catch(() => {
             state.loading = false
-            state.createCode()
-            state.loginForm.password = ""
+            debugger
+            router.push({ path: "/" }).catch((err) => {
+              console.warn(err)
+            })
+            // state.createCode()
+            // state.loginForm.password = ""
           })
       } else {
         return false
@@ -64,12 +65,12 @@ const state = reactive({
     })
   },
   /** 创建验证码 */
-  createCode: () => {
-    // 先清空验证码的输入
-    state.loginForm.code = ""
-    // 实际开发中，可替换成自己的地址，这里只是提供一个参考
-    state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
-  },
+  // createCode: () => {
+  //   // 先清空验证码的输入
+  //   state.loginForm.code = ""
+  //   // 实际开发中，可替换成自己的地址，这里只是提供一个参考
+  //   state.codeUrl = `/api/v1/login/code?${Math.random() * 1000}`
+  // },
   /* 注册表单 */
   registForm: {
     name: "",
@@ -98,7 +99,7 @@ const formLabelWidth = "100px"
         <el-form ref="loginFormDom" :model="state.loginForm" :rules="state.loginRules" @keyup.enter="state.handleLogin">
           <el-form-item prop="username">
             <el-input
-              v-model="state.loginForm.username"
+              v-model="state.loginForm.userNameOrEmailAddress"
               placeholder="用户名"
               type="text"
               tabindex="1"
@@ -117,7 +118,7 @@ const formLabelWidth = "100px"
               show-password
             />
           </el-form-item>
-          <el-form-item prop="code">
+          <!-- <el-form-item prop="code">
             <el-input
               v-model="state.loginForm.code"
               placeholder="验证码"
@@ -130,7 +131,7 @@ const formLabelWidth = "100px"
             <span class="show-code">
               <img :src="state.codeUrl" @click="state.createCode" />
             </span>
-          </el-form-item>
+          </el-form-item> -->
           <el-button :loading="state.loading" type="primary" size="large" @click.prevent="state.handleLogin">
             登 录
           </el-button>

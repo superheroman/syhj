@@ -11,6 +11,7 @@ export interface DepartmentInfo {
    * 部门名称
    */
   name: string
+  id?: number | null | undefined
 }
 /**
  * UpdateDerpartmentInput，部门更新
@@ -34,7 +35,7 @@ export function addDepartment(data: DepartmentInfo) {
 /** 修改部门 */
 export function updateDepartment(data: UpdateDepartmentInfo) {
   return request({
-    url: "/api/services/app/Hr/UpdateDerpartment",
+    url: "/api/services/app/Hr/UpdateDepartment",
     method: "put",
     data
   })
@@ -53,14 +54,14 @@ export function deleteDerpartment(id: number) {
 /** 获取根部门 */
 export function getRootDepartment() {
   return request({
-    url: "/api/services/app/Hr/GetRootDerpartment",
+    url: "/api/services/app/Hr/GetRootDepartment",
     method: "get"
   })
 }
 /** 获取下属部门 */
 export function getDepartmentChildren(id: number) {
   return request({
-    url: "/api/services/app/Hr/GetSubordinateDerpartment",
+    url: "/api/services/app/Hr/GetSubordinateDepartment",
     method: "get",
     data: {
       id
