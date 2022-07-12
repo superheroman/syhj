@@ -138,3 +138,14 @@ export function getDictionaryAndDetail(name: string) {
     }
   })
 }
+
+/** 根据字典名获取字典 */
+export function getFinanceDictionaryByName(name: string) {
+  return request({
+    url: "/api/services/app/FinanceDictionary/GetFinanceDictionaryByName",
+    method: "get",
+    data: {
+      name
+    }
+  })
+}

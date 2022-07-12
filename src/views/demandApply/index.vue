@@ -6,7 +6,11 @@
         <el-row :gutter="20">
           <el-col :span="24">
             <el-form-item label="标题:">
-              <el-input v-model="title" />
+              <el-input v-model="state.quoteForm.title">
+                <template #append>
+                  <el-button @click="generateTitle">自动生成</el-button>
+                </template>
+              </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -62,7 +66,12 @@
           <el-col :span="6">
             <el-form-item label="客户性质:">
               <el-select v-model="state.quoteForm.customerNature" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.customerNatureOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -74,7 +83,12 @@
           <el-col :span="6">
             <el-form-item label="终端性质:">
               <el-select v-model="state.quoteForm.terminalNature" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.terminalNatureOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -83,14 +97,24 @@
           <el-col :span="6">
             <el-form-item label="报价形式:">
               <el-select v-model="state.quoteForm.quotationType" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.quotationTypeOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="样品报价类型:">
               <el-select v-model="state.quoteForm.sampleQuotationType" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.sampleQuotationTypeOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -164,7 +188,12 @@
           <el-table-column label="产品小类" width="180">
             <template #default="{ row }">
               <el-select v-model="row.productType" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.productTypeOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </template>
           </el-table-column>
@@ -230,42 +259,72 @@
           <el-col :span="6">
             <el-form-item label="模具费分摊:">
               <el-select v-model="state.quoteForm.allocationOfMouldCost" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.allocationOfMouldCostOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="治具费分摊:">
               <el-select v-model="state.quoteForm.allocationOfFixtureCost" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.allocationOfFixtureCostOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="设备费分摊:">
               <el-select v-model="state.quoteForm.allocationOfEquipmentCost" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.allocationOfEquipmentCostOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="信赖性费用分摊:">
               <el-select v-model="state.quoteForm.reliabilityCost" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.reliabilityCostOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="开发费分摊:">
               <el-select v-model="state.quoteForm.developmentCost" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.developmentCostOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="落地工厂:">
               <el-select v-model="state.quoteForm.landingFactory" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.landingFactoryOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -418,15 +477,18 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="贸易方式:">
-              <el-select v-model="state.quoteForm.tradeMode" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
+              <el-input v-model="state.quoteForm.tradeMode" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="销售类型:">
               <el-select v-model="state.quoteForm.salesType" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.salesTypeOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -436,7 +498,12 @@
           <el-col :span="6">
             <el-form-item label="报价币种:">
               <el-select v-model="state.quoteForm.currency" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.currencyOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -461,14 +528,24 @@
           <el-col :span="6">
             <el-form-item label="运输方式:">
               <el-select v-model="state.quoteForm.shippingType" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.shippingTypeOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="包装方式:">
               <el-select v-model="state.quoteForm.packagingType" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option
+                  v-for="item in state.packagingTypeOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
               </el-select>
             </el-form-item>
           </el-col>
@@ -524,7 +601,7 @@ import type { User } from "./data.type"
 
 // import type { User, InputModal } from "./data.type"
 // import { saveApplyInfo } from "@/api/demandApply"
-// import { getDictionaryAndDetail } from "@/api/dictionary"
+import { getDictionaryAndDetail } from "@/api/dictionary"
 
 import dayjs from "dayjs"
 
@@ -534,6 +611,10 @@ interface Product {
   amount1: string
   amount2: string
   amount3: number
+}
+interface Options {
+  id: number
+  displayName: string
 }
 interface SummaryMethodProps<T = Product> {
   columns: TableColumnCtx<T>[]
@@ -565,6 +646,8 @@ const getSummaries = (param: SummaryMethodProps) => {
 
   return sums
 }
+let userStorage = window.sessionStorage.getItem("user")
+let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const state = reactive({
   quoteForm: {
     title: "" as any,
@@ -607,7 +690,24 @@ const state = reactive({
     deadline: "",
     projectManager: 0,
     sorFile: []
-  }
+  },
+  customerNatureOptions: [] as unknown as Options[],
+  terminalNatureOptions: [] as unknown as Options[],
+  quotationTypeOptions: [] as unknown as Options[],
+  sampleQuotationTypeOptions: [] as unknown as Options[],
+  countryOptions: [] as unknown as Options[],
+  productOptions: [] as unknown as Options[],
+  productTypeOptions: [] as unknown as Options[],
+  allocationOfMouldCostOptions: [] as unknown as Options[],
+  allocationOfFixtureCostOptions: [] as unknown as Options[],
+  allocationOfEquipmentCostOptions: [] as unknown as Options[],
+  reliabilityCostOptions: [] as unknown as Options[],
+  developmentCostOptions: [] as unknown as Options[],
+  landingFactoryOptions: [] as unknown as Options[],
+  salesTypeOptions: [] as unknown as Options[],
+  currencyOptions: [] as unknown as Options[],
+  shippingTypeOptions: [] as unknown as Options[],
+  packagingTypeOptions: [] as unknown as Options[]
 })
 // let customerNatureOptions: any = []
 const yearCount = ref(0)
@@ -731,86 +831,6 @@ const deleteProduct = (i: number) => {
   moduleTableData.splice(i, 1)
   productTableData.splice(i, 1)
 }
-// const handleEdit = (index: number, row: User) => {
-//   console.log(index, row)
-// }
-// const handleDelete = (index: number, row: User) => {
-//   console.log(index, row)
-// }
-// const checkList = ref(["selected and disabled", "Option A"])
-
-// const value1 = ref()
-
-// const data = [
-//   {
-//     value: "1",
-//     label: "Level one 1",
-//     children: [
-//       {
-//         value: "1-1",
-//         label: "Level two 1-1",
-//         children: [
-//           {
-//             value: "1-1-1",
-//             label: "Level three 1-1-1"
-//           }
-//         ]
-//       }
-//     ]
-//   },
-//   {
-//     value: "2",
-//     label: "Level one 2",
-//     children: [
-//       {
-//         value: "2-1",
-//         label: "Level two 2-1",
-//         children: [
-//           {
-//             value: "2-1-1",
-//             label: "Level three 2-1-1"
-//           }
-//         ]
-//       },
-//       {
-//         value: "2-2",
-//         label: "Level two 2-2",
-//         children: [
-//           {
-//             value: "2-2-1",
-//             label: "Level three 2-2-1"
-//           }
-//         ]
-//       }
-//     ]
-//   },
-//   {
-//     value: "3",
-//     label: "Level one 3",
-//     children: [
-//       {
-//         value: "3-1",
-//         label: "Level two 3-1",
-//         children: [
-//           {
-//             value: "3-1-1",
-//             label: "Level three 3-1-1"
-//           }
-//         ]
-//       },
-//       {
-//         value: "3-2",
-//         label: "Level two 3-2",
-//         children: [
-//           {
-//             value: "3-2-1",
-//             label: "Level three 3-2-1"
-//           }
-//         ]
-//       }
-//     ]
-//   }
-// ]
 
 // const fileList = ref<UploadUserFile[]>([
 //   {
@@ -830,8 +850,15 @@ const handleRemove: UploadProps["onRemove"] = (file, uploadFiles) => {
 const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
   console.log(uploadFile)
 }
-let userStorage = window.sessionStorage.getItem("user")
-let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
+
+const generateTitle = () => {
+  let nowDate = dayjs(new Date()).format("YYYY-MM-DD")
+  let userDepartment = userInfo.userDepartment
+  let title = `${nowDate + userDepartment}关于${
+    state.quoteForm.customerName + state.quoteForm.projectName
+  }的核价报价申请`
+  state.quoteForm.title = title
+}
 let title = computed({
   get() {
     console.log(userInfo)
@@ -852,9 +879,76 @@ onMounted(async () => {
   state.quoteForm.drafterNumber = userInfo.userNumber
   state.quoteForm.draftingCompany = userInfo.userCompany
   state.quoteForm.draftingDepartment = userInfo.userDepartment
+  let customerNature: any = await getDictionaryAndDetail("CustomerNature") //客户性质
+  state.customerNatureOptions = customerNature.result.financeDictionaryDetailList
 
-  // let customerNatureOptions: any = await getDictionaryAndDetail("customerNature")
-  // debugger
+  let terminalNature: any = await getDictionaryAndDetail("TerminalNature") //终端性质
+  state.terminalNatureOptions = terminalNature.result.financeDictionaryDetailList
+
+  let quotationType: any = await getDictionaryAndDetail("QuotationType") //报价形式
+  state.quotationTypeOptions = quotationType.result.financeDictionaryDetailList
+
+  let sampleQuotationType: any = await getDictionaryAndDetail("SampleQuotationType") //样品报价类型
+  state.sampleQuotationTypeOptions = sampleQuotationType.result.financeDictionaryDetailList
+
+  let country: any = await getDictionaryAndDetail("Country") // 客户国家
+  state.countryOptions = country.result.financeDictionaryDetailList
+
+  let product: any = await getDictionaryAndDetail("Product") // 产品
+  state.productOptions = product.result.financeDictionaryDetailList
+
+  let productType: any = await getDictionaryAndDetail("ProductType") // 产品小类
+  state.productTypeOptions = productType.result.financeDictionaryDetailList
+
+  let allocationOfMouldCost: any = await getDictionaryAndDetail("AllocationOfMouldCost") // 模具费分摊
+  state.allocationOfMouldCostOptions = allocationOfMouldCost.result.financeDictionaryDetailList
+
+  let allocationOfFixtureCost: any = await getDictionaryAndDetail("AllocationOfFixtureCost") //治具费分摊
+  state.allocationOfFixtureCostOptions = allocationOfFixtureCost.result.financeDictionaryDetailList
+
+  let allocationOfEquipmentCost: any = await getDictionaryAndDetail("AllocationOfEquipmentCost") // 设备费分摊
+  state.allocationOfEquipmentCostOptions = allocationOfEquipmentCost.result.financeDictionaryDetailList
+
+  let reliabilityCost: any = await getDictionaryAndDetail("ReliabilityCost") //信赖性费用分摊
+  state.reliabilityCostOptions = reliabilityCost.result.financeDictionaryDetailList
+
+  let developmentCost: any = await getDictionaryAndDetail("DevelopmentCost") //开发费分摊
+  state.developmentCostOptions = developmentCost.result.financeDictionaryDetailList
+
+  let landingFactory: any = await getDictionaryAndDetail("LandingFactory") //落地工厂
+  state.landingFactoryOptions = landingFactory.result.financeDictionaryDetailList
+
+  let salesType: any = await getDictionaryAndDetail("SalesType") //销售类型
+  state.salesTypeOptions = salesType.result.financeDictionaryDetailList
+
+  let currency: any = await getDictionaryAndDetail("Currency") //报价币种
+  state.currencyOptions = currency.result.financeDictionaryDetailList
+
+  let shippingType: any = await getDictionaryAndDetail("ShippingType") //运输方式
+  state.shippingTypeOptions = shippingType.result.financeDictionaryDetailList
+
+  let packagingType: any = await getDictionaryAndDetail("PackagingType") //包装方式
+  state.packagingTypeOptions = packagingType.result.financeDictionaryDetailList
+
+  console.log(
+    customerNature,
+    terminalNature,
+    quotationType,
+    sampleQuotationType,
+    country,
+    product,
+    productType,
+    allocationOfMouldCost,
+    allocationOfFixtureCost,
+    allocationOfEquipmentCost,
+    reliabilityCost,
+    developmentCost,
+    landingFactory,
+    salesType,
+    currency,
+    shippingType,
+    packagingType
+  )
 })
 // const handleExceed: UploadProps["onExceed"] = (files, uploadFiles) => {
 //   ElMessage.warning(
