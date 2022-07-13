@@ -740,7 +740,7 @@ const pcsTableData: User[] = reactive([
     date: "2022",
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles",
-    list: []
+    pcsYearList: []
   }
 ])
 //模组数量
@@ -789,12 +789,7 @@ const addProduct = () => {
   })
 }
 const addPCS = () => {
-  pcsTableData.push({
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    list: []
-  })
+  pcsTableData.push(Object.assign({}, ...pcsTableData[0]))
 }
 
 const yearChange = (val: number | undefined) => {
@@ -808,16 +803,20 @@ const yearChange = (val: number | undefined) => {
     console.log(state.yearCols, "state.yearCols ")
   }
 }
-watch(state.yearCols, (val) => {
-  pcsTableData.forEach((row) => {
-    row.pcsYearList = val.map((item) => {
-      return {
-        year: item,
-        quantity: 0
-      }
+watch(
+  () => state.yearCols,
+  (val) => {
+    pcsTableData.forEach((row) => {
+      row.pcsYearList = val.map((item) => {
+        return {
+          year: item,
+          quantity: 0
+        }
+      })
     })
-  })
-})
+    console.log(pcsTableData)
+  }
+)
 const deleteProduct = (i: number) => {
   moduleTableData.splice(i, 1)
   productTableData.splice(i, 1)
