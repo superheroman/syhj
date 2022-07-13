@@ -1,15 +1,24 @@
 <template>
   <div class="role">
     <div class="role__btn-container">
+      <el-form :model="data.searchForm" inline>
+        <el-form-item label="关键字">
+          <el-input v-model="data.searchForm.keyword" />
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="search">搜索</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+
+    <div class="role__btn-container">
       <el-button type="primary" @click="data.dialogVisible = true">创建角色</el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :data="data.tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
-      <el-table-column label="name" prop="name" />
-      <el-table-column label="displayName" prop="displayName" />
-      <el-table-column label="isStatic" prop="isStatic" />
-      <el-table-column label="isDefault" prop="isDefault" />
-      <el-table-column label="creationTime" prop="creationTime" />
+      <el-table-column label="角色名称" prop="name" />
+      <el-table-column label="角色描述" prop="description" />
+      <el-table-column label="角色权限" prop="grantedPermissions" />
       <el-table-column label="操作">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -17,28 +26,35 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-model="data.dialogVisible" title="角色信息">
+    <div class="role__btn-container">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="data.total"
+        :page-size="data.pageSize"
+        v-model:currentPage="data.pageNo"
+        @update:current-page="handlePageChange"
+      />
+    </div>
+
+    <el-dialog v-model="data.dialogVisible" title="角色信息" @close="clearRoleForm">
       <el-form :model="data.roleForm">
-        <el-form-item label="名称" :label-width="data.formLabelWidth">
+        <el-form-item label="角色名称" :label-width="data.formLabelWidth">
           <el-input v-model="data.roleForm.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="显示名称" :label-width="data.formLabelWidth">
-          <el-input v-model="data.roleForm.displayName" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="用户名" :label-width="data.formLabelWidth">
-          <el-input v-model="data.roleForm.normalizedName" autocomplete="off" />
-        </el-form-item>
-        <el-form-item label="描述" :label-width="data.formLabelWidth">
-          <el-input v-model="data.roleForm.description" autocomplete="off" type="textarea" />
+        <el-form-item label="角色描述" :label-width="data.formLabelWidth">
+          <el-input v-model="data.roleForm.description" autocomplete="off" />
         </el-form-item>
         <el-form-item label="权限选择" :label-width="data.formLabelWidth">
-          <el-select />
+          <el-select v-model="data.roleForm.grantedPermissions">
+            <option :value="item.id" v-for="item in data.permissionList" :key="item.id" />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="data.dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="data.dialogVisible = false">保存</el-button>
+          <el-button type="primary" @click="saveUser">保存</el-button>
         </span>
       </template>
     </el-dialog>
@@ -49,7 +65,22 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
-
+import { createRole, updateRole, deleteRole, RoleParams, getRoleList, getPermissionList } from "@/api/role"
+interface PermissionDto {
+  /**
+   * 权限描述
+   */
+  description?: null | string
+  /**
+   * 权限显示名称
+   */
+  displayName?: null | string
+  id?: number
+  /**
+   * 权限名称
+   */
+  name?: null | string
+}
 /**
  * 路由对象
  */
@@ -66,20 +97,49 @@ const data = reactive({
   tableData: [],
   dialogVisible: false,
   formLabelWidth: "140px",
+  searchForm: {
+    keyword: ""
+  },
+  pageSize: 20,
+  pageNo: 1,
+  total: 0,
   roleForm: {
-    id: "",
+    id: null as any,
     name: "",
-    displayName: "",
-    normalizedName: "",
+    description: "",
+    grantedPermissions: []
+  },
+  permissionList: [] as PermissionDto[],
+  isEdit: false
+})
+
+const saveUser = async () => {
+  let res: any = null
+  if (data.isEdit) {
+    res = await updateRole(data.roleForm)
+  } else {
+    res = await createRole(data.roleForm)
+  }
+  if (res.success) {
+    ElMessage({
+      type: "success",
+      message: "保存成功"
+    })
+    data.dialogVisible = false
+  }
+}
+const handleEdit = (index: number, row: role) => {
+  data.isEdit = true
+  data.roleForm = row
+  data.dialogVisible = true
+}
+const clearRoleForm = () => {
+  data.roleForm = {
+    id: null,
+    name: "",
     description: "",
     grantedPermissions: []
   }
-})
-
-const handleEdit = (index: number, row: role) => {
-  console.log(index, row)
-  data.roleForm = row
-  data.dialogVisible = true
 }
 const handleDelete = (index: number, row: role) => {
   console.log(index, row)
@@ -87,22 +147,20 @@ const handleDelete = (index: number, row: role) => {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
+  }).then(async () => {
+    if (typeof row.id === "number") {
+      let res: any = await deleteRole(row.id)
+      if (res.success) {
+        ElMessage({
+          type: "success",
+          message: "删除成功"
+        })
+      }
+    }
   })
-    .then(() => {
-      ElMessage({
-        type: "success",
-        message: "删除成功"
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "取消成功"
-      })
-    })
 }
 interface role {
-  id?: string
+  id?: number | null | undefined
   name: string
   displayName: string
   normalizedName: string
@@ -110,20 +168,43 @@ interface role {
   grantedPermissions: Array<number>
 }
 
-const tableData: role[] = [
-  {
-    id: "1",
-    name: "Tom",
-    displayName: "No. 189, Grove St, Los Angeles",
-    normalizedName: "222",
-    description: "123123",
-    grantedPermissions: []
+const getList = async () => {
+  let params: RoleParams = {
+    keyword: "",
+    maxResultCount: 20,
+    skipCount: 0
   }
-]
+  params.keyword = data.searchForm.keyword
+  params.skipCount = (data.pageNo - 1) * data.pageSize
+  params.maxResultCount = data.pageSize
+
+  let res: any = await getRoleList(params)
+  // console.log(res)
+  data.tableData = res.result.items
+  data.total = res.result.totalCount
+}
+const search = () => {
+  getList()
+}
+const handlePageChange = () => {
+  getList()
+}
+// const tableData: role[] = [
+//   {
+//     id: 1,
+//     name: "Tom",
+//     displayName: "No. 189, Grove St, Los Angeles",
+//     normalizedName: "222",
+//     description: "123123",
+//     grantedPermissions: []
+//   }
+// ]
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-onMounted(() => {
+onMounted(async () => {
+  let res: any = getPermissionList
+  data.permissionList = res.result.items
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
