@@ -721,28 +721,6 @@ const yearCount = ref(0)
 //     value: ""
 //   }
 // ])
-const options = [
-  {
-    value: "Option1",
-    label: "Option1"
-  },
-  {
-    value: "Option2",
-    label: "Option2"
-  },
-  {
-    value: "Option3",
-    label: "Option3"
-  },
-  {
-    value: "Option4",
-    label: "Option4"
-  },
-  {
-    value: "Option5",
-    label: "Option5"
-  }
-]
 //终端走量（PCS）
 const pcsTableData: User[] = reactive([
   {
@@ -852,11 +830,10 @@ const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
 }
 
 const generateTitle = () => {
-  let nowDate = dayjs(new Date()).format("YYYY-MM-DD")
-  let userDepartment = userInfo.userDepartment
-  let title = `${nowDate + userDepartment}关于${
-    state.quoteForm.customerName + state.quoteForm.projectName
-  }的核价报价申请`
+  let { quoteForm } = state
+  let nowDate = dayjs(quoteForm.draftDate ? quoteForm.draftDate : new Date()).format("YYYY-MM-DD")
+  let userDepartment = quoteForm.draftingDepartment
+  let title = `${nowDate + userDepartment}关于${quoteForm.customerName + quoteForm.projectName}的核价报价申请`
   state.quoteForm.title = title
 }
 let title = computed({
