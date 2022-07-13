@@ -135,18 +135,6 @@
           <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
         </div>
         <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries">
-          <!-- <el-table-column type="expand">
-            <template #default="props">
-              <div style="display: flex">
-                <div v-for="yearItem in props.row.list" :key="yearItem.year" style="margin: 20px 0">
-                  <div style="display: inline">
-                    <span style="margin: 0 20px">{{ yearItem.year }}:</span>
-                    <el-input v-model="yearItem.value" style="width: 200px" />
-                  </div>
-                </div>
-              </div>
-            </template>
-          </el-table-column> -->
           <el-table-column label="车厂" width="180" fixed="left">
             <template #default="{ row }">
               <el-input v-model="row.carFactory" />
@@ -159,15 +147,15 @@
           </el-table-column>
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.pcsYearList[index].quantity" />
+              <el-input v-model="row.pcsYearList[index].quantity" @input="pcsYearQuantitySum(row)" />
             </template>
           </el-table-column>
-          <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
+          <el-table-column prop="sum" label="合计" />
+          <el-table-column label="操作" fixed="right">
+            <template #default="{ $index }">
+              <el-button @click="deletePcs($index)" type="danger" :disabled="pcsTableData.length === 1">删除</el-button>
             </template>
-          </el-table-column> -->
-          <el-table-column prop="name" label="合计" />
+          </el-table-column>
         </el-table>
         <h6>模组数量</h6>
         <div class="demand-apply__btn-container">
@@ -182,7 +170,6 @@
           </el-table-column>
           <el-table-column label="产品名称" width="180">
             <template #default="{ row }">
-              <!-- <el-input v-model="row.product" /> -->
               <el-select v-model="row.product" placeholder="Select">
                 <el-option
                   v-for="item in state.productOptions"
@@ -220,32 +207,23 @@
               <el-input v-model="row.singleCarProductsQuantity" />
             </template>
           </el-table-column>
+          <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.modelCountYearList[index].quantity" @input="modelCountYearListQuantitySum(row)" />
+            </template>
+          </el-table-column>
           <el-table-column label="模组总量" prop="modelTotal" width="180" />
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
-              <el-button @click="deleteProduct($index)" type="danger">删除</el-button>
+              <el-button @click="deleteProduct($index)" type="danger" :disabled="moduleTableData.length === 1"
+                >删除</el-button
+              >
             </template>
           </el-table-column>
         </el-table>
         <h6>要求</h6>
         <el-table :data="requireTableData" style="width: 100%; margin: 20px 0" border>
-          <el-table-column type="expand">
-            <template #default="props">
-              <div>
-                <div v-for="yearItem in props.row.list" :key="yearItem.year" style="margin: 20px 0">
-                  <div style="display: inline">
-                    <span style="margin: 0 20px">{{ yearItem.year }}:</span>
-                    <el-input v-model="yearItem.value" style="width: 200px" />
-                  </div>
-                </div>
-              </div>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column label="年份" width="180">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column> -->
+          <el-table-column label="年份" width="180" prop="year" />
           <el-table-column label="年降率">
             <template #default="{ row }">
               <el-input v-model="row.annualDeclineRate" />
@@ -261,11 +239,6 @@
               <el-input v-model="row.oneTimeDiscountRate" />
             </template>
           </el-table-column>
-          <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column> -->
         </el-table>
         <el-row :gutter="20">
           <el-col :span="6">
@@ -345,124 +318,134 @@
       <!-- 产品信息 -->
       <el-card class="demand-apply__card">
         <h6>产品信息</h6>
-        <!-- <div class="demand-apply__btn-container">
-          <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增产品</el-button>
-        </div> -->
         <el-table :data="productTableData" style="width: 100%" border>
-          <el-table-column label="产品名称" width="180" fixed="left" prop="name">
-            <!-- <template #default="{ row }">
+          <el-table-column label="产品名称" width="180" fixed="left">
+            <template #default="{ row }">
               <el-input v-model="row.name" />
-            </template> -->
+            </template>
           </el-table-column>
           <el-table-column label="Sensor" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.value" placeholder="名称">
+              <el-input v-model="row.sensor" placeholder="名称">
                 <template #prepend>
-                  <el-select v-model="row.type">
-                    <el-option value="1">我司推荐</el-option>
-                    <el-option value="2">客户指定</el-option>
-                    <el-option value="3">客户供应</el-option>
+                  <el-select v-model="row.sensorTypeSelect">
+                    <el-option
+                      v-for="item in state.TypeSelectOptions"
+                      :key="item.id"
+                      :label="item.displayName"
+                      :value="item.id"
+                    />
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.price" placeholder="单价" />
+                  <el-input v-model="row.sensorPrice" placeholder="单价" />
                 </template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="Lens" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.value" placeholder="名称">
+              <el-input v-model="row.lens" placeholder="名称">
                 <template #prepend>
-                  <el-select v-model="row.type">
-                    <el-option value="1">我司推荐</el-option>
-                    <el-option value="2">客户指定</el-option>
-                    <el-option value="3">客户供应</el-option>
+                  <el-select v-model="row.lensTypeSelect">
+                    <el-option
+                      v-for="item in state.TypeSelectOptions"
+                      :key="item.id"
+                      :label="item.displayName"
+                      :value="item.id"
+                    />
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.price" placeholder="单价" />
+                  <el-input v-model="row.lensPrice" placeholder="单价" />
                 </template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="ISP" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.value" placeholder="名称">
+              <el-input v-model="row.isp" placeholder="名称">
                 <template #prepend>
-                  <el-select v-model="row.type">
-                    <el-option value="1">我司推荐</el-option>
-                    <el-option value="2">客户指定</el-option>
-                    <el-option value="3">客户供应</el-option>
+                  <el-select v-model="row.ispTypeSelect">
+                    <el-option
+                      v-for="item in state.TypeSelectOptions"
+                      :key="item.id"
+                      :label="item.displayName"
+                      :value="item.id"
+                    />
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.value" placeholder="单价" />
+                  <el-input v-model="row.ispPrice" placeholder="单价" />
                 </template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="串行芯片" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.value" placeholder="名称">
+              <el-input v-model="row.serialChip" placeholder="名称">
                 <template #prepend>
-                  <el-select v-model="row.type">
-                    <el-option value="1">我司推荐</el-option>
-                    <el-option value="2">客户指定</el-option>
-                    <el-option value="3">客户供应</el-option>
+                  <el-select v-model="row.serialChipTypeSelect">
+                    <el-option
+                      v-for="item in state.TypeSelectOptions"
+                      :key="item.id"
+                      :label="item.displayName"
+                      :value="item.id"
+                    />
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.value" placeholder="单价" />
+                  <el-input v-model="row.serialChipPrice" placeholder="单价" />
                 </template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="线缆" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.value" placeholder="名称">
+              <el-input v-model="row.cable" placeholder="名称">
                 <template #prepend>
-                  <el-select v-model="row.type">
-                    <el-option value="1">我司推荐</el-option>
-                    <el-option value="2">客户指定</el-option>
-                    <el-option value="3">客户供应</el-option>
+                  <el-select v-model="row.cableTypeSelect">
+                    <el-option
+                      v-for="item in state.TypeSelectOptions"
+                      :key="item.id"
+                      :label="item.displayName"
+                      :value="item.id"
+                    />
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.value" placeholder="单价" />
+                  <el-input v-model="row.cablePrice" placeholder="单价" />
                 </template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="LED" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.value" placeholder="名称">
+              <el-input v-model="row.led" placeholder="名称">
                 <template #prepend>
-                  <el-select v-model="row.type">
-                    <el-option value="1">我司推荐</el-option>
-                    <el-option value="2">客户指定</el-option>
-                    <el-option value="3">客户供应</el-option>
+                  <el-select v-model="row.ledTypeSelect">
+                    <el-option
+                      v-for="item in state.TypeSelectOptions"
+                      :key="item.id"
+                      :label="item.displayName"
+                      :value="item.id"
+                    />
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.value" placeholder="单价" />
+                  <el-input v-model="row.ledPrice" placeholder="单价" />
                 </template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="制程" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
+              <el-input v-model="row.manufactureProcess" />
             </template>
           </el-table-column>
           <el-table-column label="安装位置" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-          <el-table-column label="备注" width="250">
-            <template #default="{ row }">
-              <el-input v-model="row.prize" />
+              <el-input v-model="row.installationPosition" />
             </template>
           </el-table-column>
           <!-- <el-table-column label="操作" width="150" fixed="right">
@@ -472,6 +455,7 @@
           </el-table-column> -->
         </el-table>
         <h6>客户指定/供应详情</h6>
+        <el-button @click="generateCustomTable" type="primary" style="margin: 20px 0">点击生成</el-button>
         <el-table :data="specifyTableData" style="width: 100%" border>
           <el-table-column prop="name" label="类型" />
           <el-table-column prop="name" label="产品名称" />
@@ -601,16 +585,15 @@
   </div>
 </template>
 <script lang="ts" setup>
-// import { reactive, ref } from "vue"
-import { ref, reactive, onMounted, computed, toRefs, watch } from "vue"
+import { ref, reactive, onMounted, toRefs, watch } from "vue"
 // import { useRouter } from "vue-router"
 import { Search } from "@element-plus/icons-vue"
 // import SearchPerson from '@/components/SearchPerson'
 // import type { UploadProps, UploadUserFile, ElMessage, ElMessageBox } from "element-plus"
 import type { UploadProps } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
-import type { User } from "./data.type"
-
+// import type { User } from "./data.type"
+import _ from "lodash"
 // import type { User, InputModal } from "./data.type"
 // import { saveApplyInfo } from "@/api/demandApply"
 import { getDictionaryAndDetail } from "@/api/dictionary"
@@ -720,76 +703,209 @@ const state = reactive({
   salesTypeOptions: [] as unknown as Options[],
   currencyOptions: [] as unknown as Options[],
   shippingTypeOptions: [] as unknown as Options[],
-  packagingTypeOptions: [] as unknown as Options[]
+  packagingTypeOptions: [] as unknown as Options[],
+  TypeSelectOptions: [] as unknown as Options[]
 })
-// let customerNatureOptions: any = []
 const yearCount = ref(0)
-// const colYears = reactive([
-//   {
-//     year: 2022,
-//     value: ""
-//   },
-//   {
-//     year: 2023,
-//     value: ""
-//   }
-// ])
-//终端走量（PCS）
-const pcsTableData: User[] = reactive([
+// pcs 数据类型
+interface Pcs {
+  carFactory: String
+  carModel: String
+  pcsYearList: YearListItem[]
+  sum: Number
+}
+interface YearListItem {
+  year: any
+  quantity: string | number
+}
+const pcsYearQuantitySum = (row: Pcs) => {
+  let sum = 0
+  row.pcsYearList.forEach((item: any) => {
+    sum = sum + Number(item.quantity)
+  })
+  row.sum = sum
+}
+interface modelCount {
+  partNumber: String | null | Number
+  product: Number
+  productType: Number
+  marketShare: Number
+  moduleCarryingRate: Number
+  singleCarProductsQuantity: Number
+  modelTotal: Number
+  modelCountYearList: YearListItem[]
+}
+const modelCountYearListQuantitySum = (row: modelCount) => {
+  let sum = 0
+  row.modelCountYearList.forEach((item: any) => {
+    sum = sum + Number(item.quantity)
+  })
+  row.modelTotal = sum
+}
+
+//终端走量（PCS）table
+const pcsTableData: Pcs[] = reactive([
   {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    pcsYearList: []
+    carFactory: "",
+    carModel: "",
+    pcsYearList: [] as YearListItem[],
+    sum: 0
   }
 ])
-//模组数量
-const moduleTableData: User[] = reactive([
+//模组数量table
+const moduleTableData: modelCount[] = reactive([
   {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    partNumber: "",
+    product: 0,
+    productType: 0,
+    marketShare: 0,
+    moduleCarryingRate: 0,
+    singleCarProductsQuantity: 0,
+    modelTotal: 0,
+    modelCountYearList: [] as YearListItem[]
   }
 ])
+interface requireData {
+  annualDeclineRate: Number
+  annualRebateRequirements: Number
+  oneTimeDiscountRate: Number
+  year: Number
+}
 //要求
-const requireTableData: User[] = reactive([
-  {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    list: []
-  }
-])
+const requireTableData: requireData[] = reactive([])
 //产品零件
-const productTableData: User[] = reactive([
+interface productModel {
+  /**
+   * 线缆
+   */
+  cable: string
+  /**
+   * 线缆 单价
+   */
+  cablePrice?: number | null
+  /**
+   * 线缆
+   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  cableTypeSelect: number
+  /**
+   * 安装位置
+   */
+  installationPosition: string
+  /**
+   * LED
+   */
+  led: string
+  /**
+   * LED 单价
+   */
+  ledPrice?: number | null
+  /**
+   * LED
+   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  ledTypeSelect: number
+  /**
+   * Lens
+   */
+  lens: string
+  /**
+   * Lens单价
+   */
+  lensPrice?: number | null
+  /**
+   *
+   * Lens类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  lensTypeSelect: number
+  /**
+   * isp
+   */
+  isp: string
+  /**
+   * Lsp单价
+   */
+  ispPrice?: number | null
+  /**
+   *
+   * Lsp类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  ispTypeSelect: number
+  /**
+   * 制程
+   */
+  manufactureProcess: string
+  /**
+   * 产品名称
+   */
+  name: string
+  /**
+   * Sensor
+   */
+  sensor: string
+  /**
+   * Sensor单价
+   */
+  sensorPrice?: number | null
+  /**
+   *
+   * Sensor类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  sensorTypeSelect: number
+  /**
+   * 串行芯片
+   */
+  serialChip: string
+  /**
+   * 串行芯片 单价
+   */
+  serialChipPrice?: number | null
+  /**
+   * 串行芯片
+   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  serialChipTypeSelect: number
+}
+const productTableData: productModel[] = reactive([
   {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "",
+    sensor: "",
+    sensorTypeSelect: 0,
+    sensorPrice: 0,
+    lens: "",
+    lensTypeSelect: 0,
+    lensPrice: 0,
+    isp: "",
+    ispTypeSelect: 0,
+    ispPrice: 0,
+    serialChip: "",
+    serialChipTypeSelect: 0,
+    serialChipPrice: 0,
+    cable: "",
+    cableTypeSelect: 0,
+    cablePrice: 0,
+    led: "",
+    ledTypeSelect: 0,
+    ledPrice: 0,
+    manufactureProcess: "",
+    installationPosition: ""
   }
 ])
 //指定
-const specifyTableData: User[] = reactive([
-  {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  }
-])
-const addProduct = () => {
-  moduleTableData.push({
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  })
-  productTableData.push({
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
-  })
+interface specifyModel {
+  main: string
+  price: number | null | undefined
+  productName: string
+  type: string
+  productType: string
 }
+const specifyTableData: specifyModel[] = reactive([])
 const addPCS = () => {
-  pcsTableData.push(Object.assign({}, ...pcsTableData[0]))
+  pcsTableData.push(_.cloneDeep(pcsTableData[0]))
+}
+const addProduct = () => {
+  moduleTableData.push(_.cloneDeep(moduleTableData[0]))
+  productTableData.push(_.cloneDeep(productTableData[0]))
 }
 
 const yearChange = (val: number | undefined) => {
@@ -803,6 +919,8 @@ const yearChange = (val: number | undefined) => {
     console.log(state.yearCols, "state.yearCols ")
   }
 }
+
+// 监听年数的变化，对应表格赋值年份
 watch(
   () => state.yearCols,
   (val) => {
@@ -814,6 +932,25 @@ watch(
         }
       })
     })
+    moduleTableData.forEach((row) => {
+      row.modelCountYearList = val.map((item) => {
+        return {
+          year: item,
+          quantity: 0
+        }
+      })
+    })
+    // 要求表格动态加载行数
+    requireTableData.splice(0, requireTableData.length)
+    val.forEach((year) => {
+      requireTableData.push({
+        year,
+        annualDeclineRate: 0,
+        annualRebateRequirements: 0,
+        oneTimeDiscountRate: 0
+      })
+    })
+
     console.log(pcsTableData)
   }
 )
@@ -821,7 +958,9 @@ const deleteProduct = (i: number) => {
   moduleTableData.splice(i, 1)
   productTableData.splice(i, 1)
 }
-
+const deletePcs = (i: number) => {
+  pcsTableData.splice(i, 1)
+}
 // const fileList = ref<UploadUserFile[]>([
 //   {
 //     name: "food.jpeg",
@@ -848,21 +987,81 @@ const generateTitle = () => {
   let title = `${nowDate + userDepartment}关于${quoteForm.customerName + quoteForm.projectName}的核价报价申请`
   state.quoteForm.title = title
 }
-let title = computed({
-  get() {
-    console.log(userInfo)
-    let nowDate = dayjs(new Date()).format("YYYY-MM-DD")
-    let userDepartment = userInfo.userDepartment
-    let title = `${nowDate + userDepartment}关于${
-      state.quoteForm.customerName + state.quoteForm.projectName
-    }的核价报价申请`
-    return title
-  },
-  set(val) {
-    return val
-  }
-})
-
+const generateCustomTable = () => {
+  specifyTableData.splice(0, specifyTableData.length) // 清空数据
+  productTableData.forEach((item) => {
+    if (item.sensorTypeSelect === 1) {
+      let price = item.sensorPrice
+      let productName = item.name
+      let main = "sensor"
+      let type = item.sensor
+      let productType = "客户指定"
+      specifyTableData.push({
+        price,
+        productName,
+        main,
+        type,
+        productType
+      })
+    }
+    if (item.lensTypeSelect === 1) {
+      let price = item.lensPrice
+      let productName = item.name
+      let main = "lens"
+      let type = item.lens
+      let productType = "客户指定"
+      specifyTableData.push({
+        price,
+        productName,
+        main,
+        type,
+        productType
+      })
+    }
+    if (item.ispTypeSelect === 1) {
+      let price = item.ispPrice
+      let productName = item.name
+      let main = "isp"
+      let type = item.isp
+      let productType = "客户指定"
+      specifyTableData.push({
+        price,
+        productName,
+        main,
+        type,
+        productType
+      })
+    }
+    if (item.serialChipTypeSelect === 1) {
+      let price = item.serialChipPrice
+      let productName = item.name
+      let main = "serialChip"
+      let type = item.serialChip
+      let productType = "客户指定"
+      specifyTableData.push({
+        price,
+        productName,
+        main,
+        type,
+        productType
+      })
+    }
+    if (item.ledTypeSelect === 1) {
+      let price = item.ledPrice
+      let productName = item.name
+      let main = "led"
+      let type = item.led
+      let productType = "客户指定"
+      specifyTableData.push({
+        price,
+        productName,
+        main,
+        type,
+        productType
+      })
+    }
+  })
+}
 onMounted(async () => {
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber
@@ -919,6 +1118,9 @@ onMounted(async () => {
   let packagingType: any = await getDictionaryAndDetail("PackagingType") //包装方式
   state.packagingTypeOptions = packagingType.result.financeDictionaryDetailList
 
+  let typeSelect: any = await getDictionaryAndDetail("TypeSelect") //类型
+  state.TypeSelectOptions = typeSelect.result.financeDictionaryDetailList
+
   console.log(
     customerNature,
     terminalNature,
@@ -954,8 +1156,7 @@ onMounted(async () => {
 //   )
 // }
 defineExpose({
-  ...toRefs(state),
-  title
+  ...toRefs(state)
 })
 </script>
 
