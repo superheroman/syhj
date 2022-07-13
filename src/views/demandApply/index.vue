@@ -118,19 +118,14 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <!-- <el-col :span="6">
-            <el-form-item label="SOP时间:">
-              <el-date-picker type="date" placeholder="Pick a day" />
+          <el-col :span="6">
+            <el-form-item label="sop时间:">
+              <el-date-picker type="year" placeholder="Pick a year" v-model="state.quoteForm.sopTime" />
             </el-form-item>
-          </el-col> -->
+          </el-col>
           <el-col :span="6">
             <el-form-item label="项目周期:">
-              <el-date-picker
-                type="year"
-                placeholder="Pick a year"
-                v-model="state.quoteForm.sopTime"
-                @change="yearChange"
-              />
+              <el-input-number v-model="state.quoteForm.projectCycle" @change="yearChange" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -140,9 +135,9 @@
           <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
         </div>
         <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries">
-          <el-table-column type="expand">
+          <!-- <el-table-column type="expand">
             <template #default="props">
-              <div>
+              <div style="display: flex">
                 <div v-for="yearItem in props.row.list" :key="yearItem.year" style="margin: 20px 0">
                   <div style="display: inline">
                     <span style="margin: 0 20px">{{ yearItem.year }}:</span>
@@ -151,15 +146,20 @@
                 </div>
               </div>
             </template>
-          </el-table-column>
-          <el-table-column label="车厂">
+          </el-table-column> -->
+          <el-table-column label="车厂" width="180" fixed="left">
             <template #default="{ row }">
               <el-input v-model="row.carFactory" />
             </template>
           </el-table-column>
-          <el-table-column label="车型">
+          <el-table-column label="车型" width="180" fixed="left">
             <template #default="{ row }">
               <el-input v-model="row.carModel" />
+            </template>
+          </el-table-column>
+          <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.pcsYearList[index].quantity" />
             </template>
           </el-table-column>
           <!-- <el-table-column :label="item.year + ''" width="180" v-for="item in colYears" :key="item.year" sortable>
@@ -182,7 +182,15 @@
           </el-table-column>
           <el-table-column label="产品名称" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.product" />
+              <!-- <el-input v-model="row.product" /> -->
+              <el-select v-model="row.product" placeholder="Select">
+                <el-option
+                  v-for="item in state.productOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
+              </el-select>
             </template>
           </el-table-column>
           <el-table-column label="产品小类" width="180">
@@ -197,7 +205,11 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="市场份额" width="180" prop="marketShare" />
+          <el-table-column label="市场份额" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.marketShare" />
+            </template>
+          </el-table-column>
           <el-table-column label="模组搭载率" width="180">
             <template #default="{ row }">
               <el-input v-model="row.moduleCarryingRate" />
@@ -590,7 +602,7 @@
 </template>
 <script lang="ts" setup>
 // import { reactive, ref } from "vue"
-import { ref, reactive, onMounted, computed, toRefs } from "vue"
+import { ref, reactive, onMounted, computed, toRefs, watch } from "vue"
 // import { useRouter } from "vue-router"
 import { Search } from "@element-plus/icons-vue"
 // import SearchPerson from '@/components/SearchPerson'
@@ -655,7 +667,7 @@ const state = reactive({
     drafterNumber: "",
     draftingDepartment: "",
     draftingCompany: "",
-    draftDate: "",
+    draftDate: new Date(),
     number: "",
     projectName: "",
     projectCode: "",
@@ -665,8 +677,8 @@ const state = reactive({
     terminalNature: "",
     quotationType: "",
     sampleQuotationType: "",
-    sopTime: "",
-    projectCycle: "",
+    sopTime: new Date(),
+    projectCycle: 0,
     pcs: [],
     modelCount: [],
     requirement: [],
@@ -691,6 +703,7 @@ const state = reactive({
     projectManager: 0,
     sorFile: []
   },
+  yearCols: [] as Number[],
   customerNatureOptions: [] as unknown as Options[],
   terminalNatureOptions: [] as unknown as Options[],
   quotationTypeOptions: [] as unknown as Options[],
@@ -721,28 +734,6 @@ const yearCount = ref(0)
 //     value: ""
 //   }
 // ])
-const options = [
-  {
-    value: "Option1",
-    label: "Option1"
-  },
-  {
-    value: "Option2",
-    label: "Option2"
-  },
-  {
-    value: "Option3",
-    label: "Option3"
-  },
-  {
-    value: "Option4",
-    label: "Option4"
-  },
-  {
-    value: "Option5",
-    label: "Option5"
-  }
-]
 //终端走量（PCS）
 const pcsTableData: User[] = reactive([
   {
@@ -806,27 +797,27 @@ const addPCS = () => {
   })
 }
 
-const yearChange = (val: Date) => {
-  yearCount.value = val.getFullYear() - new Date().getFullYear()
-  debugger
-  pcsTableData.forEach((item) => {
-    //判断时间长度
-    if (item.list) {
-      debugger
-      let i = yearCount.value - item.list.length
-      item.list = []
-      if (i > 0) {
-        for (let j = 0; j < i + 1; j++) {
-          item.list.push({
-            year: new Date().getFullYear() + j,
-            value: ""
-          })
-        }
-      }
+const yearChange = (val: number | undefined) => {
+  if (val) {
+    yearCount.value = val
+    let i = state.quoteForm.projectCycle
+    state.yearCols = []
+    for (let j = 0; j < i; j++) {
+      state.yearCols.push(state.quoteForm.sopTime.getFullYear() + j)
     }
-  })
-  console.log(val, yearCount)
+    console.log(state.yearCols, "state.yearCols ")
+  }
 }
+watch(state.yearCols, (val) => {
+  pcsTableData.forEach((row) => {
+    row.pcsYearList = val.map((item) => {
+      return {
+        year: item,
+        quantity: 0
+      }
+    })
+  })
+})
 const deleteProduct = (i: number) => {
   moduleTableData.splice(i, 1)
   productTableData.splice(i, 1)

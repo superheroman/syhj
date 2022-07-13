@@ -3,8 +3,8 @@ export interface User {
   name: string
   address: string
   list?: Array<Object>
+  pcsYearList?: Array<Object>
 }
-
 export interface InputModal {
   /**
    *
