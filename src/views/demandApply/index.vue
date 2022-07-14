@@ -568,11 +568,12 @@
                 :on-remove="handleRemove"
                 multiple
               >
-                <el-button type="primary">SOR文件上传</el-button>
+                <el-button>SOR文件上传</el-button>
               </el-upload>
             </el-form-item>
           </el-col>
         </el-row>
+        <el-button type="primary" size="large" style="float: right; margin: 20px 0">提交</el-button>
       </el-card>
     </el-form>
     <div class="demand-apply__step">
