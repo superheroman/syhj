@@ -563,9 +563,10 @@
           <el-col :span="6">
             <el-form-item>
               <el-upload
-                action="/api/services/app/FileCommonService/UploadFile"
-                :on-preview="handlePreview"
-                :on-remove="handleRemove"
+                v-model:file-list="fileList"
+                action="http://139.196.216.165:44311/api/services/app/FileCommonService/UploadFile"
+                :on-success="handleSuccess"
+                :on-change="handleFileChange"
                 multiple
               >
                 <el-button>SOR文件上传</el-button>
@@ -573,7 +574,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-button type="primary" size="large" style="float: right; margin: 20px 0">提交</el-button>
+        <el-button type="primary" size="large" style="float: right; margin: 20px 0" @click="save">提交</el-button>
       </el-card>
     </el-form>
     <div class="demand-apply__step">
@@ -591,12 +592,12 @@ import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { Search } from "@element-plus/icons-vue"
 // import SearchPerson from '@/components/SearchPerson'
 // import type { UploadProps, UploadUserFile, ElMessage, ElMessageBox } from "element-plus"
-import type { UploadProps } from "element-plus"
+import type { UploadProps, UploadUserFile } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 // import type { User } from "./data.type"
 import _ from "lodash"
 // import type { User, InputModal } from "./data.type"
-// import { saveApplyInfo } from "@/api/demandApply"
+import { saveApplyInfo } from "@/api/demandApply"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 
 import dayjs from "dayjs"
@@ -663,16 +664,16 @@ const state = reactive({
     sampleQuotationType: "",
     sopTime: new Date(),
     projectCycle: 0,
-    pcs: [],
-    modelCount: [],
-    requirement: [],
+    pcs: [] as any,
+    modelCount: [] as any,
+    requirement: [] as any,
     allocationOfMouldCost: 0,
     allocationOfFixtureCost: 0,
     allocationOfEquipmentCost: 0,
     reliabilityCost: 0,
     developmentCost: 0,
     landingFactory: 0,
-    productInformation: [],
+    productInformation: [] as any,
     tradeMode: "",
     salesType: 0,
     paymentMethod: "",
@@ -685,7 +686,7 @@ const state = reactive({
     placeOfDelivery: "",
     deadline: "",
     projectManager: 0,
-    sorFile: []
+    sorFile: [] as any
   },
   yearCols: [] as Number[],
   customerNatureOptions: [] as unknown as Options[],
@@ -707,6 +708,12 @@ const state = reactive({
   packagingTypeOptions: [] as unknown as Options[],
   TypeSelectOptions: [] as unknown as Options[]
 })
+const fileList = ref<UploadUserFile[]>([
+  {
+    name: "food.jpeg",
+    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
+  }
+])
 const yearCount = ref(0)
 // pcs 数据类型
 interface Pcs {
@@ -743,7 +750,17 @@ const modelCountYearListQuantitySum = (row: modelCount) => {
   })
   row.modelTotal = sum
 }
-
+const save = async () => {
+  let { quoteForm } = state
+  quoteForm.pcs = pcsTableData
+  quoteForm.modelCount = moduleTableData
+  quoteForm.requirement = requireTableData
+  quoteForm.productInformation = productTableData
+  quoteForm.sorFile = fileList.value.map((item: any) => item.response.result.fileId)
+  debugger
+  let res = await saveApplyInfo(quoteForm)
+  console.log(res)
+}
 //终端走量（PCS）table
 const pcsTableData: Pcs[] = reactive([
   {
@@ -962,23 +979,13 @@ const deleteProduct = (i: number) => {
 const deletePcs = (i: number) => {
   pcsTableData.splice(i, 1)
 }
-// const fileList = ref<UploadUserFile[]>([
-//   {
-//     name: "food.jpeg",
-//     url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-//   },
-//   {
-//     name: "food2.jpeg",
-//     url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-//   }
-// ])
 
-const handleRemove: UploadProps["onRemove"] = (file, uploadFiles) => {
-  console.log(file, uploadFiles)
+const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
+  console.log(res)
 }
-
-const handlePreview: UploadProps["onPreview"] = (uploadFile) => {
-  console.log(uploadFile)
+const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
+  console.log(uploadFiles)
+  console.log(fileList, "fileList")
 }
 
 const generateTitle = () => {

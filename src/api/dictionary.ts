@@ -8,11 +8,11 @@ export interface Dictionary {
    * 字典显示名
    */
   displayName: null | string
-  id?: number | undefined | null
+  id?: string | undefined | null
   /**
    * 字典名  获取字段列表的依据
    */
-  name: null | string
+  name?: null | string
   /**
    * 备注
    */
@@ -30,7 +30,7 @@ export interface DictionarySearch {
   /**
    * 字典名  获取字段列表的依据
    */
-  name: null | string
+  name?: null | string
   /**
    * 备注
    */
@@ -44,11 +44,11 @@ export interface DictionaryDetail {
    * 字典显示名
    */
   displayName: null | string
-  financeDictionaryId: number
+  financeDictionaryId: null | string
   /**
    * 字典名  获取字段列表的依据
    */
-  name: null | string
+  id: null | string
   /**
    * 备注
    */
@@ -72,7 +72,7 @@ export function editDictionary(data: Dictionary) {
 }
 
 /** 删除字典 */
-export function deleteDictionary(id: number | undefined | null) {
+export function deleteDictionary(id: string | undefined | null) {
   return request({
     url: "/api/services/app/FinanceDictionary/DeleteFinanceDictionary",
     method: "delete",
@@ -82,7 +82,7 @@ export function deleteDictionary(id: number | undefined | null) {
   })
 }
 
-/** 添加新字典 */
+/** 获取字典列表 */
 export function getDictionary(data: Dictionary) {
   return request({
     url: "/api/services/app/FinanceDictionary/GetFinanceDictionaryList",
@@ -90,7 +90,6 @@ export function getDictionary(data: Dictionary) {
     data
   })
 }
-
 /** 添加新字典明细 */
 export function addDictionaryDetail(data: DictionaryDetail) {
   return request({
@@ -109,7 +108,7 @@ export function editDictionaryDetail(data: Dictionary) {
 }
 
 /** 删除字典明细 */
-export function deleteDictionaryDetail(id: number | undefined | null) {
+export function deleteDictionaryDetail(id: string) {
   return request({
     url: "/api/services/app/FinanceDictionary/DeleteFinanceDictionaryDetail",
     method: "delete",
@@ -129,23 +128,23 @@ export function getDictionaryDetail(data: DictionarySearch) {
 }
 
 /** 添加字典明细name */
-export function getDictionaryAndDetail(name: string) {
+export function getDictionaryAndDetail(id: string) {
   return request({
-    url: "/api/services/app/FinanceDictionary/GetFinanceDictionaryAndDetailByName",
+    url: "/api/services/app/FinanceDictionary/GetFinanceDictionaryAndDetailById",
     method: "get",
     data: {
-      name
+      id
     }
   })
 }
 
 /** 根据字典名获取字典 */
-export function getFinanceDictionaryByName(name: string) {
+export function getFinanceDictionaryByName(id: string) {
   return request({
     url: "/api/services/app/FinanceDictionary/GetFinanceDictionaryByName",
     method: "get",
     data: {
-      name
+      id
     }
   })
 }

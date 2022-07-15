@@ -19,10 +19,6 @@ export interface InputModal {
    */
   allocationOfMouldCost: number
   /**
-   * 客户国家（字典明细表主键）
-   */
-  country: number
-  /**
    *
    * 报价币种（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【Currency】）
    */

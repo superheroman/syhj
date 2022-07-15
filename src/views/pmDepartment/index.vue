@@ -4,49 +4,56 @@
       <el-button type="primary">SOR查看</el-button>
       <el-button type="primary">查看物流&包装基础数据</el-button>
     </div>
-    <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column label="单PCS包装价格/元">
-        <template #default="{ row }">
-          <el-input v-model="row.a" />
-        </template>
-      </el-table-column>
-      <el-table-column label="运费/月">
-        <template #default="{ row }">
-          <el-input v-model="row.a" />
-        </template>
-      </el-table-column>
-      <el-table-column label="仓储费用/月">
-        <template #default="{ row }">
-          <el-input v-model="row.a" />
-        </template>
-      </el-table-column>
-      <el-table-column label="月底需求量">
-        <template #default="{ row }">
-          <el-input v-model="row.a" />
-        </template>
-      </el-table-column>
-      <el-table-column label="单PCS运输费">
-        <template #default="{ row }">
-          <el-input v-model="row.a" />
-        </template>
-      </el-table-column>
-      <el-table-column label="单PCS总物流料成本">
-        <template #default="{ row }">
-          <el-input v-model="row.a" />
-        </template>
-      </el-table-column>
+    <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
+      <el-tab-pane label="零件1" name="first">
+        <el-table :data="tableData" style="width: 100%" border>
+          <el-table-column label="单PCS包装价格/元">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="运费/月">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="仓储费用/月">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="月底需求量">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="单PCS运输费">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
+          <el-table-column label="单PCS总物流料成本">
+            <template #default="{ row }">
+              <el-input v-model="row.a" />
+            </template>
+          </el-table-column>
 
-      <el-table-column label="运费/月" prop="name" />
+          <el-table-column label="运费/月" prop="name" />
 
-      <el-table-column label="年份" prop="year" />
-    </el-table>
+          <el-table-column label="年份" prop="year" />
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="零件2" name="second">Config</el-tab-pane>
+      <el-tab-pane label="零件3" name="third">Role</el-tab-pane>
+      <el-tab-pane label="零件4" name="fourth">Task</el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-
+import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import type { TabsPaneContext } from "element-plus"
 // import { useRoute, useRouter } from "vue-router"
 interface User {
   date: string
@@ -80,6 +87,10 @@ const tableData: User[] = [
     year: "2025"
   }
 ]
+const activeName = ref("first")
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event)
+}
 /**
  * 路由对象
  */

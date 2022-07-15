@@ -3,7 +3,7 @@
     <div class="dictionary__btn-container">
       <el-form :model="data.searchForm" inline>
         <el-form-item label="字典名">
-          <el-input v-model="data.searchForm.name" />
+          <el-input v-model="data.searchForm.id" />
         </el-form-item>
         <el-form-item label="字典显示名">
           <el-input v-model="data.searchForm.displayName" />
@@ -20,8 +20,8 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建字典</el-button>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
-      <el-table-column label="id" prop="id" />
-      <el-table-column label="字典名" prop="name" />
+      <el-table-column label="字典名（id）" prop="id" />
+      <!-- <el-table-column label="字典名" prop="name" /> -->
       <el-table-column label="字典显示名" prop="displayName" />
       <el-table-column label="备注" prop="remark" />
       <el-table-column label="操作">
@@ -42,10 +42,10 @@
         @update:current-page="handlePageChange"
       />
     </div>
-    <el-dialog v-model="data.dialogVisible" title="字典编辑">
+    <el-dialog v-model="data.dialogVisible" title="字典编辑" @close="clearForm">
       <el-form :model="data.editForm">
         <el-form-item label="字典名" :label-width="data.formLabelWidth">
-          <el-input v-model="data.editForm.name" />
+          <el-input v-model="data.editForm.id" />
         </el-form-item>
         <el-form-item label="字典显示名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.displayName" />
@@ -71,13 +71,12 @@ import { addDictionary, editDictionary, deleteDictionary, getDictionary } from "
 
 import { ElMessage, ElMessageBox } from "element-plus"
 interface dictionary {
-  id?: number
-  name: string
+  id?: string
   displayName: string
   remark: string
 }
 interface tableRow extends dictionary {
-  id: number
+  id: string
 }
 interface DictionarySearch {
   /**
@@ -87,7 +86,7 @@ interface DictionarySearch {
   /**
    * 字典名  获取字段列表的依据
    */
-  name: null | string
+  id: null | string
   /**
    * 备注
    */
@@ -113,15 +112,16 @@ const data = reactive({
   dialogVisible: false,
   formLabelWidth: "140px",
   searchForm: {
-    name: "",
+    id: "",
     displayName: "",
     remark: ""
   },
   editForm: {
-    name: "",
+    id: "",
     displayName: "",
     remark: ""
   } as dictionary,
+  isEdit: false,
   pageNo: 1,
   pageSize: 20,
   total: 0
@@ -131,13 +131,13 @@ const search = () => {
 }
 const getList = async () => {
   let params: DictionarySearch = {
-    name: "",
+    id: "",
     displayName: "",
     remark: "",
     maxResultCount: 20,
     skipCount: 0
   }
-  params.name = data.searchForm.name
+  params.id = data.searchForm.id
   params.displayName = data.searchForm.displayName
   params.remark = data.searchForm.remark
   params.skipCount = (data.pageNo - 1) * data.pageSize
@@ -148,8 +148,17 @@ const getList = async () => {
   data.tableData = res.result.items
   data.total = res.result.totalCount
 }
+const clearForm = () => {
+  data.editForm = {
+    id: "",
+    displayName: "",
+    remark: ""
+  }
+  data.isEdit = false
+}
 const handleEdit = (index: number, row: tableRow) => {
   console.log(index, row)
+  data.isEdit = true
   data.editForm = row
   data.dialogVisible = true
 }
@@ -166,7 +175,7 @@ const handlePageChange = () => {
 }
 const saveDictionary = async () => {
   let res: any = null
-  if (data.editForm.id) {
+  if (data.isEdit) {
     // 编辑
     res = await editDictionary(data.editForm)
   } else {
@@ -175,7 +184,7 @@ const saveDictionary = async () => {
   }
   if (res.success) {
     data.editForm = {
-      name: "",
+      id: "",
       displayName: "",
       remark: ""
     }
@@ -199,6 +208,7 @@ const handleDelete = (index: number, row: tableRow) => {
         type: "success",
         message: "删除成功"
       })
+      getList()
     }
   })
 }

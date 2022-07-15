@@ -6,37 +6,83 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="电子工程师:">
-              <SearchPerson v-model="formData.electronicEngineerNum" />
+              <el-select v-model="formData.electronicEngineerNum">
+                <el-option
+                  v-for="item in users.electronicEngineer"
+                  :key="item.id"
+                  :label="item.userName"
+                  :value="item.id"
+                />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.electronicEngineerNum" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="结构工程师:">
-              <SearchPerson v-model="formData.structureEngineerNum" />
+              <el-select v-model="formData.structureEngineerNum">
+                <el-option
+                  v-for="item in users.structureEngineer"
+                  :key="item.id"
+                  :label="item.userName"
+                  :value="item.id"
+                />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.structureEngineerNum" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="资源管理部:">
-              <SearchPerson v-model="formData.resourceManagementNum" />
+              <el-select v-model="formData.resourceManagementNum">
+                <el-option
+                  v-for="item in users.resourceManagement"
+                  :key="item.id"
+                  :label="item.userName"
+                  :value="item.id"
+                />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.resourceManagementNum" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="工程技术部:">
-              <SearchPerson v-model="formData.engineeringTechnologyNum" />
+              <el-select v-model="formData.engineeringTechnologyNum">
+                <el-option
+                  v-for="item in users.engineeringTechnology"
+                  :key="item.id"
+                  :label="item.userName"
+                  :value="item.id"
+                />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.engineeringTechnologyNum" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="财务部:">
-              <SearchPerson v-model="formData.financeNum" />
+              <el-select v-model="formData.financeNum">
+                <el-option v-for="item in users.finance" :key="item.id" :label="item.userName" :value="item.id" />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.financeNum" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="生产管理部:">
-              <SearchPerson v-model="formData.productionManagementNum" />
+              <el-select v-model="formData.productionManagementNum">
+                <el-option
+                  v-for="item in users.productionManagement"
+                  :key="item.id"
+                  :label="item.userName"
+                  :value="item.id"
+                />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.productionManagementNum" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="品保部:">
-              <SearchPerson v-model="formData.qualityNum" />
+              <el-select v-model="formData.qualityNum">
+                <el-option v-for="item in users.quality" :key="item.id" :label="item.userName" :value="item.id" />
+              </el-select>
+              <!-- <SearchPerson v-model="formData.qualityNum" /> -->
             </el-form-item>
           </el-col>
         </el-row>
@@ -70,19 +116,14 @@
     <div>
       <el-button @click="save" type="primary" size="large">保存录入</el-button>
     </div>
-    <el-steps :active="1" direction="vertical">
-      <el-step title="Step 1" description="Some description" />
-      <el-step title="Step 2" description="Some description" />
-      <el-step title="Step 3" description="Some description" />
-    </el-steps>
   </div>
 </template>
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { SearchPerson } from "@/components/SearchPerson"
-import { PostManagement } from "@/api/partEntry"
+// import { SearchPerson } from "@/components/SearchPerson"
+import { PostManagement, GetUserInput } from "@/api/partEntry"
 import { UserInputInfo } from "./data.type"
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
@@ -93,13 +134,28 @@ const formData: UserInputInfo = reactive({
   engineeringTechnologyNum: "",
   fileId: 1,
   financeNum: "",
-  // id?: number
   isFirst: "1",
   isNRE: "1",
   productionManagementNum: "",
   qualityNum: "",
   resourceManagementNum: "",
   structureEngineerNum: ""
+})
+interface user {
+  department?: null | string
+  id: number
+  position?: null | string
+  userName?: string
+  userNum?: null | string
+}
+const users = reactive({
+  electronicEngineer: [] as user[],
+  structureEngineer: [] as user[],
+  resourceManagement: [] as user[],
+  engineeringTechnology: [] as user[],
+  finance: [] as user[],
+  productionManagement: [] as user[],
+  quality: [] as user[]
 })
 const options = [
   {
@@ -135,7 +191,24 @@ const save = async () => {
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-onMounted(() => {
+onMounted(async () => {
+  let res: any = await GetUserInput()
+  let {
+    electronicEngineer,
+    structureEngineer,
+    resourceManagement,
+    engineeringTechnology,
+    finance,
+    productionManagement,
+    quality
+  } = res.result
+  users.electronicEngineer = electronicEngineer
+  users.structureEngineer = structureEngineer
+  users.resourceManagement = resourceManagement
+  users.engineeringTechnology = engineeringTechnology
+  users.finance = finance
+  users.productionManagement = productionManagement
+  users.quality = quality
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

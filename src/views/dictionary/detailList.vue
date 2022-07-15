@@ -17,8 +17,8 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建字典明细</el-button>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
-      <el-table-column label="id" prop="id" />
-      <el-table-column label="字典明细名" prop="name" />
+      <el-table-column label="字典明细名（id）" prop="id" />
+      <!-- <el-table-column label="字典明细名" prop="name" /> -->
       <el-table-column label="字典明细显示名" prop="displayName" />
       <el-table-column label="备注" prop="remark" />
       <el-table-column label="操作">
@@ -38,10 +38,10 @@
         @update:current-page="handlePageChange"
       />
     </div>
-    <el-dialog v-model="data.dialogVisible" title="字典明细编辑">
+    <el-dialog v-model="data.dialogVisible" title="字典明细编辑" @close="clearForm">
       <el-form :model="data.editForm">
         <el-form-item label="字典明细名" :label-width="data.formLabelWidth">
-          <el-input v-model="data.editForm.name" />
+          <el-input v-model="data.editForm.id" />
         </el-form-item>
         <el-form-item label="字典明细显示名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.displayName" />
@@ -72,13 +72,12 @@ import {
 
 import { ElMessage, ElMessageBox } from "element-plus"
 interface dictionary {
-  id?: number
-  name: string
+  id: string
   displayName: string
   remark: string
 }
 interface tableRow extends dictionary {
-  id: number
+  id: string
 }
 interface DictionarySearch {
   /**
@@ -88,7 +87,6 @@ interface DictionarySearch {
   /**
    * 字典名  获取字段列表的依据
    */
-  name: null | string
   /**
    * 备注
    */
@@ -113,6 +111,7 @@ console.log(route)
 const data = reactive({
   tableData: [],
   dialogVisible: false,
+  isEdit: false,
   formLabelWidth: "140px",
   searchForm: {
     // name: "",
@@ -120,7 +119,7 @@ const data = reactive({
     remark: ""
   },
   editForm: {
-    name: "",
+    id: "",
     displayName: "",
     remark: ""
   } as dictionary,
@@ -137,7 +136,6 @@ const getList = async () => {
     remark: "",
     maxResultCount: 20,
     skipCount: 0,
-    name: null,
     financeDictionaryId: 0
   }
   // params.name = data.searchForm.name
@@ -146,12 +144,14 @@ const getList = async () => {
   params.skipCount = (data.pageNo - 1) * data.pageSize
   params.maxResultCount = data.pageSize
   params.financeDictionaryId = Number(route.query.id)
+  debugger
   let res: any = await getDictionaryDetail(params)
   data.tableData = res.result.items
   data.total = res.result.totalCount
 }
 const handleEdit = (index: number, row: tableRow) => {
   console.log(index, row)
+  data.isEdit = true
   data.editForm = row
   data.dialogVisible = true
   // console.log(data.page)
@@ -161,18 +161,18 @@ const handlePageChange = () => {
 }
 const saveDictionary = async () => {
   let res: any = null
-  if (data.editForm.id) {
+  if (data.isEdit) {
     res = await editDictionaryDetail(data.editForm)
   } else {
     interface saveData extends dictionary {
-      financeDictionaryId: number
+      financeDictionaryId: string | null
     }
-    let newData: saveData = Object.assign({ financeDictionaryId: Number(route.query.id) }, data.editForm)
+    let newData: saveData = Object.assign({ financeDictionaryId: route.query.id + "" }, data.editForm)
     res = await addDictionaryDetail(newData)
   }
   if (res.success) {
     data.editForm = {
-      name: "",
+      id: "",
       displayName: "",
       remark: ""
     }
