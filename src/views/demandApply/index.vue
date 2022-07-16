@@ -1,11 +1,11 @@
 <template>
   <div class="demand-apply">
-    <el-form :model="state.quoteForm" ref="refForm">
+    <el-form :model="state.quoteForm" ref="refForm" :rules="rules">
       <!-- 拟稿人信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="24">
-            <el-form-item label="标题:">
+            <el-form-item label="标题:" prop="title">
               <el-input v-model="state.quoteForm.title">
                 <template #append>
                   <el-button @click="generateTitle">自动生成</el-button>
@@ -14,32 +14,32 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="拟稿人:">
+            <el-form-item label="拟稿人:" prop="drafter">
               <el-input v-model="state.quoteForm.drafter" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="拟稿人工号:">
+            <el-form-item label="拟稿人工号:" prop="drafterNumber">
               <el-input v-model="state.quoteForm.drafterNumber" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="拟稿公司:">
+            <el-form-item label="拟稿公司:" prop="draftingCompany">
               <el-input v-model="state.quoteForm.draftingCompany" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="拟稿部门:">
+            <el-form-item label="拟稿部门:" prop="draftingDepartment">
               <el-input v-model="state.quoteForm.draftingDepartment" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="拟稿日期:">
+            <el-form-item label="拟稿日期:" prop="draftDate">
               <el-date-picker v-model="state.quoteForm.draftDate" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="单据编号:">
+            <el-form-item label="单据编号:" prop="number">
               <el-input v-model="state.quoteForm.number" />
             </el-form-item>
           </el-col>
@@ -49,22 +49,22 @@
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="项目名称:">
+            <el-form-item label="项目名称:" prop="projectName">
               <el-input v-model="state.quoteForm.projectName" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="项目代码:">
+            <el-form-item label="项目代码:" prop="projectCode">
               <el-input v-model="state.quoteForm.projectCode" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="客户名称:">
+          <el-col :span="4">
+            <el-form-item label="客户名称:" prop="customerName">
               <el-input v-model="state.quoteForm.customerName" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
-            <el-form-item label="客户性质:">
+          <el-col :span="4">
+            <el-form-item label="客户性质:" prop="customerNature">
               <el-select v-model="state.quoteForm.customerNature" placeholder="Select">
                 <el-option
                   v-for="item in state.customerNatureOptions"
@@ -75,13 +75,25 @@
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="4">
+            <el-form-item label="客户国家:" prop="country">
+              <el-select v-model="state.quoteForm.country" placeholder="Select">
+                <el-option
+                  v-for="item in state.countryOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="6">
-            <el-form-item label="终端名称:">
+            <el-form-item label="终端名称:" prop="terminalName">
               <el-input v-model="state.quoteForm.terminalName" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="终端性质:">
+            <el-form-item label="终端性质:" prop="terminalNature">
               <el-select v-model="state.quoteForm.terminalNature" placeholder="Select">
                 <el-option
                   v-for="item in state.terminalNatureOptions"
@@ -95,7 +107,7 @@
         </el-row>
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="报价形式:">
+            <el-form-item label="报价形式:" prop="quotationType">
               <el-select v-model="state.quoteForm.quotationType" placeholder="Select">
                 <el-option
                   v-for="item in state.quotationTypeOptions"
@@ -107,7 +119,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="样品报价类型:">
+            <el-form-item label="样品报价类型:" prop="sampleQuotationType">
               <el-select v-model="state.quoteForm.sampleQuotationType" placeholder="Select">
                 <el-option
                   v-for="item in state.sampleQuotationTypeOptions"
@@ -119,12 +131,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="sop时间:">
-              <el-date-picker type="year" placeholder="Pick a year" v-model="state.quoteForm.sopTime" />
+            <el-form-item label="sop时间:" prop="sopTime">
+              <el-date-picker
+                type="year"
+                placeholder="Pick a year"
+                v-model="state.quoteForm.sopTime"
+                value-format="YYYY"
+              />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="项目周期:">
+            <el-form-item label="项目周期:" prop="projectCycle">
               <el-input-number v-model="state.quoteForm.projectCycle" @change="yearChange" />
             </el-form-item>
           </el-col>
@@ -242,7 +259,7 @@
         </el-table>
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="模具费分摊:">
+            <el-form-item label="模具费分摊:" prop="allocationOfMouldCost">
               <el-select v-model="state.quoteForm.allocationOfMouldCost" placeholder="Select">
                 <el-option
                   v-for="item in state.allocationOfMouldCostOptions"
@@ -254,7 +271,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="治具费分摊:">
+            <el-form-item label="治具费分摊:" prop="allocationOfFixtureCost">
               <el-select v-model="state.quoteForm.allocationOfFixtureCost" placeholder="Select">
                 <el-option
                   v-for="item in state.allocationOfFixtureCostOptions"
@@ -266,7 +283,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="设备费分摊:">
+            <el-form-item label="设备费分摊:" prop="allocationOfEquipmentCost">
               <el-select v-model="state.quoteForm.allocationOfEquipmentCost" placeholder="Select">
                 <el-option
                   v-for="item in state.allocationOfEquipmentCostOptions"
@@ -278,7 +295,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="信赖性费用分摊:">
+            <el-form-item label="信赖性费用分摊:" prop="reliabilityCost">
               <el-select v-model="state.quoteForm.reliabilityCost" placeholder="Select">
                 <el-option
                   v-for="item in state.reliabilityCostOptions"
@@ -290,7 +307,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="开发费分摊:">
+            <el-form-item label="开发费分摊:" prop="developmentCost">
               <el-select v-model="state.quoteForm.developmentCost" placeholder="Select">
                 <el-option
                   v-for="item in state.developmentCostOptions"
@@ -302,7 +319,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="落地工厂:">
+            <el-form-item label="落地工厂:" prop="landingFactory">
               <el-select v-model="state.quoteForm.landingFactory" placeholder="Select">
                 <el-option
                   v-for="item in state.landingFactoryOptions"
@@ -472,12 +489,12 @@
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="贸易方式:">
+            <el-form-item label="贸易方式:" prop="tradeMode">
               <el-input v-model="state.quoteForm.tradeMode" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="销售类型:">
+            <el-form-item label="销售类型:" prop="salesType">
               <el-select v-model="state.quoteForm.salesType" placeholder="Select">
                 <el-option
                   v-for="item in state.salesTypeOptions"
@@ -489,10 +506,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="付款方式:"> <el-input v-model="state.quoteForm.paymentMethod" /> </el-form-item>
+            <el-form-item label="付款方式:" prop="paymentMethod">
+              <el-input v-model="state.quoteForm.paymentMethod" />
+            </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="报价币种:">
+            <el-form-item label="报价币种:" prop="currency">
               <el-select v-model="state.quoteForm.currency" placeholder="Select">
                 <el-option
                   v-for="item in state.currencyOptions"
@@ -504,15 +523,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="客户目标价:">
+            <el-form-item label="客户目标价:" prop="customerTargetPrice">
               <el-input v-model="state.quoteForm.customerTargetPrice" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="汇率:"> <el-input v-model="state.quoteForm.exchangeRate" /> </el-form-item>
+            <el-form-item label="汇率:" prop="exchangeRate">
+              <el-input v-model="state.quoteForm.exchangeRate" />
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="客户特殊性要求:">
+            <el-form-item label="客户特殊性要求:" prop="customerSpecialRequest">
               <el-input type="textarea" :rows="10" v-model="state.quoteForm.customerSpecialRequest" />
             </el-form-item>
           </el-col>
@@ -522,7 +543,7 @@
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="运输方式:">
+            <el-form-item label="运输方式:" prop="shippingType">
               <el-select v-model="state.quoteForm.shippingType" placeholder="Select">
                 <el-option
                   v-for="item in state.shippingTypeOptions"
@@ -534,7 +555,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="包装方式:">
+            <el-form-item label="包装方式:" prop="packagingType">
               <el-select v-model="state.quoteForm.packagingType" placeholder="Select">
                 <el-option
                   v-for="item in state.packagingTypeOptions"
@@ -546,17 +567,17 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="核价要求完成时间:">
+            <el-form-item label="核价要求完成时间:" prop="deadline">
               <el-date-picker type="date" placeholder="Pick a day" v-model="state.quoteForm.deadline" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="项目经理:">
+            <el-form-item label="项目经理:" prop="projectManager">
               <el-input :suffix-icon="Search" v-model="state.quoteForm.projectManager" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="交货地点:">
+            <el-form-item label="交货地点:" prop="placeOfDelivery">
               <el-input type="textarea" :rows="10" v-model="state.quoteForm.placeOfDelivery" />
             </el-form-item>
           </el-col>
@@ -574,7 +595,9 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-button type="primary" size="large" style="float: right; margin: 20px 0" @click="save">提交</el-button>
+        <el-button type="primary" size="large" style="float: right; margin: 20px 0" @click="save(refForm)"
+          >提交</el-button
+        >
       </el-card>
     </el-form>
     <div class="demand-apply__step">
@@ -594,14 +617,13 @@ import { Search } from "@element-plus/icons-vue"
 // import type { UploadProps, UploadUserFile, ElMessage, ElMessageBox } from "element-plus"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
-// import type { User } from "./data.type"
 import _ from "lodash"
-// import type { User, InputModal } from "./data.type"
 import { saveApplyInfo } from "@/api/demandApply"
 import { getDictionaryAndDetail } from "@/api/dictionary"
-
+import type { FormInstance, FormRules } from "element-plus"
+import { ElMessage } from "element-plus"
 import dayjs from "dayjs"
-
+const refForm = ref<FormInstance>()
 interface Product {
   id: string
   name: string
@@ -617,7 +639,45 @@ interface SummaryMethodProps<T = Product> {
   columns: TableColumnCtx<T>[]
   data: T[]
 }
-
+const rules = reactive<FormRules>({
+  title: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  drafter: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  drafterNumber: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  draftingDepartment: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  draftingCompany: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  draftDate: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  number: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  projectName: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  projectCode: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  customerName: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  customerNature: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  country: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  terminalName: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  terminalNature: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  quotationType: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  sampleQuotationType: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  sopTime: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  projectCycle: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  allocationOfMouldCost: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  allocationOfFixtureCost: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  allocationOfEquipmentCost: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  reliabilityCost: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  developmentCost: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  landingFactory: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  tradeMode: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  salesType: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  paymentMethod: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  currency: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  customerTargetPrice: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  exchangeRate: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  customerSpecialRequest: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  shippingType: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  packagingType: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  placeOfDelivery: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  deadline: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  projectManager: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  sorFile: [{ required: true, message: "请输入该值", trigger: "blur" }]
+})
 const getSummaries = (param: SummaryMethodProps) => {
   const { columns, data } = param
   const sums: string[] = []
@@ -656,12 +716,13 @@ const state = reactive({
     number: "",
     projectName: "",
     projectCode: "",
-    customerName: "",
-    customerNature: "",
-    terminalName: "",
-    terminalNature: "",
-    quotationType: "",
-    sampleQuotationType: "",
+    customerName: "测试mock",
+    customerNature: "测试mock",
+    country: "中国mock",
+    terminalName: "测试mock",
+    terminalNature: "测试mock",
+    quotationType: "测试mock",
+    sampleQuotationType: "测试mock",
     sopTime: new Date(),
     projectCycle: 0,
     pcs: [] as any,
@@ -674,16 +735,16 @@ const state = reactive({
     developmentCost: 0,
     landingFactory: 0,
     productInformation: [] as any,
-    tradeMode: "",
+    tradeMode: "测试mock",
     salesType: 0,
-    paymentMethod: "",
+    paymentMethod: "测试mock",
     currency: 0,
     customerTargetPrice: 0,
     exchangeRate: 0,
-    customerSpecialRequest: "",
+    customerSpecialRequest: "测试mock",
     shippingType: 0,
     packagingType: 0,
-    placeOfDelivery: "",
+    placeOfDelivery: "测试mock",
     deadline: "",
     projectManager: 0,
     sorFile: [] as any
@@ -715,6 +776,7 @@ const fileList = ref<UploadUserFile[]>([
   }
 ])
 const yearCount = ref(0)
+
 // pcs 数据类型
 interface Pcs {
   carFactory: String
@@ -750,16 +812,28 @@ const modelCountYearListQuantitySum = (row: modelCount) => {
   })
   row.modelTotal = sum
 }
-const save = async () => {
-  let { quoteForm } = state
-  quoteForm.pcs = pcsTableData
-  quoteForm.modelCount = moduleTableData
-  quoteForm.requirement = requireTableData
-  quoteForm.productInformation = productTableData
-  quoteForm.sorFile = fileList.value.map((item: any) => item.response.result.fileId)
-  debugger
-  let res = await saveApplyInfo(quoteForm)
-  console.log(res)
+const save = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      let { quoteForm } = state
+      quoteForm.pcs = pcsTableData
+      quoteForm.modelCount = moduleTableData
+      quoteForm.requirement = requireTableData
+      quoteForm.productInformation = productTableData
+      quoteForm.sorFile = fileList.value.map((item: any) => item.response.result.fileId)
+      let res: any = await saveApplyInfo(quoteForm)
+      console.log(res)
+      if (res.success) {
+        ElMessage({
+          type: "success",
+          message: "保存成功"
+        })
+      }
+    } else {
+      console.log("error submit!", fields)
+    }
+  })
 }
 //终端走量（PCS）table
 const pcsTableData: Pcs[] = reactive([
@@ -931,8 +1005,10 @@ const yearChange = (val: number | undefined) => {
     yearCount.value = val
     let i = state.quoteForm.projectCycle
     state.yearCols = []
+    state.quoteForm.sopTime
+    debugger
     for (let j = 0; j < i; j++) {
-      state.yearCols.push(state.quoteForm.sopTime.getFullYear() + j)
+      state.yearCols.push(Number(state.quoteForm.sopTime) + j)
     }
     console.log(state.yearCols, "state.yearCols ")
   }
@@ -1075,94 +1151,64 @@ onMounted(async () => {
   state.quoteForm.drafterNumber = userInfo.userNumber
   state.quoteForm.draftingCompany = userInfo.userCompany
   state.quoteForm.draftingDepartment = userInfo.userDepartment
-  let customerNature: any = await getDictionaryAndDetail("CustomerNature") //客户性质
-  state.customerNatureOptions = customerNature.result.financeDictionaryDetailList
+  try {
+    let customerNature: any = await getDictionaryAndDetail("CustomerNature") //客户性质
+    state.customerNatureOptions = customerNature.result.financeDictionaryDetailList
 
-  let terminalNature: any = await getDictionaryAndDetail("TerminalNature") //终端性质
-  state.terminalNatureOptions = terminalNature.result.financeDictionaryDetailList
+    let terminalNature: any = await getDictionaryAndDetail("TerminalNature") //终端性质
+    state.terminalNatureOptions = terminalNature.result.financeDictionaryDetailList
 
-  let quotationType: any = await getDictionaryAndDetail("QuotationType") //报价形式
-  state.quotationTypeOptions = quotationType.result.financeDictionaryDetailList
+    let quotationType: any = await getDictionaryAndDetail("QuotationType") //报价形式
+    state.quotationTypeOptions = quotationType.result.financeDictionaryDetailList
 
-  let sampleQuotationType: any = await getDictionaryAndDetail("SampleQuotationType") //样品报价类型
-  state.sampleQuotationTypeOptions = sampleQuotationType.result.financeDictionaryDetailList
+    let sampleQuotationType: any = await getDictionaryAndDetail("SampleQuotationType") //样品报价类型
+    state.sampleQuotationTypeOptions = sampleQuotationType.result.financeDictionaryDetailList
 
-  let country: any = await getDictionaryAndDetail("Country") // 客户国家
-  state.countryOptions = country.result.financeDictionaryDetailList
+    let country: any = await getDictionaryAndDetail("Country") // 客户国家
+    state.countryOptions = country.result.financeDictionaryDetailList
 
-  let product: any = await getDictionaryAndDetail("Product") // 产品
-  state.productOptions = product.result.financeDictionaryDetailList
+    let product: any = await getDictionaryAndDetail("Product") // 产品
+    state.productOptions = product.result.financeDictionaryDetailList
 
-  let productType: any = await getDictionaryAndDetail("ProductType") // 产品小类
-  state.productTypeOptions = productType.result.financeDictionaryDetailList
+    let productType: any = await getDictionaryAndDetail("ProductType") // 产品小类
+    state.productTypeOptions = productType.result.financeDictionaryDetailList
 
-  let allocationOfMouldCost: any = await getDictionaryAndDetail("AllocationOfMouldCost") // 模具费分摊
-  state.allocationOfMouldCostOptions = allocationOfMouldCost.result.financeDictionaryDetailList
+    let allocationOfMouldCost: any = await getDictionaryAndDetail("AllocationOfMouldCost") // 模具费分摊
+    state.allocationOfMouldCostOptions = allocationOfMouldCost.result.financeDictionaryDetailList
 
-  let allocationOfFixtureCost: any = await getDictionaryAndDetail("AllocationOfFixtureCost") //治具费分摊
-  state.allocationOfFixtureCostOptions = allocationOfFixtureCost.result.financeDictionaryDetailList
+    let allocationOfFixtureCost: any = await getDictionaryAndDetail("AllocationOfFixtureCost") //治具费分摊
+    state.allocationOfFixtureCostOptions = allocationOfFixtureCost.result.financeDictionaryDetailList
 
-  let allocationOfEquipmentCost: any = await getDictionaryAndDetail("AllocationOfEquipmentCost") // 设备费分摊
-  state.allocationOfEquipmentCostOptions = allocationOfEquipmentCost.result.financeDictionaryDetailList
+    let allocationOfEquipmentCost: any = await getDictionaryAndDetail("AllocationOfEquipmentCost") // 设备费分摊
+    state.allocationOfEquipmentCostOptions = allocationOfEquipmentCost.result.financeDictionaryDetailList
 
-  let reliabilityCost: any = await getDictionaryAndDetail("ReliabilityCost") //信赖性费用分摊
-  state.reliabilityCostOptions = reliabilityCost.result.financeDictionaryDetailList
+    let reliabilityCost: any = await getDictionaryAndDetail("ReliabilityCost") //信赖性费用分摊
+    state.reliabilityCostOptions = reliabilityCost.result.financeDictionaryDetailList
 
-  let developmentCost: any = await getDictionaryAndDetail("DevelopmentCost") //开发费分摊
-  state.developmentCostOptions = developmentCost.result.financeDictionaryDetailList
+    let developmentCost: any = await getDictionaryAndDetail("DevelopmentCost") //开发费分摊
+    state.developmentCostOptions = developmentCost.result.financeDictionaryDetailList
 
-  let landingFactory: any = await getDictionaryAndDetail("LandingFactory") //落地工厂
-  state.landingFactoryOptions = landingFactory.result.financeDictionaryDetailList
+    let landingFactory: any = await getDictionaryAndDetail("LandingFactory") //落地工厂
+    state.landingFactoryOptions = landingFactory.result.financeDictionaryDetailList
 
-  let salesType: any = await getDictionaryAndDetail("SalesType") //销售类型
-  state.salesTypeOptions = salesType.result.financeDictionaryDetailList
+    let salesType: any = await getDictionaryAndDetail("SalesType") //销售类型
+    state.salesTypeOptions = salesType.result.financeDictionaryDetailList
 
-  let currency: any = await getDictionaryAndDetail("Currency") //报价币种
-  state.currencyOptions = currency.result.financeDictionaryDetailList
+    let currency: any = await getDictionaryAndDetail("Currency") //报价币种
+    state.currencyOptions = currency.result.financeDictionaryDetailList
 
-  let shippingType: any = await getDictionaryAndDetail("ShippingType") //运输方式
-  state.shippingTypeOptions = shippingType.result.financeDictionaryDetailList
+    let shippingType: any = await getDictionaryAndDetail("ShippingType") //运输方式
+    state.shippingTypeOptions = shippingType.result.financeDictionaryDetailList
 
-  let packagingType: any = await getDictionaryAndDetail("PackagingType") //包装方式
-  state.packagingTypeOptions = packagingType.result.financeDictionaryDetailList
+    let packagingType: any = await getDictionaryAndDetail("PackagingType") //包装方式
+    state.packagingTypeOptions = packagingType.result.financeDictionaryDetailList
 
-  let typeSelect: any = await getDictionaryAndDetail("TypeSelect") //类型
-  state.TypeSelectOptions = typeSelect.result.financeDictionaryDetailList
-
-  console.log(
-    customerNature,
-    terminalNature,
-    quotationType,
-    sampleQuotationType,
-    country,
-    product,
-    productType,
-    allocationOfMouldCost,
-    allocationOfFixtureCost,
-    allocationOfEquipmentCost,
-    reliabilityCost,
-    developmentCost,
-    landingFactory,
-    salesType,
-    currency,
-    shippingType,
-    packagingType
-  )
+    let typeSelect: any = await getDictionaryAndDetail("TypeSelect") //类型
+    state.TypeSelectOptions = typeSelect.result.financeDictionaryDetailList
+  } catch (error) {
+    console.log(error)
+  }
 })
-// const handleExceed: UploadProps["onExceed"] = (files, uploadFiles) => {
-//   ElMessage.warning(
-//     `The limit is 3, you selected ${files.length} files this time, add up to ${
-//       files.length + uploadFiles.length
-//     } totally`
-//   )
-// }
-
-// const beforeRemove: UploadProps["beforeRemove"] = (uploadFile, uploadFiles) => {
-//   return ElMessageBox.confirm(`Cancel the transfert of ${uploadFile.name} ?`).then(
-//     () => true,
-//     () => false
-//   )
-// }
 defineExpose({
   ...toRefs(state)
 })

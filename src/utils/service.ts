@@ -101,7 +101,7 @@ function createRequestFunction(service: AxiosInstance) {
     const configDefault = {
       headers: {
         // 携带 token
-        "X-Access-Token": getToken(),
+        Authorization: "Bearer " + getToken(),
         "Content-Type": get(config, "headers.Content-Type", "application/json")
       },
       timeout: 5000,
