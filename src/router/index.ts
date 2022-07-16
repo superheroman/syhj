@@ -189,22 +189,36 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   //     }
   //   ]
   // },
-  // {
-  //   path: "/structuralMaterialImport",
-  //   redirect: "/structuralMaterialImport/index",
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: "/structuralMaterialImport/index",
-  //       component: () => import("@/views/structuralMaterialImport/index.vue"),
-  //       name: "structuralMaterialImport",
-  //       meta: {
-  //         title: "结构料导入",
-  //         icon: "structuralMaterialImport"
-  //       }
-  //     }
-  //   ]
-  // },
+  {
+    path: "/structuralMaterialImport",
+    redirect: "/structuralMaterialImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/structuralMaterialImport/index",
+        component: () => import("@/views/structuralMaterialImport/index.vue"),
+        name: "structuralMaterialImport",
+        meta: {
+          title: "结构料导入"
+        }
+      }
+    ]
+  },
+  {
+    path: "/bomView",
+    redirect: "/bomView/index",
+    component: Layout,
+    children: [
+      {
+        path: "/bomView/index",
+        component: () => import("@/views/bomView/index.vue"),
+        name: "bomView",
+        meta: {
+          title: "Bom查看"
+        }
+      }
+    ]
+  },
   {
     path: "/processManagement",
     redirect: "/processManagement/index",
