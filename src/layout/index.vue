@@ -99,6 +99,7 @@ $sideBarWidth: 220px;
   left: 0;
   z-index: 1001;
   overflow: hidden;
+  background: #152d3d;
 }
 
 .fixed-header {
