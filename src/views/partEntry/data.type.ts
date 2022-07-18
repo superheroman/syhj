@@ -4,7 +4,7 @@
 export interface UserInputInfo {
   electronicEngineerNum?: string
   engineeringTechnologyNum?: string
-  fileId?: number
+  fileId?: number | null | undefined
   financeNum?: string
   id?: number
   isFirst?: string

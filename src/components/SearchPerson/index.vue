@@ -11,13 +11,14 @@
       :remote-method="remoteMethod"
       :loading="loading"
     >
-      <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
     </el-select>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
+import { getUserList, UserParams } from "@/api/user"
 // import { useRoute, useRouter } from "vue-router"
 // import { GetUserInput } from "@/api/partEntry"
 const value = ref("")
@@ -36,12 +37,16 @@ watch(value, (val) => {
   console.log(val, props)
   emit("update:modelValue", val)
 })
-interface ListItem {
-  value: string
-  label: string
+// interface ListItem {
+//   value: string
+//   label: string
+// }
+interface user {
+  id: number
+  name: string
 }
-const list = ref<ListItem[]>([])
-const options = ref<ListItem[]>([])
+// const list = ref<ListItem[]>([])
+const options = ref<user[]>([])
 const loading = ref(false)
 
 // /**
@@ -59,71 +64,33 @@ const loading = ref(false)
 const data = reactive({})
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
-  list.value = states.map((item) => {
-    return { value: `value:${item}`, label: `label:${item}` }
-  })
+  // list.value = states.map((item) => {
+  //   return { value: `value:${item}`, label: `label:${item}` }
+  // })
 })
-const states = [
-  "Alabama",
-  "Alaska",
-  "Arizona",
-  "Arkansas",
-  "California",
-  "Colorado",
-  "Connecticut",
-  "Delaware",
-  "Florida",
-  "Georgia",
-  "Hawaii",
-  "Idaho",
-  "Illinois",
-  "Indiana",
-  "Iowa",
-  "Kansas",
-  "Kentucky",
-  "Louisiana",
-  "Maine",
-  "Maryland",
-  "Massachusetts",
-  "Michigan",
-  "Minnesota",
-  "Mississippi",
-  "Missouri",
-  "Montana",
-  "Nebraska",
-  "Nevada",
-  "New Hampshire",
-  "New Jersey",
-  "New Mexico",
-  "New York",
-  "North Carolina",
-  "North Dakota",
-  "Ohio",
-  "Oklahoma",
-  "Oregon",
-  "Pennsylvania",
-  "Rhode Island",
-  "South Carolina",
-  "South Dakota",
-  "Tennessee",
-  "Texas",
-  "Utah",
-  "Vermont",
-  "Virginia",
-  "Washington",
-  "West Virginia",
-  "Wisconsin",
-  "Wyoming"
-]
+const getList = async (query: string) => {
+  let params: UserParams = {
+    keyword: "",
+    maxResultCount: 20,
+    skipCount: 0
+  }
+  params.keyword = query
+  let res: any = await getUserList(params)
+  loading.value = false
+  options.value = res.result.items
+}
+// const states = []
 const remoteMethod = async (query: string) => {
   if (query) {
     loading.value = true
-    setTimeout(() => {
-      loading.value = false
-      options.value = list.value.filter((item) => {
-        return item.label.toLowerCase().includes(query.toLowerCase())
-      })
-    }, 200)
+    await getList(query)
+    loading.value = false
+    // setTimeout(() => {
+    //   loading.value = false
+    //   options.value = list.value.filter((item) => {
+    //     return item.label.toLowerCase().includes(query.toLowerCase())
+    //   })
+    // }, 200)
     // let res = await GetUserInput()
     // console.log(res)
   } else {

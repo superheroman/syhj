@@ -46,8 +46,13 @@
           <el-input v-model="data.roleForm.description" autocomplete="off" />
         </el-form-item>
         <el-form-item label="权限选择" :label-width="data.formLabelWidth">
-          <el-select v-model="data.roleForm.grantedPermissions">
-            <option :value="item.id" v-for="item in data.permissionList" :key="item.id" />
+          <el-select v-model="data.roleForm.grantedPermissions" multiple>
+            <el-option
+              :value="item.name"
+              v-for="item in data.permissionList"
+              :key="item.name"
+              :label="item.displayName"
+            />
           </el-select>
         </el-form-item>
       </el-form>
@@ -74,12 +79,12 @@ interface PermissionDto {
   /**
    * 权限显示名称
    */
-  displayName?: null | string
-  id?: number
+  displayName: string
+  id: number
   /**
    * 权限名称
    */
-  name?: null | string
+  name: string
 }
 /**
  * 路由对象
@@ -165,7 +170,7 @@ interface role {
   displayName: string
   normalizedName: string
   description: string
-  grantedPermissions: Array<number>
+  grantedPermissions: Array<string>
 }
 
 const getList = async () => {
@@ -203,8 +208,9 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
-  let res: any = getPermissionList
+  let res: any = await getPermissionList()
   data.permissionList = res.result.items
+  search()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

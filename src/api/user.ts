@@ -127,7 +127,7 @@ export function updateUser(data: UserDto) {
   })
 }
 /** 删除用户 */
-export function deleteUser(id: number) {
+export function deleteUser(id: number | undefined) {
   return request({
     url: "/api/services/app/User/Delete",
     method: "delete",
@@ -137,7 +137,7 @@ export function deleteUser(id: number) {
   })
 }
 /** 激活用户 */
-export function activateUser(id: number) {
+export function activateUser(id: number | undefined) {
   return request({
     url: "/api/services/app/User/Activate",
     method: "post",
@@ -148,7 +148,7 @@ export function activateUser(id: number) {
 }
 
 /** 禁用用户 */
-export function deActivateUser(id: number) {
+export function deActivateUser(id: number | undefined) {
   return request({
     url: "/api/services/app/User/DeActivate",
     method: "post",
