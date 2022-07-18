@@ -2,7 +2,7 @@
   <div class="dictionary">
     <div class="dictionary__btn-container">
       <el-form :model="data.searchForm" inline>
-        <el-form-item label="字典显示名">
+        <el-form-item label="字典名">
           <el-input v-model="data.searchForm.displayName" />
         </el-form-item>
         <el-form-item label="备注">
@@ -17,9 +17,9 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建字典明细</el-button>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
-      <el-table-column label="字典明细名（id）" prop="id" />
+      <!-- <el-table-column label="字典明细名（id）" prop="id" /> -->
       <!-- <el-table-column label="字典明细名" prop="name" /> -->
-      <el-table-column label="字典明细显示名" prop="displayName" />
+      <el-table-column label="字典明细名" prop="displayName" />
       <el-table-column label="备注" prop="remark" />
       <el-table-column label="操作">
         <template #default="scope">
@@ -40,10 +40,10 @@
     </div>
     <el-dialog v-model="data.dialogVisible" title="字典明细编辑" @close="clearForm">
       <el-form :model="data.editForm">
-        <el-form-item label="字典明细名" :label-width="data.formLabelWidth">
+        <!-- <el-form-item label="字典明细名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.id" />
-        </el-form-item>
-        <el-form-item label="字典明细显示名" :label-width="data.formLabelWidth">
+        </el-form-item> -->
+        <el-form-item label="字典明细名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.displayName" />
         </el-form-item>
         <el-form-item label="备注" :label-width="data.formLabelWidth">
@@ -93,7 +93,7 @@ interface DictionarySearch {
   remark?: null | string
   maxResultCount: number
   skipCount: number
-  financeDictionaryId: number | null
+  financeDictionaryId: string | null
 }
 /**
  * 路由对象
@@ -136,15 +136,14 @@ const getList = async () => {
     remark: "",
     maxResultCount: 20,
     skipCount: 0,
-    financeDictionaryId: 0
+    financeDictionaryId: ""
   }
   // params.name = data.searchForm.name
   params.displayName = data.searchForm.displayName
   params.remark = data.searchForm.remark
   params.skipCount = (data.pageNo - 1) * data.pageSize
   params.maxResultCount = data.pageSize
-  params.financeDictionaryId = Number(route.query.id)
-  debugger
+  params.financeDictionaryId = route.query.id + ""
   let res: any = await getDictionaryDetail(params)
   data.tableData = res.result.items
   data.total = res.result.totalCount
@@ -171,11 +170,6 @@ const saveDictionary = async () => {
     res = await addDictionaryDetail(newData)
   }
   if (res.success) {
-    data.editForm = {
-      id: "",
-      displayName: "",
-      remark: ""
-    }
     ElMessage({
       type: "success",
       message: "保存成功"
@@ -183,6 +177,14 @@ const saveDictionary = async () => {
     data.dialogVisible = false
     getList()
   }
+}
+const clearForm = () => {
+  data.editForm = {
+    id: "",
+    displayName: "",
+    remark: ""
+  }
+  data.isEdit = false
 }
 const handleDelete = (index: number, row: tableRow) => {
   console.log(index, row)

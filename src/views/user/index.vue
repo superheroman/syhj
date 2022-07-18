@@ -18,7 +18,7 @@
       <el-table-column label="用户名" prop="userName" />
       <el-table-column label="姓名" prop="name" />
       <!-- <el-table-column label="surname" prop="surname" /> -->
-      <el-table-column label="邮箱" prop="emailAddress" />
+      <!-- <el-table-column label="邮箱" prop="emailAddress" /> -->
       <el-table-column label="激活状态" prop="isActive">
         <template #default="scope">
           <el-switch
@@ -55,21 +55,21 @@
         <el-form-item label="名字" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.name" />
         </el-form-item>
-        <el-form-item label="姓" :label-width="data.formLabelWidth">
+        <!-- <el-form-item label="姓" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.surname" />
         </el-form-item>
         <el-form-item label="职位" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.position" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="工号" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.number" />
         </el-form-item>
         <el-form-item label="用户名" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.userName" />
         </el-form-item>
-        <el-form-item label="邮箱" :label-width="data.formLabelWidth">
+        <!-- <el-form-item label="邮箱" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.emailAddress" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="密码" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.password" />
         </el-form-item>

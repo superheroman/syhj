@@ -2,10 +2,13 @@
   <div class="dictionary">
     <div class="dictionary__btn-container">
       <el-form :model="data.searchForm" inline>
-        <el-form-item label="字典名">
+        <!-- <el-form-item label="字典名">
           <el-input v-model="data.searchForm.id" />
         </el-form-item>
         <el-form-item label="字典显示名">
+          <el-input v-model="data.searchForm.displayName" />
+        </el-form-item> -->
+        <el-form-item label="字典名">
           <el-input v-model="data.searchForm.displayName" />
         </el-form-item>
         <el-form-item label="备注">
@@ -20,9 +23,9 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建字典</el-button>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
-      <el-table-column label="字典名（id）" prop="id" />
+      <!-- <el-table-column label="字典名（id）" prop="id" /> -->
       <!-- <el-table-column label="字典名" prop="name" /> -->
-      <el-table-column label="字典显示名" prop="displayName" />
+      <el-table-column label="字典名" prop="displayName" />
       <el-table-column label="备注" prop="remark" />
       <el-table-column label="操作">
         <template #default="scope">
@@ -44,10 +47,10 @@
     </div>
     <el-dialog v-model="data.dialogVisible" title="字典编辑" @close="clearForm">
       <el-form :model="data.editForm">
-        <el-form-item label="字典名" :label-width="data.formLabelWidth">
+        <!-- <el-form-item label="字典名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.id" />
-        </el-form-item>
-        <el-form-item label="字典显示名" :label-width="data.formLabelWidth">
+        </el-form-item> -->
+        <el-form-item label="字典名" :label-width="data.formLabelWidth">
           <el-input v-model="data.editForm.displayName" />
         </el-form-item>
         <el-form-item label="备注" :label-width="data.formLabelWidth">
@@ -86,7 +89,7 @@ interface DictionarySearch {
   /**
    * 字典名  获取字段列表的依据
    */
-  id: null | string
+  // id: null | string
   /**
    * 备注
    */
@@ -131,13 +134,13 @@ const search = () => {
 }
 const getList = async () => {
   let params: DictionarySearch = {
-    id: "",
+    // id: "",
     displayName: "",
     remark: "",
     maxResultCount: 20,
     skipCount: 0
   }
-  params.id = data.searchForm.id
+  // params.id = data.searchForm.id
   params.displayName = data.searchForm.displayName
   params.remark = data.searchForm.remark
   params.skipCount = (data.pageNo - 1) * data.pageSize

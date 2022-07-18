@@ -131,6 +131,7 @@ const saveUser = async () => {
       message: "保存成功"
     })
     data.dialogVisible = false
+    search()
   }
 }
 const handleEdit = (index: number, row: role) => {
@@ -160,6 +161,7 @@ const handleDelete = (index: number, row: role) => {
           type: "success",
           message: "删除成功"
         })
+        search()
       }
     }
   })
