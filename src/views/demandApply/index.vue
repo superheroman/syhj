@@ -40,7 +40,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="单据编号:" prop="number">
-              <el-input v-model="state.quoteForm.number" />
+              <el-input v-model="state.quoteForm.number" disabled />
             </el-form-item>
           </el-col>
         </el-row>
@@ -50,20 +50,20 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="项目名称:" prop="projectName">
-              <el-input v-model="state.quoteForm.projectName" />
+              <el-input v-model="state.quoteForm.projectName" placeholder="与PLM系统保持一致" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="项目代码:" prop="projectCode">
-              <el-input v-model="state.quoteForm.projectCode" />
+              <el-input v-model="state.quoteForm.projectCode" placeholder="与PLM系统保持一致" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="客户名称:" prop="customerName">
               <el-input v-model="state.quoteForm.customerName" />
             </el-form-item>
           </el-col>
-          <el-col :span="4">
+          <el-col :span="6">
             <el-form-item label="客户性质:" prop="customerNature">
               <el-select v-model="state.quoteForm.customerNature" placeholder="Select">
                 <el-option
@@ -75,18 +75,7 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="4">
-            <el-form-item label="客户国家:" prop="country">
-              <el-select v-model="state.quoteForm.country" placeholder="Select">
-                <el-option
-                  v-for="item in state.countryOptions"
-                  :key="item.id"
-                  :label="item.displayName"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
+
           <el-col :span="6">
             <el-form-item label="终端名称:" prop="terminalName">
               <el-input v-model="state.quoteForm.terminalName" />
@@ -147,7 +136,7 @@
           </el-col>
         </el-row>
         <h5>项目走量</h5>
-        <h6>终端走量（PCS）</h6>
+        <h6>终端走量（单位：PCS）</h6>
         <div class="demand-apply__btn-container">
           <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
         </div>
@@ -162,7 +151,7 @@
               <el-input v-model="row.carModel" />
             </template>
           </el-table-column>
-          <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
+          <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="100">
             <template #default="{ row }">
               <el-input v-model="row.pcsYearList[index].quantity" @input="pcsYearQuantitySum(row)" />
             </template>
@@ -182,19 +171,20 @@
           <el-table-column type="index" width="50" />
           <el-table-column label="客户零件号" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.partNumber" />
+              <el-input v-model="row.partNumber" placeholder="若没有，填写 /" />
             </template>
           </el-table-column>
           <el-table-column label="产品名称" width="180">
             <template #default="{ row }">
-              <el-select v-model="row.product" placeholder="Select">
+              <el-input v-model="row.product" />
+              <!-- <el-select v-model="row.product" placeholder="Select">
                 <el-option
                   v-for="item in state.productOptions"
                   :key="item.id"
                   :label="item.displayName"
                   :value="item.id"
                 />
-              </el-select>
+              </el-select> -->
             </template>
           </el-table-column>
           <el-table-column label="产品小类" width="180">
@@ -211,12 +201,16 @@
           </el-table-column>
           <el-table-column label="市场份额" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.marketShare" />
+              <el-input v-model="row.marketShare">
+                <template #append>%</template>
+              </el-input>
             </template>
           </el-table-column>
           <el-table-column label="模组搭载率" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.moduleCarryingRate" />
+              <el-input v-model="row.moduleCarryingRate">
+                <template #append>%</template>
+              </el-input>
             </template>
           </el-table-column>
           <el-table-column label="单车产品数量" width="180">
@@ -241,19 +235,25 @@
         <h6>要求</h6>
         <el-table :data="requireTableData" style="width: 100%; margin: 20px 0" border>
           <el-table-column label="年份" width="180" prop="year" />
-          <el-table-column label="年降率">
+          <el-table-column label="年降率(%)">
             <template #default="{ row }">
-              <el-input v-model="row.annualDeclineRate" />
+              <el-input v-model="row.annualDeclineRate">
+                <template #append>%</template>
+              </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="年度返利要求">
+          <el-table-column label="年度返利要求(%)">
             <template #default="{ row }">
-              <el-input v-model="row.annualRebateRequirements" />
+              <el-input v-model="row.annualRebateRequirements">
+                <template #append>%</template>
+              </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="一次性折让率">
+          <el-table-column label="一次性折让率(%)">
             <template #default="{ row }">
-              <el-input v-model="row.oneTimeDiscountRate" />
+              <el-input v-model="row.oneTimeDiscountRate">
+                <template #append>%</template>
+              </el-input>
             </template>
           </el-table-column>
         </el-table>
@@ -261,60 +261,70 @@
           <el-col :span="6">
             <el-form-item label="模具费分摊:" prop="allocationOfMouldCost">
               <el-select v-model="state.quoteForm.allocationOfMouldCost" placeholder="Select">
-                <el-option
+                <el-option :value="true" label="是" />
+                <el-option :value="false" label="否" />
+                <!-- <el-option
                   v-for="item in state.allocationOfMouldCostOptions"
                   :key="item.id"
                   :label="item.displayName"
                   :value="item.id"
-                />
+                /> -->
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="治具费分摊:" prop="allocationOfFixtureCost">
               <el-select v-model="state.quoteForm.allocationOfFixtureCost" placeholder="Select">
-                <el-option
+                <el-option :value="true" label="是" />
+                <el-option :value="false" label="否" />
+                <!-- <el-option
                   v-for="item in state.allocationOfFixtureCostOptions"
                   :key="item.id"
                   :label="item.displayName"
                   :value="item.id"
-                />
+                /> -->
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="设备费分摊:" prop="allocationOfEquipmentCost">
               <el-select v-model="state.quoteForm.allocationOfEquipmentCost" placeholder="Select">
-                <el-option
+                <el-option :value="true" label="是" />
+                <el-option :value="false" label="否" />
+                <!-- <el-option
                   v-for="item in state.allocationOfEquipmentCostOptions"
                   :key="item.id"
                   :label="item.displayName"
                   :value="item.id"
-                />
+                /> -->
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="信赖性费用分摊:" prop="reliabilityCost">
               <el-select v-model="state.quoteForm.reliabilityCost" placeholder="Select">
-                <el-option
+                <el-option :value="true" label="是" />
+                <el-option :value="false" label="否" />
+                <!-- <el-option
                   v-for="item in state.reliabilityCostOptions"
                   :key="item.id"
                   :label="item.displayName"
                   :value="item.id"
-                />
+                /> -->
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="开发费分摊:" prop="developmentCost">
               <el-select v-model="state.quoteForm.developmentCost" placeholder="Select">
-                <el-option
+                <el-option :value="true" label="是" />
+                <el-option :value="false" label="否" />
+                <!-- <el-option
                   v-for="item in state.developmentCostOptions"
                   :key="item.id"
                   :label="item.displayName"
                   :value="item.id"
-                />
+                /> -->
               </el-select>
             </el-form-item>
           </el-col>
@@ -343,15 +353,18 @@
           </el-table-column>
           <el-table-column label="Sensor" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.sensor" placeholder="名称">
+              <el-input v-model="row.sensor" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.sensorTypeSelect">
-                    <el-option
+                    <!-- <el-option
                       v-for="item in state.TypeSelectOptions"
                       :key="item.id"
                       :label="item.displayName"
                       :value="item.id"
-                    />
+                    /> -->
+                    <el-option label="我司推荐" :value="1" />
+                    <el-option label="客户指定" :value="2" />
+                    <el-option label="客户供应" :value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -362,15 +375,18 @@
           </el-table-column>
           <el-table-column label="Lens" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.lens" placeholder="名称">
+              <el-input v-model="row.lens" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.lensTypeSelect">
-                    <el-option
+                    <!-- <el-option
                       v-for="item in state.TypeSelectOptions"
                       :key="item.id"
                       :label="item.displayName"
                       :value="item.id"
-                    />
+                    /> -->
+                    <el-option label="我司推荐" :value="1" />
+                    <el-option label="客户指定" :value="2" />
+                    <el-option label="客户供应" :value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -381,15 +397,18 @@
           </el-table-column>
           <el-table-column label="ISP" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.isp" placeholder="名称">
+              <el-input v-model="row.isp" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.ispTypeSelect">
-                    <el-option
+                    <!-- <el-option
                       v-for="item in state.TypeSelectOptions"
                       :key="item.id"
                       :label="item.displayName"
                       :value="item.id"
-                    />
+                    /> -->
+                    <el-option label="我司推荐" :value="1" />
+                    <el-option label="客户指定" :value="2" />
+                    <el-option label="客户供应" :value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -400,15 +419,18 @@
           </el-table-column>
           <el-table-column label="串行芯片" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.serialChip" placeholder="名称">
+              <el-input v-model="row.serialChip" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.serialChipTypeSelect">
-                    <el-option
+                    <!-- <el-option
                       v-for="item in state.TypeSelectOptions"
                       :key="item.id"
                       :label="item.displayName"
                       :value="item.id"
-                    />
+                    /> -->
+                    <el-option label="我司推荐" :value="1" />
+                    <el-option label="客户指定" :value="2" />
+                    <el-option label="客户供应" :value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -419,15 +441,18 @@
           </el-table-column>
           <el-table-column label="线缆" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.cable" placeholder="名称">
+              <el-input v-model="row.cable" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.cableTypeSelect">
-                    <el-option
+                    <!-- <el-option
                       v-for="item in state.TypeSelectOptions"
                       :key="item.id"
                       :label="item.displayName"
                       :value="item.id"
-                    />
+                    /> -->
+                    <el-option label="我司推荐" :value="1" />
+                    <el-option label="客户指定" :value="2" />
+                    <el-option label="客户供应" :value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -438,15 +463,18 @@
           </el-table-column>
           <el-table-column label="LED" width="400">
             <template #default="{ row }">
-              <el-input v-model="row.led" placeholder="名称">
+              <el-input v-model="row.led" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.ledTypeSelect">
-                    <el-option
+                    <!-- <el-option
                       v-for="item in state.TypeSelectOptions"
                       :key="item.id"
                       :label="item.displayName"
                       :value="item.id"
-                    />
+                    /> -->
+                    <el-option label="我司推荐" :value="1" />
+                    <el-option label="客户指定" :value="2" />
+                    <el-option label="客户供应" :value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -474,15 +502,11 @@
         <h6>客户指定/供应详情</h6>
         <el-button @click="generateCustomTable" type="primary" style="margin: 20px 0">点击生成</el-button>
         <el-table :data="specifyTableData" style="width: 100%" border>
-          <el-table-column prop="name" label="类型" />
-          <el-table-column prop="name" label="产品名称" />
-          <el-table-column prop="name" label="核心部件" />
-          <el-table-column prop="name" label="品牌/型号" />
-          <el-table-column label="单价">
-            <template #default="{ row }">
-              <el-input v-model="row.prize" />
-            </template>
-          </el-table-column>
+          <el-table-column prop="productType" label="类型" />
+          <el-table-column prop="productName" label="产品名称" />
+          <el-table-column prop="main" label="核心部件" />
+          <el-table-column prop="type" label="品牌/型号" />
+          <el-table-column prop="price" label="单价" />
         </el-table>
       </el-card>
       <!-- 商务需求 -->
@@ -529,7 +553,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="汇率:" prop="exchangeRate">
-              <el-input v-model="state.quoteForm.exchangeRate" />
+              <el-input v-model="state.quoteForm.exchangeRate" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -576,6 +600,18 @@
               <el-input :suffix-icon="Search" v-model="state.quoteForm.projectManager" />
             </el-form-item>
           </el-col>
+          <el-col :span="6">
+            <el-form-item label="出口国家:" prop="country">
+              <el-select v-model="state.quoteForm.country" placeholder="Select">
+                <el-option
+                  v-for="item in state.countryOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="交货地点:" prop="placeOfDelivery">
               <el-input type="textarea" :rows="10" v-model="state.quoteForm.placeOfDelivery" />
@@ -611,6 +647,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
+import { productTypeMap } from "./data.type"
 // import { useRouter } from "vue-router"
 import { Search } from "@element-plus/icons-vue"
 // import SearchPerson from '@/components/SearchPerson'
@@ -623,15 +660,7 @@ import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
 import dayjs from "dayjs"
-import { AnyAaaaRecord } from "dns"
 const refForm = ref<FormInstance>()
-interface Product {
-  id: string
-  name: string
-  amount1: string
-  amount2: string
-  amount3: number
-}
 interface Options {
   id: number
   displayName: string
@@ -647,7 +676,7 @@ const rules = reactive<FormRules>({
   // draftingDepartment: [{ required: true, message: "请输入该值", trigger: "blur" }],
   // draftingCompany: [{ required: true, message: "请输入该值", trigger: "blur" }],
   draftDate: [{ required: true, message: "请输入该值", trigger: "blur" }],
-  number: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // number: [{ required: true, message: "请输入该值", trigger: "blur" }],
   projectName: [{ required: true, message: "请输入该值", trigger: "blur" }],
   projectCode: [{ required: true, message: "请输入该值", trigger: "blur" }],
   customerName: [{ required: true, message: "请输入该值", trigger: "blur" }],
@@ -670,7 +699,7 @@ const rules = reactive<FormRules>({
   paymentMethod: [{ required: true, message: "请输入该值", trigger: "blur" }],
   currency: [{ required: true, message: "请输入该值", trigger: "blur" }],
   customerTargetPrice: [{ required: true, message: "请输入该值", trigger: "blur" }],
-  exchangeRate: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // exchangeRate: [{ required: true, message: "请输入该值", trigger: "blur" }],
   customerSpecialRequest: [{ required: true, message: "请输入该值", trigger: "blur" }],
   shippingType: [{ required: true, message: "请输入该值", trigger: "blur" }],
   packagingType: [{ required: true, message: "请输入该值", trigger: "blur" }],
@@ -741,11 +770,11 @@ const state = reactive({
     pcs: [] as any,
     modelCount: [] as any,
     requirement: [] as any,
-    allocationOfMouldCost: 0,
-    allocationOfFixtureCost: 0,
-    allocationOfEquipmentCost: 0,
-    reliabilityCost: 0,
-    developmentCost: 0,
+    allocationOfMouldCost: true,
+    allocationOfFixtureCost: true,
+    allocationOfEquipmentCost: true,
+    reliabilityCost: true,
+    developmentCost: true,
     landingFactory: 0,
     productInformation: [] as any,
     tradeMode: "测试mock",
@@ -809,13 +838,13 @@ const pcsYearQuantitySum = (row: Pcs) => {
   row.sum = sum
 }
 interface modelCount {
-  partNumber: String | null | Number
-  product: Number
-  productType: Number
-  marketShare: Number
-  moduleCarryingRate: Number
-  singleCarProductsQuantity: Number
-  modelTotal: Number
+  partNumber: string | null | number
+  product: string
+  productType: number
+  marketShare: number
+  moduleCarryingRate: number
+  singleCarProductsQuantity: number
+  modelTotal: number
   modelCountYearList: YearListItem[]
 }
 const modelCountYearListQuantitySum = (row: modelCount) => {
@@ -861,7 +890,7 @@ const pcsTableData: Pcs[] = reactive([
 const moduleTableData: modelCount[] = reactive([
   {
     partNumber: "",
-    product: 0,
+    product: "",
     productType: 0,
     marketShare: 0,
     moduleCarryingRate: 0,
@@ -975,22 +1004,22 @@ const productTableData: productModel[] = reactive([
   {
     name: "",
     sensor: "",
-    sensorTypeSelect: 0,
+    sensorTypeSelect: 1,
     sensorPrice: 0,
     lens: "",
-    lensTypeSelect: 0,
+    lensTypeSelect: 1,
     lensPrice: 0,
     isp: "",
-    ispTypeSelect: 0,
+    ispTypeSelect: 1,
     ispPrice: 0,
     serialChip: "",
-    serialChipTypeSelect: 0,
+    serialChipTypeSelect: 1,
     serialChipPrice: 0,
     cable: "",
-    cableTypeSelect: 0,
+    cableTypeSelect: 1,
     cablePrice: 0,
     led: "",
-    ledTypeSelect: 0,
+    ledTypeSelect: 1,
     ledPrice: 0,
     manufactureProcess: "",
     installationPosition: ""
@@ -1087,12 +1116,13 @@ const generateTitle = () => {
 const generateCustomTable = () => {
   specifyTableData.splice(0, specifyTableData.length) // 清空数据
   productTableData.forEach((item) => {
-    if (item.sensorTypeSelect === 1) {
+    if (item.sensorTypeSelect !== productTypeMap.recommend) {
       let price = item.sensorPrice
       let productName = item.name
       let main = "sensor"
       let type = item.sensor
-      let productType = "客户指定"
+      debugger
+      let productType = productTypeMap[item.sensorTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
       specifyTableData.push({
         price,
         productName,
@@ -1101,12 +1131,12 @@ const generateCustomTable = () => {
         productType
       })
     }
-    if (item.lensTypeSelect === 1) {
+    if (item.lensTypeSelect !== productTypeMap.recommend) {
       let price = item.lensPrice
       let productName = item.name
       let main = "lens"
       let type = item.lens
-      let productType = "客户指定"
+      let productType = productTypeMap[item.lensTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
       specifyTableData.push({
         price,
         productName,
@@ -1115,12 +1145,12 @@ const generateCustomTable = () => {
         productType
       })
     }
-    if (item.ispTypeSelect === 1) {
+    if (item.ispTypeSelect !== productTypeMap.recommend) {
       let price = item.ispPrice
       let productName = item.name
       let main = "isp"
       let type = item.isp
-      let productType = "客户指定"
+      let productType = productTypeMap[item.ispTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
       specifyTableData.push({
         price,
         productName,
@@ -1129,12 +1159,12 @@ const generateCustomTable = () => {
         productType
       })
     }
-    if (item.serialChipTypeSelect === 1) {
+    if (item.serialChipTypeSelect !== productTypeMap.recommend) {
       let price = item.serialChipPrice
       let productName = item.name
       let main = "serialChip"
       let type = item.serialChip
-      let productType = "客户指定"
+      let productType = productTypeMap[item.serialChipTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
       specifyTableData.push({
         price,
         productName,
@@ -1143,12 +1173,12 @@ const generateCustomTable = () => {
         productType
       })
     }
-    if (item.ledTypeSelect === 1) {
+    if (item.ledTypeSelect !== productTypeMap.recommend) {
       let price = item.ledPrice
       let productName = item.name
       let main = "led"
       let type = item.led
-      let productType = "客户指定"
+      let productType = productTypeMap[item.ledTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
       specifyTableData.push({
         price,
         productName,
@@ -1159,11 +1189,19 @@ const generateCustomTable = () => {
     }
   })
 }
+const setNumber = () => {
+  let { quoteForm } = state
+  let nowDate = dayjs(quoteForm.draftDate ? quoteForm.draftDate : new Date()).format("YYYYMMDD")
+  let number = "BJHJ-ZL" + nowDate + "-001"
+  quoteForm.number = number
+}
 onMounted(async () => {
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber
   state.quoteForm.draftingCompany = userInfo.userCompany
   state.quoteForm.draftingDepartment = userInfo.userDepartment
+  // 设置单据编号
+  setNumber()
   try {
     let customerNature: any = await getDictionaryAndDetail("CustomerNature") //客户性质
     state.customerNatureOptions = customerNature.result.financeDictionaryDetailList
@@ -1177,29 +1215,29 @@ onMounted(async () => {
     let sampleQuotationType: any = await getDictionaryAndDetail("SampleQuotationType") //样品报价类型
     state.sampleQuotationTypeOptions = sampleQuotationType.result.financeDictionaryDetailList
 
-    let country: any = await getDictionaryAndDetail("Country") // 客户国家
+    let country: any = await getDictionaryAndDetail("Country") // 出国国家
     state.countryOptions = country.result.financeDictionaryDetailList
 
-    let product: any = await getDictionaryAndDetail("Product") // 产品
-    state.productOptions = product.result.financeDictionaryDetailList
+    // let product: any = await getDictionaryAndDetail("Product") // 产品
+    // state.productOptions = product.result.financeDictionaryDetailList
 
     let productType: any = await getDictionaryAndDetail("ProductType") // 产品小类
     state.productTypeOptions = productType.result.financeDictionaryDetailList
 
-    let allocationOfMouldCost: any = await getDictionaryAndDetail("AllocationOfMouldCost") // 模具费分摊
-    state.allocationOfMouldCostOptions = allocationOfMouldCost.result.financeDictionaryDetailList
+    // let allocationOfMouldCost: any = await getDictionaryAndDetail("AllocationOfMouldCost") // 模具费分摊
+    // state.allocationOfMouldCostOptions = allocationOfMouldCost.result.financeDictionaryDetailList
 
-    let allocationOfFixtureCost: any = await getDictionaryAndDetail("AllocationOfFixtureCost") //治具费分摊
-    state.allocationOfFixtureCostOptions = allocationOfFixtureCost.result.financeDictionaryDetailList
+    // let allocationOfFixtureCost: any = await getDictionaryAndDetail("AllocationOfFixtureCost") //治具费分摊
+    // state.allocationOfFixtureCostOptions = allocationOfFixtureCost.result.financeDictionaryDetailList
 
-    let allocationOfEquipmentCost: any = await getDictionaryAndDetail("AllocationOfEquipmentCost") // 设备费分摊
-    state.allocationOfEquipmentCostOptions = allocationOfEquipmentCost.result.financeDictionaryDetailList
+    // let allocationOfEquipmentCost: any = await getDictionaryAndDetail("AllocationOfEquipmentCost") // 设备费分摊
+    // state.allocationOfEquipmentCostOptions = allocationOfEquipmentCost.result.financeDictionaryDetailList
 
-    let reliabilityCost: any = await getDictionaryAndDetail("ReliabilityCost") //信赖性费用分摊
-    state.reliabilityCostOptions = reliabilityCost.result.financeDictionaryDetailList
+    // let reliabilityCost: any = await getDictionaryAndDetail("ReliabilityCost") //信赖性费用分摊
+    // state.reliabilityCostOptions = reliabilityCost.result.financeDictionaryDetailList
 
-    let developmentCost: any = await getDictionaryAndDetail("DevelopmentCost") //开发费分摊
-    state.developmentCostOptions = developmentCost.result.financeDictionaryDetailList
+    // let developmentCost: any = await getDictionaryAndDetail("DevelopmentCost") //开发费分摊
+    // state.developmentCostOptions = developmentCost.result.financeDictionaryDetailList
 
     let landingFactory: any = await getDictionaryAndDetail("LandingFactory") //落地工厂
     state.landingFactoryOptions = landingFactory.result.financeDictionaryDetailList

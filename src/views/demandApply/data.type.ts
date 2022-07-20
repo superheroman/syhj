@@ -323,3 +323,9 @@ export interface CreateRequirementDto {
    */
   year: number
 }
+
+export enum productTypeMap {
+  recommend = 1, // 我司推荐1
+  cspecify, // 客户指定2
+  csupply // 客户供应3
+}

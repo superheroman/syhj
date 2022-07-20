@@ -15,7 +15,7 @@
     </div>
     <el-table :data="data.tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
-      <el-table-column label="用户名" prop="userName" />
+      <!-- <el-table-column label="用户名" prop="userName" /> -->
       <el-table-column label="姓名" prop="name" />
       <!-- <el-table-column label="surname" prop="surname" /> -->
       <!-- <el-table-column label="邮箱" prop="emailAddress" /> -->
@@ -64,9 +64,9 @@
         <el-form-item label="工号" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.number" />
         </el-form-item>
-        <el-form-item label="用户名" :label-width="data.formLabelWidth">
+        <!-- <el-form-item label="用户名" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.userName" />
-        </el-form-item>
+        </el-form-item> -->
         <!-- <el-form-item label="邮箱" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.emailAddress" />
         </el-form-item> -->
