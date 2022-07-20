@@ -15,22 +15,22 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿人:" prop="drafter">
-              <el-input v-model="state.quoteForm.drafter" />
+              <el-input v-model="state.quoteForm.drafter" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿人工号:" prop="drafterNumber">
-              <el-input v-model="state.quoteForm.drafterNumber" />
+              <el-input v-model="state.quoteForm.drafterNumber" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿公司:" prop="draftingCompany">
-              <el-input v-model="state.quoteForm.draftingCompany" />
+              <el-input v-model="state.quoteForm.draftingCompany" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿部门:" prop="draftingDepartment">
-              <el-input v-model="state.quoteForm.draftingDepartment" />
+              <el-input v-model="state.quoteForm.draftingDepartment" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -151,7 +151,7 @@
         <div class="demand-apply__btn-container">
           <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
         </div>
-        <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries">
+        <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries" show-summary>
           <el-table-column label="车厂" width="180" fixed="left">
             <template #default="{ row }">
               <el-input v-model="row.carFactory" />
@@ -623,6 +623,7 @@ import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
 import dayjs from "dayjs"
+import { AnyAaaaRecord } from "dns"
 const refForm = ref<FormInstance>()
 interface Product {
   id: string
@@ -635,16 +636,16 @@ interface Options {
   id: number
   displayName: string
 }
-interface SummaryMethodProps<T = Product> {
+interface SummaryMethodProps<T = Pcs> {
   columns: TableColumnCtx<T>[]
   data: T[]
 }
 const rules = reactive<FormRules>({
-  title: [{ required: true, message: "请输入该值", trigger: "blur" }],
-  drafter: [{ required: true, message: "请输入该值", trigger: "blur" }],
-  drafterNumber: [{ required: true, message: "请输入该值", trigger: "blur" }],
-  draftingDepartment: [{ required: true, message: "请输入该值", trigger: "blur" }],
-  draftingCompany: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // title: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // drafter: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // drafterNumber: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // draftingDepartment: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  // draftingCompany: [{ required: true, message: "请输入该值", trigger: "blur" }],
   draftDate: [{ required: true, message: "请输入该值", trigger: "blur" }],
   number: [{ required: true, message: "请输入该值", trigger: "blur" }],
   projectName: [{ required: true, message: "请输入该值", trigger: "blur" }],
@@ -683,21 +684,33 @@ const getSummaries = (param: SummaryMethodProps) => {
   const sums: string[] = []
   columns.forEach((column, index) => {
     if (index === 0) {
-      sums[index] = "Total Cost"
+      sums[index] = "合计"
       return
     }
-    const values = data.map((item) => Number(item.name))
-    if (!values.every((value) => Number.isNaN(value))) {
-      sums[index] = `$ ${values.reduce((prev, curr) => {
-        const value = Number(curr)
-        if (!Number.isNaN(value)) {
-          return prev + curr
-        } else {
-          return prev
+    console.log(column, data)
+    if (index >= 2) {
+      // console.log(data, "columns", column)
+      const values = data.map((item: any) => {
+        if (item.pcsYearList?.length > 0 && item.pcsYearList[index - 2]) {
+          debugger
+          console.log(item)
+          return item.value
         }
-      }, 0)}`
-    } else {
-      sums[index] = "N/A"
+      })
+      console.log(values)
+      // const values = data.map((item) => Number(item.pcsYearList[index].quantity))
+      // if (!values.every((value) => Number.isNaN(value))) {
+      //   sums[index] = `$ ${values.reduce((prev, curr) => {
+      //     const value = Number(curr)
+      //     if (!Number.isNaN(value)) {
+      //       return prev + curr
+      //     } else {
+      //       return prev
+      //     }
+      //   }, 0)}`
+      // } else {
+      //   sums[index] = "N/A"
+      // }
     }
   })
 
@@ -723,7 +736,7 @@ const state = reactive({
     terminalNature: "测试mock",
     quotationType: "测试mock",
     sampleQuotationType: "测试mock",
-    sopTime: new Date(),
+    sopTime: dayjs(new Date()).format("YYYY"),
     projectCycle: 0,
     pcs: [] as any,
     modelCount: [] as any,
