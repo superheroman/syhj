@@ -213,6 +213,9 @@ export function DownloadFile(num: number) {
     url: "/api/services/app/ExcekExport/DownloadFile",
     method: "post",
     responseType: "blob",
+    params: {
+      num
+    },
     data: {
       num
     }
