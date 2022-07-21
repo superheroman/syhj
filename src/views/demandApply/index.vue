@@ -536,11 +536,17 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="报价币种:" prop="currency">
-              <el-select v-model="state.quoteForm.currency" placeholder="Select">
-                <el-option
+              <el-select v-model="state.quoteForm.currency" placeholder="Select" @change="rateChange">
+                <!-- <el-option
                   v-for="item in state.currencyOptions"
                   :key="item.id"
                   :label="item.displayName"
+                  :value="item.id"
+                /> -->
+                <el-option
+                  v-for="item in state.ExchangeSelectOptions"
+                  :key="item.id"
+                  :label="item.exchangeRateKind"
                   :value="item.id"
                 />
               </el-select>
@@ -655,7 +661,7 @@ import { Search } from "@element-plus/icons-vue"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 import _ from "lodash"
-import { saveApplyInfo } from "@/api/demandApply"
+import { saveApplyInfo, getExchangeRate } from "@/api/demandApply"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
@@ -809,7 +815,8 @@ const state = reactive({
   currencyOptions: [] as unknown as Options[],
   shippingTypeOptions: [] as unknown as Options[],
   packagingTypeOptions: [] as unknown as Options[],
-  TypeSelectOptions: [] as unknown as Options[]
+  TypeSelectOptions: [] as unknown as Options[],
+  ExchangeSelectOptions: [] as any
 })
 const fileList = ref<UploadUserFile[]>([
   {
@@ -1195,6 +1202,18 @@ const setNumber = () => {
   let number = "BJHJ-ZL" + nowDate + "-001"
   quoteForm.number = number
 }
+const rateChange = (val: any) => {
+  state.quoteForm.exchangeRate = 0
+  state.ExchangeSelectOptions.forEach((item: any) => {
+    if (item.id === val) {
+      item.exchangeRateValue.forEach((yearItem: any) => {
+        if (yearItem.year === Number(state.quoteForm.sopTime)) {
+          state.quoteForm.exchangeRate = yearItem.value
+        }
+      })
+    }
+  })
+}
 onMounted(async () => {
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber
@@ -1256,6 +1275,12 @@ onMounted(async () => {
 
     let typeSelect: any = await getDictionaryAndDetail("TypeSelect") //类型
     state.TypeSelectOptions = typeSelect.result.financeDictionaryDetailList
+
+    let exchangeSelect: any = await getExchangeRate({
+      maxResultCount: 100,
+      skipCount: 0
+    })
+    state.ExchangeSelectOptions = exchangeSelect.result.items
   } catch (error) {
     console.log(error)
   }

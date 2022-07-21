@@ -329,3 +329,20 @@ export function saveApplyInfo(data: InputModal) {
     data
   })
 }
+
+export interface RatePage {
+  /**
+   * 货币币种
+   */
+  exchangeRateKind?: string
+  maxResultCount: number
+  skipCount: number
+}
+/** 查询汇率 */
+export function getExchangeRate(data: RatePage) {
+  return request({
+    url: "/api/services/app/UnitPriceLibrary/GetExchangeRate",
+    method: "get",
+    data
+  })
+}
