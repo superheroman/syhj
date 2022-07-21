@@ -35,7 +35,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="拟稿日期:" prop="draftDate">
-              <el-date-picker v-model="state.quoteForm.draftDate" />
+              <el-date-picker v-model="state.quoteForm.draftDate" @change="generateTitle" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -50,7 +50,7 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <el-form-item label="项目名称:" prop="projectName">
-              <el-input v-model="state.quoteForm.projectName" placeholder="与PLM系统保持一致" />
+              <el-input v-model="state.quoteForm.projectName" placeholder="与PLM系统保持一致" @change="generateTitle" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -60,7 +60,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户名称:" prop="customerName">
-              <el-input v-model="state.quoteForm.customerName" />
+              <el-input v-model="state.quoteForm.customerName" @change="generateTitle" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
