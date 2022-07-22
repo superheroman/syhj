@@ -153,7 +153,6 @@ const handleEdit = (index: number, row: tableRow) => {
   data.isEdit = true
   data.editForm = row
   data.dialogVisible = true
-  // console.log(data.page)
 }
 const handlePageChange = () => {
   getList()
