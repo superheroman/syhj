@@ -156,7 +156,7 @@
               <el-input v-model="row.pcsYearList[index].quantity" @input="pcsYearQuantitySum(row)" />
             </template>
           </el-table-column>
-          <el-table-column prop="sum" label="合计" />
+          <el-table-column prop="rowSum" label="合计" />
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
               <el-button @click="deletePcs($index)" type="danger" :disabled="pcsTableData.length === 1">删除</el-button>
@@ -215,7 +215,11 @@
               <el-input v-model="row.modelCountYearList[index].quantity" @input="modelCountYearListQuantitySum(row)" />
             </template>
           </el-table-column>
-          <el-table-column label="模组总量" prop="modelTotal" width="180" />
+          <el-table-column label="模组总量" prop="modelTotal" width="180">
+            <template #default="{ row }">
+              <el-input v-model="row.modelTotal" />
+            </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
               <el-button @click="deleteProduct($index)" type="danger" :disabled="moduleTableData.length === 1"
@@ -630,7 +634,7 @@ const rules = reactive<FormRules>({
 })
 const getSummaries = (param: SummaryMethodProps) => {
   const { columns, data } = param
-  const sums: string[] = []
+  const sums: string[] | number[] = []
 
   let arr = new Array(data[0].pcsYearList.length).fill(0).map(() => {
     return [] as number[]
@@ -647,27 +651,12 @@ const getSummaries = (param: SummaryMethodProps) => {
       return
     }
     if (index >= 2) {
-      sums[index] = arr[0].reduce((prev, curr) => {
+      let i = index - 2
+      sums[index] = arr[i]?.reduce((prev, curr) => {
         return prev + curr
       })
-      // console.log(data, "columns", column)
-      // const values = data.map((item: any) => {
-      //   return item
-      // })
-      // console.log(values, "values")
-      // const values = data.map((item) => Number(item.pcsYearList[index].quantity))
-      // if (!values.every((value) => Number.isNaN(value))) {
-      //   sums[index] = `$ ${values.reduce((prev, curr) => {
-      //     const value = Number(curr)
-      //     if (!Number.isNaN(value)) {
-      //       return prev + curr
-      //     } else {
-      //       return prev
-      //     }
-      //   }, 0)}`
-      // } else {
-      //   sums[index] = "N/A"
-      // }
+    } else {
+      sums[index] = "N/A"
     }
   })
   return sums
@@ -752,18 +741,18 @@ interface Pcs {
   carFactory: String
   carModel: String
   pcsYearList: YearListItem[]
-  sum: Number
+  rowSum: Number
 }
 interface YearListItem {
   year: any
   quantity: string | number | null
 }
 const pcsYearQuantitySum = (row: Pcs) => {
-  let sum = 0
+  let rowSum = 0
   row.pcsYearList.forEach((item: any) => {
-    sum = sum + Number(item.quantity)
+    rowSum = rowSum + Number(item.quantity)
   })
-  row.sum = sum
+  row.rowSum = rowSum
 }
 interface modelCount {
   partNumber: string | null | number
@@ -776,11 +765,12 @@ interface modelCount {
   modelCountYearList: YearListItem[]
 }
 const modelCountYearListQuantitySum = (row: modelCount) => {
-  let sum = 0
-  row.modelCountYearList.forEach((item: any) => {
-    sum = sum + Number(item.quantity)
-  })
-  row.modelTotal = sum
+  console.log("暂时功能先去掉", row)
+  // let sum = 0
+  // row.modelCountYearList.forEach((item: any) => {
+  //   sum = sum + Number(item.quantity)
+  // })
+  // row.modelTotal = sum
 }
 const save = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
