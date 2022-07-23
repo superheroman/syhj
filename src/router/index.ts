@@ -150,9 +150,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/dictionary",
     redirect: "/dictionary/index",
     component: Layout,
-    // meta: {
-    //   title: "字典管理"
-    // },
     children: [
       {
         path: "/dictionary/index",
@@ -173,22 +170,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  // {
-  //   path: "/otherImport",
-  //   redirect: "/otherImport/index",
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: "/otherImport/index",
-  //       component: () => import("@/views/otherImport/index.vue"),
-  //       name: "otherImport",
-  //       meta: {
-  //         title: "其它导入",
-  //         icon: "otherImport"
-  //       }
-  //     }
-  //   ]
-  // },
   {
     path: "/structuralMaterialImport",
     redirect: "/structuralMaterialImport/index",
@@ -238,6 +219,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/fnDepartment",
     redirect: "/fnDepartment/index",
     component: Layout,
+    meta: {
+      title: "财务参数管理"
+    },
     children: [
       {
         path: "/fnDepartment/index",
@@ -245,6 +229,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "fnDepartment",
         meta: {
           title: "财务参数管理"
+        }
+      },
+      {
+        path: "/fnDepartment/exchangeRate",
+        component: () => import("@/views/fnDepartment/exchangeRate.vue"),
+        name: "exchangeRate",
+        meta: {
+          title: "汇率"
         }
       }
     ]

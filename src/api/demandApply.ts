@@ -146,7 +146,7 @@ export interface InputModal {
    *
    * 样品报价类型（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【SampleQuotationType】）
    */
-  sampleQuotationType: number
+  // sampleQuotationType: number
   /**
    *
    * 运输方式（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【ShippingType】）
@@ -326,6 +326,23 @@ export function saveApplyInfo(data: InputModal) {
   return request({
     url: "/api/services/app/PriceEvaluation/PriceEvaluationStart",
     method: "post",
+    data
+  })
+}
+
+export interface RatePage {
+  /**
+   * 货币币种
+   */
+  exchangeRateKind?: string
+  maxResultCount: number
+  skipCount: number
+}
+/** 查询汇率 */
+export function getExchangeRate(data: RatePage) {
+  return request({
+    url: "/api/services/app/UnitPriceLibrary/GetExchangeRate",
+    method: "get",
     data
   })
 }

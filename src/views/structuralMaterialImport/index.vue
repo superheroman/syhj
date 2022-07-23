@@ -31,10 +31,17 @@
       <el-table-column prop="categoryName" label="物料大类" width="180" />
       <el-table-column prop="typeName" label="物料种类" width="180" />
       <el-table-column prop="isInvolveItem" label="是否涉及" width="180" />
+      <el-table-column prop="drawingNumName" label="图号名称" width="180" />
       <el-table-column prop="sapItemNum" label="物料编号" width="180" />
-      <el-table-column prop="sapItemName" label="材料名称" width="180" />
+      <el-table-column prop="overallDimensionSize" label="外形尺寸mm" width="180" />
+      <el-table-column prop="materialName" label="材料名称" width="180" />
+      <el-table-column prop="weightNumber" label="重量" width="180" />
+      <el-table-column prop="moldingProcess" label="成型工艺" width="180" />
+      <el-table-column prop="isNewMouldProduct" label="是否新开模" width="180" />
+      <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="180" />
+      <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="180" />
       <el-table-column prop="assemblyQuantity" label="装配数量" width="180" />
-      <el-table-column prop="encapsulationSize" label="封装（需要体现PAD的数量）" />
+      <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" />
     </el-table>
 
     <el-form :model="data.logisticsForm" inline>
@@ -50,11 +57,11 @@
         <el-input v-model="data.logisticsForm.outerPackagingHeight" />
       </el-form-item>
       <h6>重量</h6>
-      <el-form-item label="外包装长">
-        <el-input v-model="data.logisticsForm.outerPackagingLength" />
+      <el-form-item label="单个产品重量">
+        <el-input v-model="data.logisticsForm.singleProductWeight" />
       </el-form-item>
-      <el-form-item label="外包装宽">
-        <el-input v-model="data.logisticsForm.outerPackagingWidth" />
+      <el-form-item label="单箱数量">
+        <el-input v-model="data.logisticsForm.singleBoxQuantity" />
       </el-form-item>
       <h5>包装基础信息</h5>
       <h6>内包装体积</h6>
@@ -120,7 +127,8 @@ const data = reactive({
     isHit: "",
     boxesPerPallet: "",
     quantityPerBox: "",
-    remarks: ""
+    remarks: "",
+    pictureId: ""
   }
 })
 
@@ -136,6 +144,7 @@ const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
   if (res.success) {
     // data.tableDataList[data.activeIndex] = res.result
     // console.log()
+    data.logisticsForm.pictureId = res.result.fileId
   }
 }
 

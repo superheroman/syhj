@@ -107,7 +107,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   }
 }
 const downLoadTemplate = async () => {
-  let res: any = await DownloadFile(data.downloadSetForm.number)
+  let res: any = await DownloadFile(Number(data.downloadSetForm.number))
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
