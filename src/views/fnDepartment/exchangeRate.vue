@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="dictionary">
-      <div class="dictionary__btn-container">
+    <div class="exchangeRate">
+      <div class="exchangeRate__btn-container">
         <el-form :model="data.searchForm" inline>
           <el-form-item label="货币币种">
             <el-input v-model="data.searchForm.exchangeRateKind" />
@@ -11,7 +11,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="dictionary__btn-container">
+      <div class="exchangeRate__btn-container">
         <el-button type="primary" @click="data.dialogVisible = true">新增汇率</el-button>
       </div>
       <el-table :data="data.tableData" style="width: 100%">
@@ -30,7 +30,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div class="dictionary__btn-container">
+      <div class="exchangeRate__btn-container">
         <el-pagination
           background
           layout="prev, pager, next"
@@ -51,9 +51,21 @@
               placeholder="Please input"
               v-for="(item, index) in data.editForm.exchangeRateValue"
               :key="index"
+              style="margin-bottom: 20px"
             >
               <template #prepend>
-                <el-date-picker v-model="item.year" type="year" placeholder="Pick a year" />
+                <!-- <el-date-picker v-model="item.year" type="year" placeholder="Pick a year" value-format="YYYY" /> -->
+                <el-input v-model="item.year" />
+              </template>
+              <template #append>
+                <el-button-group>
+                  <el-button :icon="Plus" @click="addYearItem" />
+                  <el-button
+                    :icon="Minus"
+                    @click="reduceYearItem(index)"
+                    :disabled="data.editForm.exchangeRateValue.length === 1"
+                  />
+                </el-button-group>
               </template>
             </el-input>
           </el-form-item>
@@ -70,22 +82,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+// import { useRoute, useRouter } from "vue-router"
 import { getExchangeRate, saveExchangeRate, deleteExchangeRate } from "./service"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { RateItem } from "./data.type"
+import { Plus, Minus } from "@element-plus/icons-vue"
 /**
  * 仓库
  */
 /**
- * 路由对象
- */
-const route = useRoute()
-/**
- * 路由实例
- */
-const router = useRouter()
+//  * 路由对象
+//  */
+// const route = useRoute()
+// /**
+//  * 路由实例
+//  */
+// const router = useRouter()
 //console.log('1-开始创建组件-setup')
 /**
  * 数据部分
@@ -98,7 +111,6 @@ const data = reactive({
   },
   isEdit: false,
   editForm: {
-    id: null,
     exchangeRateKind: "",
     exchangeRateValue: [
       {
@@ -113,6 +125,15 @@ const data = reactive({
   pageSize: 20,
   total: 0
 })
+const addYearItem = () => {
+  data.editForm.exchangeRateValue.push({
+    year: "",
+    value: ""
+  })
+}
+const reduceYearItem = (index: number) => {
+  data.editForm.exchangeRateValue.splice(index, 1)
+}
 const getList = async () => {
   let params = {
     exchangeRateKind: "",
@@ -167,6 +188,7 @@ const clearForm = () => {
 }
 const save = async () => {
   let res: any = null
+
   res = await saveExchangeRate(data.editForm)
   if (res.success) {
     ElMessage({
@@ -191,4 +213,10 @@ defineExpose({
   ...toRefs(data)
 })
 </script>
-<style scoped lang="sass"></style>
+<style scoped lang="scss">
+.exchangeRate {
+  &__btn-container {
+    margin: 20px 0;
+  }
+}
+</style>

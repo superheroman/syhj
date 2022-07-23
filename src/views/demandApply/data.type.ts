@@ -4,22 +4,32 @@ export interface User {
   address: string
   pcsYearList?: Array<Object>
 }
+
+export enum productTypeMap {
+  recommend = 1, // 我司推荐1
+  cspecify, // 客户指定2
+  csupply // 客户供应3
+}
+
+/**
+ * PriceEvaluationStartInput，PriceEvaluationStart 方法的输入参数
+ */
 export interface InputModal {
   /**
    *
    * 设备费分摊（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【AllocationOfEquipmentCost】）
    */
-  allocationOfEquipmentCost: number
+  allocationOfEquipmentCost: boolean
   /**
    * 治具费分摊
    * （字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【AllocationOfFixtureCost】）
    */
-  allocationOfFixtureCost: number
+  allocationOfFixtureCost: boolean
   /**
    * 模具费分摊
    * （字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【AllocationOfMouldCost】）
    */
-  allocationOfMouldCost: number
+  allocationOfMouldCost: boolean
   /**
    *
    * 报价币种（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【Currency】）
@@ -33,7 +43,7 @@ export interface InputModal {
    *
    * 客户性质（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【CustomerNature】）
    */
-  customerNature: number
+  customerNature: number | null
   /**
    * 客户特殊性要求
    */
@@ -41,16 +51,16 @@ export interface InputModal {
   /**
    * 客户目标价
    */
-  customerTargetPrice: number
+  customerTargetPrice: number | null
   /**
    * 要求核价完成时间
    */
-  deadline: Date
+  deadline: Date | undefined
   /**
    *
    * 开发费分摊（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【DevelopmentCost】）
    */
-  developmentCost: number
+  developmentCost: boolean
   /**
    * 拟稿日期
    */
@@ -62,7 +72,7 @@ export interface InputModal {
   /**
    * 拟稿人工号
    */
-  drafterNumber: number
+  drafterNumber: number | null
   /**
    * 拟稿公司
    */
@@ -134,7 +144,7 @@ export interface InputModal {
    *
    * 信赖性费用分摊（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【ReliabilityCost】）
    */
-  reliabilityCost: number
+  reliabilityCost: boolean
   /**
    * 要求
    */
@@ -148,7 +158,7 @@ export interface InputModal {
    *
    * 样品报价类型（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【SampleQuotationType】）
    */
-  sampleQuotationType: number
+  // sampleQuotationType: number
   /**
    *
    * 运输方式（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【ShippingType】）
@@ -324,8 +334,143 @@ export interface CreateRequirementDto {
   year: number
 }
 
-export enum productTypeMap {
-  recommend = 1, // 我司推荐1
-  cspecify, // 客户指定2
-  csupply // 客户供应3
+export interface RatePage {
+  /**
+   * 货币币种
+   */
+  exchangeRateKind?: string
+  maxResultCount: number
+  skipCount: number
+}
+
+// pcs 数据类型
+export interface Pcs {
+  carFactory: String
+  carModel: String
+  pcsYearList: YearListItem[]
+  rowSum?: Number
+}
+export interface YearListItem {
+  year: any
+  quantity: string | number | null
+}
+export interface modelCount {
+  partNumber: string | null | number
+  product: string
+  productType: number
+  marketShare: number
+  moduleCarryingRate: number
+  singleCarProductsQuantity: number
+  modelTotal: number
+  modelCountYearList: YearListItem[]
+}
+
+//产品零件
+export interface productModel {
+  /**
+   * 线缆
+   */
+  cable: string
+  /**
+   * 线缆 单价
+   */
+  cablePrice?: number | null
+  /**
+   * 线缆
+   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  cableTypeSelect: number
+  /**
+   * 安装位置
+   */
+  installationPosition: string
+  /**
+   * LED
+   */
+  led: string
+  /**
+   * LED 单价
+   */
+  ledPrice?: number | null
+  /**
+   * LED
+   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  ledTypeSelect: number
+  /**
+   * Lens
+   */
+  lens: string
+  /**
+   * Lens单价
+   */
+  lensPrice?: number | null
+  /**
+   *
+   * Lens类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  lensTypeSelect: number
+  /**
+   * isp
+   */
+  isp: string
+  /**
+   * Lsp单价
+   */
+  ispPrice?: number | null
+  /**
+   *
+   * Lsp类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  ispTypeSelect: number
+  /**
+   * 制程
+   */
+  manufactureProcess: string
+  /**
+   * 产品名称
+   */
+  name: string
+  /**
+   * Sensor
+   */
+  sensor: string
+  /**
+   * Sensor单价
+   */
+  sensorPrice?: number | null
+  /**
+   *
+   * Sensor类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  sensorTypeSelect: number
+  /**
+   * 串行芯片
+   */
+  serialChip: string
+  /**
+   * 串行芯片 单价
+   */
+  serialChipPrice?: number | null
+  /**
+   * 串行芯片
+   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
+   */
+  serialChipTypeSelect: number
+}
+
+//指定
+export interface specifyModel {
+  main: string
+  price: number | null | undefined
+  productName: string
+  type: string
+  productType: string
+}
+
+export interface requireData {
+  annualDeclineRate: Number
+  annualRebateRequirements: Number
+  oneTimeDiscountRate: Number
+  year: Number
 }

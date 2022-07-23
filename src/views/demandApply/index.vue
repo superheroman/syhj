@@ -549,8 +549,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="核价原因:" prop="placeOfDelivery">
-              <el-input type="textarea" :rows="10" v-model="state.quoteForm.placeOfDelivery" />
+            <el-form-item label="核价原因:" prop="reason">
+              <el-input type="textarea" :rows="10" v-model="state.quoteForm.reason" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -583,14 +583,14 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
-import { productTypeMap } from "./data.type"
+import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
 // import { useRouter } from "vue-router"
 import { Search } from "@element-plus/icons-vue"
 
 import type { UploadProps, UploadUserFile } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 import _ from "lodash"
-import { saveApplyInfo, getExchangeRate } from "@/api/demandApply"
+import { saveApplyInfo, getExchangeRate } from "./service"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
@@ -667,19 +667,19 @@ const state = reactive({
   quoteForm: {
     title: "" as any,
     drafter: "",
-    drafterNumber: "",
+    drafterNumber: null,
     draftingDepartment: "",
     draftingCompany: "",
     draftDate: new Date(),
     number: "",
     projectName: "",
     projectCode: "",
-    customerName: "测试mock",
-    customerNature: "测试mock",
-    country: "中国mock",
-    terminalName: "测试mock",
-    terminalNature: "测试mock",
-    quotationType: "测试mock",
+    customerName: "",
+    customerNature: null,
+    country: "",
+    terminalName: "",
+    terminalNature: "",
+    quotationType: "",
     // sampleQuotationType: "测试mock",
     sopTime: dayjs(new Date()).format("YYYY"),
     projectCycle: 0,
@@ -693,19 +693,20 @@ const state = reactive({
     developmentCost: true,
     landingFactory: 0,
     productInformation: [] as any,
-    tradeMode: "测试mock",
+    tradeMode: "",
     salesType: 0,
-    paymentMethod: "测试mock",
+    paymentMethod: "",
     currency: 0,
     customerTargetPrice: 0,
     exchangeRate: 0,
-    customerSpecialRequest: "测试mock",
+    customerSpecialRequest: "",
     shippingType: 0,
     packagingType: 0,
-    placeOfDelivery: "测试mock",
-    deadline: "",
+    placeOfDelivery: "",
+    deadline: new Date(),
     projectManager: 0,
-    sorFile: [] as any
+    sorFile: [] as any,
+    reason: ""
   },
   yearCols: [] as Number[],
   customerNatureOptions: [] as unknown as Options[],
@@ -736,17 +737,6 @@ const fileList = ref<UploadUserFile[]>([
 ])
 const yearCount = ref(0)
 
-// pcs 数据类型
-interface Pcs {
-  carFactory: String
-  carModel: String
-  pcsYearList: YearListItem[]
-  rowSum: Number
-}
-interface YearListItem {
-  year: any
-  quantity: string | number | null
-}
 const pcsYearQuantitySum = (row: Pcs) => {
   let rowSum = 0
   row.pcsYearList.forEach((item: any) => {
@@ -754,16 +744,7 @@ const pcsYearQuantitySum = (row: Pcs) => {
   })
   row.rowSum = rowSum
 }
-interface modelCount {
-  partNumber: string | null | number
-  product: string
-  productType: number
-  marketShare: number
-  moduleCarryingRate: number
-  singleCarProductsQuantity: number
-  modelTotal: number
-  modelCountYearList: YearListItem[]
-}
+
 const modelCountYearListQuantitySum = (row: modelCount) => {
   console.log("暂时功能先去掉", row)
   // let sum = 0
@@ -817,107 +798,10 @@ const moduleTableData: modelCount[] = reactive([
     modelCountYearList: [] as YearListItem[]
   }
 ])
-interface requireData {
-  annualDeclineRate: Number
-  annualRebateRequirements: Number
-  oneTimeDiscountRate: Number
-  year: Number
-}
+
 //要求
 const requireTableData: requireData[] = reactive([])
-//产品零件
-interface productModel {
-  /**
-   * 线缆
-   */
-  cable: string
-  /**
-   * 线缆 单价
-   */
-  cablePrice?: number | null
-  /**
-   * 线缆
-   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
-   */
-  cableTypeSelect: number
-  /**
-   * 安装位置
-   */
-  installationPosition: string
-  /**
-   * LED
-   */
-  led: string
-  /**
-   * LED 单价
-   */
-  ledPrice?: number | null
-  /**
-   * LED
-   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
-   */
-  ledTypeSelect: number
-  /**
-   * Lens
-   */
-  lens: string
-  /**
-   * Lens单价
-   */
-  lensPrice?: number | null
-  /**
-   *
-   * Lens类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
-   */
-  lensTypeSelect: number
-  /**
-   * isp
-   */
-  isp: string
-  /**
-   * Lsp单价
-   */
-  ispPrice?: number | null
-  /**
-   *
-   * Lsp类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
-   */
-  ispTypeSelect: number
-  /**
-   * 制程
-   */
-  manufactureProcess: string
-  /**
-   * 产品名称
-   */
-  name: string
-  /**
-   * Sensor
-   */
-  sensor: string
-  /**
-   * Sensor单价
-   */
-  sensorPrice?: number | null
-  /**
-   *
-   * Sensor类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
-   */
-  sensorTypeSelect: number
-  /**
-   * 串行芯片
-   */
-  serialChip: string
-  /**
-   * 串行芯片 单价
-   */
-  serialChipPrice?: number | null
-  /**
-   * 串行芯片
-   * 类型选择（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【TypeSelect】）
-   */
-  serialChipTypeSelect: number
-}
+
 const productTableData: productModel[] = reactive([
   {
     name: "",
@@ -943,14 +827,7 @@ const productTableData: productModel[] = reactive([
     installationPosition: ""
   }
 ])
-//指定
-interface specifyModel {
-  main: string
-  price: number | null | undefined
-  productName: string
-  type: string
-  productType: string
-}
+
 const specifyTableData: specifyModel[] = reactive([])
 const addPCS = () => {
   pcsTableData.push(_.cloneDeep(pcsTableData[0]))

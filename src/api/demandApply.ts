@@ -146,7 +146,7 @@ export interface InputModal {
    *
    * 样品报价类型（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【SampleQuotationType】）
    */
-  sampleQuotationType: number
+  // sampleQuotationType: number
   /**
    *
    * 运输方式（字典明细表主键，根据字典名，调用【FinanceDictionary/GetFinanceDictionaryAndDetailByName】取字典，字典名Name是【ShippingType】）
