@@ -238,6 +238,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "汇率"
         }
+      },
+      {
+        path: "/fnDepartment/grossProfitMargin",
+        component: () => import("@/views/fnDepartment/grossProfitMargin.vue"),
+        name: "grossProfitMargin",
+        meta: {
+          title: "毛利率"
+        }
+      },
+      {
+        path: "/fnDepartment/unitPriceImport",
+        component: () => import("@/views/fnDepartment/unitPriceImport.vue"),
+        name: "unitPriceImport",
+        meta: {
+          title: "单价库导入"
+        }
       }
     ]
   },

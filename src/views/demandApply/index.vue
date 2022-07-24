@@ -328,7 +328,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.sensorPrice" placeholder="单价" />
+                  <el-input v-model="row.sensorPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -344,7 +346,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.lensPrice" placeholder="单价" />
+                  <el-input v-model="row.lensPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -360,7 +364,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.ispPrice" placeholder="单价" />
+                  <el-input v-model="row.ispPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -376,7 +382,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.serialChipPrice" placeholder="单价" />
+                  <el-input v-model="row.serialChipPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -392,7 +400,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.cablePrice" placeholder="单价" />
+                  <el-input v-model="row.cablePrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -408,7 +418,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.ledPrice" placeholder="单价" />
+                  <el-input v-model="row.ledPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -675,7 +687,7 @@ const state = reactive({
     projectName: "",
     projectCode: "",
     customerName: "",
-    customerNature: null,
+    customerNature: "",
     country: "",
     terminalName: "",
     terminalNature: "",

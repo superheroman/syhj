@@ -12,7 +12,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="data.setVisible = true">模板文件下载</el-button>
+          <el-button type="primary" @click="data.setVisible = true">电子料模版下载</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -121,6 +121,7 @@ const downLoadTemplate = async () => {
     a.click()
     a.remove() //将a标签移除
   }
+  data.setVisible = false
 }
 const submit = async () => {
   let res: any = await SaveElectronicBom({

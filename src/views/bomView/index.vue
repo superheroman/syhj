@@ -19,10 +19,17 @@
         <el-table-column prop="categoryName" label="物料大类" width="180" />
         <el-table-column prop="typeName" label="物料种类" width="180" />
         <el-table-column prop="isInvolveItem" label="是否涉及" width="180" />
+        <el-table-column prop="drawingNumName" label="图号名称" width="180" />
         <el-table-column prop="sapItemNum" label="物料编号" width="180" />
-        <el-table-column prop="sapItemName" label="材料名称" width="180" />
+        <el-table-column prop="overallDimensionSize" label="外形尺寸mm" width="180" />
+        <el-table-column prop="materialName" label="材料名称" width="180" />
+        <el-table-column prop="weightNumber" label="重量" width="180" />
+        <el-table-column prop="moldingProcess" label="成型工艺" width="180" />
+        <el-table-column prop="isNewMouldProduct" label="是否新开模" width="180" />
+        <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="180" />
+        <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="180" />
         <el-table-column prop="assemblyQuantity" label="装配数量" width="180" />
-        <el-table-column prop="encapsulationSize" label="封装（需要体现PAD的数量）" />
+        <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="200" />
       </el-table>
     </div>
   </div>
