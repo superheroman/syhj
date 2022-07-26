@@ -118,6 +118,7 @@
 <script setup lang="ts">
 import { reactive } from "vue"
 import type { UploadProps } from "element-plus"
+import { ElMessage } from "element-plus"
 import { SaveStructionBom, CommonDownloadFile, SaveBOM } from "@/api/bom"
 const data = reactive({
   tableDataList: [
@@ -156,7 +157,15 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
   if (res.success) {
     // data.tableDataList[data.activeIndex] = res.result
-    data.tableData = res.result
+
+    if (res.result.isSuccess === false) {
+      ElMessage({
+        message: res.result.message,
+        type: "error"
+      })
+    } else {
+      data.tableData = res.result
+    }
   }
 }
 const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
