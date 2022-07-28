@@ -4,93 +4,47 @@
       <el-button type="primary">SOR查看</el-button>
       <el-button type="primary">查看物流&包装基础数据</el-button>
     </div>
-    <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card">
-      <el-tab-pane label="零件1" name="first">
-        <el-table :data="tableData" style="width: 100%" border>
-          <el-table-column label="单PCS包装价格/元">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-          <el-table-column label="运费/月">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-          <el-table-column label="仓储费用/月">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-          <el-table-column label="月底需求量">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-          <el-table-column label="单PCS运输费">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-          <el-table-column label="单PCS总物流料成本">
-            <template #default="{ row }">
-              <el-input v-model="row.a" />
-            </template>
-          </el-table-column>
-
-          <el-table-column label="运费/月" prop="name" />
-
-          <el-table-column label="年份" prop="year" />
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="零件2" name="second">Config</el-tab-pane>
-      <el-tab-pane label="零件3" name="third">Role</el-tab-pane>
-      <el-tab-pane label="零件4" name="fourth">Task</el-tab-pane>
-    </el-tabs>
+    <el-table :data="data.tableData" style="width: 100%" border>
+      <el-table-column label="年份" prop="year" />
+      <el-table-column label="单PCS包装价格/元">
+        <template #default="{ row }">
+          <el-input v-model="row.perPackagingPrice" />
+        </template>
+      </el-table-column>
+      <el-table-column label="运费/月">
+        <template #default="{ row }">
+          <el-input v-model="row.freight" />
+        </template>
+      </el-table-column>
+      <el-table-column label="仓储费用/月">
+        <template #default="{ row }">
+          <el-input v-model="row.storageExpenses" />
+        </template>
+      </el-table-column>
+      <el-table-column label="月底需求量">
+        <template #default="{ row }">
+          <el-input v-model="row.monthEndDemand" />
+        </template>
+      </el-table-column>
+      <el-table-column label="单PCS运输费">
+        <template #default="{ row }">
+          <el-input v-model="row.perFreight" />
+        </template>
+      </el-table-column>
+      <el-table-column label="单PCS总物流料成本">
+        <template #default="{ row }">
+          <el-input v-model="row.perTotalLogisticsCost" />
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script setup lang="ts">
-// import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import type { TabsPaneContext } from "element-plus"
+import { getYears, saveProductionControl, getPcsByPriceEvaluationId } from "./service"
+
 // import { useRoute, useRouter } from "vue-router"
-interface User {
-  date: string
-  name: string
-  address: string
-  year: string
-}
-const tableData: User[] = [
-  {
-    date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    year: "2022"
-  },
-  {
-    date: "2023",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    year: "2023"
-  },
-  {
-    date: "2024",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    year: "2024"
-  },
-  {
-    date: "2025",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-    year: "2025"
-  }
-]
-const activeName = ref("first")
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
 /**
  * 路由对象
  */
@@ -103,11 +57,31 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 /**
  * 数据部分
  */
-const data = reactive({})
+const data = reactive({
+  tableData: []
+})
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-onMounted(() => {
+onMounted(async () => {
+  let { result } = (await getYears(1)) as any
+  let { result: monthEndDemandList } = (await getPcsByPriceEvaluationId(1)) as any
+  result = [2022, 2023, 2024]
+  console.log(monthEndDemandList)
+  if (result?.length > 0) {
+    data.tableData = result.map((year: number[]) => {
+      return {
+        year,
+        perPackagingPrice: "",
+        freight: "",
+        storageExpenses: "",
+        monthEndDemand: "",
+        perFreight: "",
+        perTotalLogisticsCost: ""
+      }
+    })
+  }
+  console.log(result)
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
