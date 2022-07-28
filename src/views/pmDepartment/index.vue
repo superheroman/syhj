@@ -37,12 +37,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <div>
+      <el-button @click="submit">提交</el-button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getYears, saveProductionControl, getPcsByPriceEvaluationId } from "./service"
+import { ElMessage } from "element-plus"
 
 // import { useRoute, useRouter } from "vue-router"
 /**
@@ -58,16 +62,33 @@ import { getYears, saveProductionControl, getPcsByPriceEvaluationId } from "./se
  * 数据部分
  */
 const data = reactive({
-  tableData: []
+  tableData: [],
+  auditFlowId: 0,
+  productId: 0
 })
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
   let { result } = (await getYears(1)) as any
-  let { result: monthEndDemandList } = (await getPcsByPriceEvaluationId(1)) as any
+  let { result: monthEndDemand } = (await getPcsByPriceEvaluationId(1)) as any
   result = [2022, 2023, 2024]
-  console.log(monthEndDemandList)
+  console.log(monthEndDemand)
+  let warpArr = [] as any[] //二维数组
+  monthEndDemand.items.forEach((item: any) => {
+    item.pcsYear.forEach((yearItem: any, index: number) => {
+      if (!warpArr[index]) {
+        warpArr[index] = []
+      }
+      warpArr[index].push(yearItem.quantity)
+    })
+  })
+  let yearValue = []
+  warpArr.forEach((arr, index) => {
+    yearValue[index] = arr.reduce((pre: number, cur: number) => {
+      return pre + cur
+    })
+  })
   if (result?.length > 0) {
     data.tableData = result.map((year: number[]) => {
       return {
@@ -85,6 +106,19 @@ onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
+
+const submit = () => {
+  let { auditFlowId, productId } = data
+  let infoList = data.tableData.map((item) => item)
+  let res: any = saveProductionControl({
+    auditFlowId,
+    productId,
+    infoList
+  })
+  if (res.success) {
+    ElMessage.success("提交成功")
+  }
+}
 // 使用toRefs解构
 // let { } = { ...toRefs(data) }
 defineExpose({

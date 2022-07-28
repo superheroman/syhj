@@ -287,6 +287,77 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
+  },
+  {
+    path: "/bomLoss",
+    redirect: "/bomLoss/index",
+    component: Layout,
+    children: [
+      {
+        path: "/bomLoss/index",
+        component: () => import("@/views/bomLoss/index.vue"),
+        name: "bomLoss",
+        meta: {
+          title: "bom损耗率表单"
+        }
+      }
+    ]
+  },
+  {
+    path: "/processImport",
+    redirect: "/processImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/processImport/index",
+        component: () => import("@/views/processImport/index.vue"),
+        name: "processImport",
+        meta: {
+          title: "工序导入"
+        }
+      }
+    ]
+  },
+  {
+    path: "/summaryTable",
+    redirect: "/summaryTable/index",
+    component: Layout,
+    children: [
+      {
+        path: "/summaryTable/index",
+        component: () => import("@/views/summaryTable/index.vue"),
+        name: "summaryTable",
+        meta: {
+          title: "汇总表"
+        }
+      }
+    ]
+  },
+  {
+    path: "/nre",
+    redirect: "/nre/nreProjectManageMent",
+    component: Layout,
+    meta: {
+      title: "nre"
+    },
+    children: [
+      {
+        path: "/nre/nreProjectManageMent",
+        component: () => import("@/views/nre/nreProjectManageMent.vue"),
+        name: "nreProjectManageMent",
+        meta: {
+          title: "项目管理部nre"
+        }
+      },
+      {
+        path: "/nre/nrePilotprojects",
+        component: () => import("@/views/nre/nrePilotprojects.vue"),
+        name: "nrePilotprojects",
+        meta: {
+          title: "产品部nre"
+        }
+      }
+    ]
   }
   // {
   //   path: "/link",
