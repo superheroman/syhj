@@ -271,7 +271,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
-  }
+  },
   // {
   //   path: "/link",
   //   component: Layout,
@@ -287,6 +287,58 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   //     }
   //   ]
   // }
+  {
+    path: "/versionManagement",
+    redirect: "/versionManagement/index",
+    component: Layout,
+    meta: {
+      title: "版本管理"
+    },
+    children: [
+      {
+        path: "/versionManagement/index",
+        component: () => import("@/views/versionManagement/index.vue"),
+        name: "versionManagement",
+        meta: {
+          title: "版本管理"
+        }
+      },
+      {
+        path: "/versionManagement/reportQuery",
+        component: () => import("@/views/versionManagement/reportQuery.vue"),
+        name: "reportQuery",
+        meta: {
+          title: "报表查询"
+        }
+      }
+    ]
+  },
+  {
+    path: "/resourcesDepartment",
+    redirect: "/resourcesDepartment/index",
+    component: Layout,
+    meta: {
+      title: "资源部"
+    },
+    children: [
+      {
+        path: "/resourcesDepartment/electronic",
+        component: () => import("@/views/resourcesDepartment/electronic.vue"),
+        name: "electronic",
+        meta: {
+          title: "电子料单价录入界面"
+        }
+      },
+      {
+        path: "/resourcesDepartment/construction",
+        component: () => import("@/views/resourcesDepartment/construction.vue"),
+        name: "construction",
+        meta: {
+          title: "结构件单价录入界面"
+        }
+      }
+    ]
+  }
 ]
 
 /**
