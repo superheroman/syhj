@@ -328,7 +328,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.sensorPrice" placeholder="单价" />
+                  <el-input v-model="row.sensorPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -344,7 +346,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.lensPrice" placeholder="单价" />
+                  <el-input v-model="row.lensPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -360,7 +364,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.ispPrice" placeholder="单价" />
+                  <el-input v-model="row.ispPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -376,7 +382,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.serialChipPrice" placeholder="单价" />
+                  <el-input v-model="row.serialChipPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -392,7 +400,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.cablePrice" placeholder="单价" />
+                  <el-input v-model="row.cablePrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -408,7 +418,9 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.ledPrice" placeholder="单价" />
+                  <el-input v-model="row.ledPrice" placeholder="单价">
+                    <template #append>元</template>
+                  </el-input>
                 </template>
               </el-input>
             </template>
@@ -528,7 +540,8 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="项目经理:" prop="projectManager">
-              <el-input :suffix-icon="Search" v-model="state.quoteForm.projectManager" />
+              <SearchPerson v-model="state.quoteForm.projectManager" />
+              <!-- <el-input :suffix-icon="Search" v-model="state.quoteForm.projectManager" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -585,7 +598,7 @@
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
 // import { useRouter } from "vue-router"
-import { Search } from "@element-plus/icons-vue"
+// import { Search } from "@element-plus/icons-vue"
 
 import type { UploadProps, UploadUserFile } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
@@ -594,6 +607,7 @@ import { saveApplyInfo, getExchangeRate } from "./service"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
+import { SearchPerson } from "@/components/SearchPerson"
 import dayjs from "dayjs"
 const refForm = ref<FormInstance>()
 interface Options {
@@ -675,7 +689,7 @@ const state = reactive({
     projectName: "",
     projectCode: "",
     customerName: "",
-    customerNature: null,
+    customerNature: "",
     country: "",
     terminalName: "",
     terminalNature: "",
@@ -704,7 +718,7 @@ const state = reactive({
     packagingType: 0,
     placeOfDelivery: "",
     deadline: new Date(),
-    projectManager: 0,
+    projectManager: "",
     sorFile: [] as any,
     reason: ""
   },

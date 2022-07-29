@@ -8,43 +8,29 @@
             :on-success="handleSuccess"
             :show-file-list="false"
           >
-            <el-button type="primary">电子料上传</el-button>
+            <el-button type="primary">工序工时上传</el-button>
           </el-upload>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="data.setVisible = true">电子料模版下载</el-button>
+          <el-button type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
         </el-form-item>
       </el-form>
     </div>
 
-    <h5>电子料导入</h5>
-    <!-- <el-tabs v-model="data.activeIndex" @tab-click="handleClick" type="border-card">
-      <el-tab-pane :label="item.name" :name="index" v-for="(item, index) in data.productList" :key="item.id">
-        <el-table :data="data.tableDataList[index]" border style="width: 100%">
-          <el-table-column prop="categoryName" label="物料大类" width="180" />
-          <el-table-column prop="typeName" label="物料种类" width="180" />
-          <el-table-column prop="isInvolveItem" label="是否涉及" width="180" />
-          <el-table-column prop="sapItemNum" label="物料编号" width="180" />
-          <el-table-column prop="sapItemName" label="材料名称" width="180" />
-          <el-table-column prop="assemblyQuantity" label="装配数量" width="180" />
-          <el-table-column prop="encapsulationSize" label="封装（需要体现PAD的数量）" />
-        </el-table>
-      </el-tab-pane>
-    </el-tabs> -->
+    <h5>工序工时导入</h5>
     <el-table :data="data.tableData" border style="width: 100%" height="700">
-      <el-table-column prop="categoryName" label="物料大类" width="180" />
-      <el-table-column prop="typeName" label="物料种类" width="180" />
-      <el-table-column prop="isInvolveItem" label="是否涉及" width="180" />
-      <el-table-column prop="sapItemNum" label="物料编号" width="180" />
-      <el-table-column prop="sapItemName" label="材料名称" width="180" />
-      <el-table-column prop="assemblyQuantity" label="装配数量" width="180" />
-      <el-table-column prop="encapsulationSize" label="封装（需要体现PAD的数量）" />
+      <el-table-column prop="categoryName" label="序号" width="180" />
+      <el-table-column prop="typeName" label="工序" width="180" />
+      <el-table-column prop="isInvolveItem" label="设备1" width="180" />
+      <el-table-column prop="sapItemNum" label="状态" width="180" />
+      <el-table-column prop="sapItemName" label="数量" width="180" />
+      <el-table-column prop="assemblyQuantity" label="单价设备1" width="180" />
     </el-table>
     <div style="float: right; margin-top: 20px">
       <el-button type="primary" @click="submit">提交</el-button>
     </div>
 
-    <el-dialog v-model="data.setVisible">
+    <!-- <el-dialog v-model="data.setVisible">
       <el-form :model="data.downloadSetForm">
         <el-form-item label="板部件数量">
           <el-input v-model="data.downloadSetForm.number" />
@@ -56,7 +42,7 @@
           <el-button type="primary" @click="downLoadTemplate">保存</el-button>
         </span>
       </template>
-    </el-dialog>
+    </el-dialog> -->
   </div>
 </template>
 <script setup lang="ts">

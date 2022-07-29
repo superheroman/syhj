@@ -238,6 +238,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "汇率"
         }
+      },
+      {
+        path: "/fnDepartment/grossProfitMargin",
+        component: () => import("@/views/fnDepartment/grossProfitMargin.vue"),
+        name: "grossProfitMargin",
+        meta: {
+          title: "毛利率"
+        }
+      },
+      {
+        path: "/fnDepartment/unitPriceImport",
+        component: () => import("@/views/fnDepartment/unitPriceImport.vue"),
+        name: "unitPriceImport",
+        meta: {
+          title: "单价库导入"
+        }
       }
     ]
   },
@@ -268,6 +284,77 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "user",
         meta: {
           title: "用户管理"
+        }
+      }
+    ]
+  },
+  {
+    path: "/bomLoss",
+    redirect: "/bomLoss/index",
+    component: Layout,
+    children: [
+      {
+        path: "/bomLoss/index",
+        component: () => import("@/views/bomLoss/index.vue"),
+        name: "bomLoss",
+        meta: {
+          title: "bom损耗率表单"
+        }
+      }
+    ]
+  },
+  {
+    path: "/processImport",
+    redirect: "/processImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/processImport/index",
+        component: () => import("@/views/processImport/index.vue"),
+        name: "processImport",
+        meta: {
+          title: "工序导入"
+        }
+      }
+    ]
+  },
+  {
+    path: "/summaryTable",
+    redirect: "/summaryTable/index",
+    component: Layout,
+    children: [
+      {
+        path: "/summaryTable/index",
+        component: () => import("@/views/summaryTable/index.vue"),
+        name: "summaryTable",
+        meta: {
+          title: "汇总表"
+        }
+      }
+    ]
+  },
+  {
+    path: "/nre",
+    redirect: "/nre/nreProjectManageMent",
+    component: Layout,
+    meta: {
+      title: "nre"
+    },
+    children: [
+      {
+        path: "/nre/nreProjectManageMent",
+        component: () => import("@/views/nre/nreProjectManageMent.vue"),
+        name: "nreProjectManageMent",
+        meta: {
+          title: "项目管理部nre"
+        }
+      },
+      {
+        path: "/nre/nrePilotprojects",
+        component: () => import("@/views/nre/nrePilotprojects.vue"),
+        name: "nrePilotprojects",
+        meta: {
+          title: "产品部nre"
         }
       }
     ]

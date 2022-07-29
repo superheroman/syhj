@@ -10,8 +10,18 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="user__btn-container">
+    <div class="user__btn-container user__flex">
       <el-button type="primary" @click="data.dialogVisible = true">创建用户</el-button>
+      <el-button type="primary" @click="downLoadTemplate">用户导入模板下载</el-button>
+      <el-upload
+        action="http://139.196.216.165:44311/api/services/app/User/ExcelImport"
+        :on-success="handleSuccess"
+        :show-file-list="false"
+        style="margin-left: 20px"
+        name="excle"
+      >
+        <el-button type="primary">用户导入</el-button>
+      </el-upload>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
@@ -124,7 +134,8 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
-
+import { User, UserParams } from "./data.type"
+import type { UploadProps } from "element-plus"
 // import { updateUser, deleteUser, activateUser, deActivateUser, changePassword, changePasswordAd } from "@/api/user"
 import {
   createUser,
@@ -133,10 +144,10 @@ import {
   activateUser,
   deActivateUser,
   getUserList,
-  UserParams,
   changePassword,
-  changePasswordAd
-} from "@/api/user"
+  changePasswordAd,
+  DownloadFile
+} from "./service"
 import type { FormInstance } from "element-plus"
 const userForm = ref<FormInstance>()
 /**
@@ -304,23 +315,42 @@ const activeChange = (val: boolean, row: User) => {
     deActivateUser(row.id)
   }
 }
-interface User {
-  id?: number
-  name: string
-  surname: string
-  userName: string
-  emailAddress: string
-  isActive: Boolean
-  roleNames: string
-  password: string
-  number: string
-  position: string
+const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
+  console.log(res)
+  if (res.result.isSuccess) {
+    ElMessage({
+      message: res.result.message,
+      type: "success"
+    })
+    getList()
+  } else {
+    ElMessage({
+      message: res.result.message,
+      type: "error"
+    })
+  }
 }
-
+const downLoadTemplate = async () => {
+  let res: any = await DownloadFile()
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = "模板文件.xlsx"
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+}
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  getList()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
@@ -334,6 +364,9 @@ defineExpose({
 .user {
   &__btn-container {
     margin: 20px 0;
+  }
+  &__flex {
+    display: flex;
   }
 }
 </style>

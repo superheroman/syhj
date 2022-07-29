@@ -5,83 +5,42 @@
         <h4>核价团队</h4>
         <el-row :gutter="20">
           <el-col :span="6">
-            <el-form-item label="电子工程师:">
-              <!-- <el-select v-model="formData.electronicEngineerNum">
-                <el-option
-                  v-for="item in users.electronicEngineer"
-                  :key="item.id"
-                  :label="item.userName"
-                  :value="item.id"
-                />
-              </el-select> -->
+            <el-form-item label="产品部-电子工程师:">
               <SearchPerson v-model="formData.electronicEngineerNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="结构工程师:">
-              <!-- <el-select v-model="formData.structureEngineerNum">
-                <el-option
-                  v-for="item in users.structureEngineer"
-                  :key="item.id"
-                  :label="item.userName"
-                  :value="item.id"
-                />
-              </el-select> -->
+            <el-form-item label="产品部-结构工程师:">
               <SearchPerson v-model="formData.structureEngineerNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="资源管理部:">
-              <!-- <el-select v-model="formData.resourceManagementNum">
-                <el-option
-                  v-for="item in users.resourceManagement"
-                  :key="item.id"
-                  :label="item.userName"
-                  :value="item.id"
-                />
-              </el-select> -->
+            <el-form-item label="资源管理部-电子资源开发:">
               <SearchPerson v-model="formData.resourceManagementNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="工程技术部:">
-              <!-- <el-select v-model="formData.engineeringTechnologyNum">
-                <el-option
-                  v-for="item in users.engineeringTechnology"
-                  :key="item.id"
-                  :label="item.userName"
-                  :value="item.id"
-                />
-              </el-select> -->
+            <el-form-item label="资源管理部-结构子资源开发:">
+              <SearchPerson v-model="formData.resourceManagementNum" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="工程技术部-损耗率录入员:">
               <SearchPerson v-model="formData.engineeringTechnologyNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="财务部:">
-              <!-- <el-select v-model="formData.financeNum">
-                <el-option v-for="item in users.finance" :key="item.id" :label="item.userName" :value="item.id" />
-              </el-select> -->
+            <el-form-item label="工程技术部-工序工时录入员::">
               <SearchPerson v-model="formData.financeNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="生产管理部:">
-              <!-- <el-select v-model="formData.productionManagementNum">
-                <el-option
-                  v-for="item in users.productionManagement"
-                  :key="item.id"
-                  :label="item.userName"
-                  :value="item.id"
-                />
-              </el-select> -->
+            <el-form-item label="品质保证部-实验费用录入员:">
               <SearchPerson v-model="formData.productionManagementNum" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="品保部:">
-              <!-- <el-select v-model="formData.qualityNum">
-                <el-option v-for="item in users.quality" :key="item.id" :label="item.userName" :value="item.id" />
-              </el-select> -->
+            <el-form-item label="品质保证部-检具费用录入员:">
               <SearchPerson v-model="formData.qualityNum" />
             </el-form-item>
           </el-col>
@@ -106,17 +65,17 @@
                 :on-success="handleSuccess"
                 :limit="1"
               >
-                <el-button type="primary">3D爆炸图</el-button>
+                <el-button type="primary">文件上传</el-button>
               </el-upload>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="是否NRE核价:">
               <el-select v-model="formData.isNRE" placeholder="Select">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-card>
     </el-form>

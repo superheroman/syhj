@@ -39,33 +39,28 @@
     <h5>物流成本汇总表</h5>
     <el-table :data="data.logisticsData" border style="width: 100%" height="500">
       <el-table-column prop="typeName" label="年份" width="180" />
-      <el-table-column prop="sapItemNum" label="单PCS包装价格/元" width="180" />
-      <el-table-column prop="sapItemName" label="单PCS运输费" width="180" />
-      <el-table-column prop="typeName" label="单PCS总物流料成本" width="180" />
+      <el-table-column prop="sapItemNum" label="单PCS包装价格/元" />
+      <el-table-column prop="sapItemName" label="单PCS运输费" />
+      <el-table-column prop="typeName" label="单PCS总物流料成本" />
     </el-table>
     <h5>质量成本汇总表</h5>
     <el-table :data="data.qualityData" border style="width: 100%" height="500">
-      <el-table-column prop="typeName" label="产品类别" width="180" />
-      <el-table-column prop="sapItemNum" label="成本比例" width="180" />
-      <el-table-column prop="sapItemName" label="质量成本（MAX）" width="180" />
+      <el-table-column prop="typeName" label="产品类别" />
+      <el-table-column prop="sapItemNum" label="成本比例" />
+      <el-table-column prop="sapItemName" label="质量成本（MAX）" />
     </el-table>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { useRoute, useRouter } from "vue-router"
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 /**
  * 仓库
  */
 /**
  * 路由对象
  */
-const route = useRoute()
-/**
- * 路由实例
- */
-const router = useRouter()
+
 //console.log('1-开始创建组件-setup')
 /**
  * 数据部分
