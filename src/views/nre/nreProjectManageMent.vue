@@ -4,36 +4,36 @@
     <div style="float: right; margin-bottom: 20px">
       <el-button type="primary" @click="addHandboardCost">新增</el-button>
     </div>
-    <el-table :data="data.handboardCostData" style="width: 100%" border height="300">
+    <el-table :data="data.handPieceCost" style="width: 100%" border height="300">
       <el-table-column type="index" width="50" />
       <el-table-column label="零件名" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carFactory" />
+          <el-input v-model="row.partName" />
         </template>
       </el-table-column>
       <el-table-column label="料号" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.partNumber" />
         </template>
       </el-table-column>
       <el-table-column label="单价" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.unitPrice" />
         </template>
       </el-table-column>
       <el-table-column label="数量" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.quantity" />
         </template>
       </el-table-column>
       <el-table-column label="费用" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.cost" />
         </template>
       </el-table-column>
-      <el-table-column label="备注" width="180">
+      <el-table-column label="备注">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.remark" />
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right">
@@ -47,7 +47,7 @@
       <el-button type="primary" @click="addOtherCostData">新增</el-button>
     </div>
     <el-table
-      :data="data.otherCostData"
+      :data="data.restsCost"
       style="width: 100%"
       border
       :summary-method="getSummaries"
@@ -57,17 +57,17 @@
       <el-table-column type="index" width="50" />
       <el-table-column label="费用名称" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carFactory" />
+          <el-input v-model="row.rroject" />
         </template>
       </el-table-column>
       <el-table-column label="费用" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.cost" />
         </template>
       </el-table-column>
       <el-table-column label="备注" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.remark" />
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right">
@@ -81,7 +81,7 @@
       <el-button type="primary" @click="addTravelCostData">新增</el-button>
     </div>
     <el-table
-      :data="data.travelCostData"
+      :data="data.travelExpense"
       style="width: 100%"
       border
       :summary-method="getSummaries"
@@ -91,32 +91,32 @@
       <el-table-column type="index" width="50" />
       <el-table-column label="事由" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carFactory" />
+          <el-input v-model="row.reasonsId" />
         </template>
       </el-table-column>
       <el-table-column label="人数" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.peopleCount" />
         </template>
       </el-table-column>
       <el-table-column label="费用/天" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.costSky" />
         </template>
       </el-table-column>
       <el-table-column label="天数" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.skyCount" />
         </template>
       </el-table-column>
       <el-table-column label="费用" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.cost" />
         </template>
       </el-table-column>
       <el-table-column label="备注" width="180">
         <template #default="{ row }">
-          <el-input v-model="row.carModel" />
+          <el-input v-model="row.remark" />
         </template>
       </el-table-column>
       <el-table-column label="操作" fixed="right">
@@ -133,6 +133,7 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.type"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 
 interface SummaryMethodProps<T = []> {
@@ -153,27 +154,27 @@ const getSummaries = (param: SummaryMethodProps) => {
  * 数据部分
  */
 const data = reactive({
-  handboardCostData: [],
-  otherCostData: [],
-  travelCostData: []
+  handPieceCost: [] as HandPieceCostModel[],
+  restsCost: [] as RestsCostModel[],
+  travelExpense: [] as TravelExpenseModel[]
 })
 const deletehandboardCost = (i: number) => {
-  data.handboardCostData.splice(i, 1)
+  data.handPieceCost.splice(i, 1)
 }
 const deleteTravelCostData = (i: number) => {
-  data.handboardCostData.splice(i, 1)
+  data.handPieceCost.splice(i, 1)
 }
 const deleteOtherCostData = (i: number) => {
-  data.otherCostData.splice(i, 1)
+  data.restsCost.splice(i, 1)
 }
 const addHandboardCost = () => {
-  data.handboardCostData.push({ carFactory: "" })
+  data.handPieceCost.push({ partName: "", partNumber: "", unitPrice: 0, quantity: 0 })
 }
 const addOtherCostData = () => {
-  data.otherCostData.push({ carFactory: "" })
+  data.restsCost.push({ rroject: "", cost: 0, remark: "" })
 }
 const addTravelCostData = () => {
-  data.travelCostData.push({ carFactory: "" })
+  data.travelExpense.push({ reasonsId: 0, peopleCount: 0, costSky: 0, skyCount: 0, cost: 0, remark: "" })
 }
 const submit = () => {}
 onBeforeMount(() => {
