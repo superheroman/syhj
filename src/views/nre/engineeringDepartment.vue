@@ -3,7 +3,7 @@
     <el-card class="margin-top">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
-          手板件费用
+          工装类
           <el-button type="primary" @click="addHandboardCost">新增</el-button>
         </el-row>
       </template>
@@ -31,7 +31,7 @@
             <el-input v-model="row.unitPrice" type="number" :min="0" :formatter="transformNumber" />
           </template>
         </el-table-column>
-        <el-table-column label="数量" width="150">
+        <el-table-column label="数量" width="100">
           <template #default="{ row }">
             <el-input v-model="row.quantity" type="number" :min="0" :formatter="transformNumber" />
           </template>
@@ -57,7 +57,7 @@
     <el-card class="margin-top">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
-          其它费用
+          治具类
           <el-button type="primary" @click="addOtherCostData">新增</el-button>
         </el-row>
       </template>
@@ -96,7 +96,54 @@
     <el-card class="margin-top">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
-          差旅费
+          软件类
+          <el-button type="primary" @click="addTravelCostData">新增</el-button>
+        </el-row>
+      </template>
+      <el-table :data="data.travelExpense" style="width: 100%" border height="300">
+        <el-table-column type="index" width="50" />
+        <el-table-column label="事由" width="150">
+          <template #default="{ row }">
+            <el-input v-model="row.reasonsId" />
+          </template>
+        </el-table-column>
+        <el-table-column label="人数" width="150">
+          <template #default="{ row }">
+            <el-input v-model="row.peopleCount" type="number" :min="0" :formatter="transformNumber" />
+          </template>
+        </el-table-column>
+        <el-table-column label="费用/天" width="150">
+          <template #default="{ row }">
+            <el-input v-model="row.costSky" type="number" :min="0" :formatter="transformNumber" />
+          </template>
+        </el-table-column>
+        <el-table-column label="天数" width="150">
+          <template #default="{ row }">
+            <el-input v-model="row.skyCount" type="number" :min="0" :formatter="transformNumber" />
+          </template>
+        </el-table-column>
+        <el-table-column label="费用" width="150">
+          <template #default="{ row }">
+            <el-input v-model="row.cost" type="number" :min="0" :formatter="transformNumber" />
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" width="150">
+          <template #default="{ row }">
+            <el-input v-model="row.remark" />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="90">
+          <template #default="{ $index }">
+            <el-button @click="deleteTravelCostData($index)" type="danger">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
+    <el-card class="margin-top">
+      <template #header>
+        <el-row style="width: 100%" justify="space-between" align="middle">
+          生产设备
           <el-button type="primary" @click="addTravelCostData">新增</el-button>
         </el-row>
       </template>
@@ -205,7 +252,7 @@ const submit = async () => {
     })
     console.log(res, "RES")
   } catch (err) {
-    console.log(err, "PostProjectManagement err")
+    console.log(err, "[PostProjectManagement ERROR]")
   }
 }
 

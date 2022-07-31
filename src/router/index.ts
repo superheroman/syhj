@@ -356,6 +356,46 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "产品部nre"
         }
+      },
+      {
+        path: "/nre/nreQCDepartment",
+        component: () => import("@/views/nre/nreQCDepartment.vue"),
+        name: "nreQCDepartment",
+        meta: {
+          title: "品保部nre"
+        }
+      },
+      {
+        path: "/nre/nreResourcesDepartment",
+        component: () => import("@/views/nre/nreResourcesDepartment.vue"),
+        name: "nreResourcesDepartment",
+        meta: {
+          title: "资源部nre"
+        }
+      },
+      {
+        path: "/nre/nreMarketingDepartment",
+        component: () => import("@/views/nre/nreMarketingDepartment.vue"),
+        name: "nreMarketingDepartment",
+        meta: {
+          title: "营销部nre"
+        }
+      },
+      {
+        path: "/nre/engineeringDepartment",
+        component: () => import("@/views/nre/engineeringDepartment.vue"),
+        name: "engineeringDepartment",
+        meta: {
+          title: "工程部nre"
+        }
+      },
+      {
+        path: "/nre/nrePricelist",
+        component: () => import("@/views/nre/nrePricelist.vue"),
+        name: "nrePricelist",
+        meta: {
+          title: "核价表nre"
+        }
       }
     ]
   },
@@ -503,6 +543,7 @@ const router = createRouter({
 
 /** 重置路由 */
 export function resetRouter() {
+  ;``
   // 注意：所有动态路由路由必须带有 name 属性，否则可能会不能完全重置干净
   try {
     router.getRoutes().forEach((route) => {
