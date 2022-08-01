@@ -844,11 +844,44 @@ const productTableData: productModel[] = reactive([
 
 const specifyTableData: specifyModel[] = reactive([])
 const addPCS = () => {
+  // let newLine = {
+  //   carFactory: "",
+  //   carModel: "",
+  //   pcsYearList: [] as YearListItem[],
+  //   sum: 0
+  // }
   pcsTableData.push(_.cloneDeep(pcsTableData[0]))
+  // pcsTableData.push(Object.assign({}, _.cloneDeep(pcsTableData[0]), newLine))
 }
 const addProduct = () => {
+  let newLineP = {
+    name: "",
+    sensor: "",
+    sensorTypeSelect: 1,
+    sensorPrice: 0,
+    lens: "",
+    lensTypeSelect: 1,
+    lensPrice: 0,
+    isp: "",
+    ispTypeSelect: 1,
+    ispPrice: 0,
+    serialChip: "",
+    serialChipTypeSelect: 1,
+    serialChipPrice: 0,
+    cable: "",
+    cableTypeSelect: 1,
+    cablePrice: 0,
+    led: "",
+    ledTypeSelect: 1,
+    ledPrice: 0,
+    manufactureProcess: "",
+    installationPosition: ""
+  }
+  productTableData.push(Object.assign(_.cloneDeep(productTableData[0]), newLineP))
   moduleTableData.push(_.cloneDeep(moduleTableData[0]))
-  productTableData.push(_.cloneDeep(productTableData[0]))
+  // productTableData.push(_.cloneDeep(productTableData[0]))
+  // moduleTableData.push(newLineM)
+  // productTableData.push(newLineP)
   //模组上的产品名称进行复制
   productTableData.forEach((item, index) => {
     item.name = moduleTableData[index].product
@@ -901,6 +934,16 @@ watch(
 
     console.log(pcsTableData)
   }
+)
+//同步产品名称
+watch(
+  moduleTableData,
+  (val) => {
+    val.forEach((item, index) => {
+      productTableData[index].name = item.product
+    })
+  },
+  { deep: true }
 )
 const deleteProduct = (i: number) => {
   moduleTableData.splice(i, 1)
@@ -1007,7 +1050,7 @@ const setNumber = () => {
   quoteForm.number = number
 }
 const rateChange = (val: any) => {
-  state.quoteForm.exchangeRate = 0
+  // state.quoteForm.exchangeRate = 0
   state.ExchangeSelectOptions.forEach((item: any) => {
     if (item.id === val) {
       item.exchangeRateValue.forEach((yearItem: any) => {

@@ -65,6 +65,12 @@
         <el-form-item label="名字" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.name" />
         </el-form-item>
+        <el-form-item label="职位" :label-width="data.formLabelWidth">
+          <el-input v-model="data.userForm.position" />
+        </el-form-item>
+        <!-- <el-form-item label="部门" :label-width="data.formLabelWidth">
+          <el-input v-model="data.userForm.departmentId" />
+        </el-form-item> -->
         <!-- <el-form-item label="姓" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.surname" />
         </el-form-item>

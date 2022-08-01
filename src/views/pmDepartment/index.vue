@@ -2,44 +2,120 @@
   <div class="pm-department">
     <div class="pm-department__btn-container">
       <el-button type="primary">SOR查看</el-button>
-      <el-button type="primary">查看物流&包装基础数据</el-button>
+      <el-button type="primary" @click="data.dialogFormVisible = true">查看物流&包装基础数据</el-button>
     </div>
-    <el-table :data="data.tableData" style="width: 100%" border>
-      <el-table-column label="年份" prop="year" />
-      <el-table-column label="单PCS包装价格/元">
-        <template #default="{ row }">
-          <el-input v-model="row.perPackagingPrice" />
-        </template>
-      </el-table-column>
-      <el-table-column label="运费/月">
-        <template #default="{ row }">
-          <el-input v-model="row.freight" />
-        </template>
-      </el-table-column>
-      <el-table-column label="仓储费用/月">
-        <template #default="{ row }">
-          <el-input v-model="row.storageExpenses" />
-        </template>
-      </el-table-column>
-      <el-table-column label="月底需求量">
-        <template #default="{ row }">
-          <el-input v-model="row.monthEndDemand" />
-        </template>
-      </el-table-column>
-      <el-table-column label="单PCS运输费">
-        <template #default="{ row }">
-          <el-input v-model="row.perFreight" />
-        </template>
-      </el-table-column>
-      <el-table-column label="单PCS总物流料成本">
-        <template #default="{ row }">
-          <el-input v-model="row.perTotalLogisticsCost" />
-        </template>
-      </el-table-column>
-    </el-table>
-    <div>
-      <el-button @click="submit">提交</el-button>
-    </div>
+    <el-card>
+      <el-table :data="data.tableData" style="width: 100%" border>
+        <el-table-column label="年份" prop="year" />
+        <el-table-column label="单PCS包装价格/元">
+          <template #default="{ row }">
+            <el-input v-model="row.perPackagingPrice" />
+          </template>
+        </el-table-column>
+        <el-table-column label="运费/月">
+          <template #default="{ row }">
+            <el-input v-model="row.freight" />
+          </template>
+        </el-table-column>
+        <el-table-column label="仓储费用/月">
+          <template #default="{ row }">
+            <el-input v-model="row.storageExpenses" />
+          </template>
+        </el-table-column>
+        <el-table-column label="月底需求量">
+          <template #default="{ row }">
+            <el-input v-model="row.monthEndDemand" />
+          </template>
+        </el-table-column>
+        <el-table-column label="单PCS运输费">
+          <template #default="{ row }">
+            <el-input v-model="row.perFreight" />
+          </template>
+        </el-table-column>
+        <el-table-column label="单PCS总物流料成本">
+          <template #default="{ row }">
+            <el-input v-model="row.perTotalLogisticsCost" />
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="float: right; margin: 20px 0">
+        <el-button @click="submit" type="primary">提交</el-button>
+      </div>
+    </el-card>
+    <el-dialog v-model="data.dialogFormVisible" title="物流基础信息">
+      <el-form :model="data.logisticsForm" inline>
+        <h5>物流基础信息</h5>
+        <h6>外包装体积</h6>
+        <el-form-item label="外包装长">
+          <el-input v-model="data.logisticsForm.outerPackagingLength">
+            <template #append>cm</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="外包装宽">
+          <el-input v-model="data.logisticsForm.outerPackagingWidth">
+            <template #append>cm</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="外包装高">
+          <el-input v-model="data.logisticsForm.outerPackagingHeight">
+            <template #append>cm</template>
+          </el-input>
+        </el-form-item>
+        <h6>重量</h6>
+        <el-form-item label="单个产品重量">
+          <el-input v-model="data.logisticsForm.singleProductWeight">
+            <template #append>kg</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="单箱数量">
+          <el-input v-model="data.logisticsForm.singleBoxQuantity">
+            <template #append>pcs</template>
+          </el-input>
+        </el-form-item>
+        <h5>包装基础信息</h5>
+        <h6>内包装体积</h6>
+        <el-form-item label="内包装长">
+          <el-input v-model="data.logisticsForm.innerPackagingLength">
+            <template #append>mm</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="内包装宽">
+          <el-input v-model="data.logisticsForm.innerPackagingWidth">
+            <template #append>mm</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="内包装高">
+          <el-input v-model="data.logisticsForm.innerPackagingHeight">
+            <template #append>mm</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="是否打托">
+          <el-select v-model="data.logisticsForm.isHit" placeholder="Select">
+            <el-option label="是" value="1" />
+            <el-option label="否" value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="每托盘箱数">
+          <el-input v-model="data.logisticsForm.boxesPerPallet">
+            <template #append> 箱/托</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="单箱包装数量">
+          <el-input v-model="data.logisticsForm.quantityPerBox">
+            <template #append> PCS/箱</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="data.logisticsForm.remarks" type="textarea" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="data.dialogFormVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="data.dialogFormVisible = false">Confirm</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -63,8 +139,24 @@ import { ElMessage } from "element-plus"
  */
 const data = reactive({
   tableData: [],
-  auditFlowId: 0,
-  productId: 0
+  auditFlowId: 1,
+  productId: 1,
+  dialogFormVisible: false,
+  logisticsForm: {
+    outerPackagingLength: "",
+    outerPackagingWidth: "",
+    outerPackagingHeight: "",
+    singleProductWeight: "",
+    singleBoxQuantity: "",
+    innerPackagingLength: "",
+    innerPackagingWidth: "",
+    innerPackagingHeight: "",
+    isHit: "",
+    boxesPerPallet: "",
+    quantityPerBox: "",
+    remarks: "",
+    pictureId: ""
+  }
 })
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')

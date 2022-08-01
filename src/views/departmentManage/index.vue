@@ -187,6 +187,7 @@ const removeNode = (node: Node, data: Tree[]) => {
 }
 const getNodes = async () => {
   // 获取根节点
+  data.treeData = []
   try {
     let res: any = await getRootDepartment()
     res.result.items.forEach((item: Tree) => {

@@ -1,17 +1,23 @@
 <template>
   <div class="bom-loss">
-    <h5>bom损耗率表单</h5>
-    <el-table :data="data.bomLossData" border style="width: 100%" height="500">
-      <el-table-column prop="categoryName" label="物料大类" width="180" />
-      <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
-        <template #default="{ row }">
-          <el-input v-model="row.yearList[index].bomLoss" />
-        </template>
-      </el-table-column>
-    </el-table>
-    <div style="float: right; margin-top: 20px">
-      <el-button type="primary" @click="submit">提交</el-button>
-    </div>
+    <el-card class="card">
+      <template #header>
+        <div class="card-header">
+          <span>bom损耗率表单</span>
+        </div>
+      </template>
+      <el-table :data="data.bomLossData" border style="width: 100%" height="500">
+        <el-table-column prop="categoryName" label="物料大类" width="180" />
+        <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
+          <template #default="{ row }">
+            <el-input v-model="row.yearList[index].bomLoss" />
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="float: right; margin: 20px 0">
+        <el-button type="primary" @click="submit">提交</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -29,7 +35,7 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
  */
 const data = reactive({
   bomLossData: [],
-  years: [2022, 2023]
+  years: [2022, 2023, 2024]
 })
 
 const submit = () => {}
@@ -46,4 +52,8 @@ defineExpose({
   ...toRefs(data)
 })
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.card {
+  margin: 10px 0;
+}
+</style>

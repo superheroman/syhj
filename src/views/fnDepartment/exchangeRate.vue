@@ -48,14 +48,14 @@
           <el-form-item label="汇率值">
             <el-input
               v-model="item.value"
-              placeholder="Please input"
+              placeholder="请输入汇率"
               v-for="(item, index) in data.editForm.exchangeRateValue"
               :key="index"
               style="margin-bottom: 20px"
             >
               <template #prepend>
                 <!-- <el-date-picker v-model="item.year" type="year" placeholder="Pick a year" value-format="YYYY" /> -->
-                <el-input v-model="item.year" />
+                <el-input v-model="item.year" placeholder="请输入年份" />
               </template>
               <template #append>
                 <el-button-group>
