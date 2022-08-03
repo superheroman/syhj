@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { SaveProductionControlInfo } from "./data.type"
+import { SaveProductionControlInfo, productParams } from "./data.type"
 
 /** 获取年份 */
 export function getYears(auditFlowId: number) {
@@ -28,5 +28,24 @@ export function getPcsByPriceEvaluationId(priceEvaluationId: number) {
     data: {
       priceEvaluationId
     }
+  })
+}
+
+export function getSor(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/ProductionControl/GetSorFileId",
+    method: "get",
+    data: {
+      auditFlowId
+    },
+    responseType: "blob"
+  })
+}
+
+export function getProductFreight(data: productParams) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/PostProductDevelopmentInput",
+    method: "post",
+    data
   })
 }

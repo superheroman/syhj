@@ -1,7 +1,7 @@
 <template>
   <div class="pm-department">
     <div class="pm-department__btn-container">
-      <el-button type="primary">SOR查看</el-button>
+      <el-button type="primary" @click="getSorFile">SOR查看</el-button>
       <el-button type="primary" @click="data.dialogFormVisible = true">查看物流&包装基础数据</el-button>
     </div>
     <el-card>
@@ -111,8 +111,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="data.dialogFormVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="data.dialogFormVisible = false">Confirm</el-button>
+          <el-button @click="data.dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="data.dialogFormVisible = false">确认</el-button>
         </span>
       </template>
     </el-dialog>
@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import { getYears, saveProductionControl, getPcsByPriceEvaluationId } from "./service"
+import { getYears, saveProductionControl, getPcsByPriceEvaluationId, getSor, getProductFreight } from "./service"
 import { ElMessage } from "element-plus"
 
 // import { useRoute, useRouter } from "vue-router"
@@ -195,10 +195,29 @@ onMounted(async () => {
     })
   }
   console.log(result)
+  // 获取运费信息
+  let res: any = await getProductFreight({ auditFlowId: 1, productId: 1 })
+  data.logisticsForm = res.result
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
 
+const getSorFile = async () => {
+  let res: any = await getSor(0)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = "sor.xlsx"
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+}
 const submit = () => {
   let { auditFlowId, productId } = data
   let infoList = data.tableData.map((item) => item)
