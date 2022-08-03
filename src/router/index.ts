@@ -334,6 +334,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/quoteAnalysis",
+    redirect: "/quoteAnalysis/index",
+    component: Layout,
+    children: [
+      {
+        path: "/quoteAnalysis/index",
+        component: () => import("@/views/quoteAnalysis/index.vue"),
+        name: "quoteAnalysis",
+        meta: {
+          title: "报价分析看板"
+        }
+      }
+    ]
+  },
+  {
     path: "/nre",
     redirect: "/nre/nreProjectManageMent",
     component: Layout,
