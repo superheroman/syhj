@@ -4,16 +4,8 @@
       <template #header> 营销部 - 业务员 </template>
       <el-table :data="mouldInventoryData" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
         <el-table-column type="index" width="50" />
-        <el-table-column label="表单名称" width="180">
-          <template #default="{ row }">
-            <el-input v-model="row.formName" />
-          </template>
-        </el-table-column>
-        <el-table-column label="核价金额" width="180">
-          <template #default="{ row }">
-            <el-input v-model="row.pricingMoney" type="number" :formatter="transformNumber" :min="0" />
-          </template>
-        </el-table-column>
+        <el-table-column label="费用名称" width="180" />
+        <el-table-column prop="pricingMoney" label="核价金额" width="180" />
         <el-table-column label="报价系数" width="180">
           <template #default="{ row }">
             <el-input v-model="row.offerCoefficient" type="number" :formatter="transformNumber" :min="0" />
@@ -21,7 +13,7 @@
         </el-table-column>
         <el-table-column label="报价金额" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.offerMoney" type="number" :formatter="transformNumber" :min="0" />
+            {{ row.pricingMoney * row.offerCoefficient }}
           </template>
         </el-table-column>
         <el-table-column label="备注" width="180">
