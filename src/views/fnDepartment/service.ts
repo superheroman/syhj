@@ -6,7 +6,8 @@ import {
   GrossMarginPage,
   GrossMarginParams,
   QualityCostProportionEntryInfo,
-  ManufacturingCostsInfo
+  ManufacturingCostsInfo,
+  RateEntryDto
 } from "./data.type"
 
 /** 查询汇率 */
@@ -71,7 +72,6 @@ export function getGrossMargin(data: GrossMarginPage) {
     data
   })
 }
-
 /** 获取质量成本比例录入 */
 export function getQualityCost() {
   return request({
@@ -102,5 +102,22 @@ export function getManufacturingCost() {
   return request({
     url: "/api/services/app/FinanceDepartmentInput/GetManufacturingCost",
     method: "get"
+  })
+}
+
+/** 获取费率录入 */
+export function GetRateEntry(): Promise<any> {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/GetRateEntry",
+    method: "get"
+  })
+}
+
+/** 保存费率录入 */
+export function SaveRateEntryInput(data: RateEntryDto): Promise<any> {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/SaveRateEntryInput",
+    method: "post",
+    data
   })
 }

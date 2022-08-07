@@ -262,6 +262,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "全生命周期维护"
         }
+      },
+      {
+        path: "/fnDepartment/rateEntry",
+        component: () => import("@/views/fnDepartment/rateEntry.vue"),
+        name: "rateEntry",
+        meta: {
+          title: "费率录入"
+        }
       }
     ]
   },
