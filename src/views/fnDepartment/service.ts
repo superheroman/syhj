@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { RatePage, RateItem, UnitPage, GrossMarginPage, GrossMarginParams } from "./data.type"
+import { RatePage, RateItem, UnitPage, GrossMarginPage, GrossMarginParams, RateEntryDto } from "./data.type"
 
 /** 查询汇率 */
 export function getExchangeRate(data: RatePage) {
@@ -60,6 +60,23 @@ export function getGrossMargin(data: GrossMarginPage) {
   return request({
     url: "/api/services/app/UnitPriceLibrary/GetGrossMargin",
     method: "get",
+    data
+  })
+}
+
+/** 获取费率录入 */
+export function GetRateEntry(): Promise<any> {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/GetRateEntry",
+    method: "get"
+  })
+}
+
+/** 获取费率录入 */
+export function SaveRateEntryInput(data: RateEntryDto): Promise<any> {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/SaveRateEntryInput",
+    method: "post",
     data
   })
 }
