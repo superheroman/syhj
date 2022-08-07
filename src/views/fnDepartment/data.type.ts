@@ -44,3 +44,28 @@ export interface GrossMarginParams {
 export interface GrossMarginItemVal {
   value: number | string | null
 }
+
+/**
+ * QualityCostProportionEntryInfo
+ */
+export interface QualityCostProportionEntryInfo {
+  isFirst?: boolean
+  lastModificationTime?: Date | null
+  lastModifierUserId?: number | null
+  rate?: number
+  year?: null | string
+}
+
+export interface ManufacturingCostsItem {
+  monthlyWorkingDays?: number | null | string
+  averageWage?: number | null | string
+  workingHours?: number | null | string
+  rateOfMobilization?: number | null | string
+  usefulLifeOfFixedAssets?: number | null | string
+  dailyShift?: number | null | string
+  year?: number | null | string
+}
+
+export interface ManufacturingCostsInfo {
+  manufacturingCosts: ManufacturingCostsItem[]
+}

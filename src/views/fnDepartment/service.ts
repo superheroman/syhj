@@ -1,5 +1,13 @@
 import { request } from "@/utils/service"
-import { RatePage, RateItem, UnitPage, GrossMarginPage, GrossMarginParams } from "./data.type"
+import {
+  RatePage,
+  RateItem,
+  UnitPage,
+  GrossMarginPage,
+  GrossMarginParams,
+  QualityCostProportionEntryInfo,
+  ManufacturingCostsInfo
+} from "./data.type"
 
 /** 查询汇率 */
 export function getExchangeRate(data: RatePage) {
@@ -61,5 +69,38 @@ export function getGrossMargin(data: GrossMarginPage) {
     url: "/api/services/app/UnitPriceLibrary/GetGrossMargin",
     method: "get",
     data
+  })
+}
+
+/** 获取质量成本比例录入 */
+export function getQualityCost() {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/GetQualityCost",
+    method: "get"
+  })
+}
+
+/** 保存质量成本比例录入 */
+export function saveQualityCost(data: QualityCostProportionEntryInfo[]) {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/SaveQualityCost",
+    method: "post",
+    data
+  })
+}
+
+/** 保存制造成本里计算字段参数维护*/
+export function saveManufacturingCost(data: ManufacturingCostsInfo) {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/SaveManufacturingCost",
+    method: "post",
+    data
+  })
+}
+/** 获取制造成本里计算字段参数维护*/
+export function getManufacturingCost() {
+  return request({
+    url: "/api/services/app/FinanceDepartmentInput/GetManufacturingCost",
+    method: "get"
   })
 }
