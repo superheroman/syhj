@@ -254,6 +254,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "单价库导入"
         }
+      },
+      {
+        path: "/fnDepartment/rateEntry",
+        component: () => import("@/views/fnDepartment/rateEntry.vue"),
+        name: "rateEntry",
+        meta: {
+          title: "费率录入"
+        }
       }
     ]
   },

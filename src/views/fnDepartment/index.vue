@@ -1,29 +1,5 @@
 <template>
   <div class="fn-department">
-    <h6>费率录入</h6>
-    <el-table :data="tableData" style="width: 100%; margin-top: 25px" border>
-      <el-table-column label="年份" prop="name" />
-      <el-table-column label="直接制造率">
-        <template #default="{ row }">
-          <el-input v-model="row.val" />
-        </template>
-      </el-table-column>
-      <el-table-column label="间接人工率">
-        <template #default="{ row }">
-          <el-input v-model="row.val" />
-        </template>
-      </el-table-column>
-      <el-table-column label="间接折旧率">
-        <template #default="{ row }">
-          <el-input v-model="row.val" />
-        </template>
-      </el-table-column>
-      <el-table-column label="间接制造率">
-        <template #default="{ row }">
-          <el-input v-model="row.val" />
-        </template>
-      </el-table-column>
-    </el-table>
     <h6>质量成本比例录入</h6>
     <el-table :data="tableData" style="width: 100%; margin-top: 25px" border>
       <el-table-column label="环境感知">
