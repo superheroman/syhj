@@ -20,3 +20,8 @@ export interface ProductionControlInfo {
   storageExpenses?: number
   year?: null | string
 }
+
+export interface productParams {
+  auditFlowId: number
+  productId: number
+}

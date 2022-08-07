@@ -224,11 +224,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "/fnDepartment/index",
-        component: () => import("@/views/fnDepartment/index.vue"),
-        name: "fnDepartment",
+        path: "/fnDepartment/qualityCost",
+        component: () => import("@/views/fnDepartment/qualityCost.vue"),
+        name: "qualityCost",
         meta: {
-          title: "财务参数管理"
+          title: "质量成本比例录入"
         }
       },
       {
@@ -253,6 +253,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "unitPriceImport",
         meta: {
           title: "单价库导入"
+        }
+      },
+      {
+        path: "/fnDepartment/fulllifeCycle",
+        component: () => import("@/views/fnDepartment/fulllifeCycle.vue"),
+        name: "fulllifeCycle",
+        meta: {
+          title: "全生命周期维护"
         }
       },
       {
