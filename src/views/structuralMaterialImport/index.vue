@@ -12,7 +12,7 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="downLoadTemplate">结构版模版下载</el-button>
+          <el-button type="primary" @click="downLoadTemplate">结构料模版下载</el-button>
         </el-form-item>
         <el-form-item label="">
           <el-upload
@@ -124,7 +124,7 @@
 import { reactive } from "vue"
 import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
-import { SaveStructionBom, CommonDownloadFile, SaveBOM } from "@/api/bom"
+import { SaveStructionBom, CommonDownloadFile, SaveBOM, getBomTemplate } from "@/api/bom"
 const data = reactive({
   tableDataList: [
     [
@@ -183,7 +183,8 @@ const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
 }
 
 const downLoadTemplate = async () => {
-  let res: any = await CommonDownloadFile(1)
+  // let res: any = await CommonDownloadFile(1)
+  let res: any = await getBomTemplate()
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
