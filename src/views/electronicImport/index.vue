@@ -111,7 +111,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
         type: "error"
       })
     } else {
-      data.tableData = res.result
+      data.tableData = res.result.electronicBomDtos
     }
   }
 }
