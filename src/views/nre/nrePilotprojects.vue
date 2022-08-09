@@ -38,11 +38,26 @@
             <el-input v-model="row.quantity" type="number" :min="0" :formatter="transformNumber" />
           </template>
         </el-table-column>
-        <el-table-column label="时间" width="250">
+        <el-table-column label="时间-摸底" width="180">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.dataThoroughly" type="date" />
+          </template>
+        </el-table-column>
+        <el-table-column label="时间-DV" width="180">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.dataDV" type="date" />
+          </template>
+        </el-table-column>
+        <el-table-column label="时间-PV" width="180">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.dataPV" type="date" />
+          </template>
+        </el-table-column>
+        <!-- <el-table-column label="时间" width="250">
           <template #default="{ row }">
             <el-date-picker size="small" v-model="row.time" type="datetime" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- <el-table-column label="时间-摸底" width="180">
         <template #default="{ row }">
           <el-input v-model="row.time" />

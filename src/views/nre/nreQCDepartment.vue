@@ -46,17 +46,17 @@
         </el-table-column>
         <el-table-column label="时间-摸底" width="180">
           <template #default="{ row }">
-            <el-date-picker size="small" v-model="row.dataThoroughly" type="datetime" />
+            <el-date-picker v-model="row.dataThoroughly" type="date" />
           </template>
         </el-table-column>
         <el-table-column label="时间-DV" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.dataDV" />
+            <el-date-picker v-model="row.dataDV" type="date" />
           </template>
         </el-table-column>
         <el-table-column label="时间-PV" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.dataPV" />
+            <el-date-picker v-model="row.dataPV" type="date" />
           </template>
         </el-table-column>
         <el-table-column label="单位" width="180">
@@ -123,7 +123,7 @@
             <el-input v-model="row.remark" />
           </template>
         </el-table-column>
-        <el-table-column label="操作" fixed="right" width="85px">
+        <el-table-column label="操作" fixed="right">
           <template #default="{ $index }">
             <el-button @click="deleteQaqcDepartmentsData($index)" type="danger">删除</el-button>
           </template>

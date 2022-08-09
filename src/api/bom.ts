@@ -251,3 +251,11 @@ export function GetElectronicBom() {
     method: "post"
   })
 }
+
+export function getBomTemplate() {
+  return request({
+    url: "/api/services/app/FileCommonService/DownloadStructionBom",
+    method: "post",
+    responseType: "blob"
+  })
+}

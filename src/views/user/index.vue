@@ -92,6 +92,12 @@
         <el-form-item label="角色选择" :label-width="data.formLabelWidth">
           <el-select v-model="data.userForm.roleNames" />
         </el-form-item>
+        <el-form-item label="部门" :label-width="data.formLabelWidth">
+          <!-- <el-cascader v-model="data.userForm.departmentId" :options="data.departmentOptions" /> -->
+          <el-select v-model="data.userForm.departmentId">
+            <el-option v-for="item in data.departmentOptions" :key="item.id" :label="item.name" :value="item.id" />
+          </el-select>
+        </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -154,6 +160,7 @@ import {
   changePasswordAd,
   DownloadFile
 } from "./service"
+import { getRootDepartment } from "@/api/departmentManage"
 import type { FormInstance } from "element-plus"
 const userForm = ref<FormInstance>()
 /**
@@ -192,7 +199,8 @@ const data = reactive({
     emailAddress: "",
     isActive: true,
     roleNames: [],
-    password: ""
+    password: "",
+    departmentId: ""
   },
   psForm: {
     currentPassword: "",
@@ -201,7 +209,8 @@ const data = reactive({
   psResetForm: {
     adminPassword: "",
     newPassword: ""
-  }
+  },
+  departmentOptions: [] as any[]
 })
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -355,8 +364,12 @@ const downLoadTemplate = async () => {
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-onMounted(() => {
+onMounted(async () => {
   getList()
+  let res: any = await getRootDepartment()
+  res.result.items.forEach((item: any) => {
+    data.departmentOptions.push(item)
+  })
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

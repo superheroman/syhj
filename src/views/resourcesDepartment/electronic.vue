@@ -96,7 +96,10 @@
         <el-table-column label="操作" fixed="right" width="150">
           <template #default="scope">
             <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
-            <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button>
+            <el-button class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
+              计算
+            </el-button>
+            <!-- <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button> -->
             <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
               >修改</el-button
             >
@@ -104,9 +107,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-row justify="end">
+      <!-- <el-row justify="end">
         <el-button class="margin-top" @click="handleCalculation" type="primary"> 计算 </el-button>
-      </el-row>
+      </el-row> -->
     </el-card>
   </div>
 </template>
@@ -187,11 +190,11 @@ const handleEdit = (row: any, isEdit: boolean) => {
 }
 
 // 计算
-const handleCalculation = async () => {
+const handleCalculation = async (row: any, index: number) => {
   try {
-    const { success, result } = await PostElectronicMaterialCalculate(electronicBomList.value)
+    const { success, result } = await PostElectronicMaterialCalculate(row)
     if (!success && !result.length) throw Error()
-    electronicBomList.value = result || []
+    electronicBomList.value[index] = result[0]
     ElMessage.success("计算成功~")
     console.log(success, "handleSubmit")
   } catch (err) {

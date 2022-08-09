@@ -112,7 +112,7 @@ import { reactive } from "vue"
 import type { UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import { DownloadFile } from "@/api/bom"
+import { downloadWorkingHoursInfo } from "./service"
 const data = reactive<{
   tableData: any
   retrospectPart: any
@@ -162,7 +162,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
 }
 
 const downLoadTemplate = async () => {
-  let res: any = await DownloadFile(Number(data.downloadSetForm.number))
+  let res: any = await downloadWorkingHoursInfo()
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)

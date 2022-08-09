@@ -128,7 +128,7 @@ export const mockData = [
 export const mock2Data = [
   {
     categoryName: "物料大类",
-    currency: "币种",
+    currency: "人民币",
     dimensionalAccuracyRemark: "关键尺寸精度及重要要求",
     drawingNumName: "图号名称",
     id: 123,
