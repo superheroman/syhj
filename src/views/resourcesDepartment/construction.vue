@@ -16,14 +16,14 @@
           <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
           <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
           <el-table-column prop="currency" label="币种" width="150" />
-          <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
+          <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
               <el-input v-if="scope.row.isEdit" :formatter="transformNumber" v-model="scope.row.materialsSystemPrice" />
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table-column>
-        <el-table-column label="sop" align="center">
+        <el-table-column label="单价" align="center">
           <el-table-column
             v-for="(item, index) in allColums?.sop"
             :key="item"
