@@ -70,17 +70,17 @@
         height="300"
       >
         <el-table-column type="index" width="50" />
-        <el-table-column label="费用名称" width="150">
+        <el-table-column label="费用名称">
           <template #default="{ row }">
             <el-input v-model="row.rroject" />
           </template>
         </el-table-column>
-        <el-table-column label="费用" width="150">
+        <el-table-column label="费用">
           <template #default="{ row }">
             <el-input v-model="row.cost" type="number" :min="0" :formatter="transformNumber" />
           </template>
         </el-table-column>
-        <el-table-column label="备注" width="150">
+        <el-table-column label="备注">
           <template #default="{ row }">
             <el-input v-model="row.remark" />
           </template>
@@ -104,7 +104,14 @@
         <el-table-column type="index" width="50" />
         <el-table-column label="事由" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.reasonsId" />
+            <el-select v-model="row.reasonsId">
+              <el-option
+                v-for="item in data.nreResonOptions"
+                :key="item.id"
+                :label="item.displayName"
+                :value="item.id"
+              />
+            </el-select>
           </template>
         </el-table-column>
         <el-table-column label="人数" width="150">
@@ -127,7 +134,7 @@
             <el-input v-model="row.cost" type="number" :min="0" :formatter="transformNumber" />
           </template>
         </el-table-column>
-        <el-table-column label="备注" width="150">
+        <el-table-column label="备注">
           <template #default="{ row }">
             <el-input v-model="row.remark" />
           </template>
@@ -152,14 +159,15 @@ import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.t
 import { PostProjectManagement } from "./common/request"
 import { transformNumber } from "../resourcesDepartment/common/util"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
-
+import { getDictionaryAndDetail } from "@/api/dictionary"
 /**
  * 数据部分
  */
 const data = reactive({
   handPieceCost: [{ partName: "", partNumber: "", unitPrice: 1, quantity: 4, cost: 4 }] as HandPieceCostModel[],
   restsCost: [] as RestsCostModel[],
-  travelExpense: [] as TravelExpenseModel[]
+  travelExpense: [] as TravelExpenseModel[],
+  nreResonOptions: [] as any[]
 })
 
 const deletehandboardCost = (i: number) => {
@@ -209,7 +217,9 @@ const submit = async () => {
   }
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+  let nreReasons: any = await getDictionaryAndDetail("NreReasons") //落地工厂
+  data.nreResonOptions = nreReasons.result.financeDictionaryDetailList
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
