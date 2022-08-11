@@ -120,7 +120,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
 import { getYears, saveProductionControl, getPcsByPriceEvaluationId, getSor, getProductFreight } from "./service"
 import { ElMessage } from "element-plus"
 
@@ -158,6 +158,7 @@ const data = reactive({
     pictureId: ""
   }
 })
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
@@ -165,7 +166,7 @@ onMounted(async () => {
   let { result } = (await getYears(1)) as any
   let { result: monthEndDemand } = (await getPcsByPriceEvaluationId(1)) as any
   result = [2022, 2023, 2024]
-  console.log(monthEndDemand)
+  console.log(monthEndDemand, "monthEndDemand")
   let warpArr = [] as any[] //二维数组
   monthEndDemand.items.forEach((item: any) => {
     item.pcsYear.forEach((yearItem: any, index: number) => {
@@ -175,26 +176,42 @@ onMounted(async () => {
       warpArr[index].push(yearItem.quantity)
     })
   })
-  let yearValue = []
+  let yearValue: any[] = [1000, 2000, 3000]
+
+  // 1.手工录入[单PCS包装价格].[运费].[仓储费用]
+  // 2.[月需求量]按照 sop年的销售数量除以12，计算得出
+  // 3.[单pcs运输费=（运费+仓储费）/月需求量]根据公式计算得出
+  // 4.[总物流成本=包装价格+单CS运输费]根据公式计算得出
   warpArr.forEach((arr, index) => {
     yearValue[index] = arr.reduce((pre: number, cur: number) => {
       return pre + cur
     })
   })
   if (result?.length > 0) {
-    data.tableData = result.map((year: number[]) => {
+    data.tableData = result.map((year: number[], index: number) => {
       return {
         year,
         perPackagingPrice: "",
         freight: "",
         storageExpenses: "",
-        monthEndDemand: "",
+        monthEndDemand: yearValue[index] / 12, //月度需求量
         perFreight: "",
         perTotalLogisticsCost: ""
       }
     })
   }
   console.log(result)
+  watch(
+    data.tableData,
+    (val) => {
+      val.forEach((row: any) => {
+        row.perFreight = (Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand
+
+        row.perTotalLogisticsCost = Number(row.perPackagingPrice) + Number(row.perFreight)
+      })
+    },
+    { deep: true }
+  )
   // 获取运费信息
   let res: any = await getProductFreight({ auditFlowId: 1, productId: 1 })
   data.logisticsForm = res.result

@@ -167,7 +167,7 @@
         <div class="demand-apply__btn-container">
           <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增模组</el-button>
         </div>
-        <el-table :data="moduleTableData" style="width: 100%" border :summary-method="getSummaries">
+        <el-table :data="moduleTableData" style="width: 100%" border>
           <el-table-column type="index" width="50" />
           <el-table-column label="客户零件号" width="180">
             <template #default="{ row }">
@@ -658,7 +658,6 @@ const getSummaries = (param: SummaryMethodProps) => {
       arr[i]?.push(Number(year.quantity))
     })
   })
-  console.log(arr, "arr")
   columns.forEach((column, index) => {
     if (index === 0) {
       sums[index] = "合计"
@@ -673,6 +672,18 @@ const getSummaries = (param: SummaryMethodProps) => {
       sums[index] = "N/A"
     }
   })
+  let sumArr = [] as number[]
+  sums.forEach((sum) => {
+    if (typeof sum === "number") {
+      sumArr.push(sum)
+    }
+  })
+  if (sumArr.length > 0) {
+    state.carAnnualTotal = sumArr.reduce((prev, curr) => {
+      return prev + curr
+    })
+  }
+  console.log(sums, "sums", state.carAnnualTotal)
   return sums
 }
 let userStorage = window.sessionStorage.getItem("user")
@@ -723,6 +734,7 @@ const state = reactive({
     reason: ""
   },
   yearCols: [] as Number[],
+  carAnnualTotal: 0, //列年度总量，把sum取出
   customerNatureOptions: [] as unknown as Options[],
   terminalNatureOptions: [] as unknown as Options[],
   quotationTypeOptions: [] as unknown as Options[],
@@ -878,7 +890,19 @@ const addProduct = () => {
     installationPosition: ""
   }
   productTableData.push(Object.assign(_.cloneDeep(productTableData[0]), newLineP))
-  moduleTableData.push(_.cloneDeep(moduleTableData[0]))
+  let moduleTableDataNew = Object.assign(_.cloneDeep(moduleTableData[0]), {
+    partNumber: "",
+    product: "",
+    productType: 0,
+    marketShare: 0,
+    moduleCarryingRate: 0,
+    singleCarProductsQuantity: 0,
+    modelTotal: 0
+  })
+  moduleTableDataNew.modelCountYearList.forEach((item) => {
+    item.quantity = ""
+  })
+  moduleTableData.push(moduleTableDataNew)
   // productTableData.push(_.cloneDeep(productTableData[0]))
   // moduleTableData.push(newLineM)
   // productTableData.push(newLineP)
@@ -941,6 +965,10 @@ watch(
   (val) => {
     val.forEach((item, index) => {
       productTableData[index].name = item.product
+      if (item.marketShare && item.moduleCarryingRate && item.singleCarProductsQuantity && state.carAnnualTotal) {
+        item.modelTotal =
+          (item.marketShare * item.moduleCarryingRate * item.singleCarProductsQuantity * state.carAnnualTotal) / 10000
+      }
     })
   },
   { deep: true }

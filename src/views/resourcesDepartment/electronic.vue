@@ -192,7 +192,7 @@ const handleEdit = (row: any, isEdit: boolean) => {
 // 计算
 const handleCalculation = async (row: any, index: number) => {
   try {
-    const { success, result } = await PostElectronicMaterialCalculate(row)
+    const { success, result } = await PostElectronicMaterialCalculate([row])
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = result[0]
     ElMessage.success("计算成功~")
