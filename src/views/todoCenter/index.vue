@@ -1,11 +1,22 @@
 <template>
   <div class="todo-center">
-    <!-- <el-button type="primary">工序添加</el-button> -->
-    <!-- <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="date" label="Date" width="180" />
-      <el-table-column prop="name" label="Name" width="180" />
-      <el-table-column prop="address" label="Address" />
-    </el-table> -->
+    <el-card>
+      <el-form :model="form" inline>
+        <el-form-item label="核报价项目名称">
+          <el-input v-model="form.quoteProjectName" />
+        </el-form-item>
+        <el-form-item label="核报价项目代码">
+          <el-input v-model="form.quoteProjectNumber" />
+        </el-form-item>
+        <el-form-item label="核报价流程版本">
+          <el-input v-model="form.quoteVersion" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="form.remarks" type="textarea" />
+        </el-form-item>
+      </el-form>
+      <el-button @click="saveNew" type="primary">新建</el-button>
+    </el-card>
     <div class="todo-center__body">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="待办" name="first">
@@ -33,8 +44,8 @@
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
-
+import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { savaNewAuditFlowInfo } from "./service"
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
 
@@ -45,6 +56,19 @@ const activeName = ref("first")
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
+}
+const form = reactive({
+  quoteProjectName: "",
+  quoteProjectNumber: "",
+  quoteVersion: "",
+  remarks: ""
+})
+const saveNew = async () => {
+  let res: any = await savaNewAuditFlowInfo(form)
+  console.log(res)
+  if (res.success) {
+    console.log(res.result)
+  }
 }
 /**
  * 仓库
