@@ -16,7 +16,12 @@
         </el-form-item>
       </el-form>
       <el-button @click="saveNew" type="primary">新建</el-button>
+      <div>
+        <span>已存在的auditFlowIds:</span>
+        <div v-for="number in auditFlowIds" :key="number">{{ number }}</div>
+      </div>
     </el-card>
+
     <div class="todo-center__body">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="待办" name="first">
@@ -45,31 +50,37 @@
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { savaNewAuditFlowInfo } from "./service"
+import { savaNewAuditFlowInfo, getAllAuditFlowIds } from "./service"
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
 
 import type { TabsPaneContext } from "element-plus"
-// import { Edit, View as IconView } from "@element-plus/icons-vue"
+import getQuery from "@/utils/getQuery"
 
 const activeName = ref("first")
-
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
 const form = reactive({
   quoteProjectName: "",
   quoteProjectNumber: "",
   quoteVersion: "",
   remarks: ""
 })
+let auditFlowIds = ref([])
 const saveNew = async () => {
   let res: any = await savaNewAuditFlowInfo(form)
-  console.log(res)
   if (res.success) {
     console.log(res.result)
+    geAuditFlowIds()
   }
 }
+const geAuditFlowIds = async () => {
+  let res: any = await getAllAuditFlowIds()
+  auditFlowIds.value = res.result
+}
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event)
+}
+
 /**
  * 仓库
  */
@@ -90,6 +101,9 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  geAuditFlowIds()
+  let a = getQuery()
+  console.log(a, "query")
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

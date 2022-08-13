@@ -131,8 +131,8 @@ const addCostData = () => {
 const submit = async () => {
   try {
     const res = await PostProductDepartment({
-      processId: 123,
-      productDepartmentModels: [{ ...data, partId: 123 }]
+      auditFlowId: 123,
+      productDepartmentModels: [{ ...data, productId: 123 }]
     })
     console.log(res, "[PostProductDepartment RES]")
   } catch (err) {

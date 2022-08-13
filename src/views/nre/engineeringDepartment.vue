@@ -245,10 +245,10 @@ const submit = async () => {
               cost: (item.unitPrice || 0) * (item.quantity || 0)
             }
           }),
-          partId: 123
+          productId: 123
         }
       ],
-      processId: 111
+      auditFlowId: 111
     })
     console.log(res, "RES")
   } catch (err) {

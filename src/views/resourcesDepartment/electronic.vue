@@ -176,7 +176,7 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
     const res = await PostElectronicMaterialEntering({
       isSubmit,
       electronicDtoList: [record],
-      processId: 123
+      auditFlowId: 123
     })
     console.log(res, "res")
   } catch (err) {

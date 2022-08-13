@@ -190,10 +190,10 @@ const addQaqcDepartmentsData = () => {
 const submit = async () => {
   try {
     const res = await PostQADepartment({
-      processId: 123,
+      auditFlowId: 123,
       qaDepartments: [
         {
-          partId: 123,
+          productId: 123,
           qaTestDepartments: data.qaTestDepartments.map((item) => ({
             ...item,
             cost: (item.unitPrice || 0) * (item.count || 0)

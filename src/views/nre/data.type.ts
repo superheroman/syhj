@@ -5,7 +5,7 @@ export interface NreProjectManageMentData {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * Nre核价 项目管理部 实体
    */
@@ -23,7 +23,7 @@ export interface ProjectManagementModel {
   /**
    * 零件的id
    */
-  partId?: number
+  productId?: number
   /**
    * 其他费用
    */
@@ -119,7 +119,7 @@ export interface NrePilotprojectsData {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * 实验费 实体类
    */
@@ -137,7 +137,7 @@ export interface ProductDepartmentModel {
   /**
    * 零件的id
    */
-  partId?: number
+  productId?: number
 }
 
 /**
@@ -181,7 +181,7 @@ export interface NreQCDepartmentData {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * 带零件id 的 品保录入模型
    */
@@ -195,7 +195,7 @@ export interface QADepartmentPartModel {
   /**
    * 零件的id
    */
-  partId?: number
+  productId?: number
   /**
    * 品保录入  项目制程QC量检具表 模型
    */
@@ -293,7 +293,7 @@ export interface ProductDepartmentModel {
   /**
    * 零件的id
    */
-  partId?: number
+  productId?: number
 }
 
 /**
@@ -333,7 +333,7 @@ export interface QADepartmentPartModel {
   /**
    * 零件的id
    */
-  partId?: number
+  productId?: number
   /**
    * 品保录入  项目制程QC量检具表 模型
    */
@@ -431,7 +431,7 @@ export interface ResourcesManagementModel {
   /**
    * 零件的id
    */
-  partId?: number
+  productId?: number
 }
 
 /**
@@ -493,7 +493,7 @@ export interface NreMarketingDepartmentModel {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * 备注
    */

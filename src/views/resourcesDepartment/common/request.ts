@@ -23,7 +23,7 @@ export function PostElectronicMaterialCalculate(data: ElectronicDto[]): any {
 export function PostElectronicMaterialEntering(data: {
   isSubmit: boolean
   electronicDtoList: ElectronicDto[]
-  processId: number
+  auditFlowId: number
 }): any {
   return request({
     url: "/api/services/app/ResourceEntering/PostElectronicMaterialEntering",
@@ -45,7 +45,7 @@ export function GetStructural(data: { id: number }): any {
 export function PostStructuralMemberEntering(data: {
   isSubmit: boolean
   structuralMaterialEntering: ConstructionModel[]
-  processId: number
+  auditFlowId: number
 }): any {
   return request({
     url: "/api/services/app/ResourceEntering/PostStructuralMemberEntering",

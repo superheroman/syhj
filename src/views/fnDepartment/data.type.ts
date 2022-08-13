@@ -56,19 +56,12 @@ export interface RateEntryDto {
  * 费率
  */
 export interface RateEntryInfo {
-  creationTime?: string
-  creatorUserId?: number | null
-  deleterUserId?: number | null
-  deletionTime?: string
   directManufacturingRate?: number
   id?: number
   indirectDepreciationRate?: number
   indirectLaborRate?: number
   indirectManufacturingRate?: number
-  isDeleted?: boolean
-  lastModificationTime?: string
-  lastModifierUserId?: number | null
-  year?: null | string
+  year?: null | string | number
 }
 /*
  * QualityCostProportionEntryInfo
@@ -88,6 +81,7 @@ export interface ManufacturingCostsItem {
   rateOfMobilization?: number | null | string
   usefulLifeOfFixedAssets?: number | null | string
   dailyShift?: number | null | string
+  vatRate?: number | null | string
   year?: number | null | string
 }
 

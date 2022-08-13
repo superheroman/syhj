@@ -124,7 +124,7 @@
 import { reactive } from "vue"
 import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
-import { SaveStructionBom, CommonDownloadFile, SaveBOM, getBomTemplate } from "@/api/bom"
+import { SaveStructionBom, SaveBOM, getBomTemplate } from "@/api/bom"
 const data = reactive({
   tableDataList: [
     [
@@ -169,7 +169,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
         type: "error"
       })
     } else {
-      data.tableData = res.result
+      data.tableData = res.result.structureBomDtos
     }
   }
 }
@@ -183,7 +183,6 @@ const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
 }
 
 const downLoadTemplate = async () => {
-  // let res: any = await CommonDownloadFile(1)
   let res: any = await getBomTemplate()
   const blob = res
   const reader = new FileReader()
@@ -201,7 +200,7 @@ const downLoadTemplate = async () => {
 }
 const submit = async () => {
   let params: SaveBOM = Object.assign(
-    { processNumber: "1", partNumber: "测试零件", structureBomDtos: data.tableData },
+    { auditFlowId: "1", partNumber: "测试零件", structureBomDtos: data.tableData },
     data.logisticsForm
   )
   let res: any = await SaveStructionBom(params)

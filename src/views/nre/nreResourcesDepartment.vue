@@ -61,11 +61,11 @@ const initFetch = async () => {
 
 const submit = async () => {
   await PostResourcesManagement({
-    processId: 123,
+    auditFlowId: 123,
     resourcesManagementModels: [
       {
         mouldInventory: data.mouldData,
-        partId: 123
+        productId: 123
       }
     ]
   })
@@ -74,11 +74,11 @@ const submit = async () => {
 const handleCalculation = async () => {
   try {
     const res = await PostCalculateMouldInventory({
-      processId: 123,
+      auditFlowId: 123,
       resourcesManagementModels: [
         {
           mouldInventory: data.mouldData,
-          partId: 123
+          productId: 123
         }
       ]
     })

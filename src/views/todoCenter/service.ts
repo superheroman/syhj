@@ -6,3 +6,9 @@ export function savaNewAuditFlowInfo(data: any) {
     data
   })
 }
+export function getAllAuditFlowIds() {
+  return request({
+    url: "/api/services/app/AuditFlow/GetAllAuditFlowIds",
+    method: "get"
+  })
+}

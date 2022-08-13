@@ -65,6 +65,9 @@ import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
 import { SaveElectronicBom, DownloadFile } from "@/api/bom"
+// import getQuery from "@/utils/getQuery"
+// let auditFlowId = 0
+// let productId = 0
 const data = reactive({
   activeIndex: 0,
   productList: [
@@ -134,7 +137,7 @@ const downLoadTemplate = async () => {
 }
 const submit = async () => {
   let res: any = await SaveElectronicBom({
-    processNumber: "1",
+    auditFlowId: "1",
     partNumber: "测试零件",
     electronicBomDtos: data.tableData
   })

@@ -175,7 +175,7 @@ const downLoadTemplate = async () => {
 }
 const submit = async () => {
   // let res: any = await SaveElectronicBom({
-  //   processNumber: "1",
+  //   auditFlowId: "1",
   //   partNumber: "测试零件",
   //   electronicBomDtos: data.tableData
   // })

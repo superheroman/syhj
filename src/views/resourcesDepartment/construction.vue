@@ -121,7 +121,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
     const res = await PostStructuralMemberEntering({
       isSubmit,
       structuralMaterialEntering: [record],
-      processId: 123
+      auditFlowId: 123
     })
     console.log(res, "res")
   } catch (err) {

@@ -317,6 +317,13 @@
               <el-input v-model="row.name" />
             </template>
           </el-table-column>
+          <el-table-column label="目标价" width="180" fixed="left">
+            <template #default="{ row }">
+              <el-input v-model="row.name">
+                <template #append>元</template>
+              </el-input>
+            </template>
+          </el-table-column>
           <el-table-column label="Sensor" width="400">
             <template #default="{ row }">
               <el-input v-model="row.sensor" placeholder="品牌/型号">

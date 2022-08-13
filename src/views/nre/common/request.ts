@@ -12,7 +12,7 @@ export function PostProjectManagement(data: {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * Nre核价 项目管理部 实体
    */
@@ -30,7 +30,7 @@ export function PostProductDepartment(data: {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * 实验费 实体类
    */
@@ -48,7 +48,7 @@ export function PostQADepartment(data: {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * 带零件id 的 品保录入模型
    */
@@ -66,7 +66,7 @@ export function PostResourcesManagement(data: {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * Nre核价  资源部录入 实体
    */
@@ -93,7 +93,7 @@ export function PostCalculateMouldInventory(data: {
   /**
    * 流程Id
    */
-  processId?: number
+  auditFlowId?: number
   /**
    * Nre核价  资源部录入 实体
    */
@@ -126,7 +126,7 @@ export function PostSalesDepartment(data: NreMarketingDepartmentModel[]): any {
 
 /**NRE费用模块 */
 
-export function GetPricingForm(data: { id: number; partId: number }): any {
+export function GetPricingForm(data: { id: number; productId: number }): any {
   return request({
     url: "/api/services/app/NrePricing/GetPricingForm",
     method: "get",
