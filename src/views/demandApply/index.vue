@@ -672,18 +672,18 @@ const getSummaries = (param: SummaryMethodProps) => {
       sums[index] = "N/A"
     }
   })
-  let sumArr = [] as number[]
+  state.sumArr = [] as number[]
   sums.forEach((sum) => {
     if (typeof sum === "number") {
-      sumArr.push(sum)
+      state.sumArr.push(sum)
     }
   })
-  if (sumArr.length > 0) {
-    state.carAnnualTotal = sumArr.reduce((prev, curr) => {
+  if (state.sumArr.length > 0) {
+    state.carAnnualTotal = state.sumArr.reduce((prev, curr) => {
       return prev + curr
     })
   }
-  console.log(sums, "sums", state.carAnnualTotal)
+  // console.log(sums, "sums", state.carAnnualTotal, state.sumArr)
   return sums
 }
 let userStorage = window.sessionStorage.getItem("user")
@@ -735,6 +735,7 @@ const state = reactive({
   },
   yearCols: [] as Number[],
   carAnnualTotal: 0, //列年度总量，把sum取出
+  sumArr: [] as number[],
   customerNatureOptions: [] as unknown as Options[],
   terminalNatureOptions: [] as unknown as Options[],
   quotationTypeOptions: [] as unknown as Options[],
@@ -755,12 +756,7 @@ const state = reactive({
   TypeSelectOptions: [] as unknown as Options[],
   ExchangeSelectOptions: [] as any
 })
-const fileList = ref<UploadUserFile[]>([
-  {
-    name: "food.jpeg",
-    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-  }
-])
+const fileList = ref<UploadUserFile[]>([])
 const yearCount = ref(0)
 
 const pcsYearQuantitySum = (row: Pcs) => {
@@ -921,7 +917,7 @@ const yearChange = (val: number | undefined) => {
     for (let j = 0; j < i; j++) {
       state.yearCols.push(Number(state.quoteForm.sopTime) + j)
     }
-    console.log(state.yearCols, "state.yearCols ")
+    // console.log(state.yearCols, "state.yearCols ")
   }
 }
 
@@ -955,8 +951,6 @@ watch(
         oneTimeDiscountRate: 0
       })
     })
-
-    console.log(pcsTableData)
   }
 )
 //同步产品名称
@@ -965,6 +959,14 @@ watch(
   (val) => {
     val.forEach((item, index) => {
       productTableData[index].name = item.product
+      moduleTableData.forEach((row) => {
+        row.modelCountYearList.forEach((item, index) => {
+          if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && state.sumArr[index]) {
+            item.quantity =
+              (row.marketShare * row.moduleCarryingRate * row.singleCarProductsQuantity * state.sumArr[index]) / 10000
+          }
+        })
+      })
       if (item.marketShare && item.moduleCarryingRate && item.singleCarProductsQuantity && state.carAnnualTotal) {
         item.modelTotal =
           (item.marketShare * item.moduleCarryingRate * item.singleCarProductsQuantity * state.carAnnualTotal) / 10000
@@ -1091,9 +1093,9 @@ const rateChange = (val: any) => {
 }
 onMounted(async () => {
   state.quoteForm.drafter = userInfo.name
-  state.quoteForm.drafterNumber = userInfo.userNumber
-  state.quoteForm.draftingCompany = userInfo.userCompany
-  state.quoteForm.draftingDepartment = userInfo.userDepartment
+  state.quoteForm.drafterNumber = userInfo.userNumber || "前端假数据"
+  state.quoteForm.draftingCompany = userInfo.userCompany || "前端假数据"
+  state.quoteForm.draftingDepartment = userInfo.userDepartment || "前端假数据"
   // 设置单据编号
   setNumber()
   try {
