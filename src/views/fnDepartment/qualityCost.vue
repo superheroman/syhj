@@ -107,8 +107,8 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let res: any = await getQualityCost()
-  if (res.result.qualityCosts.length > 0) {
-    data.tableData = res.result.qualityCosts
+  if (res.result.length > 0) {
+    data.tableData = res.result
   }
 })
 watchEffect(() => {})
