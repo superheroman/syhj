@@ -597,6 +597,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
+import getQuery from "@/utils/getQuery"
 // import { useRouter } from "vue-router"
 // import { Search } from "@element-plus/icons-vue"
 
@@ -731,7 +732,8 @@ const state = reactive({
     deadline: new Date(),
     projectManager: "",
     sorFile: [] as any,
-    reason: ""
+    reason: "",
+    auditFlowId: 5 //默认先给一个5
   },
   yearCols: [] as Number[],
   carAnnualTotal: 0, //列年度总量，把sum取出
@@ -1092,6 +1094,9 @@ const rateChange = (val: any) => {
   })
 }
 onMounted(async () => {
+  let query = getQuery()
+  let auditFlowId = Number(query.auditFlowId)
+  state.quoteForm.auditFlowId = auditFlowId || 5
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber.name || "0527"
   state.quoteForm.draftingCompany = userInfo.userCompany.name || "前端假数据"
