@@ -597,8 +597,8 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
-import getQuery from "@/utils/getQuery"
-// import { useRouter } from "vue-router"
+// import getQuery from "@/utils/getQuery"
+import { useRoute } from "vue-router"
 // import { Search } from "@element-plus/icons-vue"
 
 import type { UploadProps, UploadUserFile } from "element-plus"
@@ -760,7 +760,7 @@ const state = reactive({
 })
 const fileList = ref<UploadUserFile[]>([])
 const yearCount = ref(0)
-
+let route = useRoute()
 const pcsYearQuantitySum = (row: Pcs) => {
   let rowSum = 0
   row.pcsYearList.forEach((item: any) => {
@@ -778,10 +778,12 @@ const modelCountYearListQuantitySum = (row: modelCount) => {
   // row.modelTotal = sum
 }
 const save = async (formEl: FormInstance | undefined) => {
+  let { auditFlowId } = route.query
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       let { quoteForm } = state
+      quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : 5
       quoteForm.pcs = pcsTableData
       quoteForm.modelCount = moduleTableData
       quoteForm.requirement = requireTableData
@@ -797,6 +799,7 @@ const save = async (formEl: FormInstance | undefined) => {
       }
     } else {
       console.log("error submit!", fields)
+      console.log(state.quoteForm, "quoteForm")
     }
   })
 }
@@ -1094,9 +1097,9 @@ const rateChange = (val: any) => {
   })
 }
 onMounted(async () => {
-  let query = getQuery()
-  let auditFlowId = Number(query.auditFlowId)
-  state.quoteForm.auditFlowId = auditFlowId || 5
+  // let query = getQuery()
+  // let auditFlowId = Number(query.auditFlowId)
+  // console.log(auditFlowId)
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber.name || "0527"
   state.quoteForm.draftingCompany = userInfo.userCompany.name || "前端假数据"
