@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            action="http://139.196.216.165:44311/api/services/app/UnitPriceLibrary/PostUInitPriceForm"
+            action="api/services/app/UnitPriceLibrary/PostUInitPriceForm"
             :on-success="handleSuccess"
             :show-file-list="false"
           >

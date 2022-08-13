@@ -78,6 +78,7 @@ const years = (index: number) => {
   return yearList
 }
 onBeforeMount(() => {
+  // console.log(VITE_BASE_API)
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
   data.years = years(5)
   data.bomLossData.forEach((item) => {

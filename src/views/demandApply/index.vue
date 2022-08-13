@@ -577,7 +577,7 @@
             <el-form-item>
               <el-upload
                 v-model:file-list="fileList"
-                action="http://139.196.216.165:44311/api/services/app/FileCommonService/UploadFile"
+                action="api/services/app/FileCommonService/UploadFile"
                 :on-success="handleSuccess"
                 :on-change="handleFileChange"
                 multiple

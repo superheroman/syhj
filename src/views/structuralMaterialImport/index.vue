@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            action="http://139.196.216.165:44311/api/services/app/StructionBom/LoadExcel"
+            action="api/services/app/StructionBom/LoadExcel"
             :on-success="handleSuccess"
             :show-file-list="false"
           >
@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-upload
-            action="http://139.196.216.165:44311/api/services/app/FileCommonService/UploadFile"
+            action="api/services/app/FileCommonService/UploadFile"
             :on-success="handleSuccess3D"
             :show-file-list="false"
           >
