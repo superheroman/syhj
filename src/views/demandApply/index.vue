@@ -1093,9 +1093,9 @@ const rateChange = (val: any) => {
 }
 onMounted(async () => {
   state.quoteForm.drafter = userInfo.name
-  state.quoteForm.drafterNumber = userInfo.userNumber || "前端假数据"
-  state.quoteForm.draftingCompany = userInfo.userCompany || "前端假数据"
-  state.quoteForm.draftingDepartment = userInfo.userDepartment || "前端假数据"
+  state.quoteForm.drafterNumber = userInfo.userNumber.name || "0527"
+  state.quoteForm.draftingCompany = userInfo.userCompany.name || "前端假数据"
+  state.quoteForm.draftingDepartment = userInfo.userDepartment.name || "前端假数据"
   // 设置单据编号
   setNumber()
   try {
