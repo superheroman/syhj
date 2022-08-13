@@ -1,7 +1,7 @@
 <template>
   <el-card header="费率录入">
     <el-table :data="tableData" style="width: 100%; margin-top: 25px" border>
-      <el-table-column label="年份" prop="name" />
+      <el-table-column label="年份" prop="year" />
       <el-table-column label="直接制造率">
         <template #default="{ row }">
           <el-input v-model="row.directManufacturingRate" />
@@ -39,7 +39,14 @@ import { ElMessage } from "element-plus"
  * 数据部分
  */
 const tableData = ref<RateEntryInfo[]>([])
-
+const getYears = (index: number) => {
+  let sop = new Date().getFullYear()
+  let yearList: number[] = [sop]
+  for (let i = 1; i < index; i++) {
+    yearList.push(sop + i)
+  }
+  return yearList
+}
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
@@ -54,7 +61,20 @@ const initFetch = async () => {
   try {
     const { success, result } = await GetRateEntry()
     if (!success) throw Error()
-    tableData.value = result.rateEntryInfos || []
+    if (result.rateEntryInfos.length > 0) {
+      tableData.value = result.rateEntryInfos || []
+    } else {
+      let years = getYears(10)
+      years.forEach((year) => {
+        tableData.value.push({
+          directManufacturingRate: 0,
+          indirectLaborRate: 0,
+          indirectDepreciationRate: 0,
+          indirectManufacturingRate: 0,
+          year
+        })
+      })
+    }
   } catch (err: any) {
     console.log("[GetRateEntry Error]", err)
   }
