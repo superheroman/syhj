@@ -27,7 +27,7 @@ export interface ConstructionDto {
   /**
    * 零件的id
    */
-  partId?: null | string
+  productId?: null | string
   /**
    * 结构料
    */
@@ -153,7 +153,7 @@ export interface ElectronicDto {
   /**
    * 零件的id
    */
-  partId?: null | string
+  productId?: null | string
   /**
    * 确认人 Id
    */
@@ -195,5 +195,5 @@ export interface PartModel {
   /**
    * 零件的id
    */
-  partId?: null | string
+  productId?: null | string
 }

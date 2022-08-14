@@ -48,7 +48,7 @@ export interface SaveBOM {
   /**
    * 流程号
    */
-  processNumber?: null | string
+  auditFlowId?: null | string
   /**
    * 单箱包装数量
    */
@@ -111,7 +111,7 @@ export interface ElectronicBOMDto {
   /**
    * 流程号
    */
-  processNumber?: null | string
+  auditFlowId?: null | string
   sapItemName?: null | string
   /**
    * 物料编号（SAP）
@@ -174,7 +174,7 @@ export interface StructureBOMDto {
   /**
    * 流程号
    */
-  processNumber?: null | string
+  auditFlowId?: null | string
   /**
    * 物料编号（SAP）
    */

@@ -9,11 +9,12 @@
             {{ row.isFirst ? "是" : "否" }}
           </template>
         </el-table-column>
-        <el-table-column label="质量成本比例" width="180" />
-        <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
-          <template #default="{ row }">
-            <el-input v-model="row.qualityRateYearList[index].rate" />
-          </template>
+        <el-table-column label="质量成本比例" width="180">
+          <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
+            <template #default="{ row }">
+              <el-input v-model="row.qualityRateYearList[index].rate" />
+            </template>
+          </el-table-column>
         </el-table-column>
       </el-table>
       <div style="float: right; margin: 20px 0">
@@ -28,6 +29,8 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { getQualityCost, saveQualityCost } from "./service"
 import { QualityCostProportionEntryInfo } from "./data.type"
+import getQuery from "@/utils/getQuery"
+
 /**
  * 路由对象
  */
@@ -43,8 +46,39 @@ import { QualityCostProportionEntryInfo } from "./data.type"
 const data = reactive({
   tableData: [
     {
-      category: "string",
+      auditFlowId: 0,
+      category: "环境感知",
       isFirst: true,
+      qualityRateYearList: []
+    },
+    {
+      auditFlowId: 0,
+      category: "环境感知",
+      isFirst: false,
+      qualityRateYearList: []
+    },
+    {
+      auditFlowId: 0,
+      category: "外摄显像",
+      isFirst: true,
+      qualityRateYearList: []
+    },
+    {
+      auditFlowId: 0,
+      category: "外摄显像",
+      isFirst: false,
+      qualityRateYearList: []
+    },
+    {
+      auditFlowId: 0,
+      category: "舱内检测",
+      isFirst: true,
+      qualityRateYearList: []
+    },
+    {
+      auditFlowId: 0,
+      category: "舱内检测",
+      isFirst: false,
       qualityRateYearList: []
     }
   ],
@@ -63,15 +97,19 @@ const submit = async () => {
   console.log(res)
 }
 onBeforeMount(() => {
-  data.years = years(5)
+  data.years = years(10)
+  let query = getQuery()
+  let auditFlowId = Number(query.auditFlowId)
   data.tableData.forEach((item: any) => {
+    item.auditFlowId = auditFlowId || 5 //默认5
     item.qualityRateYearList = data.years.map((year) => ({ year, rate: "" }))
   })
 })
 onMounted(async () => {
   let res: any = await getQualityCost()
-  // data.tableData = res.result.qualityCosts || []
-  console.log(res)
+  if (res.result.length > 0) {
+    data.tableData = res.result
+  }
 })
 watchEffect(() => {})
 // 使用toRefs解构

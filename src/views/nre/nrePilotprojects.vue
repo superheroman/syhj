@@ -53,6 +53,11 @@
             <el-date-picker v-model="row.dataPV" type="date" />
           </template>
         </el-table-column>
+        <el-table-column label="单位" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.unit" type="number" :formatter="transformNumber" :min="0" />
+          </template>
+        </el-table-column>
         <!-- <el-table-column label="时间" width="250">
           <template #default="{ row }">
             <el-date-picker size="small" v-model="row.time" type="datetime" />
@@ -126,8 +131,8 @@ const addCostData = () => {
 const submit = async () => {
   try {
     const res = await PostProductDepartment({
-      processId: 123,
-      productDepartmentModels: [{ ...data, partId: 123 }]
+      auditFlowId: 123,
+      productDepartmentModels: [{ ...data, productId: 123 }]
     })
     console.log(res, "[PostProductDepartment RES]")
   } catch (err) {

@@ -200,21 +200,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: "/processManagement",
-    redirect: "/processManagement/index",
-    component: Layout,
-    children: [
-      {
-        path: "/processManagement/index",
-        component: () => import("@/views/processManagement/index.vue"),
-        name: "processManagement",
-        meta: {
-          title: "工序工时库管理"
-        }
-      }
-    ]
-  },
+  // {
+  //   path: "/processManagement",
+  //   redirect: "/processManagement/index",
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: "/processManagement/index",
+  //       component: () => import("@/views/processManagement/index.vue"),
+  //       name: "processManagement",
+  //       meta: {
+  //         title: "工序工时库管理"
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: "/fnDepartment",
     redirect: "/fnDepartment/index",

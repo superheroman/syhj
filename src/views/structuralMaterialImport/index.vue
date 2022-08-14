@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            action="http://139.196.216.165:44311/api/services/app/StructionBom/LoadExcel"
+            action="api/services/app/StructionBom/LoadExcel"
             :on-success="handleSuccess"
             :show-file-list="false"
           >
@@ -16,7 +16,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-upload
-            action="http://139.196.216.165:44311/api/services/app/FileCommonService/UploadFile"
+            action="api/services/app/FileCommonService/UploadFile"
             :on-success="handleSuccess3D"
             :show-file-list="false"
           >
@@ -169,7 +169,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
         type: "error"
       })
     } else {
-      data.tableData = res.result
+      data.tableData = res.result.structureBomDtos
     }
   }
 }
@@ -183,7 +183,6 @@ const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
 }
 
 const downLoadTemplate = async () => {
-  // let res: any = await CommonDownloadFile(1)
   let res: any = await getBomTemplate()
   const blob = res
   const reader = new FileReader()
@@ -201,7 +200,7 @@ const downLoadTemplate = async () => {
 }
 const submit = async () => {
   let params: SaveBOM = Object.assign(
-    { processNumber: "1", partNumber: "测试零件", structureBomDtos: data.tableData },
+    { auditFlowId: "1", partNumber: "测试零件", structureBomDtos: data.tableData },
     data.logisticsForm
   )
   let res: any = await SaveStructionBom(params)

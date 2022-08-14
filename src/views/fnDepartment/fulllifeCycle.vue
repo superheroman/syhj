@@ -33,6 +33,11 @@
             <el-input v-model="row.dailyShift" />
           </template>
         </el-table-column>
+        <el-table-column label="增值税率" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.vatRate" />
+          </template>
+        </el-table-column>
       </el-table>
       <div style="float: right; margin: 20px 0">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -82,7 +87,7 @@ const submit = async () => {
   }
 }
 onBeforeMount(() => {
-  data.years = years(5)
+  data.years = years(10)
   data.years.forEach((year) => {
     data.tableData.push({
       monthlyWorkingDays: 0,
@@ -91,14 +96,16 @@ onBeforeMount(() => {
       rateOfMobilization: 0,
       usefulLifeOfFixedAssets: 0,
       dailyShift: 0,
+      vatRate: 0,
       year
     })
   })
 })
 onMounted(async () => {
   let res: any = await getManufacturingCost()
-  data.tableData = res.result.manufacturingCosts || []
-  console.log(res)
+  if (res.result.manufacturingCosts.length > 0) {
+    data.tableData = res.result.manufacturingCosts || []
+  }
 })
 watchEffect(() => {})
 // 使用toRefs解构

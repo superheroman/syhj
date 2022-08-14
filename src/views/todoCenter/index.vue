@@ -1,11 +1,27 @@
 <template>
   <div class="todo-center">
-    <!-- <el-button type="primary">工序添加</el-button> -->
-    <!-- <el-table :data="tableData" border style="width: 100%">
-      <el-table-column prop="date" label="Date" width="180" />
-      <el-table-column prop="name" label="Name" width="180" />
-      <el-table-column prop="address" label="Address" />
-    </el-table> -->
+    <el-card>
+      <el-form :model="form" inline>
+        <el-form-item label="核报价项目名称">
+          <el-input v-model="form.quoteProjectName" />
+        </el-form-item>
+        <el-form-item label="核报价项目代码">
+          <el-input v-model="form.quoteProjectNumber" />
+        </el-form-item>
+        <el-form-item label="核报价流程版本">
+          <el-input v-model="form.quoteVersion" />
+        </el-form-item>
+        <el-form-item label="备注">
+          <el-input v-model="form.remarks" type="textarea" />
+        </el-form-item>
+      </el-form>
+      <el-button @click="saveNew" type="primary">新建</el-button>
+      <div>
+        <span>已存在的auditFlowIds:</span>
+        <div v-for="number in auditFlowIds" :key="number">{{ number }}</div>
+      </div>
+    </el-card>
+
     <div class="todo-center__body">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="待办" name="first">
@@ -33,19 +49,38 @@
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
-
+import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { savaNewAuditFlowInfo, getAllAuditFlowIds } from "./service"
 // import { useStore } from "vuex"
 // import { useRoute, useRouter } from "vue-router"
 
 import type { TabsPaneContext } from "element-plus"
-// import { Edit, View as IconView } from "@element-plus/icons-vue"
+import getQuery from "@/utils/getQuery"
 
 const activeName = ref("first")
+const form = reactive({
+  quoteProjectName: "",
+  quoteProjectNumber: "",
+  quoteVersion: "",
+  remarks: ""
+})
+let auditFlowIds = ref([])
+const saveNew = async () => {
+  let res: any = await savaNewAuditFlowInfo(form)
+  if (res.success) {
+    console.log(res.result)
+    geAuditFlowIds()
+  }
+}
+const geAuditFlowIds = async () => {
+  let res: any = await getAllAuditFlowIds()
+  auditFlowIds.value = res.result
+}
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
+
 /**
  * 仓库
  */
@@ -66,6 +101,9 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  geAuditFlowIds()
+  let a = getQuery()
+  console.log(a, "query")
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

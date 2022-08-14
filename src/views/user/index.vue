@@ -14,7 +14,7 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建用户</el-button>
       <el-button type="primary" @click="downLoadTemplate">用户导入模板下载</el-button>
       <el-upload
-        action="http://139.196.216.165:44311/api/services/app/User/ExcelImport"
+        action="api/services/app/User/ExcelImport"
         :on-success="handleSuccess"
         :show-file-list="false"
         style="margin-left: 20px"

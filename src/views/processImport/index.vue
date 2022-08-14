@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            action="http://139.196.216.165:44311/api/services/app/WorkingHours/UploadExcel"
+            action="api/services/app/WorkingHours/UploadExcel"
             :on-success="handleSuccess"
             :show-file-list="false"
           >
@@ -180,7 +180,7 @@ const downLoadTemplate = async () => {
 }
 const submit = () => {
   // let res: any = await SaveElectronicBom({
-  //   processNumber: "1",
+  //   auditFlowId: "1",
   //   partNumber: "测试零件",
   //   electronicBomDtos: data.tableData
   // })

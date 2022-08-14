@@ -13,7 +13,7 @@ export interface TableRow {
   lastModificationTime?: Date | null
   lastModifierUserId?: number | null
   partNumber?: null | string
-  processNumber?: null | string
+  auditFlowId?: null | string
   sapItemName?: null | string
   sapItemNum?: null | string
   typeName?: null | string

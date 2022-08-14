@@ -167,7 +167,7 @@
         <div class="demand-apply__btn-container">
           <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增模组</el-button>
         </div>
-        <el-table :data="moduleTableData" style="width: 100%" border :summary-method="getSummaries">
+        <el-table :data="moduleTableData" style="width: 100%" border>
           <el-table-column type="index" width="50" />
           <el-table-column label="客户零件号" width="180">
             <template #default="{ row }">
@@ -315,6 +315,13 @@
           <el-table-column label="产品名称" width="180" fixed="left">
             <template #default="{ row }">
               <el-input v-model="row.name" />
+            </template>
+          </el-table-column>
+          <el-table-column label="目标价" width="180" fixed="left">
+            <template #default="{ row }">
+              <el-input v-model="row.name">
+                <template #append>元</template>
+              </el-input>
             </template>
           </el-table-column>
           <el-table-column label="Sensor" width="400">
@@ -570,7 +577,7 @@
             <el-form-item>
               <el-upload
                 v-model:file-list="fileList"
-                action="http://139.196.216.165:44311/api/services/app/FileCommonService/UploadFile"
+                action="api/services/app/FileCommonService/UploadFile"
                 :on-success="handleSuccess"
                 :on-change="handleFileChange"
                 multiple
@@ -597,7 +604,8 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
-// import { useRouter } from "vue-router"
+// import getQuery from "@/utils/getQuery"
+import { useRoute } from "vue-router"
 // import { Search } from "@element-plus/icons-vue"
 
 import type { UploadProps, UploadUserFile } from "element-plus"
@@ -658,7 +666,6 @@ const getSummaries = (param: SummaryMethodProps) => {
       arr[i]?.push(Number(year.quantity))
     })
   })
-  console.log(arr, "arr")
   columns.forEach((column, index) => {
     if (index === 0) {
       sums[index] = "合计"
@@ -673,6 +680,18 @@ const getSummaries = (param: SummaryMethodProps) => {
       sums[index] = "N/A"
     }
   })
+  state.sumArr = [] as number[]
+  sums.forEach((sum) => {
+    if (typeof sum === "number") {
+      state.sumArr.push(sum)
+    }
+  })
+  if (state.sumArr.length > 0) {
+    state.carAnnualTotal = state.sumArr.reduce((prev, curr) => {
+      return prev + curr
+    })
+  }
+  // console.log(sums, "sums", state.carAnnualTotal, state.sumArr)
   return sums
 }
 let userStorage = window.sessionStorage.getItem("user")
@@ -720,9 +739,12 @@ const state = reactive({
     deadline: new Date(),
     projectManager: "",
     sorFile: [] as any,
-    reason: ""
+    reason: "",
+    auditFlowId: 5 //默认先给一个5
   },
   yearCols: [] as Number[],
+  carAnnualTotal: 0, //列年度总量，把sum取出
+  sumArr: [] as number[],
   customerNatureOptions: [] as unknown as Options[],
   terminalNatureOptions: [] as unknown as Options[],
   quotationTypeOptions: [] as unknown as Options[],
@@ -743,14 +765,9 @@ const state = reactive({
   TypeSelectOptions: [] as unknown as Options[],
   ExchangeSelectOptions: [] as any
 })
-const fileList = ref<UploadUserFile[]>([
-  {
-    name: "food.jpeg",
-    url: "https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100"
-  }
-])
+const fileList = ref<UploadUserFile[]>([])
 const yearCount = ref(0)
-
+let route = useRoute()
 const pcsYearQuantitySum = (row: Pcs) => {
   let rowSum = 0
   row.pcsYearList.forEach((item: any) => {
@@ -768,10 +785,12 @@ const modelCountYearListQuantitySum = (row: modelCount) => {
   // row.modelTotal = sum
 }
 const save = async (formEl: FormInstance | undefined) => {
+  let { auditFlowId } = route.query
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       let { quoteForm } = state
+      quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : 5
       quoteForm.pcs = pcsTableData
       quoteForm.modelCount = moduleTableData
       quoteForm.requirement = requireTableData
@@ -787,6 +806,7 @@ const save = async (formEl: FormInstance | undefined) => {
       }
     } else {
       console.log("error submit!", fields)
+      console.log(state.quoteForm, "quoteForm")
     }
   })
 }
@@ -878,7 +898,19 @@ const addProduct = () => {
     installationPosition: ""
   }
   productTableData.push(Object.assign(_.cloneDeep(productTableData[0]), newLineP))
-  moduleTableData.push(_.cloneDeep(moduleTableData[0]))
+  let moduleTableDataNew = Object.assign(_.cloneDeep(moduleTableData[0]), {
+    partNumber: "",
+    product: "",
+    productType: 0,
+    marketShare: 0,
+    moduleCarryingRate: 0,
+    singleCarProductsQuantity: 0,
+    modelTotal: 0
+  })
+  moduleTableDataNew.modelCountYearList.forEach((item) => {
+    item.quantity = ""
+  })
+  moduleTableData.push(moduleTableDataNew)
   // productTableData.push(_.cloneDeep(productTableData[0]))
   // moduleTableData.push(newLineM)
   // productTableData.push(newLineP)
@@ -897,7 +929,7 @@ const yearChange = (val: number | undefined) => {
     for (let j = 0; j < i; j++) {
       state.yearCols.push(Number(state.quoteForm.sopTime) + j)
     }
-    console.log(state.yearCols, "state.yearCols ")
+    // console.log(state.yearCols, "state.yearCols ")
   }
 }
 
@@ -931,8 +963,6 @@ watch(
         oneTimeDiscountRate: 0
       })
     })
-
-    console.log(pcsTableData)
   }
 )
 //同步产品名称
@@ -941,6 +971,18 @@ watch(
   (val) => {
     val.forEach((item, index) => {
       productTableData[index].name = item.product
+      moduleTableData.forEach((row) => {
+        row.modelCountYearList.forEach((item, index) => {
+          if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && state.sumArr[index]) {
+            item.quantity =
+              (row.marketShare * row.moduleCarryingRate * row.singleCarProductsQuantity * state.sumArr[index]) / 10000
+          }
+        })
+      })
+      if (item.marketShare && item.moduleCarryingRate && item.singleCarProductsQuantity && state.carAnnualTotal) {
+        item.modelTotal =
+          (item.marketShare * item.moduleCarryingRate * item.singleCarProductsQuantity * state.carAnnualTotal) / 10000
+      }
     })
   },
   { deep: true }
@@ -1062,10 +1104,13 @@ const rateChange = (val: any) => {
   })
 }
 onMounted(async () => {
+  // let query = getQuery()
+  // let auditFlowId = Number(query.auditFlowId)
+  // console.log(auditFlowId)
   state.quoteForm.drafter = userInfo.name
-  state.quoteForm.drafterNumber = userInfo.userNumber
-  state.quoteForm.draftingCompany = userInfo.userCompany
-  state.quoteForm.draftingDepartment = userInfo.userDepartment
+  state.quoteForm.drafterNumber = userInfo.userNumber.name || "0527"
+  state.quoteForm.draftingCompany = userInfo.userCompany.name || "前端假数据"
+  state.quoteForm.draftingDepartment = userInfo.userDepartment.name || "前端假数据"
   // 设置单据编号
   setNumber()
   try {

@@ -176,7 +176,7 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
     const res = await PostElectronicMaterialEntering({
       isSubmit,
       electronicDtoList: [record],
-      processId: 123
+      auditFlowId: 123
     })
     console.log(res, "res")
   } catch (err) {
@@ -192,7 +192,7 @@ const handleEdit = (row: any, isEdit: boolean) => {
 // 计算
 const handleCalculation = async (row: any, index: number) => {
   try {
-    const { success, result } = await PostElectronicMaterialCalculate(row)
+    const { success, result } = await PostElectronicMaterialCalculate([row])
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = result[0]
     ElMessage.success("计算成功~")

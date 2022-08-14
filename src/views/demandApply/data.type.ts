@@ -189,6 +189,10 @@ export interface InputModal {
    * 贸易方式
    */
   tradeMode: string
+  /**
+   * 流程id
+   */
+  auditFlowId: number
 }
 
 /**

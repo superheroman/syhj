@@ -105,7 +105,7 @@ function createRequestFunction(service: AxiosInstance) {
         "Content-Type": get(config, "headers.Content-Type", "application/json")
       },
       timeout: 10000,
-      baseURL: import.meta.env.VITE_BASE_API,
+      // baseURL: import.meta.env.VITE_BASE_API,
       data: {}
     }
     if (config.method === "get" || config.method === "delete") {

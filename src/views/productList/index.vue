@@ -13,41 +13,36 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-interface User {
+import getQuery from "@/utils/getQuery"
+import { getProductByAuditFlowId } from "./service"
+interface Product {
   date: string
   name: string
-  address: string
 }
-const tableData: User[] = [
+const tableData: Product[] = [
   {
     date: "2022",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "Tom"
   },
   {
     date: "2023",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "Tom"
   },
   {
     date: "2024",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "Tom"
   },
   {
     date: "2025",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "Tom"
   },
   {
     date: "2026",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "Tom"
   },
   {
     date: "2027",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles"
+    name: "Tom"
   }
 ]
 //console.log('1-开始创建组件-setup')
@@ -55,11 +50,11 @@ const tableData: User[] = [
  * 数据部分
  */
 const data = reactive({})
-onBeforeMount(() => {
-  //console.log('2.组件挂载页面之前执行----onBeforeMount')
-})
-onMounted(() => {
-  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+onBeforeMount(() => {})
+onMounted(async () => {
+  let { auditFlowId } = getQuery()
+  let res: any = getProductByAuditFlowId(Number(auditFlowId))
+  console.log(res)
 })
 watchEffect(() => {})
 // 使用toRefs解构
