@@ -111,18 +111,11 @@ const submit = async () => {
     })
   }
 }
-onBeforeMount(() => {
-  data.years = years(10)
-  // let query = getQuery()
-  // let auditFlowId = Number(query.auditFlowId)
-  data.tableData.forEach((item: any) => {
-    // item.auditFlowId = auditFlowId || 5 //默认5
-    item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
-  })
-})
-onMounted(async () => {
+onBeforeMount(async () => {
   let res: any = await getQualityCost()
   if (res.result.length > 0) {
+    console.log(data.tableData)
+    data.years = years(10)
     data.tableData = res.result.map((item: any) => {
       let { category, isFirst, qualityCostYearList } = item
       return {
@@ -136,8 +129,21 @@ onMounted(async () => {
         })
       }
     })
+    console.log(data.tableData, "data.tableData")
+  } else {
+    data.years = years(10)
+    data.tableData.forEach((item: any) => {
+      item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
+      console.log(data.tableData)
+    })
   }
+  // data.years = years(10)
+  // data.tableData.forEach((item: any) => {
+  //   item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
+  //   console.log(data.tableData)
+  // })
 })
+onMounted(async () => {})
 watchEffect(() => {})
 // 使用toRefs解构
 // let { } = { ...toRefs(data) }

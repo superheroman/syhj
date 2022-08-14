@@ -81,12 +81,12 @@ export function getQualityCost() {
 }
 
 /** 保存质量成本比例录入 */
-export function saveQualityCost(qualityCostYearList: QualityCostProportionEntryInfo[]) {
+export function saveQualityCost(qualityCostList: QualityCostProportionEntryInfo[]) {
   return request({
     url: "/api/services/app/FinanceDepartmentInput/SaveQualityCost",
     method: "post",
     data: {
-      qualityCostYearList
+      qualityCostList
     }
   })
 }
