@@ -12,14 +12,9 @@
         <el-table-column label="质量成本比例">
           <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year" width="200">
             <template #default="{ row }">
-              <el-input-number
-                v-model="row.qualityRateYearList[index].rate"
-                controls-position="right"
-                :precision="2"
-                :step="0.01"
-                :max="100"
-                :min="0"
-              />
+              <el-input v-model="row.qualityRateYearList[index].rate" type="number">
+                <template #append>%</template>
+              </el-input>
             </template>
           </el-table-column>
         </el-table-column>
@@ -95,7 +90,20 @@ const years = (index: number) => {
   return yearList
 }
 const submit = async () => {
-  let res: any = await saveQualityCost(data.tableData as QualityCostProportionEntryInfo[])
+  let formatData = data.tableData.map((item) => {
+    let { category, isFirst, qualityRateYearList } = item
+    return {
+      category,
+      isFirst,
+      qualityRateYearList: qualityRateYearList.map((item: any) => {
+        return {
+          year: item.year,
+          rate: (Number(item.rate) / 100).toFixed(4)
+        }
+      })
+    }
+  })
+  let res: any = await saveQualityCost(formatData as QualityCostProportionEntryInfo[])
   if (res.success) {
     ElMessage({
       type: "success",
@@ -109,13 +117,25 @@ onBeforeMount(() => {
   // let auditFlowId = Number(query.auditFlowId)
   data.tableData.forEach((item: any) => {
     // item.auditFlowId = auditFlowId || 5 //默认5
-    item.qualityRateYearList = data.years.map((year) => ({ year, rate: "" }))
+    item.qualityRateYearList = data.years.map((year) => ({ year, rate: 0 }))
   })
 })
 onMounted(async () => {
   let res: any = await getQualityCost()
   if (res.result.length > 0) {
-    data.tableData = res.result
+    data.tableData = res.result.map((item: any) => {
+      let { category, isFirst, qualityRateYearList } = item
+      return {
+        category,
+        isFirst,
+        qualityRateYearList: qualityRateYearList.map((item: any) => {
+          return {
+            year: item.year,
+            rate: (Number(item.rate) * 100).toFixed(2)
+          }
+        })
+      }
+    })
   }
 })
 watchEffect(() => {})
