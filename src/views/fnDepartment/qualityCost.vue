@@ -30,6 +30,7 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getQualityCost, saveQualityCost } from "./service"
 import { QualityCostProportionEntryInfo } from "./data.type"
 import getQuery from "@/utils/getQuery"
+import { ElMessage } from "element-plus"
 
 /**
  * 路由对象
@@ -93,8 +94,13 @@ const years = (index: number) => {
   return yearList
 }
 const submit = async () => {
-  let res = await saveQualityCost(data.tableData as QualityCostProportionEntryInfo[])
-  console.log(res)
+  let res: any = await saveQualityCost(data.tableData as QualityCostProportionEntryInfo[])
+  if (res.success) {
+    ElMessage({
+      type: "success",
+      message: "保存成功"
+    })
+  }
 }
 onBeforeMount(() => {
   data.years = years(10)
