@@ -12,7 +12,7 @@
         <el-table-column label="质量成本比例">
           <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year" width="200">
             <template #default="{ row }">
-              <el-input v-model="row.qualityRateYearList[index].rate" type="number">
+              <el-input v-model="row.qualityCostYearList[index].rate" type="number">
                 <template #append>%</template>
               </el-input>
             </template>
@@ -51,32 +51,32 @@ const data = reactive({
     {
       category: "环境感知",
       isFirst: true,
-      qualityRateYearList: []
+      qualityCostYearList: []
     },
     {
       category: "环境感知",
       isFirst: false,
-      qualityRateYearList: []
+      qualityCostYearList: []
     },
     {
       category: "外摄显像",
       isFirst: true,
-      qualityRateYearList: []
+      qualityCostYearList: []
     },
     {
       category: "外摄显像",
       isFirst: false,
-      qualityRateYearList: []
+      qualityCostYearList: []
     },
     {
       category: "舱内检测",
       isFirst: true,
-      qualityRateYearList: []
+      qualityCostYearList: []
     },
     {
       category: "舱内检测",
       isFirst: false,
-      qualityRateYearList: []
+      qualityCostYearList: []
     }
   ],
   years: [] as number[]
@@ -91,11 +91,11 @@ const years = (index: number) => {
 }
 const submit = async () => {
   let formatData = data.tableData.map((item) => {
-    let { category, isFirst, qualityRateYearList } = item
+    let { category, isFirst, qualityCostYearList } = item
     return {
       category,
       isFirst,
-      qualityRateYearList: qualityRateYearList.map((item: any) => {
+      qualityCostYearList: qualityCostYearList.map((item: any) => {
         return {
           year: item.year,
           rate: (Number(item.rate) / 100).toFixed(4)
@@ -117,18 +117,18 @@ onBeforeMount(() => {
   // let auditFlowId = Number(query.auditFlowId)
   data.tableData.forEach((item: any) => {
     // item.auditFlowId = auditFlowId || 5 //默认5
-    item.qualityRateYearList = data.years.map((year) => ({ year, rate: 0 }))
+    item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
   })
 })
 onMounted(async () => {
   let res: any = await getQualityCost()
   if (res.result.length > 0) {
     data.tableData = res.result.map((item: any) => {
-      let { category, isFirst, qualityRateYearList } = item
+      let { category, isFirst, qualityCostYearList } = item
       return {
         category,
         isFirst,
-        qualityRateYearList: qualityRateYearList.map((item: any) => {
+        qualityCostYearList: qualityCostYearList.map((item: any) => {
           return {
             year: item.year,
             rate: (Number(item.rate) * 100).toFixed(2)
