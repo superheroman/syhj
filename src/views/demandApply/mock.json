@@ -1,0 +1,74 @@
+{
+  "title": "string",
+  "date": "2022-08-13T05:34:31.809Z",
+  "inputCount": 0,
+  "requiredCount": 0,
+  "material": [
+    {
+      "id": "string",
+      "superType": "string",
+      "categoryName": "string",
+      "typeName": "string",
+      "sap": "string",
+      "materialName": "string",
+      "assemblyCount": 0,
+      "materialPrice": 0,
+      "currencyText": "string",
+      "exchangeRate": 0,
+      "materialPriceCyn": 0,
+      "totalMoneyCyn": 0,
+      "loss": 0,
+      "materialCost": 0,
+      "inputCount": 0,
+      "purchaseCount": 0,
+      "moqShareCount": 0,
+      "moq": 0,
+      "availableInventory": 0,
+      "remarks": "string"
+    }
+  ],
+  "manufacturingCost": {
+    "id": 0,
+    "gradientKy": 0,
+    "manufacturingCostDirect": {
+      "id": 0,
+      "directLabor": 0,
+      "equipmentDepreciation": 0,
+      "lineChangeCost": 0,
+      "manufacturingExpenses": 0,
+      "subtotal": 0
+    },
+    "manufacturingCostIndirect": {
+      "id": 0,
+      "directLabor": 0,
+      "equipmentDepreciation": 0,
+      "manufacturingExpenses": 0,
+      "subtotal": 0
+    }
+  },
+  "lossCost": [
+    {
+      "id": 0,
+      "name": "string",
+      "wastageCost": 0,
+      "moqShareCount": 0
+    }
+  ],
+  "otherCostItem": {
+    "id": 0,
+    "fixture": 0,
+    "logisticsFee": 0,
+    "productCategory": "string",
+    "costProportion": 0,
+    "qualityCost": 0,
+    "accountingPeriod": 0,
+    "capitalCostRate": 0,
+    "financialCost": 0,
+    "taxCost": 0,
+    "total": 0
+  },
+  "totalCost": 0,
+  "preparedDate": "2022-08-13T05:34:31.809Z",
+  "auditDate": "2022-08-13T05:34:31.809Z",
+  "approvalDate": "2022-08-13T05:34:31.809Z"
+}

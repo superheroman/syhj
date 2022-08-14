@@ -361,6 +361,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "报价分析看板"
         }
+      },
+      {
+        path: "/quoteAnalysis/statementAnalysisBoard",
+        component: () => import("@/views/quoteAnalysis/statementAnalysisBoard.vue"),
+        name: "statementAnalysisBoard",
+        meta: {
+          hidden: true
+        }
       }
     ]
   },
