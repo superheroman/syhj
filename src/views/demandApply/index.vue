@@ -314,12 +314,12 @@
         <el-table :data="productTableData" style="width: 100%" border>
           <el-table-column label="产品名称" width="180" fixed="left">
             <template #default="{ row }">
-              <el-input v-model="row.name" />
+              <el-input v-model="row.name" disabled />
             </template>
           </el-table-column>
           <el-table-column label="目标价" width="180" fixed="left">
             <template #default="{ row }">
-              <el-input v-model="row.name">
+              <el-input v-model="row.customerTargetPrice">
                 <template #append>元</template>
               </el-input>
             </template>
@@ -917,6 +917,7 @@ const addProduct = () => {
   //模组上的产品名称进行复制
   productTableData.forEach((item, index) => {
     item.name = moduleTableData[index].product
+    item.product = moduleTableData[index].product // 后端要同步相同字段，该字段不展示
   })
 }
 

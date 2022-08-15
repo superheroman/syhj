@@ -376,6 +376,10 @@ export interface productModel {
    */
   cable: string
   /**
+   * 目标价
+   */
+  customerTargetPrice?: number | null | string
+  /**
    * 线缆 单价
    */
   cablePrice?: number | null
@@ -435,6 +439,10 @@ export interface productModel {
    * 产品名称
    */
   name: string
+  /**
+   * 产品名称关联字段，类似id 不展示
+   */
+  product: string
   /**
    * Sensor
    */
