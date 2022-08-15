@@ -123,6 +123,7 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
 import { getYears, saveProductionControl, getPcsByPriceEvaluationId, getSor, getProductFreight } from "./service"
 import { ElMessage } from "element-plus"
+import getQuery from "@/utils/getQuery"
 
 // import { useRoute, useRouter } from "vue-router"
 /**
@@ -137,10 +138,11 @@ import { ElMessage } from "element-plus"
 /**
  * 数据部分
  */
+
 const data = reactive({
   tableData: [],
-  auditFlowId: 1,
-  productId: 1,
+  auditFlowId: 0,
+  productId: 0,
   dialogFormVisible: false,
   logisticsForm: {
     outerPackagingLength: "",
@@ -163,6 +165,9 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
+  let query = getQuery()
+  data.auditFlowId = Number(query.auditFlowId)
+  data.productId = Number(query.productId)
   let { result } = (await getYears(1)) as any
   let { result: monthEndDemand } = (await getPcsByPriceEvaluationId(1)) as any
   result = [2022, 2023, 2024]
