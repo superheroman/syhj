@@ -1,163 +1,150 @@
 <template>
   <div class="dashboard">
-    <div class="dashboard__header">
-      <el-row :gutter="12">
-        <el-col :span="6" v-for="item in dashboardPannel" :key="item.title">
-          <el-card
-            shadow="always"
-            class="dashboard__header__item"
-            :body-style="{ display: 'flex', 'align-items': 'center', width: '100%' }"
-          >
-            <img :src="item.img" class="dashboard__header__item__icon" />
-            <div class="dashboard__header__item__content">
-              <div class="dashboard__header__item__content__title">{{ item.title }}</div>
-              <div class="dashboard__header__item__content__vlaue">{{ item.value }}</div>
+    <el-card class="m-2">
+      <el-row align="middle">
+        <el-select class="m-2" v-model="data.product" placeholder="请选择产品" @change="fetchAllData">
+          <el-option v-for="item in data.productOptions" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
+        <el-select v-model="data.year" class="m-2" placeholder="请选择年份" @change="fetchAllData">
+          <el-option v-for="item in data.yearsOptions" :key="item.id" :label="item.name" :value="item.id" />
+        </el-select>
+        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
+          产品核价表下载
+        </el-button>
+        <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表下载</el-button>
+      </el-row>
+      <el-row class="m-2">
+        <el-radio-group v-model="data.mode" @change="handleChangeMode">
+          <template v-for="item in dashboardPannel" :key="item.title">
+            <el-radio :label="item.value" size="large" border>
+              {{ item.title }}
+            </el-radio>
+          </template>
+        </el-radio-group>
+      </el-row>
+    </el-card>
+
+    <el-card class="m-2">
+      <el-row :gutter="20">
+        <el-col :span="14">
+          <el-card header="成本明细表">
+            <!-- Bom成本  -->
+            <el-table v-if="data.mode === '1'" :data="data.bomData" border height="675">
+              <el-table-column prop="sapItemNum" label="物料编号" width="180" />
+              <el-table-column prop="sapItemName" label="材料名称" width="180" />
+              <el-table-column prop="typeName" label="物料种类" />
+              <el-table-column prop="categoryName" label="物料大类" />
+              <el-table-column prop="assemblyQuantity" label="装配数量" />
+              <el-table-column prop="assemblyQuantity" label="单价" />
+              <el-table-column prop="assemblyQuantity" label="币别" />
+              <el-table-column prop="assemblyQuantity" label="汇率" />
+              <el-table-column prop="assemblyQuantity" label="材料单价（人民币）" />
+              <el-table-column prop="assemblyQuantity" label="合计金额（人民币）" />
+              <el-table-column prop="isInvolveItem" label="损耗率" />
+              <el-table-column prop="encapsulationSize" label="损耗" />
+              <el-table-column prop="encapsulationSize" label="材料成本（含损耗）" />
+            </el-table>
+            <!-- 损耗成本  -->
+            <el-table v-if="data.mode === '2'" height="675">
+              <el-table-column prop="name" label="成本项目" width="180" />
+              <el-table-column prop="wastageCost" label="损耗成本" width="180" />
+              <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="180" />
+            </el-table>
+            <!-- 制造成本  -->
+            <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
+              <el-table-column prop="sapItemNum" label="项目" width="180" />
+              <el-table-column prop="sapItemName" label="梯度K/Y" width="180" />
+              <el-table-column prop="typeName" label="年份" width="180" />
+              <el-table-column prop="categoryName" label="直接制造成本">
+                <el-table-column prop="typeName" label="直接人工" width="180" />
+                <el-table-column prop="typeName" label="设备折旧" width="180" />
+                <el-table-column prop="typeName" label="换线成本" width="180" />
+                <el-table-column prop="typeName" label="制造费用" width="180" />
+                <el-table-column prop="typeName" label="小计" width="180" />
+              </el-table-column>
+              <el-table-column prop="categoryName" label="间接制造成本">
+                <el-table-column prop="typeName" label="直接人工" width="180" />
+                <el-table-column prop="typeName" label="设备折旧" width="180" />
+                <el-table-column prop="typeName" label="换线成本" width="180" />
+                <el-table-column prop="typeName" label="制造费用" width="180" />
+                <el-table-column prop="typeName" label="小计" width="180" />
+              </el-table-column>
+            </el-table>
+            <!-- 物流成本  -->
+            <el-table :data="data.logisticsData" border v-if="data.mode === '4'" height="675">
+              <el-table-column prop="typeName" label="年份" width="80" />
+              <el-table-column prop="sapItemNum" label="单PCS包装价格/元" />
+              <el-table-column prop="sapItemName" label="单PCS运输费" />
+              <el-table-column prop="typeName" label="单PCS总物流料成本" />
+            </el-table>
+            <!-- 质量成本  -->
+            <el-table v-if="data.mode === '5'" :data="data.qualityData" border height="675">
+              <el-table-column prop="typeName" label="产品类别" />
+              <el-table-column prop="sapItemNum" label="成本比例" />
+              <el-table-column prop="sapItemName" label="质量成本（MAX）" />
+            </el-table>
+          </el-card>
+        </el-col>
+
+        <el-col :span="10">
+          <el-card>
+            <div class="dashboard__footer">
+              <!-- 饼图 -->
+              <div id="percentageCostChart" />
             </div>
-            <div class="dashboard__header__item__percentage" :style="{ color: 'red' }">{{ item.percentage }}</div>
+            <div class="dashboard__body">
+              <!-- 总成本图 -->
+              <div id="costChart" />
+            </div>
           </el-card>
         </el-col>
       </el-row>
-    </div>
-
-    <div class="dashboard__body">
-      <!-- 总成本图 -->
-      <div id="costChart" />
-    </div>
-    <div class="dashboard__footer">
-      <el-row :gutter="100">
-        <el-col :span="14">
-          <!-- 成本图根据时间 -->
-          <div class="dashboard__footer__line-chart">
-            <el-form inline>
-              <el-form-item label="SOP时间:">
-                <el-date-picker type="date" placeholder="Pick a day" />
-              </el-form-item>
-              <el-form-item label="成本:">
-                <el-select v-model="value" placeholder="Select">
-                  <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary">查询</el-button>
-              </el-form-item>
-            </el-form>
-            <div id="selectCostChart" /></div
-        ></el-col>
-        <el-col :span="8">
-          <!-- 饼图和生成按钮 -->
-          <div class="dashboard__footer__pie-chart">
-            <div id="percentageCostChart" />
-            <el-button type="primary" round size="large" style="width: 400px">生成核价表</el-button>
-          </div></el-col
-        >
-      </el-row>
-    </div>
+      <el-card style="margin-top: 10px">
+        <div>
+          产品投入量：<el-input placeholder="请输入产品投入量" v-model="data.productInputs" style="width: 200px" />
+        </div>
+        <!-- 产品总成本推移图 -->
+        <div id="selectCostChart" />
+      </el-card>
+    </el-card>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, ref, onMounted, onBeforeUnmount } from "vue"
-import iconBlue from "/src/assets/layout/dashboard-icon-blue.svg"
-import iconRed from "/src/assets/layout/dashboard-icon-red.svg"
-import iconGreen from "/src/assets/layout/dashboard-icon-green.svg"
-import iconYellow from "/src/assets/layout/dashboard-icon-yellow.svg"
+import { reactive, onMounted, onBeforeUnmount } from "vue"
+import { dashboardPannel, percentageCostChartData, costChartData, selectCostChartData } from "./common/const"
+import {
+  GetBomCost,
+  GetLossCost,
+  GetQualityCost,
+  GetPricingPanelProductSelectList,
+  GetPricingPanelTimeSelectList,
+  GetPricingPanelProportionOfProductCost,
+  GetPricingPanelProfit,
+  PriceEvaluationTableDownload,
+  NreTableDownload,
+  GetLogisticsCost,
+  GetManufacturingCost
+} from "../service"
+
 import * as echarts from "echarts"
-// import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive } from "vue"
-let data1 = {
-  title: {
-    text: "总成本"
-  },
-  tooltip: {},
-  xAxis: {
-    data: ["SOP", "SOP1", "SOP2", "SOP3", "SOP4"]
-  },
-  legend: {
-    data: ["BOM", "制造", "物流", "损耗"]
-  },
-  yAxis: {},
-  series: [
-    {
-      name: "BOM",
-      type: "bar",
-      data: [5, 20, 36, 10, 10, 20]
-    },
-    {
-      name: "制造",
-      type: "bar",
-      data: [5, 20, 36, 10, 10, 20]
-    },
-    {
-      name: "物流",
-      type: "bar",
-      data: [5, 20, 36, 10, 10, 20]
-    },
-    {
-      name: "损耗",
-      type: "bar",
-      data: [5, 20, 36, 10, 10, 20]
-    },
-    {
-      name: "损耗",
-      type: "line",
-      smooth: true,
-      data: [5, 20, 36, 10, 10, 20]
-    }
-  ]
-}
-let data2 = {
-  xAxis: {
-    type: "category",
-    data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-  },
-  yAxis: {
-    type: "value"
-  },
-  series: [
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: "line",
-      smooth: true
-    }
-  ]
-}
-let data3 = {
-  title: {
-    text: "Referer of a Website",
-    subtext: "Fake Data",
-    left: "center"
-  },
-  tooltip: {
-    trigger: "item"
-  },
-  legend: {
-    orient: "vertical",
-    left: "left",
-    show: false
-  },
-  series: [
-    {
-      name: "Access From",
-      type: "pie",
-      radius: "50%",
-      data: [
-        { value: 1048, name: "Search Engine" },
-        { value: 735, name: "Direct" },
-        { value: 580, name: "Email" },
-        { value: 484, name: "Union Ads" },
-        { value: 300, name: "Video Ads" }
-      ],
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: "rgba(0, 0, 0, 0.5)"
-        }
-      }
-    }
-  ]
-}
-let chart1: any = null
-let chart2: any = null
-let chart3: any = null
+
+let costChart: any = null
+let percentageCostChart: any = null
+let selectCostChart: any = null
+
+const data = reactive<Record<string, any>>({
+  product: "",
+  year: "",
+  mode: "1",
+  productOptions: [],
+  yearsOptions: [],
+  bomData: [],
+  manufactureData: [],
+  logisticsData: [],
+  qualityData: [],
+  productInputs: 0
+})
+
 const initCharts = (id: string, chartOption: any) => {
   // 基于准备好的dom，初始化echarts实例
   let chartEl: HTMLElement | null = document.getElementById(id)
@@ -168,95 +155,219 @@ const initCharts = (id: string, chartOption: any) => {
     return chart
   }
 }
+
 onMounted(() => {
-  console.log("onMounted")
-  chart1 = initCharts("costChart", data1)
-  chart2 = initCharts("selectCostChart", data2)
-  chart3 = initCharts("percentageCostChart", data3)
+  initChart()
+  fetchOptionsData()
 })
+
 onBeforeUnmount(() => {
   console.log("destory")
-  chart1.dispose()
-  chart2.dispose()
-  chart3.dispose()
+  costChart?.dispose()
+  selectCostChart?.dispose()
+  percentageCostChart?.dispose()
 })
-const value = ref("")
-const options = [
-  {
-    value: "Option1",
-    label: "Option1"
-  },
-  {
-    value: "Option2",
-    label: "Option2"
-  },
-  {
-    value: "Option3",
-    label: "Option3"
-  },
-  {
-    value: "Option4",
-    label: "Option4"
-  },
-  {
-    value: "Option5",
-    label: "Option5"
+
+const initChart = () => {
+  // 测试
+  const barData = [
+    [20, 12, 12, 40, 30],
+    [100, 30, 40, 30, 10]
+  ]
+  costChart = initCharts("costChart", {
+    ...costChartData,
+    series: barData.map((item, index) => ({
+      ...costChartData.series[index],
+      data: item
+    }))
+  })
+  percentageCostChart = initCharts("percentageCostChart", percentageCostChartData)
+  selectCostChart = initCharts("selectCostChart", selectCostChartData)
+  window.onresize = function () {
+    percentageCostChart.resize()
+    selectCostChart.resize()
+    costChart.resize()
   }
-]
-let dashboardPannel = reactive([
-  {
-    title: "BOM成本",
-    value: "34",
-    percentage: "+25%",
-    img: iconBlue
-  },
-  {
-    title: "制造成本",
-    value: "34",
-    percentage: "+25%",
-    img: iconRed
-  },
-  {
-    title: "物流成本",
-    value: "34",
-    percentage: "+25%",
-    img: iconGreen
-  },
-  {
-    title: "质量成本",
-    value: "34",
-    percentage: "+25%",
-    img: iconYellow
+}
+
+// 初始化下拉项数据
+const fetchOptionsData = async () => {
+  getPricingPanelTimeSelectList()
+  getPricingPanelProductSelectList()
+}
+// 核价看板-【产品选择】下拉框下拉数据
+const getPricingPanelProductSelectList = async () => {
+  try {
+    const ProductSelectRes: any = await GetPricingPanelProductSelectList({})
+    data.productOptions = ProductSelectRes?.result?.items
+  } catch (err: any) {
+    console.log(err, "[ 获取下拉数据失败 ]")
   }
-])
+}
+
+// 核价看板-[时间选择]下拉框下拉数据
+const getPricingPanelTimeSelectList = async () => {
+  try {
+    const PanelTimeSelectRes: any = await GetPricingPanelTimeSelectList({})
+    data.yearsOptions = PanelTimeSelectRes?.result?.items
+  } catch (err: any) {
+    console.log(err, "[ 获取时间选择下拉数据失败 ]")
+  }
+}
+
+// 核价看板-产品成本占比图
+const getPricingPanelProportionOfProductCost = async () => {
+  try {
+    const res: any = await GetPricingPanelProportionOfProductCost({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProportionOfProductCost")
+  } catch (err: any) {
+    console.log(err, "[ 获取核价看板-产品成本占比图数据失败 ]")
+  }
+}
+
+// 核价看板-利润分布图
+const getPricingPanelProfit = async () => {
+  try {
+    const res: any = await GetPricingPanelProfit({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProfit")
+  } catch (err: any) {
+    console.log(err, "[ 获取核价看板-利润分布图数据失败 ]")
+  }
+}
+
+// 获取 bom成本（含损耗）汇总表
+const getBomCost = async () => {
+  try {
+    const res: any = await GetBomCost({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProfit")
+  } catch (err: any) {
+    console.log(err, "[ 获取 bom成本（含损耗）汇总表数据失败 ]")
+  }
+}
+
+// 获取损耗成本
+const getLossCost = async () => {
+  try {
+    const res: any = await GetLossCost({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProfit")
+  } catch (err: any) {
+    console.log(err, "[ 获取损耗成本数据失败 ]")
+  }
+}
+
+// 获取 质量成本
+const getQualityCost = async () => {
+  try {
+    const res: any = await GetQualityCost({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProfit")
+  } catch (err: any) {
+    console.log(err, "[ 获取 质量成本数据失败 ]")
+  }
+}
+const handleFetchPriceEvaluationTableDownload = async () => {
+  try {
+    const res: any = await PriceEvaluationTableDownload({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "PriceEvaluationTableDownload")
+  } catch (err: any) {
+    console.log(err, "[ 获取 质量成本数据失败 ]")
+  }
+}
+const handleFethNreTableDownload = async () => {
+  try {
+    const res: any = await NreTableDownload({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "NreTableDownload")
+  } catch (err: any) {
+    console.log(err, "[ 获取 质量成本数据失败 ]")
+  }
+}
+
+// 获取 物流成本汇总表
+const getLogisticsCost = async () => {
+  try {
+    const res: any = await GetLogisticsCost({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProfit")
+  } catch (err: any) {
+    console.log(err, "[ 获取 物流成本汇总表数据失败 ]")
+  }
+}
+
+// 获取 制造成本汇总表
+const getManufacturingCost = async () => {
+  try {
+    const res: any = await GetManufacturingCost({
+      Year: data.year,
+      AuditFlowId: 1,
+      ModelCountId: 1
+    })
+    console.log(res, "getPricingPanelProfit")
+  } catch (err: any) {
+    console.log(err, "[ 获取 制造成本汇总表据失败 ]")
+  }
+}
+
+const fetchAllData = async () => {
+  getPricingPanelProportionOfProductCost()
+  getPricingPanelProfit()
+  handleChangeMode()
+}
+
+const handleChangeMode = () => {
+  switch (data.mode) {
+    case "1":
+      getBomCost()
+      break
+    case "2":
+      getLossCost()
+      break
+    case "3":
+      getManufacturingCost()
+      break
+    case "4":
+      getLogisticsCost()
+      break
+    case "5":
+      getQualityCost()
+      break
+    default:
+      break
+  }
+}
 </script>
+
 <style lang="scss" scoped>
 .dashboard {
-  &__header {
-    margin: 20px 0;
-    &__item {
-      &__content {
-        margin-left: 15px;
-        min-width: 100px;
-        // min-width: 120px;
-        &__title {
-          font-size: 14px;
-          color: grey;
-          margin-bottom: 5px;
-        }
-        &__vlaue {
-          font-weight: bold;
-        }
-      }
-      &__percentage {
-        margin-left: 20px;
-        font-size: 14px;
-      }
-      &__icon {
-        width: 48px;
-      }
-    }
-  }
   #costChart {
     margin: 10px 0;
     height: 400px;
