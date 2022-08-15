@@ -166,9 +166,9 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let query = getQuery()
-  data.auditFlowId = Number(query.auditFlowId)
-  data.productId = Number(query.productId)
-  let { result } = (await getYears(1)) as any
+  data.auditFlowId = Number(query.auditFlowId) || 0
+  data.productId = Number(query.productId) || 0
+  let { result } = (await getYears(data.auditFlowId)) as any
   let { result: monthEndDemand } = (await getPcsByPriceEvaluationId(1)) as any
   result = [2022, 2023, 2024]
   console.log(monthEndDemand, "monthEndDemand")
@@ -218,14 +218,14 @@ onMounted(async () => {
     { deep: true }
   )
   // 获取运费信息
-  let res: any = await getProductFreight({ auditFlowId: 1, productId: 1 })
+  let res: any = await getProductFreight({ auditFlowId: data.auditFlowId, productId: data.productId })
   data.logisticsForm = res.result
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
 
 const getSorFile = async () => {
-  let res: any = await getSor(0)
+  let res: any = await getSor(data.auditFlowId)
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
