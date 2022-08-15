@@ -20,7 +20,7 @@
     <h5>工序工时导入</h5>
     <el-table :data="data.tableData" border style="width: 100%" height="700">
       <el-table-column label="设备部分" class-name="columnColor1">
-        <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="item.equipmentName">
+        <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="`equipmentPart-${index}`">
           <el-table-column
             :prop="`equipmentPart.equipmentDetails[${index}].equipmentName`"
             :label="`设备${index + 1}`"
@@ -45,7 +45,7 @@
         <el-table-column prop="equipmentPart.total" label="设备总价" width="180" />
       </el-table-column>
       <el-table-column label="追溯部分" class-name="columnColor2">
-        <template v-for="(item, index) in data.retrospectPart?.equipmentDetails" :key="item.equipmentName">
+        <template v-for="(item, index) in data.retrospectPart?.equipmentDetails" :key="`retrospectPart-${index}`">
           <el-table-column
             :prop="`retrospectPart.equipmentDetails[${index}].equipmentName`"
             :label="`设备${index + 1}`"
@@ -61,7 +61,10 @@
         <el-table-column prop="retrospectPart.total" label="开发总价" width="180" />
       </el-table-column>
       <el-table-column label="工装治具部分" class-name="columnColor3">
-        <template v-for="(item, index) in data.toolingFixturePart?.equipmentDetails" :key="item.equipmentName">
+        <template
+          v-for="(item, index) in data.toolingFixturePart?.equipmentDetails"
+          :key="`toolingFixturePart-${index}`"
+        >
           <el-table-column
             :prop="`toolingFixturePart.equipmentDetails[${index}].equipmentName`"
             :label="`治具${index + 1}`"
@@ -83,7 +86,7 @@
         <el-table-column prop="toolingFixturePart.testPrice" label="线束单价" width="180" />
         <el-table-column prop="toolingFixturePart.total" label="工装治具总价" width="180" />
       </el-table-column>
-      <template v-for="(item, index) in data.humanMachineHoursDetailList" :key="item.equipmentName">
+      <template v-for="(item, index) in data.humanMachineHoursDetailList" :key="`humanMachineHoursDetailList-${index}`">
         <el-table-column :label="index === 0 ? 'SOP' : `SOP + ${index + 1}`" class-name="columnColor4">
           <el-table-column :prop="`humanMachineHoursDetailList[${index}]laborTime`" label="标准人工工时" width="180" />
           <el-table-column
@@ -109,7 +112,6 @@ import { reactive } from "vue"
 import type { UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import unionBy from "lodash/unionBy"
 import { downloadWorkingHoursInfo } from "./service"
 const data = reactive<{
   tableData: any
@@ -132,30 +134,33 @@ const data = reactive<{
 //   console.log(tab, event)
 // }
 
-const formatterArr = (key: string) => {
-  return unionBy(
-    data.tableData.map((item: any) => item[key].equipmentDetails.map((child) => child)).flat(),
-    "equipmentName"
+const formatterArr = (key: string, childKey = "equipmentDetails") => {
+  return Math.max.apply(
+    null,
+    data.tableData.map((item: any) => {
+      if (childKey) return item[key].equipmentDetails.length
+      else return item[key].length
+    })
   )
 }
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
-  console.log(res)
-  if (res.success) {
-    data.tableData = res.result.workingHourDetailList
+  if (res.success && res.result?.workingHourDetailList.length > 0) {
+    data.tableData = res.result?.workingHourDetailList
+    console.log(data.tableData, "data.tableData")
     data.retrospectPart = {
-      equipmentDetails: formatterArr("retrospectPart")
+      equipmentDetails: new Array(formatterArr("retrospectPart"))
     }
     data.toolingFixturePart = {
-      equipmentDetails: formatterArr("toolingFixturePart")
+      equipmentDetails: new Array(formatterArr("toolingFixturePart"))
     }
     data.equipmentPart = {
-      equipmentDetails: formatterArr("equipmentPart")
+      equipmentDetails: new Array(formatterArr("equipmentPart"))
     }
-    data.humanMachineHoursDetailList = data.tableData.map((item) => item.humanMachineHoursDetailList).flat()
-    console.log(data.humanMachineHoursDetailList, "data.retrospectPart")
+    data.humanMachineHoursDetailList = new Array(formatterArr("humanMachineHoursDetailList", null))
   }
 }
+
 const downLoadTemplate = async () => {
   let res: any = await downloadWorkingHoursInfo()
   const blob = res
@@ -173,7 +178,7 @@ const downLoadTemplate = async () => {
   }
   // data.setVisible = false
 }
-const submit = async () => {
+const submit = () => {
   // let res: any = await SaveElectronicBom({
   //   auditFlowId: "1",
   //   partNumber: "测试零件",
