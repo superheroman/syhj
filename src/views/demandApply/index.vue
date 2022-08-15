@@ -858,7 +858,8 @@ const productTableData: productModel[] = reactive([
     ledTypeSelect: 1,
     ledPrice: 0,
     manufactureProcess: "",
-    installationPosition: ""
+    installationPosition: "",
+    product: ""
   }
 ])
 

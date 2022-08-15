@@ -8,3 +8,17 @@ export function getStatementAnalysisBoard(id: number) {
     }
   })
 }
+
+export function postCalculateFullGrossMargin(row, auditFlowId, unitPrice) {
+  return request({
+    url: "/api/services/app/AnalyseBoard/PostCalculateFullGrossMargin",
+    method: "post",
+    data: {
+      auditFlowId,
+      productBoards: {
+        modelCountId: row.modelCountId,
+        offerUnitPrice: unitPrice
+      }
+    }
+  })
+}
