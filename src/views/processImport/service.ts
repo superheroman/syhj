@@ -7,3 +7,10 @@ export function downloadWorkingHoursInfo() {
     responseType: "blob"
   })
 }
+export function SaveWorkingHour(data: any) {
+  return request({
+    url: "/api/services/app/WorkingHours/SaveWorkingHour",
+    method: "post",
+    data
+  })
+}

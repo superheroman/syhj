@@ -108,11 +108,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue"
+import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import { downloadWorkingHoursInfo } from "./service"
+import { downloadWorkingHoursInfo, SaveWorkingHour } from "./service"
+import getQuery from "@/utils/getQuery"
+let auditFlowId = 0
+let productId = 0
 const data = reactive<{
   tableData: any
   retrospectPart: any
@@ -178,14 +181,26 @@ const downLoadTemplate = async () => {
   }
   // data.setVisible = false
 }
-const submit = () => {
+const submit = async () => {
+  let res: any = await SaveWorkingHour({
+    auditFlowId,
+    productId,
+    workingHourDetailList: data.tableData
+  })
+  console.log(res)
   // let res: any = await SaveElectronicBom({
-  //   auditFlowId: "1",
-  //   partNumber: "测试零件",
+  //   auditFlowId,
+  //   productId,
   //   electronicBomDtos: data.tableData
   // })
   // console.log(res)
 }
+onMounted(async () => {
+  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  let query = getQuery()
+  auditFlowId = Number(query.auditFlowId)
+  productId = Number(query.productId)
+})
 </script>
 <style lang="scss" scoped>
 .electronic-import {

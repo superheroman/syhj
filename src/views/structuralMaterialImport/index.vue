@@ -124,7 +124,7 @@
 import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
-import { SaveStructionBom, SaveBOM, getBomTemplate } from "@/api/bom"
+import { SaveStructionBom, SaveBOM, getBomTemplate, SaveProductDevelopmentInput } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 
 let auditFlowId = 0
@@ -193,7 +193,8 @@ const downLoadTemplate = async () => {
 const submit = async () => {
   let params: SaveBOM = Object.assign({ auditFlowId, productId, structureBomDtos: data.tableData }, data.logisticsForm)
   let res: any = await SaveStructionBom(params)
-  console.log(res)
+  let resO: any = await SaveProductDevelopmentInput(params)
+  console.log(res, resO)
 }
 </script>
 <style lang="scss" scoped>

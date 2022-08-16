@@ -243,6 +243,13 @@ export function SaveStructionBom(data: SaveBOM) {
     data
   })
 }
+export function SaveProductDevelopmentInput(data: SaveBOM) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/SaveProductDevelopmentInput",
+    method: "post",
+    data
+  })
+}
 export function GetStructionBom() {
   return request({
     url: "/api/services/app/StructionBom/FindStructureBomByProcess",
