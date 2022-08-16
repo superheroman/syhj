@@ -4,11 +4,11 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           实验费用
-          <el-button type="primary" @click="addCostData">新增</el-button>
+          <el-button type="primary" @click="addLaboratoryFeeModel">新增</el-button>
         </el-row>
       </template>
       <el-table
-        :data="data.costData"
+        :data="data.laboratoryFeeModels"
         style="width: 100%"
         border
         :summary-method="getLaboratoryFeeSummaries"
@@ -55,7 +55,8 @@
         </el-table-column>
         <el-table-column label="单位" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.unit" type="number" :formatter="transformNumber" :min="0" />
+            <!-- <el-input v-model="row.unit" type="number" :formatter="transformNumber" :min="0" /> -->
+            <el-input v-model="row.unit" />
           </template>
         </el-table-column>
         <!-- <el-table-column label="时间" width="250">
@@ -101,7 +102,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteLaboratoryFeeModel($index)" type="danger">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -119,20 +120,21 @@ import { PostProductDepartment } from "./common/request"
 import { transformNumber } from "../resourcesDepartment/common/util"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import { LaboratoryFeeModel } from "./data.type"
+import useQueryData from "@/hook/useQueryData"
 
-const deleteCostData = (i: number) => {
-  data.costData.splice(i, 1)
+const deleteLaboratoryFeeModel = (i: number) => {
+  data.laboratoryFeeModels.splice(i, 1)
 }
-
-const addCostData = () => {
-  data.costData.push({ unitPrice: 0, allCost: 0, quantity: 0 })
+let { auditFlowId, productId } = useQueryData()
+const addLaboratoryFeeModel = () => {
+  data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, quantity: 0 })
 }
 
 const submit = async () => {
   try {
     const res = await PostProductDepartment({
-      auditFlowId: 123,
-      productDepartmentModels: [{ ...data, productId: 123 }]
+      auditFlowId: auditFlowId.value,
+      productDepartmentModels: [{ ...data, productId: productId.value }]
     })
     console.log(res, "[PostProductDepartment RES]")
   } catch (err) {
@@ -144,9 +146,9 @@ const submit = async () => {
  * 数据部分
  */
 const data = reactive<{
-  costData: LaboratoryFeeModel[]
+  laboratoryFeeModels: LaboratoryFeeModel[]
 }>({
-  costData: []
+  laboratoryFeeModels: []
 })
 
 onBeforeMount(() => {
