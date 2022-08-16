@@ -60,39 +60,18 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive } from "vue"
+import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
 import { SaveElectronicBom, DownloadFile } from "@/api/bom"
-// import getQuery from "@/utils/getQuery"
-// let auditFlowId = 0
-// let productId = 0
+import getQuery from "@/utils/getQuery"
+
+let auditFlowId = 0
+let productId = 0
 const data = reactive({
   activeIndex: 0,
-  productList: [
-    {
-      name: "零件1",
-      id: 1
-    },
-    {
-      name: "零件2",
-      id: 2
-    }
-  ],
-  tableDataList: [
-    [
-      {
-        categoryName: "1",
-        typeName: "12",
-        isInvolveItem: "是",
-        sapItemNum: "123",
-        sapItemName: "321",
-        assemblyQuantity: "12312",
-        encapsulationSize: "123123"
-      }
-    ]
-  ],
+  productList: [],
   tableData: [],
   setVisible: false,
   downloadSetForm: {
@@ -137,12 +116,17 @@ const downLoadTemplate = async () => {
 }
 const submit = async () => {
   let res: any = await SaveElectronicBom({
-    auditFlowId: "1",
-    partNumber: "测试零件",
+    auditFlowId,
+    productId,
     electronicBomDtos: data.tableData
   })
   console.log(res)
 }
+onMounted(async () => {
+  let query = getQuery()
+  auditFlowId = Number(query.auditFlowId) || 0
+  productId = Number(query.productId) || 0
+})
 </script>
 <style lang="scss" scoped>
 .electronic-import {

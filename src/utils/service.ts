@@ -39,6 +39,12 @@ function createService() {
       //       return Promise.reject(new Error("Error"))
       //   }
       // }
+      const { result } = apiData
+      if (result.isSuccess === false && result.message) {
+        // 后端定制错误格式
+        ElMessage.error(result.message)
+      }
+      // 默认格式先加上
       const error = apiData.error
       if (error) {
         ElMessage.error(error)

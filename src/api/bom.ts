@@ -38,6 +38,10 @@ export interface SaveBOM {
    */
   partNumber?: null | string
   /**
+   * 零件id
+   */
+  productId?: null | string | number
+  /**
    * 3D爆炸图名字
    */
   pictureName?: null | string
@@ -48,7 +52,7 @@ export interface SaveBOM {
   /**
    * 流程号
    */
-  auditFlowId?: null | string
+  auditFlowId?: null | string | number
   /**
    * 单箱包装数量
    */
@@ -235,6 +239,13 @@ export function CommonDownloadFile(fileId: number) {
 export function SaveStructionBom(data: SaveBOM) {
   return request({
     url: "/api/services/app/StructionBom/SaveStructionBom",
+    method: "post",
+    data
+  })
+}
+export function SaveProductDevelopmentInput(data: SaveBOM) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/SaveProductDevelopmentInput",
     method: "post",
     data
   })
