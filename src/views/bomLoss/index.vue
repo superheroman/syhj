@@ -56,6 +56,7 @@ const data = reactive({
 
 let auditFlowId = 0
 let productId = 0
+let isOld = "false"
 const submit = async () => {
   let res: any = await saveLossRateInfo({
     auditFlowId: auditFlowId,
@@ -80,21 +81,24 @@ const years = (index: number) => {
 onBeforeMount(() => {
   // console.log(VITE_BASE_API)
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
-  data.years = years(5)
-  data.bomLossData.forEach((item) => {
-    item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
-  })
 })
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId)
   productId = Number(query.productId)
-
-  let res: any = await getLossRateType({ auditFlowId, productId })
-  console.log(res)
-  let resOld: any = await getOldLossRateInfo({ auditFlowId, productId })
-  data.bomLossData = resOld.result
+  data.years = years(5)
+  if (isOld === "true") {
+    let resOld: any = await getOldLossRateInfo({ auditFlowId, productId })
+    data.bomLossData = resOld.result
+  } else {
+    let res: any = await getLossRateType({ auditFlowId, productId })
+    data.bomLossData = res.result
+  }
+  data.bomLossData.forEach((item: any) => {
+    item.lossRateYearList = []
+    item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
+  })
 })
 watchEffect(() => {})
 // 使用toRefs解构
