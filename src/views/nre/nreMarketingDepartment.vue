@@ -4,7 +4,7 @@
       <template #header> 营销部 - 业务员 </template>
       <el-table :data="mouldInventoryData" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
         <el-table-column type="index" width="50" />
-        <el-table-column label="费用名称" width="180" />
+        <el-table-column label="费用名称" prop="formName" width="180" />
         <el-table-column prop="pricingMoney" label="核价金额" width="180" />
         <el-table-column label="报价系数" width="180">
           <template #default="{ row }">
@@ -37,12 +37,15 @@ import { getMouldSummaries } from "./common/mouldSummaries"
 import { NreMarketingDepartmentModel } from "./data.type"
 import { transformNumber } from "./common/utils"
 import { ElMessage } from "element-plus"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 const mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
 
 const initFetch = async () => {
   try {
-    const { success, result } = await GetInitialSalesDepartment({ id: 123 })
+    const { success, result } = await GetInitialSalesDepartment({ id: auditFlowId, productId })
     if (!success) throw Error()
     console.log(result, "result")
     mouldInventoryData.value = result

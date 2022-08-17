@@ -16,7 +16,7 @@ export const getMouldSummaries = (param: MouldSummaryMethodProps) => {
       return
     }
 
-    const values = data.map((item) => Number(item.pricingMoney))
+    const values = data.map((item) => Number(item.cost))
     if (!values.every((value) => Number.isNaN(value)) && index === 2) {
       sums[index] = `¥ ${values.reduce((prev, curr) => {
         if (!Number.isNaN(curr)) {

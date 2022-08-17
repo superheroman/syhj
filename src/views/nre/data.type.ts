@@ -9,7 +9,7 @@ export interface NreProjectManageMentData {
   /**
    * Nre核价 项目管理部 实体
    */
-  projectManagements?: ProjectManagementModel[] | null
+  projectManagements?: ProjectManagementModel[]
 }
 
 /**
@@ -19,7 +19,7 @@ export interface ProjectManagementModel {
   /**
    * 手板件费用
    */
-  handPieceCost?: HandPieceCostModel[] | null
+  handPieceCost?: HandPieceCostModel[]
   /**
    * 零件的id
    */
@@ -27,11 +27,11 @@ export interface ProjectManagementModel {
   /**
    * 其他费用
    */
-  restsCost?: RestsCostModel[] | null
+  restsCost?: RestsCostModel[]
   /**
    * 差旅费
    */
-  travelExpense?: TravelExpenseModel[] | null
+  travelExpense?: TravelExpenseModel[]
 }
 
 /**
@@ -123,7 +123,7 @@ export interface NrePilotprojectsData {
   /**
    * 实验费 实体类
    */
-  productDepartmentModels?: ProductDepartmentModel[] | null
+  productDepartmentModels?: ProductDepartmentModel[]
 }
 
 /**
@@ -133,7 +133,7 @@ export interface ProductDepartmentModel {
   /**
    * 实验费 模型
    */
-  laboratoryFeeModels?: LaboratoryFeeModel[] | null
+  laboratoryFeeModels?: LaboratoryFeeModel[]
   /**
    * 零件的id
    */
@@ -185,7 +185,7 @@ export interface NreQCDepartmentData {
   /**
    * 带零件id 的 品保录入模型
    */
-  qaDepartments?: QADepartmentPartModel[] | null
+  qaDepartments?: QADepartmentPartModel[]
 }
 
 /**
@@ -199,11 +199,11 @@ export interface QADepartmentPartModel {
   /**
    * 品保录入  项目制程QC量检具表 模型
    */
-  qaqcDepartments?: QADepartmentQCModel[] | null
+  qaqcDepartments?: QADepartmentQCModel[]
   /**
    * 品保录入  试验项目表 模型
    */
-  qaTestDepartments?: QADepartmentTestModel[] | null
+  qaTestDepartments?: QADepartmentTestModel[]
 }
 
 /**
@@ -289,7 +289,7 @@ export interface ProductDepartmentModel {
   /**
    * 实验费 模型
    */
-  laboratoryFeeModels?: LaboratoryFeeModel[] | null
+  laboratoryFeeModels?: LaboratoryFeeModel[]
   /**
    * 零件的id
    */
@@ -337,11 +337,11 @@ export interface QADepartmentPartModel {
   /**
    * 品保录入  项目制程QC量检具表 模型
    */
-  qaqcDepartments?: QADepartmentQCModel[] | null
+  qaqcDepartments?: QADepartmentQCModel[]
   /**
    * 品保录入  试验项目表 模型
    */
-  qaTestDepartments?: QADepartmentTestModel[] | null
+  qaTestDepartments?: QADepartmentTestModel[]
 }
 
 /**
@@ -427,7 +427,7 @@ export interface ResourcesManagementModel {
   /**
    * 模具清单
    */
-  mouldInventory?: MouldInventoryModel[] | null
+  mouldInventory?: MouldInventoryModel[]
   /**
    * 零件的id
    */
@@ -498,6 +498,7 @@ export interface NreMarketingDepartmentModel {
    * 备注
    */
   remark?: null | string
+  cost?: number
 }
 
 export interface pricingForm {
@@ -509,15 +510,15 @@ export interface pricingForm {
    * 编制日期
    */
   compileDate?: Date
-  handPieceCost?: HandPieceCostModel[] | null
+  handPieceCost?: HandPieceCostModel[]
   /**
    * 实验费 模型
    */
-  laboratoryFeeModels?: LaboratoryFeeModel[] | null
+  laboratoryFeeModels?: LaboratoryFeeModel[]
   /**
    * 模具清单 (模具费用)
    */
-  mouldInventory?: MouldInventoryModel[] | null
+  mouldInventory?: MouldInventoryModel[]
   /**
    * 项目名称
    */
@@ -525,7 +526,7 @@ export interface pricingForm {
   /**
    * 检具费用
    */
-  qaqcDepartments?: QADepartmentQCModel[] | null
+  qaqcDepartments?: QADepartmentQCModel[]
   /**
    * 记录编号=>版本号
    */
@@ -537,7 +538,7 @@ export interface pricingForm {
   /**
    * 其他费用
    */
-  restsCost?: RestsCostModel[] | null
+  restsCost?: RestsCostModel[]
   /**
    * (不含税人民币) NRE 总费用
    */
@@ -545,7 +546,7 @@ export interface pricingForm {
   /**
    * 差旅费
    */
-  travelExpense?: TravelExpenseModel[] | null
+  travelExpense?: TravelExpenseModel[]
   /**
    * (不含税美金) NRE 总费用
    */

@@ -143,7 +143,9 @@ import { QADepartmentTestModel, QADepartmentQCModel } from "./data.type"
 import { transformNumber } from "./common/utils"
 import { getQaTestDepartmentsSummaries, getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment } from "./common/request"
-import console from "console"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 /**
  * 数据部分
@@ -190,10 +192,10 @@ const addQaqcDepartmentsData = () => {
 const submit = async () => {
   try {
     const res = await PostQADepartment({
-      auditFlowId: 123,
+      auditFlowId,
       qaDepartments: [
         {
-          productId: 123,
+          productId,
           qaTestDepartments: data.qaTestDepartments.map((item) => ({
             ...item,
             cost: (item.unitPrice || 0) * (item.count || 0)

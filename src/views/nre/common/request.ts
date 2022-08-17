@@ -80,7 +80,7 @@ export function PostResourcesManagement(data: {
 }
 
 // 资源部录入初始值
-export function GetInitialResourcesManagement(data: { id: number }): any {
+export function GetInitialResourcesManagement(data: { id: number; productId: number }): any {
   return request({
     url: "/api/services/app/NrePricing/GetInitialResourcesManagement",
     method: "get",
@@ -107,7 +107,7 @@ export function PostCalculateMouldInventory(data: {
 }
 
 // Ner 营销部录入初始值
-export function GetInitialSalesDepartment(data: { id: number }): any {
+export function GetInitialSalesDepartment(data: { Id: number; productId: number }): any {
   return request({
     url: "/api/services/app/NrePricing/GetInitialSalesDepartment",
     method: "get",
@@ -126,7 +126,7 @@ export function PostSalesDepartment(data: NreMarketingDepartmentModel[]): any {
 
 /**NRE费用模块 */
 
-export function GetPricingForm(data: { id: number; productId: number }): any {
+export function GetPricingForm(data: { Id: number; productId: number }): any {
   return request({
     url: "/api/services/app/NrePricing/GetPricingForm",
     method: "get",
