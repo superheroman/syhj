@@ -73,6 +73,7 @@ import { ConstructionDto, ConstructionModel } from "./data.type"
 import { GetStructural, PostStructuralMemberEntering } from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
+import { transformNumber } from "./common/util"
 import getQuery from "@/utils/getQuery"
 
 const { auditFlowId = 1 }: any = getQuery()
@@ -85,7 +86,7 @@ const allColums = reactive<any>({
   sop: []
 })
 
-const exchangeSelectOptions = ref([])
+const exchangeSelectOptions = ref<any>([])
 
 onBeforeMount(() => {
   fetchOptionsData()
