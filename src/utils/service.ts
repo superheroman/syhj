@@ -40,7 +40,7 @@ function createService() {
       //   }
       // }
       const { result } = apiData
-      if (result.isSuccess === false && result.message) {
+      if (result?.isSuccess === false && result?.message) {
         // 后端定制错误格式
         ElMessage.error(result.message)
       }
