@@ -1,7 +1,7 @@
 <template>
   <div class="margin-top">
     <el-card class="table-wrap" header="电子料单价录入界面">
-      <el-table :data="electronicBomList" style="width: 100%">
+      <el-table :data="electronicBomList" style="width: 100%" height="500">
         <el-table-column prop="categoryName" label="物料大类" width="150" />
         <el-table-column prop="typeName" label="物料种类" width="150" />
         <el-table-column prop="sapItemNum" label="物料编号" width="150" />
@@ -93,10 +93,10 @@
           </template>
         </el-table-column>
         <el-table-column prop="pricingEndTime" label="确认人" />
-        <el-table-column label="操作" fixed="right" width="150">
+        <el-table-column label="操作" fixed="right" width="200">
           <template #default="scope">
             <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
-            <el-button class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
+            <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
               计算
             </el-button>
             <!-- <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button> -->
@@ -117,11 +117,13 @@
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { useUserStore } from "@/store/modules/user"
-import { mockData } from "./common/mock"
 import { ElectronicDto } from "./data.type"
 import { transformNumber } from "./common/util"
 import { ElMessage } from "element-plus"
 import { GetElectronic, PostElectronicMaterialCalculate, PostElectronicMaterialEntering } from "./common/request"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1 }: any = getQuery()
 
 // 获取仓库的值
 const store = useUserStore()
@@ -153,10 +155,10 @@ const fetchInitData = async () => {
     const {
       success,
       result: { electronicBomList: tempData }
-    } = await GetElectronic({ id: 123 })
+    } = await GetElectronic({ id: auditFlowId })
     if (!success) throw Error()
     console.log(tempData, "获取初始化数据")
-    electronicBomList.value = mockData || []
+    electronicBomList.value = tempData
     // 初始化表头数据
     const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
       electronicBomList?.value[0] || {}
@@ -176,7 +178,7 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
     const res = await PostElectronicMaterialEntering({
       isSubmit,
       electronicDtoList: [record],
-      auditFlowId: 123
+      auditFlowId
     })
     console.log(res, "res")
   } catch (err) {

@@ -126,7 +126,9 @@ import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetPricingForm } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { pricingForm } from "./data.type"
-import console from "console"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
 // import { ElMessage } from "element-plus"
 
 const data = ref<pricingForm>({
@@ -142,10 +144,15 @@ const data = ref<pricingForm>({
 
 const initFetch = async () => {
   try {
-    const { success, result } = await GetPricingForm({ Id: 123, PartId: 123 })
+    const { success, result } = await GetPricingForm({ Id: auditFlowId, productId })
     if (!success) throw Error()
     console.log(result, "result")
-    // data.value = result
+    data.value.handPieceCost = result.handPieceCost || []
+    data.value.mouldInventory = result.mouldInventory || []
+    data.value.qaqcDepartments = result.qaqcDepartments || []
+    data.value.laboratoryFeeModels = result.laboratoryFeeModels || []
+    data.value.travelExpense = result.travelExpense || []
+    data.value.restsCost = result.restsCost || []
   } catch (err) {
     console.log(err, "[ GetPricingForm err ]")
   }

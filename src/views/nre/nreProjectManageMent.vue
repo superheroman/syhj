@@ -160,11 +160,15 @@ import { PostProjectManagement } from "./common/request"
 import { transformNumber } from "../resourcesDepartment/common/util"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
 import { getDictionaryAndDetail } from "@/api/dictionary"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
+
 /**
  * 数据部分
  */
 const data = reactive({
-  handPieceCost: [{ partName: "", partNumber: "", unitPrice: 1, quantity: 4, cost: 4 }] as HandPieceCostModel[],
+  handPieceCost: [{ partName: "", partNumber: "", unitPrice: 0, quantity: 0, cost: 0 }] as HandPieceCostModel[],
   restsCost: [] as RestsCostModel[],
   travelExpense: [] as TravelExpenseModel[],
   nreResonOptions: [] as any[]
@@ -191,7 +195,7 @@ const addOtherCostData = () => {
 }
 
 const addTravelCostData = () => {
-  data.travelExpense.push({ reasonsId: "123", peopleCount: 0, costSky: 0, skyCount: 0, cost: 0, remark: "" })
+  data.travelExpense.push({ reasonsId: "", peopleCount: 0, costSky: 0, skyCount: 0, cost: 0, remark: "" })
 }
 
 const submit = async () => {
@@ -206,10 +210,10 @@ const submit = async () => {
               cost: (item.unitPrice || 0) * (item.quantity || 0)
             }
           }),
-          productId: 123
+          productId
         }
       ],
-      auditFlowId: 111
+      auditFlowId
     })
     console.log(res, "RES")
   } catch (err) {

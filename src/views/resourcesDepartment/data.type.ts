@@ -31,11 +31,11 @@ export interface ConstructionDto {
   /**
    * 结构料
    */
-  structureMaterial?: ConstructionModel[] | null
+  structureMaterial?: ConstructionModel[]
   /**
    * 超级大种类  结构料 胶水等辅材 SMT外协 包材
    */
-  superTypeName?: null | string
+  superTypeName?: string
 }
 
 /**
