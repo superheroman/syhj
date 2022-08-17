@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import { getLossRateType, getOldLossRateInfo, saveLossRateInfo } from "./service"
+import { getLossRateType, getOldLossRateInfo, saveLossRateInfo, getYears } from "./service"
 import { ElMessage } from "element-plus"
 // import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
@@ -54,8 +54,8 @@ const data = reactive({
   years: [] as number[]
 })
 
-let auditFlowId = 0
-let productId = 0
+let auditFlowId = 1
+let productId = 1
 let isOld = "false"
 const submit = async () => {
   let res: any = await saveLossRateInfo({
@@ -70,14 +70,14 @@ const submit = async () => {
     })
   }
 }
-const years = (index: number) => {
-  let sop = new Date().getFullYear()
-  let yearList: number[] = [sop]
-  for (let i = 1; i < index; i++) {
-    yearList.push(sop + i)
-  }
-  return yearList
-}
+// const years = (index: number) => {
+//   let sop = new Date().getFullYear()
+//   let yearList: number[] = [sop]
+//   for (let i = 1; i < index; i++) {
+//     yearList.push(sop + i)
+//   }
+//   return yearList
+// }
 onBeforeMount(() => {
   // console.log(VITE_BASE_API)
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
@@ -85,9 +85,10 @@ onBeforeMount(() => {
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   let query = getQuery()
-  auditFlowId = Number(query.auditFlowId)
-  productId = Number(query.productId)
-  data.years = years(5)
+  auditFlowId = query.auditFlowId ? Number(query.auditFlowId) : 1
+  productId = query.productId ? Number(query.productId) : 1
+  let { result } = (await getYears(auditFlowId)) as any
+  data.years = result
   if (isOld === "true") {
     let resOld: any = await getOldLossRateInfo({ auditFlowId, productId })
     data.bomLossData = resOld.result

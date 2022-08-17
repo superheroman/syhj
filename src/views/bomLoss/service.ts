@@ -24,3 +24,14 @@ export function getOldLossRateInfo(data: auditFlowInfo) {
     data
   })
 }
+
+/** 获取年份 */
+export function getYears(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/ProductionControl/GetAllYearsFrom",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}

@@ -170,7 +170,7 @@ onMounted(async () => {
   data.productId = Number(query.productId) || 0
   let { result } = (await getYears(data.auditFlowId)) as any
   let { result: monthEndDemand } = (await getPcsByPriceEvaluationId(1)) as any
-  result = [2022, 2023, 2024]
+  // result = [2022, 2023, 2024]
   console.log(monthEndDemand, "monthEndDemand")
   let warpArr = [] as any[] //二维数组
   monthEndDemand.items.forEach((item: any) => {

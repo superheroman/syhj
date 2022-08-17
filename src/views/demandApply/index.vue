@@ -740,7 +740,7 @@ const state = reactive({
     projectManager: "",
     sorFile: [] as any,
     reason: "",
-    auditFlowId: 5 //默认先给一个5
+    auditFlowId: 1 //默认先给一个5
   },
   yearCols: [] as Number[],
   carAnnualTotal: 0, //列年度总量，把sum取出

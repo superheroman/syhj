@@ -6,8 +6,8 @@ export default function useQueryData() {
   let auditFlowId = ref(0)
   let productId = ref(0)
   onMounted(() => {
-    auditFlowId.value = Number(query.auditFlowId) || 0
-    productId.value = Number(query.productId) || 0
+    auditFlowId.value = Number(query.auditFlowId) || 1
+    productId.value = Number(query.productId) || 1
   })
   return {
     auditFlowId,

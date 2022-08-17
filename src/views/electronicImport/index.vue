@@ -67,8 +67,8 @@ import { ElMessage } from "element-plus"
 import { SaveElectronicBom, DownloadFile } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 
-let auditFlowId = 0
-let productId = 0
+let auditFlowId = 1
+let productId = 1
 const data = reactive({
   activeIndex: 0,
   productList: [],
@@ -124,8 +124,8 @@ const submit = async () => {
 }
 onMounted(async () => {
   let query = getQuery()
-  auditFlowId = Number(query.auditFlowId) || 0
-  productId = Number(query.productId) || 0
+  auditFlowId = Number(query.auditFlowId) || 1
+  productId = Number(query.productId) || 1
 })
 </script>
 <style lang="scss" scoped>
