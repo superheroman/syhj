@@ -132,6 +132,36 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: "/marketingQuotation",
+    redirect: "/marketingQuotation/index",
+    component: Layout,
+    children: [
+      {
+        path: "/marketingQuotation/index",
+        component: () => import("@/views/marketingQuotation/index.vue"),
+        name: "marketingQuotation",
+        meta: {
+          title: "营销部报价"
+        }
+      }
+    ]
+  },
+  {
+    path: "/tradeCompliance",
+    redirect: "/tradeCompliance/index",
+    component: Layout,
+    children: [
+      {
+        path: "/tradeCompliance/index",
+        component: () => import("@/views/tradeCompliance/index.vue"),
+        name: "tradeCompliance",
+        meta: {
+          title: "贸易合规"
+        }
+      }
+    ]
+  },
+  {
     path: "/departmentManage",
     redirect: "/departmentManage/index",
     component: Layout,
@@ -434,6 +464,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "nrePricelist",
         meta: {
           title: "核价表nre"
+        }
+      },
+      {
+        path: "/nre/costInformation",
+        component: () => import("@/views/nre/costInformation.vue"),
+        name: "costInformation",
+        meta: {
+          title: "成本信息表"
         }
       }
     ]
