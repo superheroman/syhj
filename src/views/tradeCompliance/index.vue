@@ -37,7 +37,7 @@
     </el-descriptions>
     <el-descriptions :column="2" border>
       <el-descriptions-item label="做成/日期"> {{ data.tradeComplianceCheck.creationTime }} </el-descriptions-item>
-      <el-descriptions-item label="审核/日期"> {{ data.tradeComplianceCheck.deletionTime }} </el-descriptions-item>
+      <!-- <el-descriptions-item label="审核/日期"> {{ data.tradeComplianceCheck.deletionTime }} </el-descriptions-item> -->
     </el-descriptions>
   </el-card>
 </template>

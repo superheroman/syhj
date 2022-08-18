@@ -19,7 +19,7 @@ export const getQaTestDepartmentsSummaries = (param: QaTestDepartmentsSummaryMet
   const sums: string[] = []
   columns.forEach((column, index) => {
     if (index === 4) {
-      sums[index] = "手板件总费用"
+      sums[index] = "实验费合计"
       return
     }
 
@@ -46,7 +46,7 @@ export const getQaqcDepartmentsSummaries = (param: QaqcDepartmentsSummaryMethodP
   const sums: string[] = []
   columns.forEach((column, index) => {
     if (index === 3) {
-      sums[index] = "手板件总费用"
+      sums[index] = "项目制程QC量检具费用合计"
       return
     }
 

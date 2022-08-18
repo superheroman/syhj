@@ -46,7 +46,7 @@ export const getOtherCostSummaries = (param: RestsCostSummaryMethodProps) => {
   const sums: string[] = []
   columns.forEach((column, index) => {
     if (index === 1) {
-      sums[index] = "手板件总费用"
+      sums[index] = "其他费用合计"
       return
     }
 
