@@ -36,11 +36,11 @@
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-          <el-table-column label="Sop" align="center" v-if="allColums?.sop.length">
+          <el-table-column label="单价" align="center" v-if="allColums?.sop.length">
             <el-table-column
               v-for="(item, index) in allColums?.sop"
               :key="item"
-              :label="`Sop + ${index + 1}`"
+              :label="`${index === 0 ? 'SOP' : `SOP + ${index + 1}`}`"
               :prop="`sop[${index}].value`"
               width="150"
             >
