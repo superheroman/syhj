@@ -134,17 +134,17 @@
           <el-table-column label="年份" prop="year" />
           <el-table-column label="人工工时" prop="`laborTime`">
             <template #default="{ row }">
-              <el-input v-model="row.laborTime" />
+              <el-input v-model="row.laborTime" type="number" :min="0" :formatter="transformNumber" />
             </template>
           </el-table-column>
           <el-table-column label="标准机器工时" prop="machineHours">
             <template #default="{ row }">
-              <el-input v-model="row.machineHours" />
+              <el-input v-model="row.machineHours" type="number" :min="0" :formatter="transformNumber" />
             </template>
           </el-table-column>
           <el-table-column label="人员数量" prop="personnelNumber">
             <template #default="{ row }">
-              <el-input v-model="row.personnelNumber" />
+              <el-input v-model="row.personnelNumber" type="number" :min="0" :formatter="transformNumber" />
             </template>
           </el-table-column>
         </el-table>
@@ -191,6 +191,10 @@ const data = reactive<{
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
 // }
+
+const transformNumber = (str: string) => {
+  return Number(str)
+}
 
 const formatterArr = (key: string, childKey = "equipmentDetails") => {
   return Math.max.apply(
