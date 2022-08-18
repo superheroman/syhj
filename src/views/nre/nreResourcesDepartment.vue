@@ -50,18 +50,24 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { PostResourcesManagement, GetInitialResourcesManagement, PostCalculateMouldInventory } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { transformNumber } from "./common/utils"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 const data = reactive({
-  mouldData: []
+  mouldData: [],
+  resourcesManagementModels: []
 })
 
 const initFetch = async () => {
-  await GetInitialResourcesManagement({ id: 123 })
+  const { result } = await GetInitialResourcesManagement({ id: auditFlowId, productId })
+  data.mouldData = result.mouldInventoryModels.map((item) => item.mouldInventoryModels).flat()
+  data.resourcesManagementModels = result.mouldInventoryModels
 }
 
 const submit = async () => {
   await PostResourcesManagement({
-    auditFlowId: 123,
+    auditFlowId,
     resourcesManagementModels: [
       {
         mouldInventory: data.mouldData,
@@ -74,7 +80,7 @@ const submit = async () => {
 const handleCalculation = async () => {
   try {
     const res = await PostCalculateMouldInventory({
-      auditFlowId: 123,
+      auditFlowId,
       resourcesManagementModels: [
         {
           mouldInventory: data.mouldData,

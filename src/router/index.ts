@@ -230,6 +230,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  {
+    path: "/bomVerify",
+    redirect: "/bomVerify/index",
+    component: Layout,
+    children: [
+      {
+        path: "/bomVerify/index",
+        component: () => import("@/views/bomVerify/index.vue"),
+        name: "bomVerify",
+        meta: {
+          title: "Bom单价审核"
+        }
+      }
+    ]
+  },
   // {
   //   path: "/processManagement",
   //   redirect: "/processManagement/index",

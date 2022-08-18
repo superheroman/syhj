@@ -9,7 +9,7 @@
       </el-descriptions-item>
     </el-descriptions>
     <el-card header="产品组成物料" class="card-margin">
-      <el-table :data="data.productMaterialInfos" style="width: 100%; height: 500px" border>
+      <el-table :data="data.productMaterialInfos" style="width: 100%" height="500" border>
         <el-table-column type="index" label="序号" width="100" />
         <el-table-column label="物料编码" prop="name" />
         <el-table-column label="物料名称" prop="name" />

@@ -16,8 +16,7 @@
 
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted } from "vue"
-// import { GetYearDimensionalityComparison } from "./service"
-import MockData from "./mock.json"
+import { GetYearDimensionalityComparison } from "./service"
 
 /**
  * 数据部分
@@ -37,7 +36,7 @@ onMounted(() => {
 })
 
 const init = async () => {
-  const { result } = MockData //await GetYearDimensionalityComparison({})
+  const { result } = await GetYearDimensionalityComparison({})
   console.log(result, "res")
   data.tableData = result
 }
