@@ -1,4 +1,5 @@
 import { request } from "@/utils/service"
+import { TangentSaveDto } from "./data.type"
 
 export function downloadWorkingHoursInfo() {
   return request({
@@ -7,9 +8,18 @@ export function downloadWorkingHoursInfo() {
     responseType: "blob"
   })
 }
+
 export function SaveWorkingHour(data: any) {
   return request({
     url: "/api/services/app/WorkingHours/SaveWorkingHour",
+    method: "post",
+    data
+  })
+}
+
+export function SaveTangentHours(data: TangentSaveDto): any {
+  return request({
+    url: "/api/services/app/WorkingHours/SaveTangentHours",
     method: "post",
     data
   })

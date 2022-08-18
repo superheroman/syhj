@@ -1,121 +1,170 @@
 <template>
   <div class="electronic-import">
-    <div class="electronic-import__btn-container">
-      <el-form :inline="true">
-        <el-form-item label="">
-          <el-upload
-            action="api/services/app/WorkingHours/UploadExcel"
-            :on-success="handleSuccess"
-            :show-file-list="false"
-          >
-            <el-button type="primary">工序工时上传</el-button>
-          </el-upload>
-        </el-form-item>
-        <el-form-item label="">
-          <el-button type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-
-    <h5>工序工时导入</h5>
-    <el-table :data="data.tableData" border style="width: 100%" height="700">
-      <el-table-column label="设备部分" class-name="columnColor1">
-        <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="`equipmentPart-${index}`">
-          <el-table-column
-            :prop="`equipmentPart.equipmentDetails[${index}].equipmentName`"
-            :label="`设备${index + 1}`"
-            width="180"
-          />
-          <el-table-column
-            :prop="`equipmentPart.equipmentDetails[${index}].status`"
-            :label="`设备${index + 1}状态`"
-            width="180"
-          />
-          <el-table-column
-            :prop="`equipmentPart.equipmentDetails[${index}].number`"
-            :label="`设备${index + 1}数量`"
-            width="180"
-          />
-          <el-table-column
-            :prop="`equipmentPart.equipmentDetails[${index}].price`"
-            :label="`设备${index + 1}单价`"
-            width="180"
-          />
-        </template>
-        <el-table-column prop="equipmentPart.total" label="设备总价" width="180" />
-      </el-table-column>
-      <el-table-column label="追溯部分" class-name="columnColor2">
-        <template v-for="(item, index) in data.retrospectPart?.equipmentDetails" :key="`retrospectPart-${index}`">
-          <el-table-column
-            :prop="`retrospectPart.equipmentDetails[${index}].equipmentName`"
-            :label="`设备${index + 1}`"
-            width="180"
-          />
-          <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].status`" label="状态" width="180" />
-          <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].number`" label="数量" width="180" />
-          <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].price`" label="单价" width="180" />
-        </template>
-        <el-table-column prop="retrospectPart.openGraphSoftware" label="开图软件" width="180" />
-        <el-table-column prop="retrospectPart.openGraphSoftware" label="软件" width="180" />
-        <el-table-column prop="retrospectPart.openGraphFee" label="开发费(开图)" width="180" />
-        <el-table-column prop="retrospectPart.total" label="开发总价" width="180" />
-      </el-table-column>
-      <el-table-column label="工装治具部分" class-name="columnColor3">
-        <template
-          v-for="(item, index) in data.toolingFixturePart?.equipmentDetails"
-          :key="`toolingFixturePart-${index}`"
-        >
-          <el-table-column
-            :prop="`toolingFixturePart.equipmentDetails[${index}].equipmentName`"
-            :label="`治具${index + 1}`"
-            width="180"
-          />
-          <el-table-column :prop="`toolingFixturePart.equipmentDetails[${index}].status`" label="状态" width="180" />
-          <el-table-column :prop="`toolingFixturePart.equipmentDetails[${index}].number`" label="数量" width="180" />
-          <el-table-column
-            :prop="`toolingFixturePart.equipmentDetails[${index}].price`"
-            :label="`治具单价${index + 1}`"
-            width="180"
-          />
-        </template>
-        <el-table-column prop="toolingFixturePart.toolingName" label="工装名称" width="180" />
-        <el-table-column prop="toolingFixturePart.toolingNum" label="数量" width="180" />
-        <el-table-column prop="toolingFixturePart.toolingPrice" label="工装单价" width="180" />
-        <el-table-column prop="toolingFixturePart.testName" label="测试线名称" width="180" />
-        <el-table-column prop="toolingFixturePart.testNum" label="数量" width="180" />
-        <el-table-column prop="toolingFixturePart.testPrice" label="线束单价" width="180" />
-        <el-table-column prop="toolingFixturePart.total" label="工装治具总价" width="180" />
-      </el-table-column>
-      <template v-for="(item, index) in data.humanMachineHoursDetailList" :key="`humanMachineHoursDetailList-${index}`">
-        <el-table-column :label="index === 0 ? 'SOP' : `SOP + ${index + 1}`" class-name="columnColor4">
-          <el-table-column :prop="`humanMachineHoursDetailList[${index}]laborTime`" label="标准人工工时" width="180" />
-          <el-table-column
-            :prop="`humanMachineHoursDetailList[${index}]machineHours`"
-            label="标准机器工时"
-            width="180"
-          />
-          <el-table-column
-            :prop="`humanMachineHoursDetailList[${index}]personnelNumber`"
-            label="人员数量"
-            width="180"
-          />
-        </el-table-column>
+    <el-card class="m-2">
+      <template #header>
+        <el-row align="middle" justify="space-between">
+          <span>工序工时导入</span>
+          <el-row align="middle">
+            <el-upload
+              action="api/services/app/WorkingHours/UploadExcel"
+              :on-success="handleSuccess"
+              :show-file-list="false"
+              class="m-2"
+            >
+              <el-button type="primary">工序工时上传</el-button>
+            </el-upload>
+            <el-button class="m-2" type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
+          </el-row>
+        </el-row>
       </template>
-    </el-table>
-    <div style="float: right; margin-top: 20px">
-      <el-button type="primary" @click="submit">提交</el-button>
-    </div>
+      <el-card>
+        <el-table :data="data.tableData" border style="width: 100%" height="700">
+          <el-table-column label="设备部分" class-name="columnColor1">
+            <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="`equipmentPart-${index}`">
+              <el-table-column
+                :prop="`equipmentPart.equipmentDetails[${index}].equipmentName`"
+                :label="`设备${index + 1}`"
+                width="180"
+              />
+              <el-table-column
+                :prop="`equipmentPart.equipmentDetails[${index}].status`"
+                :label="`设备${index + 1}状态`"
+                width="180"
+              />
+              <el-table-column
+                :prop="`equipmentPart.equipmentDetails[${index}].number`"
+                :label="`设备${index + 1}数量`"
+                width="180"
+              />
+              <el-table-column
+                :prop="`equipmentPart.equipmentDetails[${index}].price`"
+                :label="`设备${index + 1}单价`"
+                width="180"
+              />
+            </template>
+            <el-table-column prop="equipmentPart.total" label="设备总价" width="180" />
+          </el-table-column>
+          <el-table-column label="追溯部分" class-name="columnColor2">
+            <template v-for="(item, index) in data.retrospectPart?.equipmentDetails" :key="`retrospectPart-${index}`">
+              <el-table-column
+                :prop="`retrospectPart.equipmentDetails[${index}].equipmentName`"
+                :label="`设备${index + 1}`"
+                width="180"
+              />
+              <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].status`" label="状态" width="180" />
+              <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].number`" label="数量" width="180" />
+              <el-table-column :prop="`retrospectPart.equipmentDetails[${index}].price`" label="单价" width="180" />
+            </template>
+            <el-table-column prop="retrospectPart.openGraphSoftware" label="开图软件" width="180" />
+            <el-table-column prop="retrospectPart.openGraphSoftware" label="软件" width="180" />
+            <el-table-column prop="retrospectPart.openGraphFee" label="开发费(开图)" width="180" />
+            <el-table-column prop="retrospectPart.total" label="开发总价" width="180" />
+          </el-table-column>
+          <el-table-column label="工装治具部分" class-name="columnColor3">
+            <template
+              v-for="(item, index) in data.toolingFixturePart?.equipmentDetails"
+              :key="`toolingFixturePart-${index}`"
+            >
+              <el-table-column
+                :prop="`toolingFixturePart.equipmentDetails[${index}].equipmentName`"
+                :label="`治具${index + 1}`"
+                width="180"
+              />
+              <el-table-column
+                :prop="`toolingFixturePart.equipmentDetails[${index}].status`"
+                label="状态"
+                width="180"
+              />
+              <el-table-column
+                :prop="`toolingFixturePart.equipmentDetails[${index}].number`"
+                label="数量"
+                width="180"
+              />
+              <el-table-column
+                :prop="`toolingFixturePart.equipmentDetails[${index}].price`"
+                :label="`治具单价${index + 1}`"
+                width="180"
+              />
+            </template>
+            <el-table-column prop="toolingFixturePart.toolingName" label="工装名称" width="180" />
+            <el-table-column prop="toolingFixturePart.toolingNum" label="数量" width="180" />
+            <el-table-column prop="toolingFixturePart.toolingPrice" label="工装单价" width="180" />
+            <el-table-column prop="toolingFixturePart.testName" label="测试线名称" width="180" />
+            <el-table-column prop="toolingFixturePart.testNum" label="数量" width="180" />
+            <el-table-column prop="toolingFixturePart.testPrice" label="线束单价" width="180" />
+            <el-table-column prop="toolingFixturePart.total" label="工装治具总价" width="180" />
+          </el-table-column>
+          <template
+            v-for="(item, index) in data.humanMachineHoursDetailList"
+            :key="`humanMachineHoursDetailList-${index}`"
+          >
+            <el-table-column :label="index === 0 ? 'SOP' : `SOP + ${index + 1}`" class-name="columnColor4">
+              <el-table-column
+                :prop="`humanMachineHoursDetailList[${index}]laborTime`"
+                label="标准人工工时"
+                width="180"
+              />
+              <el-table-column
+                :prop="`humanMachineHoursDetailList[${index}]machineHours`"
+                label="标准机器工时"
+                width="180"
+              />
+              <el-table-column
+                :prop="`humanMachineHoursDetailList[${index}]personnelNumber`"
+                label="人员数量"
+                width="180"
+              />
+            </el-table-column>
+          </template>
+        </el-table>
+        <div style="float: right" class="m-2">
+          <el-button type="primary" @click="submit">提交</el-button>
+        </div>
+      </el-card>
+      <el-card style="margin-top: 20px">
+        <template #header>
+          <el-row align="middle" justify="space-between">
+            <span>根线/切线工时</span>
+          </el-row>
+        </template>
+        <el-row align="middle" style="width: 350px; flex-wrap: nowrap"
+          >UPH值: <el-input style="width: 180px" class="m-2" v-model="data.uph" type="number" placeholder="请输入UPH值"
+        /></el-row>
+        <el-table :data="data.tangent">
+          <el-table-column label="年份" prop="year" />
+          <el-table-column label="人工工时" prop="`laborTime`">
+            <template #default="{ row }">
+              <el-input v-model="row.laborTime" />
+            </template>
+          </el-table-column>
+          <el-table-column label="标准机器工时" prop="machineHours">
+            <template #default="{ row }">
+              <el-input v-model="row.machineHours" />
+            </template>
+          </el-table-column>
+          <el-table-column label="人员数量" prop="personnelNumber">
+            <template #default="{ row }">
+              <el-input v-model="row.personnelNumber" />
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-row align="middle" justify="end" style="margin-top: 20px">
+          <el-button type="primary" @click="handleSaveTangentHours">保存</el-button>
+        </el-row>
+      </el-card>
+    </el-card>
   </div>
 </template>
 <script setup lang="ts">
 import { reactive, onMounted } from "vue"
-import type { UploadProps } from "element-plus"
+import { ElMessage, UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import { downloadWorkingHoursInfo, SaveWorkingHour } from "./service"
+import { downloadWorkingHoursInfo, SaveWorkingHour, SaveTangentHours } from "./service"
 import getQuery from "@/utils/getQuery"
-let auditFlowId = 0
-let productId = 0
+import { getYears } from "../pmDepartment/service"
+const { auditFlowId = 1, productId = 1 }: any = getQuery
+
 const data = reactive<{
   tableData: any
   retrospectPart: any
@@ -123,6 +172,9 @@ const data = reactive<{
   equipmentPart: any
   downloadSetForm: any
   humanMachineHoursDetailList: any[]
+  sop: any[]
+  tangent: any[]
+  uph: number | null
 }>({
   tableData: [],
   downloadSetForm: {
@@ -131,7 +183,10 @@ const data = reactive<{
   retrospectPart: { equipmentDetails: [] }, // 追溯部分（硬件及软件开发费用）
   toolingFixturePart: { equipmentDetails: [] }, // 工装治具部分
   equipmentPart: { equipmentDetails: [] }, // 设备部分
-  humanMachineHoursDetailList: []
+  humanMachineHoursDetailList: [],
+  sop: [],
+  tangent: [], // 根线/切线工时
+  uph: null
 })
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
@@ -181,27 +236,48 @@ const downLoadTemplate = async () => {
   }
   // data.setVisible = false
 }
+
 const submit = async () => {
-  let res: any = await SaveWorkingHour({
-    auditFlowId,
-    productId,
-    workingHourDetailList: data.tableData
-  })
-  console.log(res)
-  // let res: any = await SaveElectronicBom({
-  //   auditFlowId,
-  //   productId,
-  //   electronicBomDtos: data.tableData
-  // })
-  // console.log(res)
+  try {
+    let { success }: any = await SaveWorkingHour({
+      auditFlowId,
+      productId,
+      workingHourDetailList: data.tableData
+    })
+    if (!success) throw Error()
+    ElMessage.success("请求成功！")
+  } catch {
+    ElMessage.error("请求失败")
+  }
 }
+
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
-  let query = getQuery()
-  auditFlowId = Number(query.auditFlowId)
-  productId = Number(query.productId)
+  getAllSop()
 })
+
+const getAllSop = async () => {
+  const { result } = (await getYears(auditFlowId)) || {}
+  data.tangent = result.map((item: number) => ({ laborTime: 0, machineHours: 0, personnelNumber: 0, year: item }))
+}
+
+// 保存切线工时
+const handleSaveTangentHours = async () => {
+  try {
+    const { success } = await SaveTangentHours({
+      uph: Number(data.uph || 0),
+      auditFlowId,
+      productId,
+      tangentHoursDetailList: data.tangent
+    })
+    if (!success) throw Error()
+    ElMessage.success("请求成功！")
+  } catch {
+    ElMessage.error("请求失败")
+  }
+}
 </script>
+
 <style lang="scss" scoped>
 .electronic-import {
   &__btn-container {
