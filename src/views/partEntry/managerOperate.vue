@@ -6,42 +6,48 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="产品部-电子工程师:">
-              <SearchPerson v-model="formData.electronicEngineerNum" />
+              <SearchPerson v-model="formData.electronicEngineerId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="产品部-结构工程师:">
-              <SearchPerson v-model="formData.structureEngineerNum" />
+              <SearchPerson v-model="formData.structureEngineerId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="资源管理部-电子资源开发:">
-              <SearchPerson v-model="formData.resourceManagementNum" />
+              <SearchPerson v-model="formData.resourceElecId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="资源管理部-结构子资源开发:">
-              <SearchPerson v-model="formData.resourceManagementNum" />
+              <SearchPerson v-model="formData.resourceStructId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="工程技术部-损耗率录入员:">
-              <SearchPerson v-model="formData.engineeringTechnologyNum" />
+              <SearchPerson v-model="formData.engineerLossRateId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="工程技术部-工序工时录入员::">
-              <SearchPerson v-model="formData.financeNum" />
+              <SearchPerson v-model="formData.engineerWorkHourId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="品质保证部-实验费用录入员:">
-              <SearchPerson v-model="formData.productionManagementNum" />
+              <SearchPerson v-model="formData.qualityBenchId" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="品质保证部-检具费用录入员:">
-              <SearchPerson v-model="formData.qualityNum" />
+              <SearchPerson v-model="formData.qualityToolId" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="6">
+            <el-form-item label="生产管理部-物流成本录入员:">
+              <SearchPerson v-model="formData.productManageId" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -94,16 +100,32 @@ import type { UploadProps } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
 // import { Edit, View as IconView } from "@element-plus/icons-vue"
 const formData: UserInputInfo = reactive({
-  electronicEngineerNum: "",
-  engineeringTechnologyNum: "",
+  // electronicEngineerNum: "",
+  // engineeringTechnologyNum: "",
   fileId: null,
   financeNum: "",
   isFirst: "是",
   isNRE: "是",
-  productionManagementNum: "",
-  qualityNum: "",
-  resourceManagementNum: "",
-  structureEngineerNum: ""
+  // productionManagementNum: "",
+  // qualityNum: "",
+  // resourceManagementNum: "",
+  // structureEngineerNum: "",
+
+  auditFlowId: 1,
+  electronicEngineerId: undefined,
+  engineerLossRateId: undefined,
+  engineerWorkHourId: undefined,
+
+  id: 0,
+
+  product: null,
+  productId: 1,
+  productManageId: undefined,
+  qualityBenchId: undefined,
+  qualityToolId: undefined,
+  resourceElecId: undefined,
+  resourceStructId: undefined,
+  structureEngineerId: undefined
 })
 // interface user {
 //   department?: null | string

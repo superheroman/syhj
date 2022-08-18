@@ -1,17 +1,35 @@
 import { request } from "@/utils/service"
 
+// export interface UserInputInfo {
+//   electronicEngineerNum?: string
+//   engineeringTechnologyNum?: string
+//   fileId?: number
+//   financeNum?: string
+//   id?: number
+//   isFirst?: string
+//   isNRE?: string
+//   productionManagementNum?: string
+//   qualityNum?: string
+//   resourceManagementNum?: string
+//   structureEngineerNum?: string
+// }
+
 export interface UserInputInfo {
-  electronicEngineerNum?: string
-  engineeringTechnologyNum?: string
-  fileId?: number
-  financeNum?: string
+  auditFlowId: number
+  electronicEngineerId?: null | string
+  engineerLossRateId?: null | string
+  engineerWorkHourId?: null | string
+  fileId?: number | null
   id?: number
-  isFirst?: string
-  isNRE?: string
-  productionManagementNum?: string
-  qualityNum?: string
-  resourceManagementNum?: string
-  structureEngineerNum?: string
+  isFirst?: null | string
+  product?: null | string
+  productId?: number
+  productManageId?: null | string
+  qualityBenchId?: null | string
+  qualityToolId?: null | string
+  resourceElecId?: null | string
+  resourceStructId?: null | string
+  structureEngineerId?: null | string
 }
 
 /** 项目经理确认 */
