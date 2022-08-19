@@ -80,7 +80,7 @@ export function PostResourcesManagement(data: {
 }
 
 // 资源部录入初始值
-export function GetInitialResourcesManagement(data: { id: number; productId: number }): any {
+export function GetInitialResourcesManagement(data: { id: number }): any {
   return request({
     url: "/api/services/app/NrePricing/GetInitialResourcesManagement",
     method: "get",
