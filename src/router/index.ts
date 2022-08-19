@@ -96,6 +96,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "核价看板"
         }
+      },
+      {
+        path: "productPriceList",
+        component: () => import("@/views/productPriceList/index.vue"),
+        name: "ProductPriceList",
+        meta: {
+          title: "项目核价表"
+        }
       }
     ]
   },

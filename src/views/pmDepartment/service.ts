@@ -26,7 +26,7 @@ export function getPcsByPriceEvaluationId(priceEvaluationId: number) {
     url: "/api/services/app/PriceEvaluation/GetPcsByPriceEvaluationId",
     method: "get",
     data: {
-      priceEvaluationId
+      auditFlowId: priceEvaluationId
     }
   })
 }

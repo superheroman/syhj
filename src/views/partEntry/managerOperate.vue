@@ -81,9 +81,7 @@
         </el-row>
       </el-card>
     </el-form>
-    <div>
-      <el-button @click="save" type="primary" size="large">保存录入</el-button>
-    </div>
+    <el-button @click="save" type="primary" style="float: right" size="large">保存录入</el-button>
   </div>
 </template>
 

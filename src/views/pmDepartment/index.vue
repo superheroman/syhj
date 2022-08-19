@@ -182,7 +182,7 @@ onMounted(async () => {
     })
   })
   let yearValue: any[] = [1000, 2000, 3000]
-
+  console.log(warpArr, "warpArr")
   // 1.手工录入[单PCS包装价格].[运费].[仓储费用]
   // 2.[月需求量]按照 sop年的销售数量除以12，计算得出
   // 3.[单pcs运输费=（运费+仓储费）/月需求量]根据公式计算得出
@@ -192,6 +192,7 @@ onMounted(async () => {
       return pre + cur
     })
   })
+  console.log(yearValue)
   if (result?.length > 0) {
     data.tableData = result.map((year: number[], index: number) => {
       return {

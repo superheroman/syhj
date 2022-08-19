@@ -12,7 +12,9 @@
         <el-table-column prop="categoryName" label="物料大类" width="180" />
         <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
           <template #default="{ row }">
-            <el-input v-model="row.lossRateYearList[index].rate" />
+            <el-input v-model="row.lossRateYearList[index].rate" type="number">
+              <template #append>%</template>
+            </el-input>
           </template>
         </el-table-column>
       </el-table>
@@ -27,7 +29,7 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getLossRateType, getOldLossRateInfo, saveLossRateInfo, getYears } from "./service"
 import { ElMessage } from "element-plus"
-// import { LossRateYearDto } from "./data.type"
+import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
 
 /**
@@ -61,7 +63,17 @@ const submit = async () => {
   let res: any = await saveLossRateInfo({
     auditFlowId: auditFlowId,
     productId: productId,
-    lossRateDtoList: data.bomLossData
+    lossRateDtoList: data.bomLossData.map((item: any) => {
+      return {
+        ...item,
+        lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
+          return {
+            year: i.year,
+            rate: (Number(i.rate) / 100).toFixed(4)
+          }
+        })
+      }
+    })
   })
   if (res.success) {
     ElMessage({
