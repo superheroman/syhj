@@ -28,7 +28,7 @@
           <el-table-column label="数量" prop="count" width="180" />
           <el-table-column label="单价" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.unitPrice" type="number" :formatter="transformNumber" :min="0" />
+              <el-input v-model="row.unitPrice" />
             </template>
           </el-table-column>
           <el-table-column label="费用" width="180">
