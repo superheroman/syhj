@@ -221,15 +221,15 @@ export interface QADepartmentTestModel {
   /**
    * 时间-DV
    */
-  dataDV?: Date
+  dataDV?: string
   /**
    * 时间-PV
    */
-  dataPV?: Date
+  dataPV?: string
   /**
    * 时间-摸底
    */
-  dataThoroughly?: Date
+  dataThoroughly?: string
   /**
    * 是否指定第三方
    */
@@ -275,7 +275,7 @@ export interface QADepartmentQCModel {
   /**
    * 单价
    */
-  unitPrice?: number
+  unitPrice?: string
   /**
    * 使用工站
    */
@@ -692,7 +692,65 @@ export interface QADepartmentQCModel {
    */
   useWorkstation?: null | string
 }
+/**
+ * ExperimentItemsModel，带零件id 的 品保部=>试验项目 录入 模型
+ */
+export interface ExperimentItemsModel {
+  /**
+   * 零件的id
+   */
+  productId?: number
+  /**
+   * 品保录入  试验项目表 模型
+   */
+  qaTestDepartments?: QADepartmentTestModel[] | null
+}
 
+/**
+ * QADepartmentTestModel，品保录入  试验项目表 模型
+ */
+export interface QADepartmentTestModel {
+  /**
+   * 总费用
+   */
+  allCost?: number
+  /**
+   * 数量
+   */
+  count?: number
+  /**
+   * 时间-DV
+   */
+  dataDV?: Date
+  /**
+   * 时间-PV
+   */
+  dataPV?: Date
+  /**
+   * 时间-摸底
+   */
+  dataThoroughly?: Date
+  /**
+   * 是否指定第三方 (是 true 否 false)
+   */
+  isThirdParty?: boolean
+  /**
+   * 试验项目(根据与客户协定项目)
+   */
+  projectName?: null | string
+  /**
+   * 备注
+   */
+  remark?: null | string
+  /**
+   * 单位
+   */
+  unit?: null | string
+  /**
+   * 单价
+   */
+  unitPrice?: number
+}
 /**
  * RestsCostModel，其他费用 模型
  */

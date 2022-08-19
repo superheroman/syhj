@@ -1,0 +1,160 @@
+<template>
+  <div style="padding: 0 10px">
+    <el-card class="margin-top">
+      <template #header>
+        <el-row style="width: 100%" justify="space-between" align="middle">
+          试验项目（根据与客户协定项目）
+          <el-button type="primary" @click="addExperimentItemsData">新增</el-button>
+        </el-row>
+      </template>
+      <el-table
+        :data="data.experimentItems"
+        style="width: 100%"
+        border
+        :summary-method="getQaTestDepartmentsSummaries"
+        show-summary
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column label="试验项目（根据与客户协定项目）" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.projectName" />
+          </template>
+        </el-table-column>
+        <el-table-column label="是否指定第三方" width="180">
+          <template #default="{ row }">
+            <el-select v-model="row.isThirdParty">
+              <el-option :value="true" label="是" />
+              <el-option :value="false" label="否" />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.unitPrice" />
+          </template>
+        </el-table-column>
+        <el-table-column label="数量" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.count" type="number" :formatter="transformNumber" :min="0" />
+          </template>
+        </el-table-column>
+        <el-table-column label="总费用" width="180">
+          <template #default="{ row }">
+            <!-- <el-input v-model="row.allCost" type="number" :formatter="transformNumber" :min="0" /> -->
+            {{ row.unitPrice * row.count }}
+          </template>
+        </el-table-column>
+        <el-table-column label="时间-摸底" width="250">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.dataThoroughly" type="date" size="small" />
+          </template>
+        </el-table-column>
+        <el-table-column label="时间-DV" width="250">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.dataDV" type="date" size="small" />
+          </template>
+        </el-table-column>
+        <el-table-column label="时间-PV" width="250">
+          <template #default="{ row }">
+            <el-date-picker v-model="row.dataPV" type="date" size="small" />
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.unit" />
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.remark" />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="85px">
+          <template #default="{ $index }">
+            <el-button @click="deleteExperimentItemsData($index)" type="danger">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+    <div style="float: right; margin: 20px 0">
+      <el-button type="primary" @click="submit">提交</el-button>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { QADepartmentTestModel } from "./data.type"
+import { transformNumber } from "./common/utils"
+import { getQaTestDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
+import { PostExperimentItems } from "./common/request"
+import getQuery from "@/utils/getQuery"
+import { ElMessage } from "element-plus"
+
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
+
+/**
+ * 数据部分
+ */
+const data = reactive<{
+  experimentItems: QADepartmentTestModel[]
+}>({
+  experimentItems: []
+})
+
+const deleteExperimentItemsData = (i: number) => {
+  data.experimentItems.splice(i, 1)
+}
+
+const addExperimentItemsData = () => {
+  data.experimentItems.push({
+    allCost: 0,
+    count: 0,
+    dataDV: "",
+    dataPV: "",
+    dataThoroughly: "",
+    isThirdParty: false,
+    projectName: "",
+    remark: "",
+    unit: "",
+    unitPrice: 0
+  })
+}
+
+const submit = async () => {
+  try {
+    const { success } = await PostExperimentItems({
+      auditFlowId,
+      experimentItems: [
+        {
+          productId,
+          qaTestDepartments: data.experimentItems.map((item) => ({
+            ...item,
+            allCost: (item.unitPrice || 0) * (item.count || 0)
+          }))
+        }
+      ]
+    })
+    if (!success) throw Error()
+    ElMessage.success("提交成功")
+  } catch (err) {
+    console.log(err, "[PostExperimentItems err]")
+    // ElMessage.error("提交失败")
+  }
+}
+
+onBeforeMount(() => {
+  //console.log('2.组件挂载页面之前执行----onBeforeMount')
+})
+
+onMounted(() => {
+  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+})
+
+watchEffect(() => {})
+</script>
+<style scoped lang="scss">
+.margin-top {
+  margin-top: 20px;
+}
+</style>
