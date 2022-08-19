@@ -61,7 +61,7 @@
         </el-table-column>
         <el-table-column label="单位" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.unit" type="number" :formatter="transformNumber" :min="0" />
+            <el-input v-model="row.unit" />
           </template>
         </el-table-column>
         <el-table-column label="备注" width="180">
