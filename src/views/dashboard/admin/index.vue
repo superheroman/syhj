@@ -123,9 +123,12 @@ import {
   PriceEvaluationTableDownload,
   NreTableDownload,
   GetLogisticsCost,
-  GetManufacturingCost
+  GetManufacturingCost,
+  GetGoTable
 } from "../service"
+import getQuery from "@/utils/getQuery"
 
+const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
 let costChart: any = null
@@ -159,6 +162,7 @@ const initCharts = (id: string, chartOption: any) => {
 onMounted(() => {
   initChart()
   fetchOptionsData()
+  getGoTableChartData()
 })
 
 onBeforeUnmount(() => {
@@ -183,6 +187,7 @@ const initChart = () => {
   })
   percentageCostChart = initCharts("percentageCostChart", percentageCostChartData)
   selectCostChart = initCharts("selectCostChart", selectCostChartData)
+
   window.onresize = function () {
     percentageCostChart.resize()
     selectCostChart.resize()
@@ -195,6 +200,7 @@ const fetchOptionsData = async () => {
   getPricingPanelTimeSelectList()
   getPricingPanelProductSelectList()
 }
+
 // 核价看板-【产品选择】下拉框下拉数据
 const getPricingPanelProductSelectList = async () => {
   try {
@@ -220,8 +226,8 @@ const getPricingPanelProportionOfProductCost = async () => {
   try {
     const res: any = await GetPricingPanelProportionOfProductCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
     console.log(res, "getPricingPanelProportionOfProductCost")
   } catch (err: any) {
@@ -234,8 +240,8 @@ const getPricingPanelProfit = async () => {
   try {
     const res: any = await GetPricingPanelProfit({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
     console.log(res, "getPricingPanelProfit")
   } catch (err: any) {
@@ -248,8 +254,8 @@ const getBomCost = async () => {
   try {
     const res: any = await GetBomCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
     console.log(res, "getPricingPanelProfit")
   } catch (err: any) {
@@ -262,8 +268,8 @@ const getLossCost = async () => {
   try {
     const res: any = await GetLossCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
     console.log(res, "getPricingPanelProfit")
   } catch (err: any) {
@@ -276,36 +282,40 @@ const getQualityCost = async () => {
   try {
     const res: any = await GetQualityCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
     console.log(res, "getPricingPanelProfit")
   } catch (err: any) {
     console.log(err, "[ 获取 质量成本数据失败 ]")
   }
 }
+
+// 产品核价表下载
 const handleFetchPriceEvaluationTableDownload = async () => {
   try {
     const res: any = await PriceEvaluationTableDownload({
       Year: data.year,
       AuditFlowId: 1,
-      ModelCountId: 1
+      ModelCountId
     })
     console.log(res, "PriceEvaluationTableDownload")
   } catch (err: any) {
-    console.log(err, "[ 获取 质量成本数据失败 ]")
+    console.log(err, "[ 产品核价表下载据失败 ]")
   }
 }
+
+// NRE核价表下载
 const handleFethNreTableDownload = async () => {
   try {
     const res: any = await NreTableDownload({
       Year: data.year,
       AuditFlowId: 1,
-      ModelCountId: 1
+      ModelCountId
     })
     console.log(res, "NreTableDownload")
   } catch (err: any) {
-    console.log(err, "[ 获取 质量成本数据失败 ]")
+    console.log(err, "[ NRE核价表下载 失败 ]")
   }
 }
 
@@ -315,7 +325,7 @@ const getLogisticsCost = async () => {
     const res: any = await GetLogisticsCost({
       Year: data.year,
       AuditFlowId: 1,
-      ModelCountId: 1
+      ModelCountId
     })
     console.log(res, "getPricingPanelProfit")
   } catch (err: any) {
@@ -328,8 +338,8 @@ const getManufacturingCost = async () => {
   try {
     const res: any = await GetManufacturingCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
     console.log(res, "getPricingPanelProfit")
   } catch (err: any) {
@@ -363,6 +373,11 @@ const handleChangeMode = () => {
     default:
       break
   }
+}
+
+const getGoTableChartData = async () => {
+  const { result }: any = await GetGoTable({ AuditFlowId, ModelCountId, InputCount: data.productInputs })
+  console.log(result, "getGoTableChartData")
 }
 </script>
 
