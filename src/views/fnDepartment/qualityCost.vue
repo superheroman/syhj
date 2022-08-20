@@ -3,7 +3,7 @@
     <el-card class="card">
       <el-table :data="data.tableData" style="width: 100%; margin-top: 25px" border>
         <el-table-column type="index" width="80" />
-        <el-table-column label="类别" prop="category" width="180" />
+        <el-table-column label="类别" prop="categoryName" width="180" />
         <el-table-column label="是否首款产品" width="180">
           <template #default="{ row }">
             {{ row.isFirst ? "是" : "否" }}
@@ -28,6 +28,8 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { getDictionaryAndDetail } from "@/api/dictionary"
+
 // import { useRoute, useRouter } from "vue-router"
 import { getQualityCost, saveQualityCost } from "./service"
 import { QualityCostProportionEntryInfo } from "./data.type"
@@ -48,38 +50,39 @@ import { ElMessage } from "element-plus"
  */
 const data = reactive({
   tableData: [
-    {
-      category: "环境感知",
-      isFirst: true,
-      qualityCostYearList: []
-    },
-    {
-      category: "环境感知",
-      isFirst: false,
-      qualityCostYearList: []
-    },
-    {
-      category: "外摄显像",
-      isFirst: true,
-      qualityCostYearList: []
-    },
-    {
-      category: "外摄显像",
-      isFirst: false,
-      qualityCostYearList: []
-    },
-    {
-      category: "舱内检测",
-      isFirst: true,
-      qualityCostYearList: []
-    },
-    {
-      category: "舱内检测",
-      isFirst: false,
-      qualityCostYearList: []
-    }
-  ],
-  years: [] as number[]
+    // {
+    //   category: "环境感知",
+    //   isFirst: true,
+    //   qualityCostYearList: []
+    // },
+    // {
+    //   category: "环境感知",
+    //   isFirst: false,
+    //   qualityCostYearList: []
+    // },
+    // {
+    //   category: "外摄显像",
+    //   isFirst: true,
+    //   qualityCostYearList: []
+    // },
+    // {
+    //   category: "外摄显像",
+    //   isFirst: false,
+    //   qualityCostYearList: []
+    // },
+    // {
+    //   category: "舱内检测",
+    //   isFirst: true,
+    //   qualityCostYearList: []
+    // },
+    // {
+    //   category: "舱内检测",
+    //   isFirst: false,
+    //   qualityCostYearList: []
+    // }
+  ] as any[],
+  years: [] as number[],
+  productTypeMap: {} as any
 })
 const years = (index: number) => {
   let sop = new Date().getFullYear()
@@ -112,6 +115,24 @@ const submit = async () => {
   }
 }
 onBeforeMount(async () => {
+  let productType: any = await getDictionaryAndDetail("ProductType") //客户性质
+  let productTypeOptions: any = productType.result.financeDictionaryDetailList
+  productTypeOptions.forEach((item: any) => {
+    data.productTypeMap[item.id] = item.displayName
+    data.tableData.push({
+      categoryName: item.displayName,
+      category: item.id,
+      isFirst: true,
+      qualityCostYearList: []
+    })
+    data.tableData.push({
+      categoryName: item.displayName,
+      category: item.id,
+      isFirst: false,
+      qualityCostYearList: []
+    })
+  })
+  // 获取值，后端没返回name需要另外映射
   let res: any = await getQualityCost()
   if (res.result.length > 0) {
     data.years = years(10)
@@ -119,6 +140,7 @@ onBeforeMount(async () => {
       let { category, isFirst, qualityCostYearList } = item
       return {
         category,
+        categoryName: data.productTypeMap[category], // 映射name
         isFirst,
         qualityCostYearList: qualityCostYearList.map((item: any) => {
           return {
@@ -128,18 +150,12 @@ onBeforeMount(async () => {
         })
       }
     })
-    console.log(data.tableData, "data.tableData")
   } else {
     data.years = years(10)
     data.tableData.forEach((item: any) => {
       item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
     })
   }
-  // data.years = years(10)
-  // data.tableData.forEach((item: any) => {
-  //   item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
-  //   console.log(data.tableData)
-  // })
 })
 onMounted(async () => {})
 watchEffect(() => {})
