@@ -66,6 +66,7 @@
                 v-model="scope.row.iginalCurrency[index].value"
                 controls-position="right"
                 :min="0"
+                @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
               />
               <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
             </template>
@@ -79,7 +80,7 @@
             :prop="`standardMoney[${index}].value`"
             width="180"
           >
-            <template #default="scope">
+            <!-- <template #default="scope">
               <el-input-number
                 v-if="scope.row.isEdit"
                 v-model="scope.row.standardMoney[index].value"
@@ -87,7 +88,7 @@
                 :min="0"
               />
               <span v-if="!scope.row.isEdit">{{ scope.row.standardMoney[index].value }}</span>
-            </template>
+            </template> -->
           </el-table-column>
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
@@ -97,17 +98,16 @@
           </template>
         </el-table-column>
         <el-table-column prop="peopleName" label="确认人" />
-        <el-table-column label="操作" fixed="right" width="120">
+        <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
-            <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
-            <!-- <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
-              计算
-            </el-button> -->
-            <!-- <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button> -->
-            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
-              >修改</el-button
-            >
-            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
+            <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
+            <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 1)" type="warning">
+              提交
+            </el-button>
+            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
+              修改
+            </el-button>
+            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, 1)">取消</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -123,7 +123,12 @@ import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { useUserStore } from "@/store/modules/user"
 import { ElectronicDto } from "./data.type"
 import { ElMessage } from "element-plus"
-import { GetElectronic, PostElectronicMaterialCalculate, PostElectronicMaterialEntering } from "./common/request"
+import {
+  GetElectronic,
+  PostElectronicMaterialCalculate,
+  PostElectronicMaterialEntering,
+  PosToriginalCurrencyCalculate
+} from "./common/request"
 import getQuery from "@/utils/getQuery"
 
 const { auditFlowId = 1 }: any = getQuery()
@@ -175,8 +180,8 @@ const fetchInitData = async () => {
   }
 }
 
-// 确认电子料单价行数据
-const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
+// 提交电子料单价行数据
+const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
   try {
     const { success } = await PostElectronicMaterialEntering({
       isSubmit,
@@ -184,8 +189,10 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
       auditFlowId
     })
     if (!success) throw Error()
-    record.peopleName = "admin"
+    ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
+    fetchInitData()
   } catch (err) {
+    ElMessage.error("提交失败~")
     console.log(err, "确认")
   }
 }
@@ -195,13 +202,25 @@ const handleEdit = (row: any, isEdit: boolean) => {
   row.isEdit = isEdit
 }
 
-// 计算
+// 根据汇率计算
 const handleCalculation = async (row: any, index: number) => {
   try {
     const { success, result } = await PostElectronicMaterialCalculate([row])
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result[0] || {}), isEdit: true }
-    ElMessage.success("计算成功~")
+    console.log(success, "handleSubmit")
+  } catch (err) {
+    console.log
+    ElMessage.error("计算失败~")
+  }
+}
+
+// 根据原币计算
+const handleCalculationIginalCurrency = async (row: any, index: number) => {
+  try {
+    const { success, result } = await PosToriginalCurrencyCalculate([row])
+    if (!success && !result.length) throw Error()
+    electronicBomList.value[index] = { ...(result[0] || {}), isEdit: true }
     console.log(success, "handleSubmit")
   } catch (err) {
     console.log

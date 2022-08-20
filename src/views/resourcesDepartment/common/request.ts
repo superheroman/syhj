@@ -26,9 +26,10 @@ export function PosToriginalCurrencyCalculate(data: ElectronicDto[]): any {
     data
   })
 }
+
 // 电子料单价录入录入确认/提交 有则添加无则修改
 export function PostElectronicMaterialEntering(data: {
-  isSubmit: boolean
+  isSubmit: number
   electronicDtoList: ElectronicDto[]
   auditFlowId: number
 }): any {

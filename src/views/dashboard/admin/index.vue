@@ -30,58 +30,66 @@
           <el-card header="成本明细表">
             <!-- Bom成本  -->
             <el-table v-if="data.mode === '1'" :data="data.bomData" border height="675">
-              <el-table-column prop="sapItemNum" label="物料编号" width="180" />
-              <el-table-column prop="sapItemName" label="材料名称" width="180" />
-              <el-table-column prop="typeName" label="物料种类" />
-              <el-table-column prop="categoryName" label="物料大类" />
-              <el-table-column prop="assemblyQuantity" label="装配数量" />
-              <el-table-column prop="assemblyQuantity" label="单价" />
-              <el-table-column prop="assemblyQuantity" label="币别" />
-              <el-table-column prop="assemblyQuantity" label="汇率" />
-              <el-table-column prop="assemblyQuantity" label="材料单价（人民币）" />
-              <el-table-column prop="assemblyQuantity" label="合计金额（人民币）" />
-              <el-table-column prop="isInvolveItem" label="损耗率" />
-              <el-table-column prop="encapsulationSize" label="损耗" />
-              <el-table-column prop="encapsulationSize" label="材料成本（含损耗）" />
+              <el-table-column prop="superType" label="超级大种类" width="180" />
+              <el-table-column prop="materialName" label="材料名称" width="180" />
+              <el-table-column prop="typeName" label="物料种类" width="180" />
+              <el-table-column prop="categoryName" label="物料大类" width="150" />
+              <el-table-column prop="assemblyCount" label="装配数量" />
+              <el-table-column prop="materialPrice" label="材料单价（原币）" width="180" />
+              <el-table-column prop="currencyText" label="币别" width="150" />
+              <el-table-column prop="exchangeRate" label="汇率" width="150" />
+              <el-table-column prop="materialPriceCyn" label="材料单价（人民币）" width="180" />
+              <el-table-column prop="totalMoneyCyn" label="合计金额（人民币）" width="180" />
+              <el-table-column prop="loss" label="损耗" width="150" />
+              <el-table-column prop="materialCost" label="材料成本（含损耗）" width="180" />
+              <el-table-column prop="inputCount" label="投入量" width="150" />
+              <el-table-column prop="purchaseCount" label="采购量" width="150" />
+              <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="150" />
+              <el-table-column prop="moq" label="MOQ" />
+              <el-table-column prop="availableInventory" label="可用库存" width="150" />
+              <el-table-column prop="remarks" label="备注" />
             </el-table>
             <!-- 损耗成本  -->
-            <el-table v-if="data.mode === '2'" height="675">
+            <el-table v-if="data.mode === '2'" :data="data.lossData" height="675">
               <el-table-column prop="name" label="成本项目" width="180" />
               <el-table-column prop="wastageCost" label="损耗成本" width="180" />
               <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="180" />
             </el-table>
             <!-- 制造成本  -->
             <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
-              <el-table-column prop="sapItemNum" label="项目" width="180" />
-              <el-table-column prop="sapItemName" label="梯度K/Y" width="180" />
-              <el-table-column prop="typeName" label="年份" width="180" />
-              <el-table-column prop="categoryName" label="直接制造成本">
-                <el-table-column prop="typeName" label="直接人工" width="180" />
-                <el-table-column prop="typeName" label="设备折旧" width="180" />
-                <el-table-column prop="typeName" label="换线成本" width="180" />
-                <el-table-column prop="typeName" label="制造费用" width="180" />
-                <el-table-column prop="typeName" label="小计" width="180" />
+              <!-- <el-table-column prop="sapItemNum" label="项目" width="180" /> -->
+              <el-table-column prop="gradientKy" label="梯度K/Y" width="180" />
+              <!-- <el-table-column prop="typeName" label="年份" width="180" /> -->
+              <el-table-column prop="manufacturingCostDirect" label="直接制造成本">
+                <el-table-column prop="manufacturingCostDirect.directLabor" label="直接人工" width="150" />
+                <el-table-column prop="manufacturingCostDirect.equipmentDepreciation" label="设备折旧" width="150" />
+                <el-table-column prop="manufacturingCostDirect.lineChangeCost" label="换线成本" width="150" />
+                <el-table-column prop="manufacturingCostDirect.manufacturingExpenses" label="制造费用" width="150" />
+                <el-table-column prop="manufacturingCostDirect.subtotal" label="小计" width="150" />
               </el-table-column>
-              <el-table-column prop="categoryName" label="间接制造成本">
-                <el-table-column prop="typeName" label="直接人工" width="180" />
-                <el-table-column prop="typeName" label="设备折旧" width="180" />
-                <el-table-column prop="typeName" label="换线成本" width="180" />
-                <el-table-column prop="typeName" label="制造费用" width="180" />
-                <el-table-column prop="typeName" label="小计" width="180" />
+              <el-table-column prop="manufacturingCostIndirect" label="间接制造成本">
+                <el-table-column prop="manufacturingCostIndirect.directLabor" label="直接人工" width="150" />
+                <el-table-column prop="manufacturingCostIndirect.equipmentDepreciation" label="设备折旧" width="150" />
+                <!-- <el-table-column prop="manufacturingCostIndirect.typeName" label="换线成本" width="180" /> -->
+                <el-table-column prop="manufacturingCostIndirect.manufacturingExpenses" label="制造费用" width="150" />
+                <el-table-column prop="manufacturingCostIndirect.subtotal" label="小计" width="150" />
               </el-table-column>
             </el-table>
             <!-- 物流成本  -->
             <el-table :data="data.logisticsData" border v-if="data.mode === '4'" height="675">
-              <el-table-column prop="typeName" label="年份" width="80" />
-              <el-table-column prop="sapItemNum" label="单PCS包装价格/元" />
-              <el-table-column prop="sapItemName" label="单PCS运输费" />
-              <el-table-column prop="typeName" label="单PCS总物流料成本" />
+              <el-table-column prop="year" label="年份" width="80" />
+              <el-table-column prop="freight" label="运费/月" width="180" />
+              <el-table-column prop="monthEndDemand" label="月底需求量" width="180" />
+              <el-table-column prop="storageExpenses" label="仓储费用/元" width="180" />
+              <el-table-column prop="perPackagingPrice" label="单PCS包装价格/元" width="150" />
+              <el-table-column prop="perFreight" label="单PCS运输费" width="150" />
+              <el-table-column prop="perTotalLogisticsCost" label="单PCS总物流料成本" width="180" />
             </el-table>
             <!-- 质量成本  -->
-            <el-table v-if="data.mode === '5'" :data="data.qualityData" border height="675">
-              <el-table-column prop="typeName" label="产品类别" />
-              <el-table-column prop="sapItemNum" label="成本比例" />
-              <el-table-column prop="sapItemName" label="质量成本（MAX）" />
+            <el-table :data="data.qualityData" v-if="data.mode === '5'" border height="675">
+              <el-table-column prop="productCategory" label="产品类别" />
+              <el-table-column prop="costProportion" label="成本比例" />
+              <el-table-column prop="qualityCost" label="质量成本（MAX）" />
             </el-table>
           </el-card>
         </el-col>
@@ -110,7 +118,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted, onBeforeUnmount } from "vue"
+import { reactive, onMounted, onBeforeUnmount, onBeforeMount } from "vue"
 import { dashboardPannel, percentageCostChartData, costChartData, selectCostChartData } from "./common/const"
 import {
   GetBomCost,
@@ -123,9 +131,12 @@ import {
   PriceEvaluationTableDownload,
   NreTableDownload,
   GetLogisticsCost,
-  GetManufacturingCost
+  GetManufacturingCost,
+  GetGoTable
 } from "../service"
+import getQuery from "@/utils/getQuery"
 
+const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
 let costChart: any = null
@@ -139,6 +150,7 @@ const data = reactive<Record<string, any>>({
   productOptions: [],
   yearsOptions: [],
   bomData: [],
+  lossData: [],
   manufactureData: [],
   logisticsData: [],
   qualityData: [],
@@ -156,9 +168,14 @@ const initCharts = (id: string, chartOption: any) => {
   }
 }
 
+onBeforeMount(() => {
+  fetchOptionsData()
+})
+
 onMounted(() => {
   initChart()
-  fetchOptionsData()
+  getGoTableChartData()
+  fetchAllData()
 })
 
 onBeforeUnmount(() => {
@@ -169,20 +186,10 @@ onBeforeUnmount(() => {
 })
 
 const initChart = () => {
-  // 测试
-  const barData = [
-    [20, 12, 12, 40, 30],
-    [100, 30, 40, 30, 10]
-  ]
-  costChart = initCharts("costChart", {
-    ...costChartData,
-    series: barData.map((item, index) => ({
-      ...costChartData.series[index],
-      data: item
-    }))
-  })
+  costChart = initCharts("costChart", costChartData)
   percentageCostChart = initCharts("percentageCostChart", percentageCostChartData)
   selectCostChart = initCharts("selectCostChart", selectCostChartData)
+
   window.onresize = function () {
     percentageCostChart.resize()
     selectCostChart.resize()
@@ -195,10 +202,11 @@ const fetchOptionsData = async () => {
   getPricingPanelTimeSelectList()
   getPricingPanelProductSelectList()
 }
+
 // 核价看板-【产品选择】下拉框下拉数据
 const getPricingPanelProductSelectList = async () => {
   try {
-    const ProductSelectRes: any = await GetPricingPanelProductSelectList({})
+    const ProductSelectRes: any = await GetPricingPanelProductSelectList({ AuditFlowId })
     data.productOptions = ProductSelectRes?.result?.items
   } catch (err: any) {
     console.log(err, "[ 获取下拉数据失败 ]")
@@ -208,50 +216,24 @@ const getPricingPanelProductSelectList = async () => {
 // 核价看板-[时间选择]下拉框下拉数据
 const getPricingPanelTimeSelectList = async () => {
   try {
-    const PanelTimeSelectRes: any = await GetPricingPanelTimeSelectList({})
+    const PanelTimeSelectRes: any = await GetPricingPanelTimeSelectList({ AuditFlowId })
     data.yearsOptions = PanelTimeSelectRes?.result?.items
+    data.year = data.yearsOptions[0].id
   } catch (err: any) {
     console.log(err, "[ 获取时间选择下拉数据失败 ]")
-  }
-}
-
-// 核价看板-产品成本占比图
-const getPricingPanelProportionOfProductCost = async () => {
-  try {
-    const res: any = await GetPricingPanelProportionOfProductCost({
-      Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
-    })
-    console.log(res, "getPricingPanelProportionOfProductCost")
-  } catch (err: any) {
-    console.log(err, "[ 获取核价看板-产品成本占比图数据失败 ]")
-  }
-}
-
-// 核价看板-利润分布图
-const getPricingPanelProfit = async () => {
-  try {
-    const res: any = await GetPricingPanelProfit({
-      Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
-    })
-    console.log(res, "getPricingPanelProfit")
-  } catch (err: any) {
-    console.log(err, "[ 获取核价看板-利润分布图数据失败 ]")
   }
 }
 
 // 获取 bom成本（含损耗）汇总表
 const getBomCost = async () => {
   try {
-    const res: any = await GetBomCost({
+    const { result }: any = await GetBomCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
-    console.log(res, "getPricingPanelProfit")
+    data.bomData = result || []
+    console.log(result, "获取 bom成本（含损耗）汇总表")
   } catch (err: any) {
     console.log(err, "[ 获取 bom成本（含损耗）汇总表数据失败 ]")
   }
@@ -260,12 +242,13 @@ const getBomCost = async () => {
 // 获取损耗成本
 const getLossCost = async () => {
   try {
-    const res: any = await GetLossCost({
+    const { result }: any = await GetLossCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
-    console.log(res, "getPricingPanelProfit")
+    data.lossData = result || []
+    console.log(result, "获取损耗成本")
   } catch (err: any) {
     console.log(err, "[ 获取损耗成本数据失败 ]")
   }
@@ -274,50 +257,55 @@ const getLossCost = async () => {
 // 获取 质量成本
 const getQualityCost = async () => {
   try {
-    const res: any = await GetQualityCost({
+    const { result }: any = await GetQualityCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
-    console.log(res, "getPricingPanelProfit")
+    data.qualityData = [result] || []
   } catch (err: any) {
     console.log(err, "[ 获取 质量成本数据失败 ]")
   }
 }
+
+// 产品核价表下载
 const handleFetchPriceEvaluationTableDownload = async () => {
   try {
-    const res: any = await PriceEvaluationTableDownload({
+    const { result }: any = await PriceEvaluationTableDownload({
       Year: data.year,
       AuditFlowId: 1,
-      ModelCountId: 1
+      ModelCountId
     })
-    console.log(res, "PriceEvaluationTableDownload")
+    console.log(result, "产品核价表下载")
   } catch (err: any) {
-    console.log(err, "[ 获取 质量成本数据失败 ]")
+    console.log(err, "[ 产品核价表下载据失败 ]")
   }
 }
+
+// NRE核价表下载
 const handleFethNreTableDownload = async () => {
   try {
     const res: any = await NreTableDownload({
       Year: data.year,
       AuditFlowId: 1,
-      ModelCountId: 1
+      ModelCountId
     })
     console.log(res, "NreTableDownload")
   } catch (err: any) {
-    console.log(err, "[ 获取 质量成本数据失败 ]")
+    console.log(err, "[ NRE核价表下载 失败 ]")
   }
 }
 
 // 获取 物流成本汇总表
 const getLogisticsCost = async () => {
   try {
-    const res: any = await GetLogisticsCost({
+    const { result }: any = await GetLogisticsCost({
       Year: data.year,
       AuditFlowId: 1,
-      ModelCountId: 1
+      ModelCountId
     })
-    console.log(res, "getPricingPanelProfit")
+    data.logisticsData = result
+    console.log(result, "物流成本汇总表")
   } catch (err: any) {
     console.log(err, "[ 获取 物流成本汇总表数据失败 ]")
   }
@@ -326,15 +314,79 @@ const getLogisticsCost = async () => {
 // 获取 制造成本汇总表
 const getManufacturingCost = async () => {
   try {
-    const res: any = await GetManufacturingCost({
+    const { result }: any = await GetManufacturingCost({
       Year: data.year,
-      AuditFlowId: 1,
-      ModelCountId: 1
+      AuditFlowId,
+      ModelCountId
     })
-    console.log(res, "getPricingPanelProfit")
+    data.manufactureData = result
+    console.log(result, "getPricingPanelProfit")
   } catch (err: any) {
     console.log(err, "[ 获取 制造成本汇总表据失败 ]")
   }
+}
+
+// 核价看板-产品成本占比图
+const getPricingPanelProportionOfProductCost = async () => {
+  try {
+    const { result }: any = await GetPricingPanelProportionOfProductCost({
+      Year: data.year,
+      AuditFlowId,
+      ModelCountId
+    })
+    const value = result?.items.map((val: any) => ({ value: val.proportion, name: val.name }))
+    percentageCostChart.setOption({
+      ...percentageCostChartData,
+      series: percentageCostChartData.series.map((_, index) => {
+        return {
+          ...percentageCostChartData.series[index],
+          data: value
+        }
+      })
+    })
+    console.log(value, "核价看板-产品成本占比图")
+  } catch (err: any) {
+    console.log(err, "[ 获取核价看板-产品成本占比图数据失败 ]")
+  }
+}
+
+// 核价看板-利润分布图
+const getPricingPanelProfit = async () => {
+  try {
+    const { result }: any = await GetPricingPanelProfit({
+      Year: data.year,
+      AuditFlowId,
+      ModelCountId
+    })
+    const val = result?.items.map((val: any) => val.proportion)
+    costChart.setOption({
+      ...costChartData,
+      series: costChartData.series.map((_, index) => {
+        return {
+          ...costChartData.series[index],
+          data: val
+        }
+      })
+    })
+    console.log(result.items, "核价看板-利润分布图")
+  } catch (err: any) {
+    console.log(err, "[ 获取核价看板-利润分布图数据失败 ]")
+  }
+}
+
+// 获取推移图
+const getGoTableChartData = async () => {
+  const { result }: any = await GetGoTable({ AuditFlowId, ModelCountId, InputCount: data.productInputs })
+  const val = result?.items.map((val: any) => val.value)
+  selectCostChart = initCharts("selectCostChart", {
+    ...selectCostChartData,
+    series: selectCostChartData.series.map((_, index) => {
+      return {
+        ...selectCostChartData.series[index],
+        data: val
+      }
+    })
+  })
 }
 
 const fetchAllData = async () => {
@@ -359,8 +411,6 @@ const handleChangeMode = () => {
       break
     case "5":
       getQualityCost()
-      break
-    default:
       break
   }
 }
