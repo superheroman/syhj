@@ -25,7 +25,20 @@
               <el-input v-model="row.modelNumber" type="number" :formatter="transformNumber" :min="0" />
             </template>
           </el-table-column>
-          <el-table-column label="数量" prop="count" width="180" />
+          <el-table-column label="数量" prop="count" width="180">
+            <template #default="{ row }">
+              <el-input
+                v-model="row.count"
+                type="number"
+                :formatter="transformNumber"
+                :min="0"
+                v-if="row.modelName === '吸塑/包材'"
+              />
+              <div v-else>
+                {{ row.count }}
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column label="单价" width="180">
             <template #default="{ row }">
               <el-input v-model="row.unitPrice" />
