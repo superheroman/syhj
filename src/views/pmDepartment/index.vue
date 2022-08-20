@@ -121,7 +121,7 @@
 
 <script setup lang="ts">
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
-import { getYears, saveProductionControl, getPcsByPriceEvaluationId, getSor, getProductFreight } from "./service"
+import { saveProductionControl, getPcsByPriceAuditFlowId, getSor, getProductFreight } from "./service"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 
@@ -166,14 +166,12 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let query = getQuery()
-  data.auditFlowId = Number(query.auditFlowId) || 0
-  data.productId = Number(query.productId) || 0
-  let { result } = (await getYears(data.auditFlowId)) as any
-  let { result: monthEndDemand } = (await getPcsByPriceEvaluationId(1)) as any
-  // result = [2022, 2023, 2024]
-  console.log(monthEndDemand, "monthEndDemand")
+  data.auditFlowId = Number(query.auditFlowId) || 1
+  data.productId = Number(query.productId) || 1
+  let { result } = (await getPcsByPriceAuditFlowId(data.auditFlowId)) as any
   let warpArr = [] as any[] //二维数组
-  monthEndDemand.items.forEach((item: any) => {
+  let years = [] as number[]
+  result.items.forEach((item: any) => {
     item.pcsYear.forEach((yearItem: any, index: number) => {
       if (!warpArr[index]) {
         warpArr[index] = []
@@ -181,8 +179,11 @@ onMounted(async () => {
       warpArr[index].push(yearItem.quantity)
     })
   })
-  let yearValue: any[] = [1000, 2000, 3000]
-
+  result.items[0]?.pcsYear.forEach((yearItem: any) => {
+    years.push(yearItem.year)
+  })
+  let yearValue: any[] = [] //1000, 2000, 3000
+  console.log(warpArr, "warpArr")
   // 1.手工录入[单PCS包装价格].[运费].[仓储费用]
   // 2.[月需求量]按照 sop年的销售数量除以12，计算得出
   // 3.[单pcs运输费=（运费+仓储费）/月需求量]根据公式计算得出
@@ -192,20 +193,21 @@ onMounted(async () => {
       return pre + cur
     })
   })
-  if (result?.length > 0) {
-    data.tableData = result.map((year: number[], index: number) => {
+  console.log(yearValue)
+  if (years?.length > 0) {
+    data.tableData = years.map((year: number, index: number) => {
       return {
         year,
         perPackagingPrice: "",
         freight: "",
         storageExpenses: "",
-        monthEndDemand: yearValue[index] / 12, //月度需求量
+        monthEndDemand: (yearValue[index] / 12).toFixed(0), //月度需求量
         perFreight: "",
         perTotalLogisticsCost: ""
       }
-    })
+    }) as any
   }
-  console.log(result)
+  console.log(data.tableData)
   watch(
     data.tableData,
     (val) => {

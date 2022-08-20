@@ -114,7 +114,6 @@ const submit = async () => {
 onBeforeMount(async () => {
   let res: any = await getQualityCost()
   if (res.result.length > 0) {
-    console.log(data.tableData)
     data.years = years(10)
     data.tableData = res.result.map((item: any) => {
       let { category, isFirst, qualityCostYearList } = item
@@ -134,7 +133,6 @@ onBeforeMount(async () => {
     data.years = years(10)
     data.tableData.forEach((item: any) => {
       item.qualityCostYearList = data.years.map((year) => ({ year, rate: 0 }))
-      console.log(data.tableData)
     })
   }
   // data.years = years(10)

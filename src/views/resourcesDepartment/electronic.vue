@@ -41,14 +41,11 @@
             width="150"
           >
             <template #default="scope">
-              <el-input-number
+              <el-input
                 v-if="scope.row.isEdit"
-                type="number"
                 v-model="scope.row.inTheRate[index].value"
-                controls-position="right"
-              >
-                <template #append>%</template>
-              </el-input-number>
+                @blur="handleCalculation(scope.row, scope.$index)"
+              />
               <span v-if="!scope.row.isEdit">{{ scope.row.inTheRate[index].value }}</span>
             </template>
           </el-table-column>
@@ -91,9 +88,9 @@
         <el-table-column label="操作" fixed="right" width="200">
           <template #default="scope">
             <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
-            <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
+            <!-- <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
               计算
-            </el-button>
+            </el-button> -->
             <!-- <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button> -->
             <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
               >修改</el-button

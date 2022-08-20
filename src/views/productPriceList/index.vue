@@ -26,7 +26,7 @@
         <el-table-column label="备注" prop="remarks" width="180" />
       </el-table>
     </el-card>
-    <el-card>
+    <el-card class="card">
       <el-table :data="data.manufacturingCost" style="width: 100%" border>
         <el-table-column label="成本项目" prop="" width="180" />
         <el-table-column label="直接制造成本" prop="">
@@ -51,7 +51,7 @@
         <el-table-column label="合计" prop="" />
       </el-table>
     </el-card>
-    <el-card>
+    <el-card class="card">
       <el-table :data="data.lossCost" style="width: 100%" border>
         <el-table-column label="成本项目" prop="name" width="180" />
         <el-table-column label="损耗率" prop="" width="180" />
@@ -63,7 +63,7 @@
         <el-table-column label="合计" prop="" width="180" />
       </el-table>
     </el-card>
-    <el-card>
+    <el-card class="card">
       <el-table :data="data.otherCostItem" style="width: 100%" border>
         <el-table-column label="夹具" prop="fixture" width="180" />
         <el-table-column label="物流费" prop="logisticsFee" width="180" />
@@ -139,4 +139,8 @@ defineExpose({
   ...toRefs(data)
 })
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.card {
+  margin: 20px 0;
+}
+</style>
