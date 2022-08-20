@@ -98,7 +98,7 @@
             </el-table-column>
             <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
-              <el-input v-if="scope.row.isEdit" :formatter="transformNumber" v-model="scope.row.materialsSystemPrice" />
+              <el-input v-if="scope.row.isEdit" v-model="scope.row.materialsSystemPrice" />
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->

@@ -35,12 +35,12 @@
         </el-table-column>
         <el-table-column label="数量" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.count" type="number" :formatter="transformNumber" :min="0" />
+            <el-input-number v-model="row.count" controls-position="right" :min="0" />
           </template>
         </el-table-column>
         <el-table-column label="总费用" width="180">
           <template #default="{ row }">
-            <!-- <el-input v-model="row.allCost" type="number" :formatter="transformNumber" :min="0" /> -->
+            <!-- <el-input-number v-model="row.allCost" type="number" :min="0" controls-position="right" :min="0" /> -->
             {{ row.unitPrice * row.count }}
           </template>
         </el-table-column>
@@ -85,7 +85,6 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { QADepartmentTestModel } from "./data.type"
-import { transformNumber } from "./common/utils"
 import { getQaTestDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostExperimentItems } from "./common/request"
 import getQuery from "@/utils/getQuery"
