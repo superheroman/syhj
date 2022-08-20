@@ -132,19 +132,19 @@
         /></el-row>
         <el-table :data="data.tangent">
           <el-table-column label="年份" prop="year" />
-          <el-table-column label="人工工时" prop="`laborTime`">
+          <el-table-column label="人工工时" prop="`laborTime`" width="175">
             <template #default="{ row }">
-              <el-input v-model="row.laborTime" type="number" :min="0" :formatter="transformNumber" />
+              <el-input-number v-model="row.laborTime" :min="0" controls-position="right" />
             </template>
           </el-table-column>
-          <el-table-column label="标准机器工时" prop="machineHours">
+          <el-table-column label="标准机器工时" prop="machineHours" width="175">
             <template #default="{ row }">
-              <el-input v-model="row.machineHours" type="number" :min="0" :formatter="transformNumber" />
+              <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
             </template>
           </el-table-column>
-          <el-table-column label="人员数量" prop="personnelNumber">
+          <el-table-column label="人员数量" prop="personnelNumber" width="175">
             <template #default="{ row }">
-              <el-input v-model="row.personnelNumber" type="number" :min="0" :formatter="transformNumber" />
+              <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
             </template>
           </el-table-column>
         </el-table>
@@ -191,10 +191,6 @@ const data = reactive<{
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
 // }
-
-const transformNumber = (str: string) => {
-  return Number(str)
-}
 
 const formatterArr = (key: string, childKey = "equipmentDetails") => {
   return Math.max.apply(

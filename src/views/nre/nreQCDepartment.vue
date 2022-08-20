@@ -27,13 +27,12 @@
         </el-table-column>
         <el-table-column label="数量（set）" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.count" type="number" :formatter="transformNumber" :min="0" />
+            <el-input-number v-model="row.count" :min="0" controls-position="right" />
           </template>
         </el-table-column>
 
         <el-table-column label="费用" width="180">
           <template #default="{ row }">
-            <!-- <el-input v-model="row.cost" type="number" :formatter="transformNumber" :min="0" /> -->
             {{ row.unitPrice * row.count }}
           </template>
         </el-table-column>
@@ -64,7 +63,6 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { QADepartmentTestModel, QADepartmentQCModel } from "./data.type"
-import { transformNumber } from "./common/utils"
 import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment } from "./common/request"
 import { ElMessage } from "element-plus"

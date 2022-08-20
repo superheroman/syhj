@@ -30,12 +30,12 @@
         </el-table-column>
         <el-table-column label="单价" width="120">
           <template #default="{ row }">
-            <el-input v-model="row.unitPrice" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.unitPrice" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="数量" width="120">
           <template #default="{ row }">
-            <el-input v-model="row.quantity" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.quantity" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="时间-摸底" width="180">
@@ -55,7 +55,6 @@
         </el-table-column>
         <el-table-column label="单位" width="180">
           <template #default="{ row }">
-            <!-- <el-input v-model="row.unit" type="number" :formatter="transformNumber" :min="0" /> -->
             <el-input v-model="row.unit" />
           </template>
         </el-table-column>
@@ -85,10 +84,7 @@
         </template>
       </el-table-column> -->
         <el-table-column label="总费用" width="150">
-          <template #default="{ row }">
-            <!-- <el-input v-model="row.allCost" type="number" :formatter="transformNumber" /> -->
-            ￥ {{ row.unitPrice * row.quantity }}
-          </template>
+          <template #default="{ row }"> ￥ {{ row.unitPrice * row.quantity }} </template>
         </el-table-column>
         <!-- <el-table-column label="单位" width="180">
         <template #default="{ row }">
@@ -117,7 +113,6 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { PostProductDepartment } from "./common/request"
-import { transformNumber } from "../resourcesDepartment/common/util"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import { LaboratoryFeeModel } from "./data.type"
 import useQueryData from "@/hook/useQueryData"

@@ -32,7 +32,7 @@
           </el-table-column>
           <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
-              <el-input v-if="scope.row.isEdit" :formatter="transformNumber" v-model="scope.row.materialsSystemPrice" />
+              <el-input v-if="scope.row.isEdit" v-model="scope.row.materialsSystemPrice" />
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
@@ -45,7 +45,7 @@
               width="150"
             >
               <template #default="scope">
-                <el-input v-if="scope.row.isEdit" :formatter="transformNumber" v-model="scope.row.sop[index].value" />
+                <el-input v-if="scope.row.isEdit" v-model.number="scope.row.sop[index].value" />
                 <span v-if="!scope.row.isEdit">{{ scope.row.sop[index].value }}</span>
               </template>
             </el-table-column>
@@ -73,9 +73,13 @@ import { ConstructionDto, ConstructionModel } from "./data.type"
 import { GetStructural, PostStructuralMemberEntering } from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
-import { transformNumber } from "./common/util"
 import getQuery from "@/utils/getQuery"
+import { useUserStore } from "@/store/modules/user"
 
+// 获取仓库的值
+const store = useUserStore()
+
+console.log(store.userInfo, "store")
 const { auditFlowId = 1 }: any = getQuery()
 
 // 结构料 - table数据
@@ -128,7 +132,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
-      structuralMaterialEntering: [record],
+      structuralMaterialEntering: [{ ...record, peopleId: 1 }],
       auditFlowId
     })
     if (!success) throw Error()

@@ -41,11 +41,14 @@
             width="150"
           >
             <template #default="scope">
-              <el-input
+              <el-input-number
                 v-if="scope.row.isEdit"
-                :formatter="transformNumber"
+                type="number"
                 v-model="scope.row.inTheRate[index].value"
-              />
+                controls-position="right"
+              >
+                <template #append>%</template>
+              </el-input-number>
               <span v-if="!scope.row.isEdit">{{ scope.row.inTheRate[index].value }}</span>
             </template>
           </el-table-column>
@@ -59,11 +62,7 @@
             width="150"
           >
             <template #default="scope">
-              <el-input
-                v-if="scope.row.isEdit"
-                :formatter="transformNumber"
-                v-model="scope.row.iginalCurrency[index].value"
-              />
+              <el-input-number v-if="scope.row.isEdit" v-model="scope.row.iginalCurrency[index].value" />
               <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
             </template>
           </el-table-column>
@@ -77,22 +76,18 @@
             width="150"
           >
             <template #default="scope">
-              <el-input
-                v-if="scope.row.isEdit"
-                :formatter="transformNumber"
-                v-model="scope.row.standardMoney[index].value"
-              />
+              <el-input-number v-if="scope.row.isEdit" v-model="scope.row.standardMoney[index].value" />
               <span v-if="!scope.row.isEdit">{{ scope.row.standardMoney[index].value }}</span>
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150">
           <template #default="{ row }">
-            <el-input v-if="row.isEdit" :formatter="transformNumber" v-model="row.rebateMoney" />
+            <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" />
             <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="pricingEndTime" label="确认人" />
+        <el-table-column prop="peopleName" label="确认人" />
         <el-table-column label="操作" fixed="right" width="200">
           <template #default="scope">
             <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
@@ -118,7 +113,6 @@
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { useUserStore } from "@/store/modules/user"
 import { ElectronicDto } from "./data.type"
-import { transformNumber } from "./common/util"
 import { ElMessage } from "element-plus"
 import { GetElectronic, PostElectronicMaterialCalculate, PostElectronicMaterialEntering } from "./common/request"
 import getQuery from "@/utils/getQuery"
@@ -175,12 +169,13 @@ const fetchInitData = async () => {
 // 确认电子料单价行数据
 const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
   try {
-    const res = await PostElectronicMaterialEntering({
+    const { success } = await PostElectronicMaterialEntering({
       isSubmit,
       electronicDtoList: [record],
       auditFlowId
     })
-    console.log(res, "res")
+    if (!success) throw Error()
+    record.peopleName = "admin"
   } catch (err) {
     console.log(err, "确认")
   }
@@ -206,8 +201,14 @@ const handleCalculation = async (row: any, index: number) => {
 
 watchEffect(() => {})
 </script>
-<style scoped lang="scss">
+<style lang="scss">
 .margin-top {
   margin: 20px;
+}
+.input-number {
+  >>> .el-input-number__increase,
+  .el-input-number__decrease {
+    display: none !important;
+  }
 }
 </style>

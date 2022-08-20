@@ -102,6 +102,8 @@ export interface ConstructionModel {
    * 重量g
    */
   weightNumber?: null | string
+  peopleId: number
+  peopleName: string
 }
 
 /**
@@ -154,6 +156,7 @@ export interface ElectronicDto {
    * 零件的id
    */
   productId?: null | string
+  peopleName?: string
   /**
    * 确认人 Id
    */

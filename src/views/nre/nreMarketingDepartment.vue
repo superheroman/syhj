@@ -8,7 +8,7 @@
         <el-table-column prop="pricingMoney" label="核价金额" width="180" />
         <el-table-column label="报价系数" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.offerCoefficient" type="number" :formatter="transformNumber" :min="0" />
+            <el-input-number v-model="row.offerCoefficient" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="报价金额" width="180">
@@ -35,7 +35,6 @@ import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetInitialSalesDepartment, PostSalesDepartment } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { NreMarketingDepartmentModel } from "./data.type"
-import { transformNumber } from "./common/utils"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 

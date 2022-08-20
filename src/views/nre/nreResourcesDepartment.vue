@@ -17,18 +17,18 @@
           </el-table-column>
           <el-table-column label="模穴数" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.moldCavityCount" type="number" :formatter="transformNumber" :min="0" />
+              <el-input-number v-model="row.moldCavityCount" :min="0" controls-position="right" />
             </template>
           </el-table-column>
           <el-table-column label="模次数" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.modelNumber" type="number" :formatter="transformNumber" :min="0" />
+              <el-input-number v-model="row.modelNumber" :min="0" controls-position="right" />
             </template>
           </el-table-column>
           <el-table-column label="数量" prop="count" width="180" />
           <el-table-column label="单价" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.unitPrice" type="number" :formatter="transformNumber" :min="0" />
+              <el-input-number v-model="row.unitPrice" :min="0" controls-position="right" />
             </template>
           </el-table-column>
           <el-table-column label="费用" width="180">
@@ -51,7 +51,6 @@
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { PostResourcesManagement, GetInitialResourcesManagement, PostCalculateMouldInventory } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
-import { transformNumber } from "./common/utils"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 

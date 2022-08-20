@@ -26,17 +26,17 @@
             <el-input v-model="row.partNumber" />
           </template>
         </el-table-column>
-        <el-table-column label="单价" width="100">
+        <el-table-column label="单价" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.unitPrice" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.unitPrice" controls-position="right" :min="0" />
           </template>
         </el-table-column>
-        <el-table-column label="数量" width="100">
+        <el-table-column label="数量" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.quantity" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.quantity" controls-position="right" :min="0" />
           </template>
         </el-table-column>
-        <el-table-column label="费用" prop="cost" width="100">
+        <el-table-column label="费用" prop="cost" width="175">
           <template #default="{ row }">
             {{ row.unitPrice * row.quantity }}
           </template>
@@ -75,9 +75,9 @@
             <el-input v-model="row.rroject" />
           </template>
         </el-table-column>
-        <el-table-column label="费用" width="150">
+        <el-table-column label="费用" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.cost" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.cost" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="备注" width="150">
@@ -107,24 +107,24 @@
             <el-input v-model="row.reasonsId" />
           </template>
         </el-table-column>
-        <el-table-column label="人数" width="150">
+        <el-table-column label="人数" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.peopleCount" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number controls-position="right" v-model="row.peopleCount" :min="0" />
           </template>
         </el-table-column>
-        <el-table-column label="费用/天" width="150">
+        <el-table-column label="费用/天" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.costSky" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.costSky" :min="0" controls-position="right" />
           </template>
         </el-table-column>
-        <el-table-column label="天数" width="150">
+        <el-table-column label="天数" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.skyCount" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.skyCount" :min="0" controls-position="right" />
           </template>
         </el-table-column>
-        <el-table-column label="费用" width="150">
+        <el-table-column label="费用" width="175">
           <template #default="{ row }">
-            <el-input v-model="row.cost" type="number" :min="0" :formatter="transformNumber" />
+            <el-input-number v-model="row.cost" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="备注" width="150">
@@ -156,22 +156,22 @@
         </el-table-column>
         <el-table-column label="人数" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.peopleCount" type="number" :min="0" :formatter="transformNumber" />
+            <el-input v-model="row.peopleCount" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="费用/天" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.costSky" type="number" :min="0" :formatter="transformNumber" />
+            <el-input v-model="row.costSky" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="天数" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.skyCount" type="number" :min="0" :formatter="transformNumber" />
+            <el-input v-model="row.skyCount" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="费用" width="150">
           <template #default="{ row }">
-            <el-input v-model="row.cost" type="number" :min="0" :formatter="transformNumber" />
+            <el-input v-model="row.cost" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="备注" width="150">
@@ -197,7 +197,6 @@
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.type"
 import { PostProjectManagement } from "./common/request"
-import { transformNumber } from "../resourcesDepartment/common/util"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
 
 /**
