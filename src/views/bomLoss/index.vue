@@ -6,7 +6,21 @@
           <span>bom损耗率表单</span>
         </div>
       </template>
-      <el-table :data="data.bomLossData" border style="width: 100%" height="500">
+      <h4>电子料</h4>
+      <el-table :data="data.bomLossElecData" border style="width: 100%" height="500">
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="superType" label="种类" width="180" />
+        <el-table-column prop="categoryName" label="物料大类" width="180" />
+        <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
+          <template #default="{ row }">
+            <el-input v-model="row.lossRateYearList[index].rate" type="number">
+              <template #append>%</template>
+            </el-input>
+          </template>
+        </el-table-column>
+      </el-table>
+      <h4>结构料</h4>
+      <el-table :data="data.bomLossStructData" border style="width: 100%" height="500">
         <el-table-column type="index" width="50" />
         <el-table-column prop="superType" label="种类" width="180" />
         <el-table-column prop="categoryName" label="物料大类" width="180" />
@@ -27,7 +41,16 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import { getLossRateType, getOldLossRateInfo, saveLossRateInfo, getYears } from "./service"
+import {
+  // getLossRateType,
+  getElecOldLossRateInfo,
+  getStructOldLossRateInfo,
+  // getOldLossRateInfo,
+  saveLossRateInfo,
+  getYears,
+  getElecLossRateType,
+  getStructLossRateType
+} from "./service"
 import { ElMessage } from "element-plus"
 import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
@@ -43,16 +66,18 @@ import getQuery from "@/utils/getQuery"
  * 数据部分
  */
 const data = reactive({
-  bomLossData: [
-    // {
-    //   categoryName: "1123",
-    //   lossRateYearList: [] as LossRateYearDto[],
-    //   auditFlowId: 2,
-    //   productId: 2,
-    //   product: "string",
-    //   superType: "string"
-    // }
-  ],
+  // bomLossData: [
+  //   {
+  //     categoryName: "1123",
+  //     lossRateYearList: [] as LossRateYearDto[],
+  //     auditFlowId: 2,
+  //     productId: 2,
+  //     product: "string",
+  //     superType: "string"
+  //   }
+  // ],
+  bomLossElecData: [],
+  bomLossStructData: [],
   years: [] as number[]
 })
 
@@ -60,10 +85,12 @@ let auditFlowId = 1
 let productId = 1
 let isOld = "false"
 const submit = async () => {
+  let bomLossData = [] as any[]
+  bomLossData.concat(data.bomLossElecData, data.bomLossStructData)
   let res: any = await saveLossRateInfo({
     auditFlowId: auditFlowId,
     productId: productId,
-    lossRateDtoList: data.bomLossData.map((item: any) => {
+    lossRateDtoList: bomLossData.map((item: any) => {
       return {
         ...item,
         lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
@@ -102,13 +129,27 @@ onMounted(async () => {
   let { result } = (await getYears(auditFlowId)) as any
   data.years = result
   if (isOld === "true") {
-    let resOld: any = await getOldLossRateInfo({ auditFlowId, productId })
-    data.bomLossData = resOld.result
+    // let resOld: any = await getOldLossRateInfo({ auditFlowId, productId })
+    // data.bomLossData = resOld.result
+
+    let resOldElec: any = await getElecOldLossRateInfo({ auditFlowId, productId })
+    data.bomLossElecData = resOldElec.result
+
+    let resOldStruct: any = await getStructOldLossRateInfo({ auditFlowId, productId })
+    data.bomLossStructData = resOldStruct.result
   } else {
-    let res: any = await getLossRateType({ auditFlowId, productId })
-    data.bomLossData = res.result
+    // let res: any = await getLossRateType({ auditFlowId, productId })
+    // 获取电子料 结构料初始值
+    let resElec: any = await getElecLossRateType({ auditFlowId, productId })
+    let resStruct: any = await getStructLossRateType({ auditFlowId, productId })
+    data.bomLossElecData = resElec.result
+    data.bomLossStructData = resStruct.result
   }
-  data.bomLossData.forEach((item: any) => {
+  data.bomLossElecData.forEach((item: any) => {
+    item.lossRateYearList = []
+    item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
+  })
+  data.bomLossStructData.forEach((item: any) => {
     item.lossRateYearList = []
     item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
   })
