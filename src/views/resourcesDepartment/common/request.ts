@@ -18,7 +18,14 @@ export function PostElectronicMaterialCalculate(data: ElectronicDto[]): any {
     data
   })
 }
-
+// 计算电子料单价录入 根据原币计算
+export function PosToriginalCurrencyCalculate(data: ElectronicDto[]): any {
+  return request({
+    url: "/api/services/app/ResourceEntering/PosToriginalCurrencyCalculate",
+    method: "post",
+    data
+  })
+}
 // 电子料单价录入录入确认/提交 有则添加无则修改
 export function PostElectronicMaterialEntering(data: {
   isSubmit: boolean
