@@ -40,7 +40,7 @@
             <el-table-column
               v-for="(item, index) in allColums?.sop"
               :key="item"
-              :label="`${index === 0 ? 'SOP' : `SOP + ${index + 1}`}`"
+              :label="item"
               :prop="`sop[${index}].value`"
               width="150"
             >
@@ -50,7 +50,7 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column prop="pricingEndTime" label="确认人" />
+          <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">
               <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
@@ -126,12 +126,14 @@ const fetchInitData = async () => {
 const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
   console.log(record, "record")
   try {
-    const res = await PostStructuralMemberEntering({
+    const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
       structuralMaterialEntering: [record],
       auditFlowId
     })
-    console.log(res, "res")
+    if (!success) throw Error()
+    record.peopleName = "admin"
+    console.log(result, "handleSubmit")
   } catch (err) {
     console.log(err, "确认")
   }

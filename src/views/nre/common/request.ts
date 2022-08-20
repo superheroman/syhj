@@ -4,7 +4,8 @@ import {
   ProductDepartmentModel,
   ProjectManagementModel,
   ResourcesManagementModel,
-  NreMarketingDepartmentModel
+  NreMarketingDepartmentModel,
+  ExperimentItemsModel
 } from "../data.type"
 
 // 项目管理部录入
@@ -56,6 +57,23 @@ export function PostQADepartment(data: {
 }): any {
   return request({
     url: "/api/services/app/NrePricing/PostQADepartment",
+    method: "post",
+    data
+  })
+}
+// Nre 品保部=>试验项目 录入
+export function PostExperimentItems(data: {
+  /**
+   * 流程Id
+   */
+  auditFlowId?: number
+  /**
+   * 带零件id 的 品保录入模型
+   */
+  experimentItems?: ExperimentItemsModel[] | null
+}): any {
+  return request({
+    url: "/api/services/app/NrePricing/PostExperimentItems",
     method: "post",
     data
   })
