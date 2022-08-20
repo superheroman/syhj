@@ -98,17 +98,17 @@
           </template>
         </el-table-column>
         <el-table-column prop="peopleName" label="确认人" />
-        <el-table-column label="操作" fixed="right" width="120">
+        <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
-            <!-- <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button> -->
+            <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
             <!-- <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
               计算
             </el-button> -->
-            <el-button link @click="handleSubmit(scope.row)" type="warning"> 提交 </el-button>
+            <el-button link @click="handleSubmit(scope.row, 1)" type="warning"> 提交 </el-button>
             <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
               >修改</el-button
             >
-            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
+            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, 1)">取消</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -182,16 +182,16 @@ const fetchInitData = async () => {
 }
 
 // 提交电子料单价行数据
-const handleSubmit = async (record: ElectronicDto) => {
+const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
   try {
     const { success } = await PostElectronicMaterialEntering({
-      isSubmit: 1,
+      isSubmit,
       electronicDtoList: [record],
       auditFlowId
     })
     if (!success) throw Error()
-    ElMessage.success("提交成功！")
-    record.peopleName = "admin"
+    ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
+    fetchInitData()
   } catch (err) {
     ElMessage.error("提交失败~")
     console.log(err, "确认")
