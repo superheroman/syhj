@@ -453,7 +453,7 @@ export interface MouldInventoryModel {
   /**
    * 模具名称
    */
-  modelName?: null | string
+  modelName?: null
   /**
    * 模次数
    */

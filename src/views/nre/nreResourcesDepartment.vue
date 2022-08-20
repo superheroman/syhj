@@ -10,10 +10,10 @@
           show-summary
         >
           <el-table-column type="index" width="50" />
-          <el-table-column label="模具名称" width="180">
-            <template #default="{ row }">
+          <el-table-column label="模具名称" prop="modelName" width="180">
+            <!-- <template #default="{ row }">
               <el-input v-model="row.modelName" />
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="模穴数" width="180">
             <template #default="{ row }">
@@ -27,10 +27,9 @@
           </el-table-column>
           <el-table-column label="数量" prop="count" width="180">
             <template #default="{ row }">
-              <el-input
+              <el-input-number
                 v-model="row.count"
-                type="number"
-                :formatter="transformNumber"
+                controls-position="right"
                 :min="0"
                 v-if="row.modelName === '吸塑/包材'"
               />
@@ -44,7 +43,7 @@
               <el-input-number v-model="row.unitPrice" :min="0" controls-position="right" />
             </template>
           </el-table-column>
-          <el-table-column label="费用" width="180">
+          <el-table-column label="费用">
             <template #default="{ row }">
               <!-- <el-input v-model="row.cost" /> -->
               {{ row.unitPrice * row.count }}
@@ -106,7 +105,10 @@ const handleCalculation = async (record: any, i: number) => {
     })
     if (!success) ElMessage.success("计算成功")
     const { mouldInventory = [] }: any = result[0] || []
-    data.mouldData[i].mouldInventoryModels = mouldInventory
+    data.mouldData[i].mouldInventoryModels = mouldInventory.map((item: any, index: number) => {
+      if (item.modelName === "吸塑/包材") return data.mouldData[i].mouldInventoryModels[index]
+      return item
+    })
     console.log(result, "[PostCalculateMouldInventory res]")
   } catch (err) {
     console.log(err, "[PostCalculateMouldInventory err ]")

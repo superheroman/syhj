@@ -23,7 +23,7 @@
                     v-for="item in exchangeSelectOptions"
                     :key="item.id"
                     :label="item.exchangeRateKind"
-                    :value="item.id"
+                    :value="item.exchangeRateKind"
                   />
                 </el-select>
                 <!-- <el-input v-model="scope.row.currency" v-if="scope.row.isEdit" /> -->
