@@ -104,7 +104,7 @@
             <!-- <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
               计算
             </el-button> -->
-            <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button>
+            <el-button link @click="handleSubmit(scope.row)" type="warning"> 提交 </el-button>
             <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
               >修改</el-button
             >
@@ -182,10 +182,10 @@ const fetchInitData = async () => {
 }
 
 // 提交电子料单价行数据
-const handleSubmit = async (record: ElectronicDto, isSubmit: boolean) => {
+const handleSubmit = async (record: ElectronicDto) => {
   try {
     const { success } = await PostElectronicMaterialEntering({
-      isSubmit,
+      isSubmit: 1,
       electronicDtoList: [record],
       auditFlowId
     })
