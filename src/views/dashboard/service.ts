@@ -99,3 +99,12 @@ export function GetManufacturingCost(data: GetLossCostProps) {
     data
   })
 }
+
+// 获取推移图
+export function GetGoTable(data: { AuditFlowId: number; ModelCountId: number; InputCount: number }) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/GetGoTable",
+    method: "get",
+    data
+  })
+}

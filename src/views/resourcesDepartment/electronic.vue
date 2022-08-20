@@ -101,13 +101,12 @@
         <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
             <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
-            <!-- <el-button link class="margin-top" @click="handleCalculation(scope.row, scope.$index)" type="primary">
-              计算
-            </el-button> -->
-            <el-button link @click="handleSubmit(scope.row, 1)" type="warning"> 提交 </el-button>
-            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
-              >修改</el-button
-            >
+            <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 1)" type="warning">
+              提交
+            </el-button>
+            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
+              修改
+            </el-button>
             <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, 1)">取消</el-button>
           </template>
         </el-table-column>
