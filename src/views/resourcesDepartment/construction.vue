@@ -75,6 +75,7 @@ import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { useUserStore } from "@/store/modules/user"
+import { ElMessage } from "element-plus"
 
 // 获取仓库的值
 const store = useUserStore()
@@ -137,9 +138,11 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
     })
     if (!success) throw Error()
     record.peopleName = "admin"
+    ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
     console.log(result, "handleSubmit")
   } catch (err) {
     console.log(err, "确认")
+    ElMessage.error("请求失败")
   }
 }
 
