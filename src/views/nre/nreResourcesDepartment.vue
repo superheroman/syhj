@@ -1,6 +1,6 @@
 <template>
   <el-card>
-    <template v-for="item in data.mouldData" :key="item.productId">
+    <template v-for="(item, index) in data.mouldData" :key="item.productId">
       <el-card class="margin-top" :header="`零件${item.productId}`">
         <el-table
           :data="item.mouldInventoryModels"
@@ -17,7 +17,7 @@
           </el-table-column>
           <el-table-column label="模穴数" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.moldCavityCount" />
+              <el-input v-model="row.moldCavityCount" type="number" :formatter="transformNumber" :min="0" />
             </template>
           </el-table-column>
           <el-table-column label="模次数" width="180">
@@ -39,7 +39,7 @@
           </el-table-column>
         </el-table>
         <div style="float: right; margin: 20px 0">
-          <el-button type="primary" @click="handleCalculation(item)">计算</el-button>
+          <el-button type="primary" @click="handleCalculation(item, index)">计算</el-button>
           <el-button type="primary" @click="submit(item)">提交</el-button>
         </div>
       </el-card>
@@ -53,10 +53,11 @@ import { PostResourcesManagement, GetInitialResourcesManagement, PostCalculateMo
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { transformNumber } from "./common/utils"
 import getQuery from "@/utils/getQuery"
+import { ElMessage } from "element-plus"
 
 const { auditFlowId = 1 }: any = getQuery()
 
-const data = reactive({
+const data = reactive<any>({
   mouldData: [],
   resourcesManagementModels: []
 })
@@ -79,10 +80,10 @@ const submit = async (record: any) => {
   })
 }
 
-const handleCalculation = async (record: any) => {
+const handleCalculation = async (record: any, i: number) => {
   console.log(record, "record")
   try {
-    const res = await PostCalculateMouldInventory({
+    const { result, success } = await PostCalculateMouldInventory({
       auditFlowId,
       resourcesManagementModels: [
         {
@@ -91,9 +92,13 @@ const handleCalculation = async (record: any) => {
         }
       ]
     })
-    console.log(res, "[PostCalculateMouldInventory res]")
+    if (!success) ElMessage.success("计算成功")
+    const { mouldInventory = [] }: any = result[0] || []
+    data.mouldData[i].mouldInventoryModels = mouldInventory
+    console.log(result, "[PostCalculateMouldInventory res]")
   } catch (err) {
     console.log(err, "[PostCalculateMouldInventory err ]")
+    ElMessage.error("计算失败")
   }
 }
 
