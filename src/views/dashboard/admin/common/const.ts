@@ -1,7 +1,7 @@
 export const percentageCostChartData = {
   title: {
     text: "产品成本",
-    subtext: "Fake Data",
+    subtext: "",
     left: "center"
   },
   tooltip: {
@@ -18,11 +18,11 @@ export const percentageCostChartData = {
       type: "pie",
       radius: "50%",
       data: [
-        { value: 1048, name: "BOM" },
-        { value: 735, name: "损耗" },
-        { value: 580, name: "制造" },
-        { value: 484, name: "物流" },
-        { value: 300, name: "质量" }
+        { value: 0, name: "bom成本" },
+        { value: 0, name: "损耗成本" },
+        { value: 0, name: "制造成本" },
+        { value: 0, name: "物流成本" },
+        { value: 0, name: "质量成本" }
       ],
       emphasis: {
         itemStyle: {
@@ -41,16 +41,6 @@ export const costChartData = {
     subtext: "",
     left: "center"
   },
-  tooltip: {
-    trigger: "axis",
-    axisPointer: {
-      type: "shadow"
-    },
-    formatter: function (params: any) {
-      const tar = params[1]
-      return tar.name + "<br/>" + tar.seriesName + " : " + tar.value
-    }
-  },
   grid: {
     left: "3%",
     right: "4%",
@@ -60,37 +50,19 @@ export const costChartData = {
   xAxis: {
     type: "category",
     splitLine: { show: false },
-    data: ["BOM", "损耗", "制造", "物流", "质量"]
+    data: ["bom成本", "损耗成本", "制造成本", "物流成本", "质量成本", "利润"]
   },
   yAxis: {
     type: "value"
   },
   series: [
     {
-      name: "Placeholder",
       type: "bar",
-      stack: "Total",
-      itemStyle: {
-        borderColor: "transparent",
-        color: "transparent"
+      showBackground: true,
+      backgroundStyle: {
+        color: "rgba(180, 180, 180, 0.2)"
       },
-      emphasis: {
-        itemStyle: {
-          borderColor: "transparent",
-          color: "transparent"
-        }
-      },
-      data: [0, 0, 0, 0, 0]
-    },
-    {
-      name: "利润",
-      type: "bar",
-      stack: "Total",
-      label: {
-        show: true,
-        position: "inside"
-      },
-      data: [0, 0, 0, 0, 0]
+      data: [0, 0, 0, 0, 0, 0]
     }
   ]
 }
@@ -105,7 +77,7 @@ export const selectCostChartData = {
   },
   series: [
     {
-      data: [820, 932, 901, 934, 1290, 1330, 1320, 2000],
+      data: [],
       type: "line",
       smooth: true
     }
