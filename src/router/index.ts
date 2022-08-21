@@ -359,15 +359,26 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: "/bomLoss",
-    redirect: "/bomLoss/index",
+    redirect: "/bomLoss/indexElec",
     component: Layout,
+    meta: {
+      title: "bom损耗率表单"
+    },
     children: [
       {
-        path: "/bomLoss/index",
-        component: () => import("@/views/bomLoss/index.vue"),
-        name: "bomLoss",
+        path: "/bomLoss/indexElec",
+        component: () => import("@/views/bomLoss/indexElec.vue"),
+        name: "bomLossElec",
         meta: {
-          title: "bom损耗率表单"
+          title: "电子bom损耗率表单"
+        }
+      },
+      {
+        path: "/bomLoss/indexStruct",
+        component: () => import("@/views/bomLoss/indexStruct.vue"),
+        name: "bomLossStruct",
+        meta: {
+          title: "结构bom损耗率表单"
         }
       }
     ]
