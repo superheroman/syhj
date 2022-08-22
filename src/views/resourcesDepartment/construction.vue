@@ -3,7 +3,7 @@
     <div v-for="item in constructionBomList" :key="item.superTypeName">
       <el-card class="table-wrap" :header="item.superTypeName">
         <el-table :data="item.structureMaterial" style="width: 100%" height="500">
-          <el-table-column label="bom" align="center">
+          <el-table-column label="bom">
             <el-table-column type="index" label="序号" width="50" />
             <el-table-column prop="categoryName" label="物料大类" width="150" />
             <el-table-column prop="typeName" label="物料种类" width="150" />
@@ -36,46 +36,7 @@
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-          <el-table-column prop="iginalCurrency" label="原币">
-            <el-table-column
-              v-for="(item, index) in allColums?.iginalCurrencyYears"
-              :key="item"
-              :label="`${item}`"
-              :prop="`iginalCurrency[${index}].value`"
-              width="180"
-            >
-              <template #default="scope">
-                <el-input-number
-                  v-if="scope.row.isEdit"
-                  v-model="scope.row.iginalCurrency[index].value"
-                  controls-position="right"
-                  :min="0"
-                  @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
-                />
-                <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column prop="standardMoney" label="本位币">
-            <el-table-column
-              v-for="(item, index) in allColums?.standardMoneyYears"
-              :key="item"
-              :label="`${item}`"
-              :prop="`standardMoney[${index}].value`"
-              width="180"
-            >
-              <!-- <template #default="scope">
-              <el-input-number
-                v-if="scope.row.isEdit"
-                v-model="scope.row.standardMoney[index].value"
-                controls-position="right"
-                :min="0"
-              />
-              <span v-if="!scope.row.isEdit">{{ scope.row.standardMoney[index].value }}</span>
-            </template> -->
-            </el-table-column>
-          </el-table-column>
-          <el-table-column label="单价" align="center" v-if="allColums?.sop.length">
+          <el-table-column label="原币" v-if="allColums?.sop.length">
             <el-table-column
               v-for="(item, index) in allColums?.sop"
               :key="item"
@@ -84,10 +45,23 @@
               width="150"
             >
               <template #default="scope">
-                <el-input v-if="scope.row.isEdit" v-model.number="scope.row.sop[index].value" />
+                <el-input
+                  @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
+                  v-if="scope.row.isEdit"
+                  v-model.number="scope.row.sop[index].value"
+                />
                 <span v-if="!scope.row.isEdit">{{ scope.row.sop[index].value }}</span>
               </template>
             </el-table-column>
+          </el-table-column>
+          <el-table-column prop="standardMoney" label="本位币">
+            <el-table-column
+              v-for="(item, index) in allColums?.sop"
+              :key="item"
+              :label="`${item}`"
+              :prop="`standardMoney[${index}].value`"
+              width="180"
+            />
           </el-table-column>
           <el-table-column prop="moq" label="MOQ" width="180">
             <template #default="{ row }">

@@ -1,23 +1,23 @@
 <template>
-  <el-card header="作业价格录入">
+  <el-card header="作业价格" class="m-2">
     <el-table :data="tableData" style="width: 100%; margin-top: 25px" border>
       <el-table-column label="年份" prop="year" />
-      <el-table-column label="直接制造率">
+      <el-table-column label="直接其他费用作业价格">
         <template #default="{ row }">
           <el-input v-model="row.directManufacturingRate" />
         </template>
       </el-table-column>
-      <el-table-column label="间接人工率">
+      <el-table-column label="间接人工作业价格">
         <template #default="{ row }">
           <el-input v-model="row.indirectLaborRate" />
         </template>
       </el-table-column>
-      <el-table-column label="间接折旧率">
+      <el-table-column label="间接折旧作业价格">
         <template #default="{ row }">
           <el-input v-model="row.indirectDepreciationRate" />
         </template>
       </el-table-column>
-      <el-table-column label="间接制造率">
+      <el-table-column label="间接其他费用作业价格">
         <template #default="{ row }">
           <el-input v-model="row.indirectManufacturingRate" />
         </template>
