@@ -321,7 +321,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/fnDepartment/rateEntry.vue"),
         name: "rateEntry",
         meta: {
-          title: "费率录入"
+          title: "作业价格"
         }
       }
     ]

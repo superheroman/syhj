@@ -3,7 +3,7 @@
     <div v-for="item in constructionBomList" :key="item.superTypeName">
       <el-card class="table-wrap" :header="item.superTypeName">
         <el-table :data="item.structureMaterial" style="width: 100%" height="500">
-          <el-table-column label="bom" align="center">
+          <el-table-column label="bom">
             <el-table-column type="index" label="序号" width="50" />
             <el-table-column prop="categoryName" label="物料大类" width="150" />
             <el-table-column prop="typeName" label="物料种类" width="150" />
@@ -36,7 +36,7 @@
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-          <el-table-column label="单价" align="center" v-if="allColums?.sop.length">
+          <el-table-column label="原币" v-if="allColums?.sop.length">
             <el-table-column
               v-for="(item, index) in allColums?.sop"
               :key="item"
@@ -45,19 +45,46 @@
               width="150"
             >
               <template #default="scope">
-                <el-input v-if="scope.row.isEdit" v-model.number="scope.row.sop[index].value" />
+                <el-input
+                  @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
+                  v-if="scope.row.isEdit"
+                  v-model.number="scope.row.sop[index].value"
+                />
                 <span v-if="!scope.row.isEdit">{{ scope.row.sop[index].value }}</span>
               </template>
             </el-table-column>
+          </el-table-column>
+          <el-table-column prop="standardMoney" label="本位币">
+            <el-table-column
+              v-for="(item, index) in allColums?.sop"
+              :key="item"
+              :label="`${item}`"
+              :prop="`standardMoney[${index}].value`"
+              width="180"
+            />
+          </el-table-column>
+          <el-table-column prop="moq" label="MOQ" width="180">
+            <template #default="{ row }">
+              <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
+              <span v-if="!row.isEdit">{{ row.moq }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
+            <template #default="{ row }">
+              <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" controls-position="right" :min="0" />
+              <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
+            </template>
           </el-table-column>
           <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">
               <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
-              <el-button link @click="handleSubmit(scope.row, true)" type="warning"> 提交 </el-button>
-              <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary"
-                >修改</el-button
-              >
+              <el-button :disabled="scope.row.isSubmit" link @click="handleSubmit(scope.row, true)" type="warning">
+                提交
+              </el-button>
+              <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
+                修改
+              </el-button>
               <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
             </template>
           </el-table-column>
@@ -70,7 +97,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { ConstructionDto, ConstructionModel } from "./data.type"
-import { GetStructural, PostStructuralMemberEntering } from "./common/request"
+import { GetStructural, PostStructuralMemberEntering, PosToriginalCurrencyCalculate } from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
@@ -129,7 +156,6 @@ const fetchInitData = async () => {
 
 // 确认结构料单价行数据
 const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
-  console.log(record, "record")
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
@@ -139,6 +165,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
     if (!success) throw Error()
     record.peopleName = "admin"
     ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
+    fetchInitData()
     console.log(result, "handleSubmit")
   } catch (err) {
     console.log(err, "确认")
@@ -149,6 +176,19 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
 const fetchSopYear = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
   allColums.sop = result || []
+}
+
+// 根据原币计算
+const handleCalculationIginalCurrency = async (row: any, index: number) => {
+  try {
+    const { success, result } = await PosToriginalCurrencyCalculate([row])
+    if (!success && !result.length) throw Error()
+    constructionBomList.value[index] = { ...(result[0] || {}), isEdit: true }
+    console.log(success, "handleSubmit")
+  } catch (err) {
+    console.log
+    ElMessage.error("计算失败~")
+  }
 }
 
 // 修改

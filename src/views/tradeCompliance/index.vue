@@ -46,20 +46,10 @@
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetTradeComplianceCheckFromDateBase } from "./service"
 import { ProductMaterialInfo, TradeComplianceCheck } from "./data.type"
-// import { useRoute, useRouter } from "vue-router"
+import getQuery from "@/utils/getQuery"
 
-/**
- * 仓库
- */
-/**
- * 路由对象
- */
-// const route = useRoute()
-// /**
-//  * 路由实例
-//  */
-// const router = useRouter()
-//console.log('1-开始创建组件-setup')
+const { AuditFlowId = 1, ProductId = 1 }: any = getQuery()
+
 /**
  * 数据部分
  */
@@ -81,7 +71,7 @@ onMounted(() => {
 })
 
 const initFetch = async () => {
-  const { result } = await GetTradeComplianceCheckFromDateBase({ AuditFlowId: 1, ProductId: 2 })
+  const { result } = await GetTradeComplianceCheckFromDateBase({ AuditFlowId, ProductId })
   data.productMaterialInfos = result.productMaterialInfos || []
   data.tradeComplianceCheck = result.tradeComplianceCheck || {}
   console.log(result, "res")
