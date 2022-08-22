@@ -83,6 +83,7 @@ export interface ManufacturingCostsItem {
   dailyShift?: number | null | string
   vatRate?: number | null | string
   year?: number | null | string
+  traceLineOfPerson?: number | null | string
 }
 
 export interface ManufacturingCostsInfo {
