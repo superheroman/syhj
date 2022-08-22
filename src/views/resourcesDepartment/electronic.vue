@@ -19,7 +19,7 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
+        <!-- <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
           <el-table-column
             v-for="(item, index) in allColums?.systemiginalCurrencyYears"
             :key="item"
@@ -31,7 +31,7 @@
               <span>{{ scope.row.systemiginalCurrency[index].value }}</span>
             </template>
           </el-table-column>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="inTheRate" label="年降率">
           <el-table-column
             v-for="(item, index) in allColums?.inTheRateYears"
@@ -90,6 +90,12 @@
               <span v-if="!scope.row.isEdit">{{ scope.row.standardMoney[index].value }}</span>
             </template> -->
           </el-table-column>
+        </el-table-column>
+        <el-table-column prop="moq" label="MOQ" width="180">
+          <template #default="{ row }">
+            <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
+            <span v-if="!row.isEdit">{{ row.moq }}</span>
+          </template>
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
           <template #default="{ row }">

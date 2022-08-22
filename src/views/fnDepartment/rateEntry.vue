@@ -1,5 +1,5 @@
 <template>
-  <el-card header="费率录入">
+  <el-card header="作业价格录入">
     <el-table :data="tableData" style="width: 100%; margin-top: 25px" border>
       <el-table-column label="年份" prop="year" />
       <el-table-column label="直接制造率">
