@@ -78,8 +78,8 @@
           <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">
-              <el-button link @click="handleSubmit(scope.row, false)" type="danger">确认</el-button>
-              <el-button :disabled="scope.row.isSubmit" link @click="handleSubmit(scope.row, true)" type="warning">
+              <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
+              <el-button :disabled="scope.row.isSubmit" link @click="handleSubmit(scope.row, 1)" type="warning">
                 提交
               </el-button>
               <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
@@ -97,7 +97,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { ConstructionDto, ConstructionModel } from "./data.type"
-import { GetStructural, PostStructuralMemberEntering, PosToriginalCurrencyCalculate } from "./common/request"
+import { GetStructural, PostStructuralMemberEntering, ToriginalCurrencyStructural } from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
@@ -155,7 +155,7 @@ const fetchInitData = async () => {
 }
 
 // 确认结构料单价行数据
-const handleSubmit = async (record: ConstructionModel, isSubmit: boolean) => {
+const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
@@ -181,7 +181,7 @@ const fetchSopYear = async () => {
 // 根据原币计算
 const handleCalculationIginalCurrency = async (row: any, index: number) => {
   try {
-    const { success, result } = await PosToriginalCurrencyCalculate([row])
+    const { success, result } = await ToriginalCurrencyStructural([row])
     if (!success && !result.length) throw Error()
     constructionBomList.value[index] = { ...(result[0] || {}), isEdit: true }
     console.log(success, "handleSubmit")

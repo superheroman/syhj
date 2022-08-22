@@ -52,12 +52,21 @@ export function GetStructural(data: { id: number }): any {
 
 // 结构件单价录入提交 有则添加无则修改
 export function PostStructuralMemberEntering(data: {
-  isSubmit: boolean
+  isSubmit: number
   structuralMaterialEntering: ConstructionModel[]
   auditFlowId: number
 }): any {
   return request({
     url: "/api/services/app/ResourceEntering/PostStructuralMemberEntering",
+    method: "post",
+    data
+  })
+}
+
+// 计算结构料单价录入 ==>根据原币计算
+export function ToriginalCurrencyStructural(data: ElectronicDto[]): any {
+  return request({
+    url: "/api/services/app/ElectronicStructuralMethod/ToriginalCurrencyStructural",
     method: "post",
     data
   })
