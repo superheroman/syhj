@@ -20,13 +20,22 @@ export function saveProductionControl(data: SaveProductionControlInfo) {
   })
 }
 
-/** 获取年份 */
 export function getPcsByPriceAuditFlowId(priceEvaluationId: number) {
   return request({
     url: "/api/services/app/PriceEvaluation/GetPcsByPriceAuditFlowId",
     method: "get",
     data: {
       auditFlowId: priceEvaluationId
+    }
+  })
+}
+
+export function getModelCountByAuditFlowId(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/GetModelCountByAuditFlowId",
+    method: "get",
+    data: {
+      auditFlowId
     }
   })
 }

@@ -121,7 +121,13 @@
 
 <script setup lang="ts">
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
-import { saveProductionControl, getPcsByPriceAuditFlowId, getSor, getProductFreight } from "./service"
+import {
+  saveProductionControl,
+  // getPcsByPriceAuditFlowId,
+  getSor,
+  getProductFreight,
+  getModelCountByAuditFlowId
+} from "./service"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 
@@ -168,18 +174,18 @@ onMounted(async () => {
   let query = getQuery()
   data.auditFlowId = Number(query.auditFlowId) || 1
   data.productId = Number(query.productId) || 1
-  let { result } = (await getPcsByPriceAuditFlowId(data.auditFlowId)) as any
+  let { result } = (await getModelCountByAuditFlowId(data.auditFlowId)) as any
   let warpArr = [] as any[] //二维数组
   let years = [] as number[]
   result.items.forEach((item: any) => {
-    item.pcsYear.forEach((yearItem: any, index: number) => {
+    item.modelCountYearListDto.forEach((yearItem: any, index: number) => {
       if (!warpArr[index]) {
         warpArr[index] = []
       }
       warpArr[index].push(yearItem.quantity)
     })
   })
-  result.items[0]?.pcsYear.forEach((yearItem: any) => {
+  result.items[0]?.modelCountYearListDto.forEach((yearItem: any) => {
     years.push(yearItem.year)
   })
   let yearValue: any[] = [] //1000, 2000, 3000

@@ -3,10 +3,10 @@
     <el-card class="card">
       <template #header>
         <div class="card-header">
-          <span>bom损耗率表单</span>
+          <span>结构料bom损耗率表单</span>
         </div>
       </template>
-      <el-table :data="data.bomLossData" border style="width: 100%" height="500">
+      <el-table :data="data.bomLossStructData" border style="width: 100%" height="500">
         <el-table-column type="index" width="50" />
         <el-table-column prop="superType" label="种类" width="180" />
         <el-table-column prop="categoryName" label="物料大类" width="180" />
@@ -27,7 +27,13 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import { getLossRateType, getOldLossRateInfo, saveLossRateInfo, getYears } from "./service"
+import {
+  // getLossRateType,
+  getStructOldLossRateInfo,
+  saveLossRateInfo,
+  getYears,
+  getStructLossRateType
+} from "./service"
 import { ElMessage } from "element-plus"
 import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
@@ -43,16 +49,17 @@ import getQuery from "@/utils/getQuery"
  * 数据部分
  */
 const data = reactive({
-  bomLossData: [
-    // {
-    //   categoryName: "1123",
-    //   lossRateYearList: [] as LossRateYearDto[],
-    //   auditFlowId: 2,
-    //   productId: 2,
-    //   product: "string",
-    //   superType: "string"
-    // }
-  ],
+  // bomLossData: [
+  //   {
+  //     categoryName: "1123",
+  //     lossRateYearList: [] as LossRateYearDto[],
+  //     auditFlowId: 2,
+  //     productId: 2,
+  //     product: "string",
+  //     superType: "string"
+  //   }
+  // ],
+  bomLossStructData: [],
   years: [] as number[]
 })
 
@@ -60,10 +67,12 @@ let auditFlowId = 1
 let productId = 1
 let isOld = "false"
 const submit = async () => {
+  let bomLossData = [] as any[]
+  bomLossData.concat(data.bomLossStructData)
   let res: any = await saveLossRateInfo({
     auditFlowId: auditFlowId,
     productId: productId,
-    lossRateDtoList: data.bomLossData.map((item: any) => {
+    lossRateDtoList: bomLossData.map((item: any) => {
       return {
         ...item,
         lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
@@ -102,13 +111,14 @@ onMounted(async () => {
   let { result } = (await getYears(auditFlowId)) as any
   data.years = result
   if (isOld === "true") {
-    let resOld: any = await getOldLossRateInfo({ auditFlowId, productId })
-    data.bomLossData = resOld.result
+    let resOldStruct: any = await getStructOldLossRateInfo({ auditFlowId, productId })
+    data.bomLossStructData = resOldStruct.result
   } else {
-    let res: any = await getLossRateType({ auditFlowId, productId })
-    data.bomLossData = res.result
+    //  结构料初始值
+    let resStruct: any = await getStructLossRateType({ auditFlowId, productId })
+    data.bomLossStructData = resStruct.result
   }
-  data.bomLossData.forEach((item: any) => {
+  data.bomLossStructData.forEach((item: any) => {
     item.lossRateYearList = []
     item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
   })

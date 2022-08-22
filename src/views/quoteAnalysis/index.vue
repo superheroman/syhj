@@ -68,17 +68,17 @@
       </el-table>
     </el-card>
     <el-card class="card">
-      <el-table :data="data.tableData" style="width: 100%" border>
+      <el-table :data="data.productBoard" style="width: 100%" border>
         <el-table-column label="产品" prop="productName" />
         <el-table-column label="单车产品数量" prop="productNumber" />
         <el-table-column label="目标价（内部）">
           <el-table-column label="单价" prop="interiorTargetUnitPrice" />
           <el-table-column label="毛利率" prop="interiorTargetGrossMargin" />
         </el-table-column>
-        <el-table-column label="目标价（内部）" prop="product">
+        <!-- <el-table-column label="目标价（内部）" prop="product">
           <el-table-column label="单价" prop="product" />
           <el-table-column label="毛利率" prop="product" />
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="目标价（客户）">
           <el-table-column label="单价" prop="clientTargetUnitPrice" />
           <el-table-column label="毛利率" prop="clientTargetGrossMargin" />
@@ -95,9 +95,21 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="第一轮报价" prop="product">
-          <el-table-column label="单价" prop="product" />
-          <el-table-column label="毛利率" prop="product" />
+        <el-table-column
+          :label="'第' + (index + 1) + '轮'"
+          v-for="(item, index) in data.productBoard.length > 0 ? data.productBoard[0].oldOffer : []"
+          :key="index"
+        >
+          <el-table-column label="单价">
+            <template>
+              <div>{{ item.unitPrice }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="毛利率">
+            <template>
+              <div>{{ item.grossMargin }}</div>
+            </template>
+          </el-table-column>
         </el-table-column>
       </el-table>
     </el-card>
@@ -319,7 +331,7 @@ onMounted(async () => {
   data.nre = nre
   data.unitPrice = unitPrice
   data.pooledAnalysis = pooledAnalysis
-  data.productBoard = productBoard
+  data.productBoard = productBoard.productBoard // 有疑问
   data.projectBoard = projectBoard
   console.log(result)
 })
