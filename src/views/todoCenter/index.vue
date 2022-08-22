@@ -1,6 +1,6 @@
 <template>
   <div class="todo-center">
-    <el-card>
+    <el-card class="card">
       <el-form :model="form" inline>
         <el-form-item label="核报价项目名称">
           <el-input v-model="form.quoteProjectName" />
@@ -21,42 +21,61 @@
         <div v-for="number in auditFlowIds" :key="number">{{ number }}</div>
       </div>
     </el-card>
-
-    <div class="todo-center__body">
+    <el-card class="card">
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="待办" name="first">
-          <div>
-            <el-link href="https://element.eleme.io" target="_blank"
-              >default
-              <el-icon class="el-icon--right"><icon-view /></el-icon>
-            </el-link>
-          </div>
-
-          <el-link type="primary">primary</el-link>
-          <el-link type="success">success</el-link>
-          <el-link type="warning">warning</el-link>
-          <el-link type="danger">danger</el-link>
-          <el-link type="info">info</el-link>
+          <el-table :data="auditFlowIdInfoList" style="width: 100%">
+            <el-table-column type="expand">
+              <template #default="scopeP">
+                <el-table :data="scopeP.row.auditFlowRightDetailList">
+                  <el-table-column label="流程界面" prop="processName" />
+                  <el-table-column label="是否回退">
+                    <template #default="scope">
+                      {{ scope.row.isRetype ? "是" : "否" }}
+                    </template>
+                  </el-table-column>
+                  <el-table-column label="跳转至流程">
+                    <template #default="scope">
+                      <el-button @click="clickToPage(scope.row, scopeP)">跳转</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </template>
+            </el-table-column>
+            <el-table-column label="流程ID" prop="auditFlowId" />
+            <el-table-column label="流程标题" prop="auditFlowTitle" />
+          </el-table>
         </el-tab-pane>
-        <el-tab-pane label="转发" name="second">Config</el-tab-pane>
+        <!-- <el-tab-pane label="转发" name="second">Config</el-tab-pane>
         <el-tab-pane label="抄送" name="third">Role</el-tab-pane>
         <el-tab-pane label="已办" name="fourth">Task</el-tab-pane>
-        <el-tab-pane label="跟踪" name="fifth">Task</el-tab-pane>
+        <el-tab-pane label="跟踪" name="fifth">Task</el-tab-pane> -->
       </el-tabs>
-    </div>
+    </el-card>
+
+    <!-- </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { savaNewAuditFlowInfo, getAllAuditFlowIds } from "./service"
+import { savaNewAuditFlowInfo, getAllAuditFlowIds, getAllAuditFlowInfos } from "./service"
+import urlMap from "./constant"
 // import { useStore } from "vuex"
-// import { useRoute, useRouter } from "vue-router"
+import { useRouter } from "vue-router"
 
 import type { TabsPaneContext } from "element-plus"
-import getQuery from "@/utils/getQuery"
+// import getQuery from "@/utils/getQuery"
 
+/**
+ * 路由对象
+ */
+// const route = useRoute()
+/**
+ * 路由实例
+ */
+const router = useRouter()
 const activeName = ref("first")
 const form = reactive({
   quoteProjectName: "",
@@ -65,6 +84,9 @@ const form = reactive({
   remarks: ""
 })
 let auditFlowIds = ref([])
+let auditFlowIdInfoList = ref([])
+// let userStorage = window.sessionStorage.getItem("user")
+// let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const saveNew = async () => {
   let res: any = await savaNewAuditFlowInfo(form)
   if (res.success) {
@@ -80,7 +102,26 @@ const geAuditFlowIds = async () => {
 const handleClick = (tab: TabsPaneContext, event: Event) => {
   console.log(tab, event)
 }
+// const getAuditFlowIds = async () => {
+//   let res: any = await getAuditFlowIdsByUser(userInfo.userId)
+//   console.log(res.result) // 返回空列表
+// }
 
+// const getProcessRights = async () => {
+//   let res: any = await getProcessRightsByFlowId({
+//     userId: userInfo.userId,
+//     auditFlowId: 1
+//   })
+//   console.log(res.result) // 返回空列表
+// }
+const clickToPage = (row: any, scopeP: any) => {
+  router.push({
+    path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
+    query: {
+      auditFlowId: scopeP.row.auditFlowId
+    }
+  })
+}
 /**
  * 仓库
  */
@@ -100,10 +141,29 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-onMounted(() => {
+onMounted(async () => {
   geAuditFlowIds()
-  let a = getQuery()
-  console.log(a, "query")
+  // let a = getQuery()
+
+  // getAuditFlowIds()
+  // getProcessRights()
+
+  let res: any = await getAllAuditFlowInfos()
+  auditFlowIdInfoList.value = res.result || [
+    {
+      auditFlowId: 1,
+      auditFlowTitle: "测试流程",
+      auditFlowRightDetailList: [
+        {
+          processName: "123",
+          processIdentifier: "231",
+          isRetype: "222",
+          right: "222233"
+        }
+      ]
+    }
+  ]
+  console.log(res)
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
@@ -119,6 +179,9 @@ watchEffect(() => {})
     margin: 20px 0;
     background: #fff;
     height: 500px;
+  }
+  .card {
+    margin: 20px 0;
   }
 }
 </style>

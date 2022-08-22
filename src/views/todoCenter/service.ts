@@ -12,3 +12,35 @@ export function getAllAuditFlowIds() {
     method: "get"
   })
 }
+
+export function getAuditFlowIdsByUser(userId: number) {
+  return request({
+    url: "/api/services/app/AuditFlow/GetAuditFlowIdsByUser",
+    method: "get",
+    data: {
+      userId
+    }
+  })
+}
+
+export function getProcessRightsByFlowId(data: any) {
+  return request({
+    url: "/api/services/app/AuditFlow/GetProcessRightsByFlowId",
+    method: "get",
+    data
+  })
+}
+
+export function getFlowProcessInfo() {
+  return request({
+    url: "/api/services/app/AuditFlow/GetFlowProcessInfo",
+    method: "get"
+  })
+}
+
+export function getAllAuditFlowInfos() {
+  return request({
+    url: "/api/services/app/AuditFlow/GetAllAuditFlowInfos",
+    method: "get"
+  })
+}
