@@ -10,7 +10,7 @@ export function GetElectronic(data: { id: number }): any {
   })
 }
 
-// 计算电子料单价录入
+// 计算电子料单价录入 根据汇率计算
 export function PostElectronicMaterialCalculate(data: ElectronicDto[]): any {
   return request({
     url: "/api/services/app/ResourceEntering/PostElectronicMaterialCalculate",
@@ -18,6 +18,7 @@ export function PostElectronicMaterialCalculate(data: ElectronicDto[]): any {
     data
   })
 }
+
 // 计算电子料单价录入 根据原币计算
 export function PosToriginalCurrencyCalculate(data: ElectronicDto[]): any {
   return request({
