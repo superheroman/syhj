@@ -72,7 +72,7 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let res: any = await getAuditFlowVersion(auditFlowId.value)
-  console.log(res)
+  data.form.title = res.result.title
   trFileId = res.result.solutionFileIdentifier
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
