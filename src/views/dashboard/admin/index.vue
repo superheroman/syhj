@@ -168,15 +168,18 @@ const initCharts = (id: string, chartOption: any) => {
   }
 }
 
-onBeforeMount(() => {
-  fetchOptionsData()
-})
+onBeforeMount(() => {})
 
 onMounted(() => {
-  initChart()
-  getGoTableChartData()
-  fetchAllData()
+  init()
 })
+
+const init = async () => {
+  await fetchOptionsData()
+  await initChart()
+  await getGoTableChartData()
+  await fetchAllData()
+}
 
 onBeforeUnmount(() => {
   console.log("destory")
@@ -219,6 +222,7 @@ const getPricingPanelTimeSelectList = async () => {
     const PanelTimeSelectRes: any = await GetPricingPanelTimeSelectList({ AuditFlowId })
     data.yearsOptions = PanelTimeSelectRes?.result?.items
     data.year = data.yearsOptions[0].id
+    console.log(data.year, data.yearsOptions[0].id, "getPricingPanelTimeSelectList")
   } catch (err: any) {
     console.log(err, "[ 获取时间选择下拉数据失败 ]")
   }
@@ -227,6 +231,7 @@ const getPricingPanelTimeSelectList = async () => {
 // 获取 bom成本（含损耗）汇总表
 const getBomCost = async () => {
   try {
+    console.log(data.year, "getBomCost")
     const { result }: any = await GetBomCost({
       Year: data.year,
       AuditFlowId,
@@ -334,7 +339,7 @@ const getPricingPanelProportionOfProductCost = async () => {
       AuditFlowId,
       ModelCountId
     })
-    const value = result?.items.map((val: any) => ({ value: val.proportion, name: val.name }))
+    const value = result?.items.map((val: any) => ({ value: val.proportion?.toFixed(2) || 0, name: val.name }))
     percentageCostChart.setOption({
       ...percentageCostChartData,
       series: percentageCostChartData.series.map((_, index) => {
@@ -358,7 +363,8 @@ const getPricingPanelProfit = async () => {
       AuditFlowId,
       ModelCountId
     })
-    const val = result?.items.map((val: any) => val.proportion)
+    const val = result?.items?.map((val: any) => Math.floor(val.proportion))
+    console.log(val, "getPricingPanelProfit")
     costChart.setOption({
       ...costChartData,
       series: costChartData.series.map((_, index) => {
@@ -376,14 +382,21 @@ const getPricingPanelProfit = async () => {
 
 // 获取推移图
 const getGoTableChartData = async () => {
-  const { result }: any = await GetGoTable({ AuditFlowId, ModelCountId, InputCount: data.productInputs })
-  const val = result?.items.map((val: any) => val.value)
+  const {
+    result: { items = [] }
+  }: any = await GetGoTable({ AuditFlowId, ModelCountId, InputCount: data.productInputs })
+  const value = items.map((item: any) => Math.floor(item.value)) || []
+  const years = items.map((val: any) => val.year) || []
   selectCostChart = initCharts("selectCostChart", {
     ...selectCostChartData,
+    xAxis: {
+      ...selectCostChartData.xAxis,
+      data: [...years]
+    },
     series: selectCostChartData.series.map((_, index) => {
       return {
         ...selectCostChartData.series[index],
-        data: val
+        data: value
       }
     })
   })

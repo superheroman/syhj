@@ -56,7 +56,7 @@
           <el-table-column
             v-for="(item, index) in allColums?.iginalCurrencyYears"
             :key="item"
-            :label="`${item}`"
+            :label="`${item?.toString()}`"
             :prop="`iginalCurrency[${index}].value`"
             width="180"
           >
@@ -76,7 +76,7 @@
           <el-table-column
             v-for="(item, index) in allColums?.standardMoneyYears"
             :key="item"
-            :label="`${item}`"
+            :label="`${item?.toString()}`"
             :prop="`standardMoney[${index}].value`"
             width="180"
           >
