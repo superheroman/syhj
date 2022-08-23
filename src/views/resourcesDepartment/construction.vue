@@ -1,6 +1,6 @@
 <template>
   <div class="margin-top">
-    <div v-for="item in constructionBomList" :key="item.superTypeName">
+    <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
       <el-card class="table-wrap" :header="item.superTypeName">
         <el-table :data="item.structureMaterial" style="width: 100%" height="500">
           <el-table-column label="bom">
@@ -36,29 +36,31 @@
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-          <el-table-column label="原币" v-if="allColums?.sop.length">
+          <el-table-column prop="iginalCurrency" label="原币">
             <el-table-column
-              v-for="(item, index) in allColums?.sop"
-              :key="item"
-              :label="item"
-              :prop="`sop[${index}].value`"
-              width="150"
+              v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+              :key="`construction-iginalCurrency${item}`"
+              :label="`${item?.toString()}`"
+              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
+              width="180"
             >
               <template #default="scope">
-                <el-input
-                  @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
+                <el-input-number
                   v-if="scope.row.isEdit"
-                  v-model.number="scope.row.sop[index].value"
+                  v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
+                  controls-position="right"
+                  :min="0"
+                  @blur="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
                 />
-                <span v-if="!scope.row.isEdit">{{ scope.row.sop[index].value }}</span>
+                <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
               </template>
             </el-table-column>
           </el-table-column>
           <el-table-column prop="standardMoney" label="本位币">
             <el-table-column
               v-for="(item, index) in allColums?.sop"
-              :key="item"
-              :label="`${item}`"
+              :key="`construction-standardMoney${item}`"
+              :label="`${item?.toString()}`"
               :prop="`standardMoney[${index}].value`"
               width="180"
             />
@@ -96,7 +98,7 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { ConstructionDto, ConstructionModel } from "./data.type"
+import { ConstructionModel } from "./data.type"
 import { GetStructural, PostStructuralMemberEntering, ToriginalCurrencyStructural } from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
@@ -111,7 +113,7 @@ console.log(store.userInfo, "store")
 const { auditFlowId = 1 }: any = getQuery()
 
 // 结构料 - table数据
-const constructionBomList = ref<ConstructionDto[]>([])
+const constructionBomList = ref<any>([])
 
 // 表单子列
 const allColums = reactive<any>({
@@ -159,7 +161,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
-      structuralMaterialEntering: [{ ...record, peopleId: 1 }],
+      structuralMaterialEntering: [{ ...record, productId: 1 }],
       auditFlowId
     })
     if (!success) throw Error()
@@ -179,12 +181,12 @@ const fetchSopYear = async () => {
 }
 
 // 根据原币计算
-const handleCalculationIginalCurrency = async (row: any, index: number) => {
+const handleCalculationIginalCurrency = async (row: any, bomIndex: number, iginalCurrencyIndex: number) => {
   try {
     const { success, result } = await ToriginalCurrencyStructural([row])
     if (!success && !result.length) throw Error()
-    constructionBomList.value[index] = { ...(result[0] || {}), isEdit: true }
-    console.log(success, "handleSubmit")
+    const res = { ...(result[0] || {}), isEdit: true }
+    constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex] = res
   } catch (err) {
     console.log
     ElMessage.error("计算失败~")

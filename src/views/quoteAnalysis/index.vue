@@ -37,7 +37,7 @@
       <el-table :data="data.unitPrice" style="width: 100%" border v-if="data.unitPrice.length > 0">
         <el-table-column label="产品" prop="productName" />
         <el-table-column label="单车产品数量" prop="productNumber" />
-        <el-table-column
+        <!-- <el-table-column
           :label="'测算' + (index + 1) + item.grossMargin"
           v-for="(item, index) in data.unitPrice[0].grossMarginList"
           :key="index"
@@ -45,7 +45,7 @@
           <template #default="scope">
             <span>{{ scope.row.grossMarginList[index].grossMarginNumber }} </span>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </el-card>
     <el-card class="card">
@@ -119,25 +119,25 @@
         <el-table-column label="项目" prop="projectName" />
         <el-table-column label="目标价（内部）">
           <template #default="scope">
-            <div>{{ scope.row.interiorTarge.grossMargin }}</div>
-            <div>{{ scope.row.interiorTarge.value }}</div>
+            <div>{{ scope.row?.interiorTarge?.grossMargin }}</div>
+            <div>{{ scope.row?.interiorTarge?.value }}</div>
           </template>
         </el-table-column>
         <el-table-column label="目标价（客户）">
           <template #default="scope">
-            <div>{{ scope.row.clientTarget.grossMargin }}</div>
-            <div>{{ scope.row.clientTarget.value }}</div>
+            <div>{{ scope.row.clientTarget?.grossMargin }}</div>
+            <div>{{ scope.row.clientTarget?.value }}</div>
           </template>
         </el-table-column>
         <el-table-column label="本次报价">
           <template #default="scope">
-            <div>{{ scope.row.offer.grossMargin }}</div>
-            <div>{{ scope.row.offer.value }}</div>
+            <div>{{ scope.row.offer?.grossMargin }}</div>
+            <div>{{ scope.row.offer?.value }}</div>
           </template>
         </el-table-column>
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
-          v-for="(item, index) in data.projectBoard.length > 0 ? data.projectBoard[0].oldOffer : []"
+          v-for="(item, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
           :key="index"
         >
           <template #default="scope">
@@ -330,6 +330,7 @@ onMounted(async () => {
   let { nre, unitPrice, pooledAnalysis, productBoard, projectBoard } = result
   data.nre = nre
   data.unitPrice = unitPrice
+  console.log(data.unitPrice, "data.unitPrice")
   data.pooledAnalysis = pooledAnalysis
   data.productBoard = productBoard.productBoard // 有疑问
   data.projectBoard = projectBoard

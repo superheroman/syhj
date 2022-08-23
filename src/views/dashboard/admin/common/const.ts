@@ -1,3 +1,5 @@
+import { bigNumberTransform } from "./util"
+
 export const percentageCostChartData = {
   title: {
     text: "产品成本",
@@ -11,6 +13,21 @@ export const percentageCostChartData = {
     orient: "vertical",
     left: "left",
     show: false
+  },
+  label: {
+    alignTo: "edge",
+    formatter: (item: any) => {
+      return `${item.seriesName}: ${bigNumberTransform(item.value || 0)}`
+    },
+    minMargin: 5,
+    edgeDistance: 10,
+    lineHeight: 15,
+    rich: {
+      time: {
+        fontSize: 10,
+        color: "#999"
+      }
+    }
   },
   series: [
     {
@@ -59,6 +76,14 @@ export const costChartData = {
     {
       type: "bar",
       showBackground: true,
+      stack: "Total",
+      label: {
+        show: true,
+        position: "top",
+        formatter: (item: any) => {
+          return bigNumberTransform(item.value || 0)
+        }
+      },
       backgroundStyle: {
         color: "rgba(180, 180, 180, 0.2)"
       },
@@ -79,6 +104,13 @@ export const selectCostChartData = {
     {
       data: [],
       type: "line",
+      label: {
+        show: true,
+        position: "top",
+        formatter: (item: any) => {
+          return Math.floor(item.value || 0).toLocaleString("en-US")
+        }
+      },
       smooth: true
     }
   ]
