@@ -584,6 +584,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
+  },
+  {
+    path: "/trAudit",
+    redirect: "/trAudit/index",
+    component: Layout,
+    children: [
+      {
+        path: "/trAudit/index",
+        component: () => import("@/views/trAudit/index.vue"),
+        name: "trAudit",
+        meta: {
+          title: "Tr主方案"
+        }
+      }
+    ]
   }
 ]
 

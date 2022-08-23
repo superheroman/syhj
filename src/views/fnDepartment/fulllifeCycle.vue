@@ -38,6 +38,11 @@
             <el-input v-model="row.vatRate" />
           </template>
         </el-table-column>
+        <el-table-column label="人均跟线数量">
+          <template #default="{ row }">
+            <el-input v-model="row.traceLineOfPerson" />
+          </template>
+        </el-table-column>
       </el-table>
       <div style="float: right; margin: 20px 0">
         <el-button type="primary" @click="submit">提交</el-button>
@@ -97,6 +102,7 @@ onBeforeMount(() => {
       usefulLifeOfFixedAssets: 0,
       dailyShift: 0,
       vatRate: 0,
+      traceLineOfPerson: 0,
       year
     })
   })
