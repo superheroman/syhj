@@ -161,7 +161,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
-      structuralMaterialEntering: [{ ...record, peopleId: 1 }],
+      structuralMaterialEntering: [{ ...record, productId: 1 }],
       auditFlowId
     })
     if (!success) throw Error()
