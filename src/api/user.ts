@@ -182,3 +182,16 @@ export function getUserList(data: UserParams) {
     data
   })
 }
+
+/** 根据角色获取人员 */
+export function getUserListByRoleName(roleName: string) {
+  return request({
+    url: "/api/services/app/User/GetUserListByRoleName",
+    method: "get",
+    data: {
+      roleName,
+      maxResultCount: 20,
+      skipCount: 0
+    }
+  })
+}
