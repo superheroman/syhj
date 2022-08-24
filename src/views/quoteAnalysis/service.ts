@@ -23,11 +23,41 @@ export function postCalculateFullGrossMargin(row: any, auditFlowId: number, unit
     }
   })
 }
+
+export function getSpreadSheetCalculate(id: number, grossMargin: number) {
+  return request({
+    url: "/api/services/app/AnalyseBoard/GetSpreadSheetCalculate",
+    method: "get",
+    data: {
+      id,
+      grossMargin
+    }
+  })
+}
 // 查看年份维度对比
 export function GetYearDimensionalityComparison(data: { id: number }): any {
   return request({
     url: "/api/services/app/AnalyseBoard/GetYearDimensionalityComparison",
     method: "get",
     data
+  })
+}
+
+export function postIsOffer(data: any): any {
+  return request({
+    url: "/api/services/app/AnalyseBoard/PostIsOffer",
+    method: "post",
+    data
+  })
+}
+export function getDownloadMessage(id: number, fileName: string) {
+  return request({
+    url: "/api/services/app/AnalyseBoard/GetDownloadMessage",
+    method: "get",
+    data: {
+      id,
+      fileName
+    },
+    responseType: "blob"
   })
 }

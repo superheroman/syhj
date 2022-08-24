@@ -6,48 +6,48 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="产品部-电子工程师:">
-              <SearchPerson v-model="formData.electronicEngineerId" />
+              <SearchDepartMentPerson v-model="formData.electronicEngineerId" roleName="产品开发部-电子工程师" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="产品部-结构工程师:">
-              <SearchPerson v-model="formData.structureEngineerId" />
+              <SearchDepartMentPerson v-model="formData.structureEngineerId" roleName="产品开发部-结构工程师" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="资源管理部-电子资源开发:">
-              <SearchPerson v-model="formData.resourceElecId" />
+              <SearchDepartMentPerson v-model="formData.resourceElecId" roleName="资源管理部-电子单价录入员" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="资源管理部-结构子资源开发:">
-              <SearchPerson v-model="formData.resourceStructId" />
+              <SearchDepartMentPerson v-model="formData.resourceStructId" roleName="资源管理部-结构单价录入员" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="工程技术部-损耗率录入员:">
-              <SearchPerson v-model="formData.engineerLossRateId" />
+              <SearchDepartMentPerson v-model="formData.engineerLossRateId" roleName="工程技术部-损耗率录入员" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="工程技术部-工序工时录入员::">
-              <SearchPerson v-model="formData.engineerWorkHourId" />
+              <SearchDepartMentPerson v-model="formData.engineerWorkHourId" roleName="工程技术部-工序工时录入员" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="品质保证部-实验费用录入员:">
-              <SearchPerson v-model="formData.qualityBenchId" />
+              <SearchDepartMentPerson v-model="formData.qualityBenchId" roleName="品质保证部-实验费用录入员" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="品质保证部-检具费用录入员:">
-              <SearchPerson v-model="formData.qualityToolId" />
+              <SearchDepartMentPerson v-model="formData.qualityToolId" roleName="品质保证部-检具费用录入员" />
             </el-form-item>
           </el-col>
 
           <el-col :span="6">
             <el-form-item label="生产管理部-物流成本录入员:">
-              <SearchPerson v-model="formData.productManageId" />
+              <SearchDepartMentPerson v-model="formData.productManageId" roleName="生产管理部-物流成本录入员" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -88,7 +88,8 @@
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { SearchPerson } from "@/components/SearchPerson"
+import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
+
 import { PostManagement } from "@/api/partEntry"
 import { UserInputInfo } from "./data.type"
 import type { UploadProps } from "element-plus"

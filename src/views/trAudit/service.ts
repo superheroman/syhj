@@ -5,7 +5,7 @@ export function getAuditFlowVersion(auditFlowId: number) {
     url: "/api/services/app/TRCheck/GetAuditFlowVersion",
     method: "get",
     data: {
-      auditFlowId
+      flowId: auditFlowId
     }
   })
 }
