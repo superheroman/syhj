@@ -135,7 +135,7 @@ import {
   GetGoTable
 } from "../service"
 import getQuery from "@/utils/getQuery"
-
+import { downloadFileExcel } from "@/utils/index"
 const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
@@ -276,12 +276,14 @@ const getQualityCost = async () => {
 // 产品核价表下载
 const handleFetchPriceEvaluationTableDownload = async () => {
   try {
-    const { result }: any = await PriceEvaluationTableDownload({
+    const res: any = await PriceEvaluationTableDownload({
       Year: data.year,
       AuditFlowId: 1,
       ModelCountId
     })
-    console.log(result, "产品核价表下载")
+
+    downloadFileExcel(res, "产品核价表")
+    // console.log(result, "产品核价表下载")
   } catch (err: any) {
     console.log(err, "[ 产品核价表下载据失败 ]")
   }
@@ -295,6 +297,7 @@ const handleFethNreTableDownload = async () => {
       AuditFlowId: 1,
       ModelCountId
     })
+    downloadFileExcel(res, "NRE核价表")
     console.log(res, "NreTableDownload")
   } catch (err: any) {
     console.log(err, "[ NRE核价表下载 失败 ]")

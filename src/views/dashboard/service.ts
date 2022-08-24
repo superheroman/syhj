@@ -60,7 +60,8 @@ export function PriceEvaluationTableDownload(data: GetLossCostProps) {
   return request({
     url: "/api/services/app/PriceEvaluation/PriceEvaluationTableDownload",
     method: "get",
-    data
+    data,
+    responseType: "blob"
   })
 }
 
@@ -69,7 +70,8 @@ export function NreTableDownload(data: GetLossCostProps) {
   return request({
     url: "/api/services/app/PriceEvaluation/NreTableDownload",
     method: "get",
-    data
+    data,
+    responseType: "blob"
   })
 }
 
