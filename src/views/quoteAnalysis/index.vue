@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div style="margin: 20px 0">
       <el-button type="primary" @click="downLoad" style="margin-left: 10px">成本信息表下载</el-button>
       <el-button-group style="margin-right: 10px; float: right">
         <el-button type="primary" @click="postOffer(1)">报价</el-button>
@@ -122,12 +122,12 @@
         >
           <el-table-column label="单价">
             <template>
-              <div>{{ item.unitPrice }}</div>
+              <div>{{ item.unitPrice.toFixed(2) }}</div>
             </template>
           </el-table-column>
           <el-table-column label="毛利率">
             <template>
-              <div>{{ item.grossMargin }}</div>
+              <div>{{ item.grossMargin.toFixed(2) }}</div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -180,7 +180,7 @@
       </el-table>
     </el-card>
     <div id="unitpriceChart" />
-    <div id="yearChart" />
+    <div id="revenueGrossMarginChart" />
   </div>
 </template>
 
@@ -210,7 +210,7 @@ import getQuery from "@/utils/getQuery"
 // const router = useRouter()
 //console.log('1-开始创建组件-setup')
 
-let data1 = {
+let ProjectUnitPrice = {
   title: {
     text: "项目单价对比"
   },
@@ -232,49 +232,34 @@ let data1 = {
     type: "category",
     data: ["目标价", "本次报价", "上一轮"]
   },
-  yAxis: {
-    type: "value"
-  },
-  series: [
+  // yAxis: {
+  //   type: "value"
+  // },
+  yAxis: [
     {
-      name: "Direct",
-      type: "bar",
-      stack: "total",
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: "series"
-      },
-      data: [320, 302, 301]
+      type: "value",
+      name: "单价",
+      min: 0,
+      max: 1000,
+      interval: 200,
+      axisLabel: {
+        formatter: "{value} 元"
+      }
     },
     {
-      name: "Mail Ad",
-      type: "bar",
-      stack: "total",
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: "series"
-      },
-      data: [120, 132, 101]
-    },
-    {
-      name: "Affiliate Ad",
-      type: "bar",
-      stack: "total",
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: "series"
-      },
-      data: [220, 182, 191]
+      type: "value",
+      name: "毛利率",
+      min: 0,
+      max: 0.5,
+      interval: 0.02,
+      axisLabel: {
+        formatter: "{value}"
+      }
     }
-  ]
+  ],
+  series: []
 }
-let data2 = {
+let RevenueGrossMargin = {
   title: {
     text: "收入和毛利率对比"
   },
@@ -282,13 +267,40 @@ let data2 = {
     type: "category",
     data: ["目标价", "本次报价", "上一轮"]
   },
-  yAxis: {
-    type: "value"
-  },
+  legend: {},
+  yAxis: [
+    {
+      type: "value",
+      name: "收入",
+      min: 0,
+      max: 1000,
+      interval: 200,
+      axisLabel: {
+        formatter: "{value} 元"
+      }
+    },
+    {
+      type: "value",
+      name: "毛利率",
+      min: 0,
+      max: 0.5,
+      interval: 0.02,
+      axisLabel: {
+        formatter: "{value}"
+      }
+    }
+  ],
   series: [
     {
       data: [120, 200, 150],
-      type: "bar"
+      type: "bar",
+      name: "OV方案销售收入"
+    },
+    {
+      data: [0, 0.05, 0.1],
+      type: "line",
+      name: "OV方案毛利率",
+      yAxisIndex: 1
     }
   ]
 }
@@ -325,7 +337,7 @@ const calculateFullGrossMargin = async (row: any, index: number, unitPrice: numb
   row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 }
 const setData = () => {
-  data1.series = data.productBoard.map((item: any) => {
+  ProjectUnitPrice.series = data.productBoard.map((item: any) => {
     return {
       name: item.productName,
       type: "bar",
@@ -336,9 +348,16 @@ const setData = () => {
       emphasis: {
         focus: "series"
       },
-      data: [320, 302, 301]
+      data: [item.clientTargetUnitPrice, item.offerUnitPrice || 100, item.oldOffer[0]?.unitPrice || 110]
     }
   })
+  ProjectUnitPrice.series.push({
+    yAxisIndex: 1,
+    name: "整体毛利率",
+    type: "line",
+    data: [0.1, 0.2, 0.4]
+  })
+  chart1.setOption(ProjectUnitPrice)
 }
 const spreadSheetCalculate = async (row: any) => {
   let res: any = await getSpreadSheetCalculate(row.id, row.rossMargin)
@@ -381,8 +400,8 @@ onBeforeMount(() => {
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 
-  chart1 = initCharts("unitpriceChart", data1)
-  chart2 = initCharts("yearChart", data2)
+  chart1 = initCharts("unitpriceChart", ProjectUnitPrice)
+  chart2 = initCharts("revenueGrossMarginChart", RevenueGrossMargin)
   let query = getQuery()
   data.auditFlowId = Number(query.auditFlowId) || 1
 
@@ -419,7 +438,7 @@ defineExpose({
 #unitpriceChart {
   height: 400px;
 }
-#yearChart {
+#revenueGrossMarginChart {
   height: 400px;
 }
 </style>
