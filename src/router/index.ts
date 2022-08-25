@@ -550,6 +550,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
+        path: "/versionManagement/operationRecord",
+        component: () => import("@/views/versionManagement/operationRecord.vue"),
+        name: "operationRecord",
+        meta: {
+          title: "时效性管理"
+        }
+      },
+      {
         path: "/versionManagement/reportQuery",
         component: () => import("@/views/versionManagement/reportQuery.vue"),
         name: "reportQuery",

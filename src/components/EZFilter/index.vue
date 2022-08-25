@@ -8,9 +8,16 @@
         <el-form-item :label="item.label" v-else-if="item.role === 'select'">
           <el-select
             :placeholder="item.placeholder || `请输入${item.label}`"
-            :options="item.options"
             v-model="formValue[item.key]"
-          />
+            :multiple="item.multiple"
+            :filterable="item.filterable"
+            :remote="item.remote"
+            :remote-method="item.remoteMethod"
+            :loading="item.loading"
+            @change="item.onchange"
+          >
+            <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" />
+          </el-select>
         </el-form-item>
         <el-form-item :label="item.label" v-else-if="item.role === 'timePicker'" :prop="item.key">
           <el-date-picker
@@ -20,6 +27,7 @@
             :type="item.dateType || 'daterange'"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
+            value-format="YYYY-MM-DD"
           />
         </el-form-item>
         <el-form-item :label="item.label" v-else-if="item.role === 'radioGroup'" :prop="item.key">
