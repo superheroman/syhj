@@ -1,7 +1,10 @@
 <template>
   <div class="margin-top">
+    <el-row justify="end">
+      <el-button m="2" type="primary" @click="queryModlueNumber">查看项目走量</el-button>
+    </el-row>
     <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
-      <el-card class="table-wrap" :header="item.superTypeName">
+      <el-card m="2" :header="item.superTypeName">
         <el-table :data="item.structureMaterial" style="width: 100%" height="500">
           <el-table-column label="bom">
             <el-table-column type="index" label="序号" width="50" />
@@ -38,7 +41,7 @@
           </el-table-column> -->
           <el-table-column prop="iginalCurrency" label="原币">
             <el-table-column
-              v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+              v-for="(item, iginalCurrencyIndex) in data?.sop"
               :key="`construction-iginalCurrency${item}`"
               :label="`${item?.toString()}`"
               :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
@@ -58,7 +61,7 @@
           </el-table-column>
           <el-table-column prop="standardMoney" label="本位币">
             <el-table-column
-              v-for="(item, index) in allColums?.sop"
+              v-for="(item, index) in data?.sop"
               :key="`construction-standardMoney${item}`"
               :label="`${item?.toString()}`"
               :prop="`standardMoney[${index}].value`"
@@ -93,13 +96,35 @@
         </el-table>
       </el-card>
     </div>
+    <el-dialog v-model="data.visiable" title="项目走量">
+      <el-table :data="data.moduleNumber" style="width: 100%" height="500">
+        <el-table-column prop="productName" label="产品" width="150" />
+        <el-table-column prop="productTypeName" label="产品小类" width="150" />
+        <!-- <el-table-column prop="marketShare" label="市场份额" width="150" />
+        <el-table-column prop="moduleCarryingRate" label="模组搭载率" width="150" />
+        <el-table-column prop="singleCarProductsQuantity" label="单车产品数量" width="150" /> -->
+        <el-table-column
+          v-for="(item, index) in data?.moduleNumberSop"
+          :key="`construction-moduleNumberSop${item}`"
+          :label="`${item?.year.toString()}`"
+          :prop="`modelCountYear[${index}].value`"
+          width="180"
+        />
+        <el-table-column prop="modelTotal" label="模组总量" width="150" />
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { ConstructionModel } from "./data.type"
-import { GetStructural, PostStructuralMemberEntering, ToriginalCurrencyStructural } from "./common/request"
+import {
+  GetStructural,
+  PostStructuralMemberEntering,
+  ToriginalCurrencyStructural,
+  GetProjectGoQuantity
+} from "./common/request"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
@@ -115,9 +140,11 @@ const { auditFlowId = 1 }: any = getQuery()
 // 结构料 - table数据
 const constructionBomList = ref<any>([])
 
-// 表单子列
-const allColums = reactive<any>({
-  sop: []
+const data = reactive<any>({
+  sop: [], // 表单子列
+  visiable: false,
+  moduleNumber: [], // 项目走量
+  moduleNumberSop: []
 })
 
 const exchangeSelectOptions = ref<any>([])
@@ -131,6 +158,7 @@ onBeforeMount(() => {
 onMounted(() => {
   console.log(constructionBomList.value, "constructionBomList")
   fetchInitData()
+  fetchModuleNumberData()
 })
 
 const fetchOptionsData = async () => {
@@ -156,6 +184,15 @@ const fetchInitData = async () => {
   }
 }
 
+const queryModlueNumber = () => {
+  data.visiable = true
+}
+
+const fetchModuleNumberData = async () => {
+  const { result } = await GetProjectGoQuantity({ Id: auditFlowId })
+  data.modelCountYear = result
+}
+
 // 确认结构料单价行数据
 const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
   try {
@@ -177,7 +214,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
 
 const fetchSopYear = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
-  allColums.sop = result || []
+  data.sop = result || []
 }
 
 // 根据原币计算

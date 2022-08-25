@@ -12,4 +12,5 @@ export interface EnumDataProps {
   dom?: HtmlHTMLAttributes
   placeholder?: string
   dateType?: DatePickType
+  [x: string]: any
 }

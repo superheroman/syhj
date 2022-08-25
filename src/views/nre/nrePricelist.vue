@@ -1,7 +1,13 @@
 <template>
   <div style="padding: 0 10px">
     <el-card class="margin-top" header="手板件费用">
-      <el-table :data="data.handPieceCost" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
+      <el-table
+        :data="data.handPieceCost"
+        style="width: 100%"
+        border
+        :summary-method="(val) => getMouldSummaries(val, '手板件费用')"
+        show-summary
+      >
         <el-table-column type="index" width="50" />
         <el-table-column prop="partName" label="手板件名称" />
         <el-table-column prop="partNumber" label="料号" />
@@ -69,7 +75,7 @@
         :data="data.laboratoryFeeModels"
         style="width: 100%"
         border
-        :summary-method="getMouldSummaries"
+        :summary-method="(val) => getMouldSummaries(val, '实验费用')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -97,7 +103,13 @@
       </el-table>
     </el-card> -->
     <el-card class="margin-top" header="差旅费用">
-      <el-table :data="data.travelExpense" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
+      <el-table
+        :data="data.travelExpense"
+        style="width: 100%"
+        border
+        :summary-method="(val) => getMouldSummaries(val, '差旅费用')"
+        show-summary
+      >
         <el-table-column type="index" width="50" />
         <el-table-column prop="partName" label="事由" />
         <el-table-column prop="peopleCount" label="人数" />
@@ -108,7 +120,13 @@
       </el-table>
     </el-card>
     <el-card class="margin-top" header="其他费用">
-      <el-table :data="data.restsCost" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
+      <el-table
+        :data="data.restsCost"
+        style="width: 100%"
+        border
+        :summary-method="(val) => getMouldSummaries(val, '其他费用')"
+        show-summary
+      >
         <el-table-column type="index" width="50" />
         <el-table-column prop="rroject" label="项目" />
         <el-table-column prop="cost" label="费用" />

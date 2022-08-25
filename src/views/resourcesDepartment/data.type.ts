@@ -42,6 +42,7 @@ export interface ConstructionDto {
  * ConstructionModel，结构BOM表单
  */
 export interface ConstructionModel {
+  productId: number
   /**
    * 物料大类
    */

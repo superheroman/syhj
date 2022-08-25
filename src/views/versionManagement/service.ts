@@ -1,7 +1,15 @@
 import { request } from "@/utils/service"
 
 // 获取系统版本
-export function GetVersionInfos(data: { id: number }): any {
+export function GetVersionInfos(data: {
+  ProjectName: string
+  Version: number
+  AuditFlowId: number
+  DraftStartTime: string
+  DraftEndTime: string
+  FinishedStartTime: string
+  FinishedEndTime: string
+}): any {
   return request({
     url: "/api/services/app/VersionManagment/GetVersionInfos",
     method: "get",
@@ -33,5 +41,14 @@ export function GetAllAuditFlowVersion(data: { projectName: string }): any {
     url: "/api/services/app/VersionManagment/GetAllAuditFlowVersion",
     method: "get",
     data
+  })
+}
+
+// 根据项目名称获取项目已有核价流程所有版本
+export function GetAllAuditFlowProjectNameAndVersion(): any {
+  return request({
+    url: "/api/services/app/VersionManagment/GetAllAuditFlowProjectNameAndVersion",
+    method: "get",
+    data: {}
   })
 }
