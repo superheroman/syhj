@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, watch, ref } from "vue"
+import { reactive, watch } from "vue"
 import { useSettingsStore } from "@/store/modules/settings"
 
 const settingsStore = useSettingsStore()
@@ -57,19 +57,32 @@ watch(
     })
   }
 )
-let product = ref(0)
 </script>
 
 <template>
   <div class="drawer-container">
     <div>
-      <h3 class="drawer-title">零件切换</h3>
-      <el-radio-group v-model="product" size="large">
-        <el-radio-button label="New York" />
-        <el-radio-button label="Washington" />
-        <el-radio-button label="Los Angeles" />
-        <el-radio-button label="Chicago" />
-      </el-radio-group>
+      <h3 class="drawer-title">系统布局配置</h3>
+      <div class="drawer-item">
+        <span>显示 Tags-View</span>
+        <el-switch v-model="state.showTagsView" class="drawer-switch" />
+      </div>
+      <div class="drawer-item">
+        <span>显示侧边栏 Logo</span>
+        <el-switch v-model="state.showSidebarLogo" class="drawer-switch" />
+      </div>
+      <div class="drawer-item">
+        <span>固定 Header</span>
+        <el-switch v-model="state.fixedHeader" class="drawer-switch" />
+      </div>
+      <div class="drawer-item">
+        <span>显示换肤按钮</span>
+        <el-switch v-model="state.showThemeSwitch" class="drawer-switch" />
+      </div>
+      <div class="drawer-item">
+        <span>显示全屏按钮</span>
+        <el-switch v-model="state.showScreenfull" class="drawer-switch" />
+      </div>
     </div>
   </div>
 </template>

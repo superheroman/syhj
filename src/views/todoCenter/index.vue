@@ -116,6 +116,7 @@ const saveNew = async () => {
 }
 
 const clickToPage = (row: any, scopeP: any) => {
+  window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
   router.push({
     path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
     query: {
