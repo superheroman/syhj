@@ -160,9 +160,9 @@ import { reactive, onMounted } from "vue"
 import { ElMessage, UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import { downloadWorkingHoursInfo, SaveWorkingHour, SaveTangentHours } from "./service"
+import { downloadWorkingHoursInfo, SaveWorkingHour, SaveTangentHours, getTangentHoursList } from "./service"
 import getQuery from "@/utils/getQuery"
-import { getYears, getTangentHoursList } from "../pmDepartment/service"
+import { getYears } from "../pmDepartment/service"
 const { auditFlowId = 1, productId = 1 }: any = getQuery
 
 const data = reactive<{
