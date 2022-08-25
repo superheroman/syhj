@@ -75,6 +75,9 @@
           </template>
         </el-table-column>
       </el-table>
+      <div style="float: right; margin: 20px 0">
+        <el-button @click="openDialog" type="primary">年份维度对比</el-button>
+      </div>
     </el-card>
     <el-card class="card">
       <el-table :data="data.productBoard" style="width: 100%" border>
@@ -181,19 +184,43 @@
     </el-card>
     <div id="unitpriceChart" />
     <div id="revenueGrossMarginChart" />
+    <div style="float: right">
+      <el-button @click="toProductPriceList">在线预览核价表</el-button>
+      <el-button>点击生成待审批的报价表</el-button>
+    </div>
+    <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
+      <div v-for="item in data.dialogTable" :key="item" class="common-card">
+        <el-card class="table-wrap" :header="item.project">
+          <el-table :data="[item]" style="width: 100%">
+            <template v-for="(yearItem, i) in item.yearList" :key="yearItem">
+              <el-table-column :prop="`yearList.${i}.value`" :label="yearItem.year" />
+            </template>
+            <el-table-column prop="grossMargin" label="毛利率" />
+            <el-table-column prop="totak" label="总和" />
+          </el-table>
+        </el-card>
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <!-- <el-button @click="dialogVisible = false">Cancel</el-button> -->
+          <el-button type="primary" @click="dialogVisible = false">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, onBeforeUnmount } from "vue"
-// import { useRoute, useRouter } from "vue-router"
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, onBeforeUnmount, ref } from "vue"
+import { useRouter } from "vue-router"
 import * as echarts from "echarts"
 import {
   getStatementAnalysisBoard,
   postCalculateFullGrossMargin,
   getSpreadSheetCalculate,
   postIsOffer,
-  getDownloadMessage
+  getDownloadMessage,
+  GetYearDimensionalityComparison
 } from "./service"
 import { NreMarketingDepartmentModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
@@ -207,9 +234,10 @@ import getQuery from "@/utils/getQuery"
 /**
  * 路由实例
  */
-// const router = useRouter()
+const router = useRouter()
 //console.log('1-开始创建组件-setup')
 
+let dialogVisible = ref(false)
 let ProjectUnitPrice = {
   title: {
     text: "项目单价对比"
@@ -329,12 +357,14 @@ const data = reactive({
   allInteriorGrossMargin: "",
   allClientGrossMargin: "",
   projectBoard: [] as any[],
-  auditFlowId: 1
+  auditFlowId: 1,
+  dialogTable: []
 })
 const calculateFullGrossMargin = async (row: any, index: number, unitPrice: number) => {
   // console.log(data.auditFlowId)
   let res: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
-  row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
+  // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
+  row.offeGrossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 }
 const setData = () => {
   ProjectUnitPrice.series = data.productBoard.map((item: any) => {
@@ -393,6 +423,22 @@ const downLoad = async () => {
     a.click()
     a.remove() //将a标签移除
   }
+}
+const toProductPriceList = () => {
+  router.push({
+    path: "/nupriceManagement/productPriceList"
+  })
+}
+const openDialog = () => {
+  getDialogData()
+  dialogVisible.value = true
+}
+const getDialogData = async () => {
+  const { result } = await GetYearDimensionalityComparison({
+    id: data.auditFlowId
+  })
+  console.log(result, "res")
+  data.dialogTable = result
 }
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')

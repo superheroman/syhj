@@ -24,3 +24,14 @@ export function SaveTangentHours(data: TangentSaveDto): any {
     data
   })
 }
+
+export function getTangentHoursList(auditFlowId: number, productId: number): any {
+  return request({
+    url: "/api/services/app/WorkingHours/GetTangentHoursList",
+    method: "get",
+    data: {
+      auditFlowId,
+      productId
+    }
+  })
+}

@@ -113,6 +113,10 @@
         </div>
         <!-- 产品总成本推移图 -->
         <div id="selectCostChart" />
+        <div style="float: right; margin: 20px 0">
+          <el-button type="primary">同意</el-button>
+          <el-button type="primary">退回</el-button>
+        </div>
       </el-card>
     </el-card>
   </div>

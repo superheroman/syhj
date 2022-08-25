@@ -21,8 +21,8 @@ export interface UserInputInfo {
   engineerWorkHourId?: undefined | string
   fileId?: number | null
   id?: number
-  isFirst?: undefined | string
-  product?: undefined | string | null
+  isFirst?: undefined | boolean
+  product?: undefined | boolean | null
   productId?: number
   productManageId?: undefined | string
   qualityBenchId?: undefined | string

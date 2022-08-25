@@ -57,7 +57,7 @@
           <el-col :span="6">
             <el-form-item label="是否为首款产品:">
               <el-select v-model="formData.isFirst" placeholder="Select">
-                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                <el-option v-for="item in options" :key="item.label" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -103,8 +103,8 @@ const formData: UserInputInfo = reactive({
   // engineeringTechnologyNum: "",
   fileId: null,
   financeNum: "",
-  isFirst: "是",
-  isNRE: "是",
+  isFirst: true,
+  isNRE: true,
   // productionManagementNum: "",
   // qualityNum: "",
   // resourceManagementNum: "",
@@ -150,11 +150,11 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
 // })
 const options = [
   {
-    value: "是",
+    value: true,
     label: "是"
   },
   {
-    value: "否",
+    value: false,
     label: "否"
   }
 ]

@@ -16,20 +16,20 @@ import { request } from "@/utils/service"
 
 export interface UserInputInfo {
   auditFlowId: number
-  electronicEngineerId?: null | string
-  engineerLossRateId?: null | string
-  engineerWorkHourId?: null | string
+  electronicEngineerId?: undefined | string
+  engineerLossRateId?: undefined | string
+  engineerWorkHourId?: undefined | string
   fileId?: number | null
   id?: number
-  isFirst?: null | string
-  product?: null | string
+  isFirst?: undefined | boolean
+  product?: undefined | boolean | null
   productId?: number
-  productManageId?: null | string
-  qualityBenchId?: null | string
-  qualityToolId?: null | string
-  resourceElecId?: null | string
-  resourceStructId?: null | string
-  structureEngineerId?: null | string
+  productManageId?: undefined | string
+  qualityBenchId?: undefined | string
+  qualityToolId?: undefined | string
+  resourceElecId?: undefined | string
+  resourceStructId?: undefined | string
+  structureEngineerId?: undefined | string
 }
 
 /** 项目经理确认 */

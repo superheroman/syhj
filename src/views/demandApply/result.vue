@@ -33,6 +33,9 @@
         <el-table-column label="年度返利要求" prop="name" />
         <el-table-column label="一次性折让率" prop="name" />
       </el-table>
+      <el-descriptions :column="1" border>
+        <el-descriptions-item label="项目名称"> kooriookami </el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <!-- <h5>项目名称：1223</h5> -->
     <!-- <h5>核心部件：</h5> -->

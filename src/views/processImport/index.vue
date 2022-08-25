@@ -162,7 +162,7 @@ import { ElMessage, UploadProps } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
 import { downloadWorkingHoursInfo, SaveWorkingHour, SaveTangentHours } from "./service"
 import getQuery from "@/utils/getQuery"
-import { getYears } from "../pmDepartment/service"
+import { getYears, getTangentHoursList } from "../pmDepartment/service"
 const { auditFlowId = 1, productId = 1 }: any = getQuery
 
 const data = reactive<{
@@ -259,6 +259,10 @@ onMounted(async () => {
 const getAllSop = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
   data.tangent = result.map((item: number) => ({ laborTime: 0, machineHours: 0, personnelNumber: 0, year: item }))
+
+  let res: any = getTangentHoursList(auditFlowId, productId)
+  console.log(res)
+  // res.result.tangentHoursDetailList
 }
 
 // 保存切线工时
