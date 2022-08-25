@@ -148,25 +148,25 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { InitVersionFilterValue } from "./common/const"
 import { VersionManageItem } from "./data.type"
 import EZFilter from "@/components/EZFilter/index.vue"
-import { GetVersionInfos, GetAllAuditFlowProjectName, GetAllAuditFlowVersion } from "./service"
+import { GetVersionInfos, GetAllAuditFlowProjectNameAndVersion } from "./service"
 import { useRouter } from "vue-router"
 import { formatDateTime } from "@/utils"
 const router = useRouter()
 
+// 获取项目已有核价流程所有项目名称以及对应版本号
 const getAllAuditFlowProjectName = async () => {
-  const { result } = await GetAllAuditFlowProjectName()
-  data.verisonfilterNnum[0].options = result.map((item: any) => ({ label: item, value: item }))
-  console.log(data.verisonfilterNnum, "res")
+  const { result } = await GetAllAuditFlowProjectNameAndVersion()
+  data.verisonfilterNnum[0].options = result.map((item: any) => {
+    let obj: any = {}
+    obj[item.projectName] = item.versions.map((vNo: any) => ({ label: vNo, value: vNo }))
+    data.versionsEnum = obj
+    return { label: item.projectName, value: item.projectName }
+  })
 }
 
+// 获取项目名称对应版本号
 const getAllAuditFlowVersion = async (projectName: any) => {
-  const { result } = await GetAllAuditFlowVersion({ projectName })
-  data.verisonfilterNnum[1].options = result.map((item: any) => ({ label: item, value: item }))
-  console.log(data.verisonfilterNnum, "res")
-}
-
-const getProjectData = (val) => {
-  getAllAuditFlowVersion(val)
+  data.verisonfilterNnum[1].options = data.versionsEnum[projectName]
 }
 
 // 系统版本管理表-table数据
@@ -175,6 +175,7 @@ const data = reactive<{
   verisonfilterNnum: any[]
   priceEvaluationTableList: any[]
   visible: boolean
+  versionsEnum: any
 }>({
   versionManageData: [],
   verisonfilterNnum: [
@@ -184,7 +185,7 @@ const data = reactive<{
       key: "ProjectName",
       role: "select",
       options: [],
-      onchange: getProjectData
+      onchange: getAllAuditFlowVersion
     },
     {
       label: "版本号",
@@ -208,12 +209,23 @@ const data = reactive<{
     }
   ],
   priceEvaluationTableList: [],
-  visible: false
+  visible: false,
+  versionsEnum: {}
 })
 
 const queryTable = async (formValue: any) => {
-  const { result } = await GetVersionInfos({ ...formValue })
-  data.versionManageData = result
+  console.log(formValue, "formValue")
+  const { DraftDate, ProjectName, Version, AuditFlowId, FinishedDate } = formValue
+  const { result } = await GetVersionInfos({
+    ProjectName,
+    Version,
+    AuditFlowId,
+    DraftStartTime: DraftDate[0] || "",
+    DraftEndTime: DraftDate[1] || "",
+    FinishedStartTime: FinishedDate[0] || "",
+    FinishedEndTime: FinishedDate[1] || ""
+  })
+  data.versionManageData = result || []
   console.log(result, "queryTable")
 }
 

@@ -71,3 +71,12 @@ export function ToriginalCurrencyStructural(data: ElectronicDto[]): any {
     data
   })
 }
+
+// 查看项目走量(获取某流程的项目走量)
+export function GetProjectGoQuantity(data: { Id: number }): any {
+  return request({
+    url: "/api/services/app/ResourceEntering/GetProjectGoQuantity",
+    method: "get",
+    data
+  })
+}
