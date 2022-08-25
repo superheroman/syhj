@@ -111,6 +111,16 @@
         <div>
           产品投入量：<el-input placeholder="请输入产品投入量" v-model="data.productInputs" style="width: 200px" />
         </div>
+        <el-upload
+          v-model:file-list="fileList"
+          :show-file-list="false"
+          action="api/services/app/FileCommonService/UploadFile"
+          :on-success="handleSuccess"
+          :on-change="handleFileChange"
+          style="float: right"
+        >
+          <el-button>TR主方案上传</el-button>
+        </el-upload>
         <!-- 产品总成本推移图 -->
         <div id="selectCostChart" />
         <div style="float: right; margin: 20px 0">
@@ -122,7 +132,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted, onBeforeUnmount, onBeforeMount } from "vue"
+import { reactive, onMounted, onBeforeUnmount, onBeforeMount, ref } from "vue"
 import { dashboardPannel, percentageCostChartData, costChartData, selectCostChartData } from "./common/const"
 import {
   GetBomCost,
@@ -136,17 +146,19 @@ import {
   NreTableDownload,
   GetLogisticsCost,
   GetManufacturingCost,
-  GetGoTable
+  GetGoTable,
+  addPricingPanelTrProgrammeId
 } from "../service"
 import getQuery from "@/utils/getQuery"
 import { downloadFileExcel } from "@/utils/index"
+import type { UploadProps, UploadUserFile } from "element-plus"
 const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
 let costChart: any = null
 let percentageCostChart: any = null
 let selectCostChart: any = null
-
+const fileList = ref<UploadUserFile[]>([])
 const data = reactive<Record<string, any>>({
   product: "",
   year: "",
@@ -160,6 +172,19 @@ const data = reactive<Record<string, any>>({
   qualityData: [],
   productInputs: 0
 })
+
+const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
+  console.log(res)
+  let response: any = await addPricingPanelTrProgrammeId(AuditFlowId, res.result.fileId)
+  if (response.success) {
+    console.log(response, "response")
+    console.log("上传成功")
+  }
+}
+const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
+  console.log(uploadFiles)
+  console.log(fileList, "fileList")
+}
 
 const initCharts = (id: string, chartOption: any) => {
   // 基于准备好的dom，初始化echarts实例

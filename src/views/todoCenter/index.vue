@@ -16,10 +16,6 @@
         </el-form-item>
       </el-form>
       <el-button @click="saveNew" type="primary">新建</el-button>
-      <div>
-        <span>已存在的auditFlowIds:</span>
-        <div v-for="number in auditFlowIds" :key="number">{{ number }}</div>
-      </div>
     </el-card>
     <el-card class="card">
       <el-tabs v-model="activeName" type="card">
@@ -84,8 +80,9 @@ import urlMap from "./constant"
 // import { useStore } from "vuex"
 import { useRouter } from "vue-router"
 import _ from "lodash"
-
+import { useProductStore } from "@/store/modules/productList"
 // import getQuery from "@/utils/getQuery"
+const productStore = useProductStore()
 
 /**
  * 路由对象
@@ -102,7 +99,7 @@ const form = reactive({
   quoteVersion: "",
   remarks: ""
 })
-let auditFlowIds = ref([])
+// let auditFlowIds = ref([])
 let auditFlowIdInfoList = ref([])
 let auditFlowIdInfoListCheck = ref([])
 // let userStorage = window.sessionStorage.getItem("user")
@@ -117,6 +114,7 @@ const saveNew = async () => {
 
 const clickToPage = (row: any, scopeP: any) => {
   window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
+  productStore.setProductList(scopeP.row.auditFlowId) // 只在这里执行获取零件列表
   router.push({
     path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
     query: {
@@ -169,14 +167,14 @@ onMounted(async () => {
   auditFlowIdInfoList.value = _.cloneDeep(res.result)
   auditFlowIdInfoList.value.forEach((item: any) => {
     item.auditFlowRightDetailList = item.auditFlowRightDetailList.filter((i: any) => {
-      return i.right === 1
+      return i.right === 2
     })
   })
   // 已办
   auditFlowIdInfoListCheck.value = _.cloneDeep(res.result)
   auditFlowIdInfoListCheck.value.forEach((item: any) => {
     item.auditFlowRightDetailList = item.auditFlowRightDetailList.filter((i: any) => {
-      return i.right === 2
+      return i.right === 1
     })
   })
   // console.log(res)

@@ -185,6 +185,7 @@
     <div id="unitpriceChart" />
     <div id="revenueGrossMarginChart" />
     <div style="float: right">
+      <el-button @click="toNREPriceList">在线预览NRE核价表</el-button>
       <el-button @click="toProductPriceList">在线预览核价表</el-button>
       <el-button>点击生成待审批的报价表</el-button>
     </div>
@@ -427,6 +428,11 @@ const downLoad = async () => {
 const toProductPriceList = () => {
   router.push({
     path: "/nupriceManagement/productPriceList"
+  })
+}
+const toNREPriceList = () => {
+  router.push({
+    path: "/nre/nrePricelist"
   })
 }
 const openDialog = () => {

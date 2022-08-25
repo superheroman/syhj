@@ -9,8 +9,8 @@
           <el-button @click="downLoad">点击下载附件</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="save">同意</el-button>
-          <el-button>拒绝</el-button>
+          <el-button type="primary" @click="save(true)">同意</el-button>
+          <el-button @click="save(false)">拒绝</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -19,9 +19,10 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import { getAuditFlowVersion, addPricingPanelTrProgrammeId, downloadFile } from "./service"
-import useQueryData from "@/hook/useQueryData"
-let { auditFlowId } = useQueryData()
+import { getAuditFlowVersion, downloadFile, setTRMainSolutionState } from "./service"
+// import useQueryData from "@/hook/useQueryData"
+import getQuery from "@/utils/getQuery"
+let { trCheckType } = getQuery()
 
 // import { useRoute, useRouter } from "vue-router"
 /**
@@ -43,9 +44,15 @@ const data = reactive({
   }
 })
 let trFileId: null | number = null
-const save = async () => {
+const save = async (isAgree: boolean) => {
   if (trFileId) {
-    let res: any = await addPricingPanelTrProgrammeId(auditFlowId.value, trFileId)
+    // let res: any = await addPricingPanelTrProgrammeId(auditFlowId.value, trFileId)
+    // console.log(res)
+    let res: any = await setTRMainSolutionState({
+      auditFlowId: window.sessionStorage.getItem("auditFlowId"),
+      trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
+      isAgree
+    })
     console.log(res)
   }
 }
@@ -71,7 +78,8 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
-  let res: any = await getAuditFlowVersion(auditFlowId.value)
+  let auditFlowId = window.sessionStorage.getItem("auditFlowId") || 1
+  let res: any = await getAuditFlowVersion(Number(auditFlowId))
   data.form.title = res.result.title
   trFileId = res.result.solutionFileIdentifier
   //console.log('3.-组件挂载到页面之后执行-------onMounted')

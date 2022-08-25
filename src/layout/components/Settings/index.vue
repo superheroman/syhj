@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import { reactive, watch, ref } from "vue"
 import { useSettingsStore } from "@/store/modules/settings"
-
+import { useProductStore } from "@/store/modules/productList"
 const settingsStore = useSettingsStore()
-
+const productStore = useProductStore()
+let productId = ref(0)
 const state = reactive({
   fixedHeader: settingsStore.fixedHeader,
   showTagsView: settingsStore.showTagsView,
   showSidebarLogo: settingsStore.showSidebarLogo,
   showThemeSwitch: settingsStore.showThemeSwitch,
-  showScreenfull: settingsStore.showScreenfull
+  showScreenfull: settingsStore.showScreenfull,
+  productList: productStore.productList
 })
 
 watch(
@@ -57,18 +59,24 @@ watch(
     })
   }
 )
-let product = ref(0)
+
+watch(
+  () => productId,
+  (productId) => {
+    console.log(productId.value)
+    window.sessionStorage.setItem("productId", String(productId.value))
+  }
+)
 </script>
 
 <template>
   <div class="drawer-container">
     <div>
       <h3 class="drawer-title">零件切换</h3>
-      <el-radio-group v-model="product" size="large">
-        <el-radio-button label="New York" />
-        <el-radio-button label="Washington" />
-        <el-radio-button label="Los Angeles" />
-        <el-radio-button label="Chicago" />
+      <el-radio-group v-model="productId" size="large">
+        <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
+          <el-radio :label="item.id" border>{{ item.product }}</el-radio>
+        </div>
       </el-radio-group>
     </div>
   </div>

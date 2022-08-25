@@ -1,8 +1,9 @@
 import { request } from "@/utils/service"
+import { TRMainSolutionState } from "./data.type"
 /** 获取TR主方案信息 */
 export function getAuditFlowVersion(auditFlowId: number) {
   return request({
-    url: "/api/services/app/TRCheck/GetAuditFlowVersion",
+    url: "/api/services/app/TRCheck/GetTRMainSolution",
     method: "get",
     data: {
       flowId: auditFlowId
@@ -28,5 +29,12 @@ export function downloadFile(fileId: number) {
       fileId
     },
     responseType: "blob"
+  })
+}
+export function setTRMainSolutionState(data: TRMainSolutionState) {
+  return request({
+    url: "/api/services/app/TRCheck/SetTRMainSolutionState",
+    method: "post",
+    data
   })
 }

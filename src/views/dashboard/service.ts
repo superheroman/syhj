@@ -110,3 +110,14 @@ export function GetGoTable(data: { AuditFlowId: number; ModelCountId: number; In
     data
   })
 }
+// 上传tr主方案
+export function addPricingPanelTrProgrammeId(auditFlowId: number, fileManagementId: number) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/AddPricingPanelTrProgrammeId",
+    method: "post",
+    data: {
+      auditFlowId,
+      fileManagementId
+    }
+  })
+}
