@@ -80,3 +80,12 @@ export function GetProjectGoQuantity(data: { Id: number }): any {
     data
   })
 }
+
+// Bom审核
+export function SetBomState(data: { auditFlowId: number; bomCheckType: number; isAgree: boolean }): any {
+  return request({
+    url: "/api/services/app/BomCheck/SetBomState",
+    method: "post",
+    data
+  })
+}

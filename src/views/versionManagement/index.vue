@@ -217,7 +217,7 @@ const queryTable = async (formValue: any) => {
   console.log(formValue, "formValue")
   const { DraftDate, ProjectName, Version, AuditFlowId, FinishedDate } = formValue
   const { result } = await GetVersionInfos({
-    ProjectName,
+    ProjectName: ProjectName,
     Version,
     AuditFlowId,
     DraftStartTime: DraftDate[0] || "",

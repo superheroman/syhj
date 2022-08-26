@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 0 10px">
+  <el-card m="2">
     <el-card class="margin-top" header="手板件费用">
       <el-table
         :data="data.handPieceCost"
@@ -28,48 +28,6 @@
         <el-table-column prop="remark" label="备注" />
       </el-table>
     </el-card>
-    <!-- <el-card class="margin-top" header="工装费用">
-    <el-table :data="data.qaqcDepartments" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="qc" label="工装名称" />
-        <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
-        <el-table-column prop="cost" label="费用" />
-        <el-table-column prop="remark" label="备注" />
-      </el-table>
-    </el-card> -->
-    <!-- <el-card class="margin-top" header="治具费用">
-      <el-table :data="data." style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="partName" label="手板件名称" />
-        <el-table-column prop="partNumber" label="料号" />
-        <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
-        <el-table-column prop="cost" label="费用" />
-        <el-table-column prop="remark" label="备注" />
-      </el-table>
-    </el-card> -->
-    <!-- <el-card class="margin-top" header="检具费用">
-      <el-table :data="data.qaqcDepartments" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="qc" label="检具名称" />
-        <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
-        <el-table-column prop="cost" label="费用" />
-        <el-table-column prop="remark" label="备注" />
-      </el-table>
-    </el-card> -->
-    <!-- <el-card class="margin-top" header="生产设备费用">
-      <el-table :data="mouldInventoryData" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="partName" label="手板件名称" />
-        <el-table-column prop="partNumber" label="料号" />
-        <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
-        <el-table-column prop="cost" label="费用" />
-        <el-table-column prop="remark" label="备注" />
-      </el-table>
-    </el-card> -->
     <el-card class="margin-top" header="实验费用">
       <el-table
         :data="data.laboratoryFeeModels"
@@ -91,17 +49,6 @@
         <el-table-column prop="remark" label="备注" />
       </el-table>
     </el-card>
-    <!-- <el-card class="margin-top" header="测试软件费用">
-    <el-table :data="mouldInventoryData" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
-        <el-table-column type="index" width="50" />
-        <el-table-column prop="partName" label="手板件名称" />
-        <el-table-column prop="partNumber" label="料号" />
-        <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
-        <el-table-column prop="cost" label="费用" />
-        <el-table-column prop="remark" label="备注" />
-      </el-table>
-    </el-card> -->
     <el-card class="margin-top" header="差旅费用">
       <el-table
         :data="data.travelExpense"
@@ -136,7 +83,8 @@
     <!-- <div style="float: right; margin: 20px 0">
       <el-button type="primary" @click="submit">提交</el-button>
     </div> -->
-  </div>
+    <div m="4">编制时间：{{ formatDateTime(new Date()) }}</div>
+  </el-card>
 </template>
 
 <script lang="ts" setup>
@@ -145,6 +93,7 @@ import { GetPricingForm } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { pricingForm } from "./data.type"
 import getQuery from "@/utils/getQuery"
+import { formatDateTime } from "@/utils"
 
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
 // import { ElMessage } from "element-plus"

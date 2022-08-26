@@ -12,7 +12,7 @@
         {{ data.marketingQuotationData.terminalClientNature }}
       </el-descriptions-item>
       <el-descriptions-item label="开发计划">
-        <el-input style="width: 200px" v-model="data.developmentPlan" />
+        {{ data.marketingQuotationData.developmentPlan }}
       </el-descriptions-item>
       <el-descriptions-item label="汇率"> {{ data.marketingQuotationData.exchangeRate }} </el-descriptions-item>
     </el-descriptions>
@@ -29,10 +29,9 @@
       </el-table>
     </el-card>
     <el-card header="核心部件：" m="2">
-      <div>
-        产品名称：
-        <el-input class="m-2" v-model="data.projectName" placeholder="请输入产品名称" style="width: 200px" />
-      </div>
+      <!-- <div>
+        产品名称：{{ data.marketingQuotationData. }}
+      </div> -->
       <template v-for="item in data.marketingQuotationData.coreComponent" :key="item.messageName">
         <el-card :header="item.componentName" class="m-2">
           <el-table :data="item.productSubclass" border>

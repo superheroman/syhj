@@ -240,15 +240,26 @@ export const constantRoutes: Array<RouteRecordRaw> = [
   },
   {
     path: "/bomVerify",
-    redirect: "/bomVerify/index",
+    redirect: "/bomVerify/construction",
     component: Layout,
+    meta: {
+      title: "Bom单价审核"
+    },
     children: [
       {
-        path: "/bomVerify/index",
-        component: () => import("@/views/bomVerify/index.vue"),
-        name: "bomVerify",
+        path: "/bomVerify/construction",
+        component: () => import("@/views/bomVerify/construction.vue"),
+        name: "bomVerifyConstruction",
         meta: {
-          title: "Bom单价审核"
+          title: "结构件单价审核"
+        }
+      },
+      {
+        path: "/bomVerify/electronic",
+        component: () => import("@/views/bomVerify/electronic.vue"),
+        name: "bomVerifyElectronic",
+        meta: {
+          title: "电子料单价审核"
         }
       }
     ]
