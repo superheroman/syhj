@@ -1110,9 +1110,9 @@ onMounted(async () => {
   // let auditFlowId = Number(query.auditFlowId)
   // console.log(auditFlowId)
   state.quoteForm.drafter = userInfo.name
-  state.quoteForm.drafterNumber = userInfo.userNumber?.name || "0527"
-  state.quoteForm.draftingCompany = userInfo.userCompany?.name || "前端假数据"
-  state.quoteForm.draftingDepartment = userInfo.userDepartment?.name || "前端假数据"
+  state.quoteForm.drafterNumber = userInfo.userNumber || "未成功获取"
+  state.quoteForm.draftingCompany = userInfo.userCompany?.name || "未成功获取"
+  state.quoteForm.draftingDepartment = userInfo.userDepartment?.name || "未成功获取"
   // 设置单据编号
   setNumber()
   try {
