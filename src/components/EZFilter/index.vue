@@ -16,7 +16,13 @@
             :loading="item.loading"
             @change="item.onchange"
           >
-            <el-option v-for="opt in item.options" :key="opt.value" :label="opt.label" :value="opt.value" />
+            <el-option
+              v-for="opt in item.options"
+              :key="opt.value"
+              :label="opt.label"
+              :value="opt.value || opt.label"
+              :disabled="opt.disabled"
+            />
           </el-select>
         </el-form-item>
         <el-form-item :label="item.label" v-else-if="item.role === 'timePicker'" :prop="item.key">
