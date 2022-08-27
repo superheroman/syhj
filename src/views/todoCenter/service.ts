@@ -44,3 +44,12 @@ export function getAllAuditFlowInfos() {
     method: "get"
   })
 }
+export function getAuditFlowNewVersionByProjectName(projectName: string) {
+  return request({
+    url: "/api/services/app/VersionManagment/GetAuditFlowNewVersionByProjectName",
+    method: "get",
+    data: {
+      projectName
+    }
+  })
+}

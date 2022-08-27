@@ -48,14 +48,19 @@
       <!-- 项目信息 -->
       <el-card class="demand-apply__card">
         <el-row :gutter="20">
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="项目名称:" prop="projectName">
               <el-input v-model="state.quoteForm.projectName" placeholder="与PLM系统保持一致" @change="generateTitle" />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="项目代码:" prop="projectCode">
               <el-input v-model="state.quoteForm.projectCode" placeholder="与PLM系统保持一致" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="项目版本号:">
+              <el-input v-model="state.quoteVersion" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -604,7 +609,7 @@
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
-// import getQuery from "@/utils/getQuery"
+import getQuery from "@/utils/getQuery"
 import { useRoute } from "vue-router"
 // import { Search } from "@element-plus/icons-vue"
 
@@ -742,6 +747,7 @@ const state = reactive({
     reason: "",
     auditFlowId: 1 //默认先给一个5
   },
+  quoteVersion: "",
   yearCols: [] as Number[],
   carAnnualTotal: 0, //列年度总量，把sum取出
   sumArr: [] as number[],
@@ -1009,7 +1015,9 @@ const generateTitle = () => {
   let { quoteForm } = state
   let nowDate = dayjs(quoteForm.draftDate ? quoteForm.draftDate : new Date()).format("YYYY-MM-DD")
   let userDepartment = quoteForm.draftingDepartment
-  let title = `${nowDate + userDepartment}关于${quoteForm.customerName + quoteForm.projectName}的核价报价申请`
+  let title = `${nowDate + userDepartment}关于${
+    quoteForm.customerName + quoteForm.projectName + state.quoteVersion
+  }的核价报价申请`
   state.quoteForm.title = title
 }
 const generateCustomTable = () => {
@@ -1106,9 +1114,10 @@ const rateChange = (val: any) => {
   })
 }
 onMounted(async () => {
-  // let query = getQuery()
-  // let auditFlowId = Number(query.auditFlowId)
-  // console.log(auditFlowId)
+  let query = getQuery()
+  state.quoteForm.projectName = query.projectName ? query.projectName + "" : ""
+  state.quoteForm.projectCode = query.projectCode ? query.projectCode + "" : ""
+  state.quoteVersion = query.quoteVersion ? query.quoteVersion + "" : ""
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber || "未成功获取"
   state.quoteForm.draftingCompany = userInfo.userCompany?.name || "未成功获取"
