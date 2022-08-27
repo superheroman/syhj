@@ -552,7 +552,8 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="项目经理:" prop="projectManager">
-              <SearchPerson v-model="state.quoteForm.projectManager" />
+              <!-- <SearchPerson v-model="state.quoteForm.projectManager" /> -->
+              <SearchDepartMentPerson v-model="state.quoteForm.projectManager" roleName="项目经理" />
               <!-- <el-input :suffix-icon="Search" v-model="state.quoteForm.projectManager" /> -->
             </el-form-item>
           </el-col>
@@ -620,7 +621,9 @@ import { saveApplyInfo, getExchangeRate } from "./service"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
-import { SearchPerson } from "@/components/SearchPerson"
+// import { SearchPerson } from "@/components/SearchPerson"
+import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
+
 import dayjs from "dayjs"
 const refForm = ref<FormInstance>()
 interface Options {
@@ -918,13 +921,10 @@ const addProduct = () => {
     item.quantity = ""
   })
   moduleTableData.push(moduleTableDataNew)
-  // productTableData.push(_.cloneDeep(productTableData[0]))
-  // moduleTableData.push(newLineM)
-  // productTableData.push(newLineP)
-  //模组上的产品名称进行复制
+  // 每次执行添加都对模组上的产品名称进行复制
   productTableData.forEach((item, index) => {
     item.name = moduleTableData[index].product
-    item.product = moduleTableData[index].product // 后端要同步相同字段，该字段不展示
+    item.product = moduleTableData[index].product
   })
 }
 
@@ -978,7 +978,9 @@ watch(
   moduleTableData,
   (val) => {
     val.forEach((item, index) => {
+      // 同步带入下面表格的名称
       productTableData[index].name = item.product
+      productTableData[index].product = item.product
       moduleTableData.forEach((row) => {
         row.modelCountYearList.forEach((item, index) => {
           if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && state.sumArr[index]) {
