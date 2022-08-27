@@ -54,7 +54,7 @@ onBeforeUnmount(() => {
         <TagsView v-if="showTagsView" />
       </div>
       <AppMain />
-      <RightPanel v-if="showSettings">
+      <RightPanel v-show="showSettings">
         <Settings />
       </RightPanel>
     </div>

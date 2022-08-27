@@ -1,70 +1,44 @@
 <script lang="ts" setup>
-import { reactive, watch, ref } from "vue"
-import { useSettingsStore } from "@/store/modules/settings"
+import { reactive, watch, onMounted } from "vue"
 import { useProductStore } from "@/store/modules/productList"
-const settingsStore = useSettingsStore()
+import getQuery from "@/utils/getQuery"
+// import { useRoute, useRouter } from "vue-router"
+// const reload: any = inject("reload")
+
+// const route = useRoute()
+
+// const router = useRouter()
+
 const productStore = useProductStore()
-let productId = ref(0)
 const state = reactive({
-  fixedHeader: settingsStore.fixedHeader,
-  showTagsView: settingsStore.showTagsView,
-  showSidebarLogo: settingsStore.showSidebarLogo,
-  showThemeSwitch: settingsStore.showThemeSwitch,
-  showScreenfull: settingsStore.showScreenfull,
+  productId: "",
   productList: productStore.productList
 })
 
-watch(
-  () => state.fixedHeader,
-  (value) => {
-    settingsStore.changeSetting({
-      key: "fixedHeader",
-      value
-    })
+onMounted(async () => {
+  let { auditFlowId } = getQuery()
+  console.log("onMounted")
+  if (auditFlowId) {
+    await productStore.setProductList(Number(auditFlowId))
+    state.productList = productStore.productList
   }
-)
-watch(
-  () => state.showTagsView,
-  (value) => {
-    settingsStore.changeSetting({
-      key: "showTagsView",
-      value
-    })
-  }
-)
-watch(
-  () => state.showSidebarLogo,
-  (value) => {
-    settingsStore.changeSetting({
-      key: "showSidebarLogo",
-      value
-    })
-  }
-)
-watch(
-  () => state.showThemeSwitch,
-  (value) => {
-    settingsStore.changeSetting({
-      key: "showThemeSwitch",
-      value
-    })
-  }
-)
-watch(
-  () => state.showScreenfull,
-  (value) => {
-    settingsStore.changeSetting({
-      key: "showScreenfull",
-      value
-    })
-  }
-)
+})
 
 watch(
-  () => productId,
+  () => state.productId,
   (productId) => {
-    console.log(productId.value)
-    window.sessionStorage.setItem("productId", String(productId.value))
+    productStore.setProductId(productId)
+    debugger
+    window.history.replaceState({ productId }, "")
+    // reload()
+    // route.query.productId = productId
+    // route.path
+    // debugger
+    // router.replace({
+    //   path: route.path,
+    //   query: route.query
+    // })
+    // console.log(route.query)
   }
 )
 </script>
@@ -73,8 +47,8 @@ watch(
   <div class="drawer-container">
     <div>
       <h3 class="drawer-title">零件切换</h3>
-      <el-radio-group v-model="productId" size="large">
-        <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
+      <el-radio-group v-model="state.productId" size="large">
+        <div style="margin-bottom: 10px" v-for="item in state.productList" :key="item.id">
           <el-radio :label="item.id" border>{{ item.product }}</el-radio>
         </div>
       </el-radio-group>

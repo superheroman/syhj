@@ -4,19 +4,29 @@ import { getProductByAuditFlowId } from "@/views/productList/service"
 
 interface ProductState {
   productList: any[]
+  productId: number | string
 }
 
 export const useProductStore = defineStore({
   id: "productList",
   state: (): ProductState => {
     return {
-      productList: []
+      productList: [],
+      productId: ""
     }
   },
   actions: {
     async setProductList(id: number) {
       const res: any = await getProductByAuditFlowId(id)
       this.productList = res.result
+      // this.productId = res.result?.length > 0 ? res.result[0].id : ""
+      // if (this.productId) {
+      //   window.sessionStorage.setItem("productId", this.productId + "")
+      // }
+    },
+    setProductId(id: number | string) {
+      this.productId = id
+      window.sessionStorage.setItem("productId", this.productId + "")
     }
   }
 })
