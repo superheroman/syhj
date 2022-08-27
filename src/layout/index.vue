@@ -1,10 +1,18 @@
 <script lang="ts" setup>
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive } from "vue"
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
 import { useAppStore, DeviceType } from "@/store/modules/app"
 import { useSettingsStore } from "@/store/modules/settings"
 import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
 import useResize from "./useResize"
 
+let isRouterAlive = ref(true)
+
+const reload = async () => {
+  isRouterAlive.value = false
+  setTimeout(() => {
+    isRouterAlive.value = true
+  }, 100)
+}
 const appStore = useAppStore()
 const settingsStore = useSettingsStore()
 const { sidebar, device, addEventListenerOnResize, resizeMounted, removeEventListenerResize, watchRouter } = useResize()
@@ -53,9 +61,9 @@ onBeforeUnmount(() => {
         <NavigationBar />
         <TagsView v-if="showTagsView" />
       </div>
-      <AppMain />
+      <AppMain v-if="isRouterAlive" />
       <RightPanel v-show="showSettings">
-        <Settings />
+        <Settings @change="reload" />
       </RightPanel>
     </div>
   </div>

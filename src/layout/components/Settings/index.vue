@@ -1,55 +1,68 @@
 <script lang="ts" setup>
-import { reactive, watch, onMounted } from "vue"
+import { reactive, onMounted } from "vue"
 import { useProductStore } from "@/store/modules/productList"
 import getQuery from "@/utils/getQuery"
-// import { useRoute, useRouter } from "vue-router"
+import { useRoute } from "vue-router"
 // const reload: any = inject("reload")
 
-// const route = useRoute()
+const route = useRoute()
 
 // const router = useRouter()
 
 const productStore = useProductStore()
 const state = reactive({
   productId: "",
-  productList: productStore.productList
+  productList: productStore.productList,
+  auditFlowId: ""
 })
 
 onMounted(async () => {
-  let { auditFlowId } = getQuery()
+  let { auditFlowId, productId } = getQuery()
   console.log("onMounted")
+  state.auditFlowId = String(auditFlowId)
   if (auditFlowId) {
     await productStore.setProductList(Number(auditFlowId))
     state.productList = productStore.productList
   }
+  if (productId) {
+    state.productId = String(productId)
+    console.log(state.productId)
+  }
 })
 
-watch(
-  () => state.productId,
-  (productId) => {
-    productStore.setProductId(productId)
-    debugger
-    window.history.replaceState({ productId }, "")
-    // reload()
-    // route.query.productId = productId
-    // route.path
-    // debugger
-    // router.replace({
-    //   path: route.path,
-    //   query: route.query
-    // })
-    // console.log(route.query)
-  }
-)
+// watch(
+//   () => state.productId,
+//   (productId) => {
+//     productStore.setProductId(productId)
+//     window.history.replaceState(
+//       { productId },
+//       "",
+//       `${route.path}?auditFlowId=${state.auditFlowId}&productId=${productId}`
+//     )
+//     reload()
+//   }
+// )
+const emit = defineEmits(["change"])
+
+const handleChange = (productId: any) => {
+  console.log(productId)
+  productStore.setProductId(productId)
+  window.history.replaceState(
+    { productId },
+    "",
+    `${route.path}?auditFlowId=${state.auditFlowId}&productId=${productId}`
+  )
+  emit("change")
+}
 </script>
 
 <template>
   <div class="drawer-container">
     <div>
       <h3 class="drawer-title">零件切换</h3>
-      <el-radio-group v-model="state.productId" size="large">
+      <el-radio-group v-model="state.productId" size="large" @change="handleChange">
         <div style="margin-bottom: 10px" v-for="item in state.productList" :key="item.id">
-          <el-radio :label="item.id" border>{{ item.product }}</el-radio>
+          <el-radio :label="item.id + ''" border>{{ item.product }}</el-radio>
         </div>
       </el-radio-group>
     </div>
