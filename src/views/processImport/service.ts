@@ -35,3 +35,14 @@ export function getTangentHoursList(auditFlowId: number, productId: number): any
     }
   })
 }
+
+// 工序工时提交
+export function SubmitWorkingHourAndSwitchLine(auditFlowId: number): any {
+  return request({
+    url: "/api/services/app/WorkingHours/SubmitWorkingHourAndSwitchLine",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}

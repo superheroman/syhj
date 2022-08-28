@@ -1,5 +1,5 @@
 <template>
-  <el-card class="marketingQuotation-page" header="报价审核">
+  <el-card class="marketingQuotation-page" header="报价审核" m="2">
     <el-descriptions :column="2" border>
       <el-descriptions-item label="直接客户名称">
         {{ data.marketingQuotationData.directCustomerName }}
@@ -84,14 +84,19 @@
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
+    <el-row justify="end" style="margin-top: 20px">
+      <el-button type="primary" @click="handleGeneralManagerQuoteCheck(true)">同意</el-button>
+      <el-button type="danger" @click="handleGeneralManagerQuoteCheck(false)">拒绝</el-button>
+    </el-row>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { GetQuotationList } from "./service"
+import { GetQuotationList, GeneralManagerQuoteCheck } from "./service"
 import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
+import { ElMessageBox } from "element-plus"
 
 const { auditFlowId = 1 }: any = getQuery()
 /**
@@ -128,6 +133,19 @@ const initFetch = async () => {
 const fetchSopYear = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
   columns.sopData = result || []
+}
+
+const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
+  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "报价审核", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    await GeneralManagerQuoteCheck({
+      isAgree,
+      auditFlowId
+    })
+  })
 }
 
 watchEffect(() => {})
