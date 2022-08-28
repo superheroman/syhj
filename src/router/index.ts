@@ -40,15 +40,15 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "待办中心"
         }
-      },
-      {
-        path: "/productList/index",
-        component: () => import("@/views/productList/index.vue"),
-        name: "productList",
-        meta: {
-          title: "零件列表"
-        }
       }
+      // {
+      //   path: "/productList/index",
+      //   component: () => import("@/views/productList/index.vue"),
+      //   name: "productList",
+      //   meta: {
+      //     title: "零件列表"
+      //   }
+      // }
     ]
   },
   {
@@ -67,14 +67,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
           title: "营销部录入"
         }
       },
-      {
-        path: "/demandApply/result",
-        component: () => import("@/views/demandApply/result.vue"),
-        name: "demandApplyResult",
-        meta: {
-          title: "营销部报价表"
-        }
-      },
+
       {
         path: "/partEntry/managerOperate",
         component: () => import("@/views/partEntry/managerOperate.vue"),
@@ -84,19 +77,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: "/pmDepartment/index",
-        component: () => import("@/views/pmDepartment/index.vue"),
-        name: "pmDepartment",
+        path: "/trAudit/index",
+        component: () => import("@/views/trAudit/index.vue"),
+        name: "trAudit",
         meta: {
-          title: "生管部录入"
-        }
-      },
-      {
-        path: "dashboard",
-        component: () => import("@/views/dashboard/index.vue"),
-        name: "Dashboard",
-        meta: {
-          title: "核价看板"
+          title: "Tr主方案"
         }
       },
       {
@@ -106,22 +91,28 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "项目核价表"
         }
+      },
+      {
+        path: "/demandApply/result",
+        component: () => import("@/views/demandApply/result.vue"),
+        name: "demandApplyResult",
+        meta: {
+          title: "营销部报价表"
+        }
       }
     ]
   },
-
   // {
-  //   path: "/secondForm",
-  //   redirect: "/secondForm/index",
+  //   path: "/trAudit",
+  //   redirect: "/trAudit/index",
   //   component: Layout,
   //   children: [
   //     {
-  //       path: "/secondForm/index",
-  //       component: () => import("@/views/secondForm/index.vue"),
-  //       name: "secondForm",
+  //       path: "/trAudit/index",
+  //       component: () => import("@/views/trAudit/index.vue"),
+  //       name: "trAudit",
   //       meta: {
-  //         title: "核价处理",
-  //         icon: "secondForm"
+  //         title: "Tr主方案"
   //       }
   //     }
   //   ]
@@ -142,16 +133,221 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: "/marketingQuotation",
-    redirect: "/marketingQuotation/index",
+    path: "/structuralMaterialImport",
+    redirect: "/structuralMaterialImport/index",
     component: Layout,
     children: [
       {
-        path: "/marketingQuotation/index",
-        component: () => import("@/views/marketingQuotation/index.vue"),
-        name: "marketingQuotation",
+        path: "/structuralMaterialImport/index",
+        component: () => import("@/views/structuralMaterialImport/index.vue"),
+        name: "structuralMaterialImport",
         meta: {
-          title: "营销部报价"
+          title: "结构料导入"
+        }
+      }
+    ]
+  },
+  {
+    path: "/resourcesDepartment",
+    redirect: "/resourcesDepartment/index",
+    component: Layout,
+    meta: {
+      title: "Bom单价录入"
+    },
+    children: [
+      {
+        path: "/resourcesDepartment/electronic",
+        component: () => import("@/views/resourcesDepartment/electronic.vue"),
+        name: "electronic",
+        meta: {
+          title: "电子料单价录入界面"
+        }
+      },
+      {
+        path: "/resourcesDepartment/construction",
+        component: () => import("@/views/resourcesDepartment/construction.vue"),
+        name: "construction",
+        meta: {
+          title: "结构件单价录入界面"
+        }
+      }
+    ]
+  },
+  {
+    path: "/bomVerify",
+    redirect: "/bomVerify/construction",
+    component: Layout,
+    meta: {
+      title: "Bom单价审核"
+    },
+    children: [
+      {
+        path: "/bomVerify/construction",
+        component: () => import("@/views/bomVerify/construction.vue"),
+        name: "bomVerifyConstruction",
+        meta: {
+          title: "结构件单价审核"
+        }
+      },
+      {
+        path: "/bomVerify/electronic",
+        component: () => import("@/views/bomVerify/electronic.vue"),
+        name: "bomVerifyElectronic",
+        meta: {
+          title: "电子料单价审核"
+        }
+      }
+    ]
+  },
+  {
+    path: "/bomLoss",
+    redirect: "/bomLoss/indexElec",
+    component: Layout,
+    meta: {
+      title: "bom损耗率表单"
+    },
+    children: [
+      {
+        path: "/bomLoss/indexElec",
+        component: () => import("@/views/bomLoss/indexElec.vue"),
+        name: "bomLossElec",
+        meta: {
+          title: "电子bom损耗率表单"
+        }
+      },
+      {
+        path: "/bomLoss/indexStruct",
+        component: () => import("@/views/bomLoss/indexStruct.vue"),
+        name: "bomLossStruct",
+        meta: {
+          title: "结构bom损耗率表单"
+        }
+      }
+    ]
+  },
+  {
+    path: "/processImport",
+    redirect: "/processImport/index",
+    component: Layout,
+    children: [
+      {
+        path: "/processImport/index",
+        component: () => import("@/views/processImport/index.vue"),
+        name: "processImport",
+        meta: {
+          title: "工序导入"
+        }
+      }
+    ]
+  },
+  {
+    path: "/pmDepartment",
+    redirect: "/pmDepartment/index",
+    component: Layout,
+    children: [
+      {
+        path: "/pmDepartment/index",
+        component: () => import("@/views/pmDepartment/index.vue"),
+        name: "pmDepartment",
+        meta: {
+          title: "生管部录入"
+        }
+      }
+    ]
+  },
+  {
+    path: "/nre",
+    redirect: "/nre/nreProjectManageMent",
+    component: Layout,
+    meta: {
+      title: "nre"
+    },
+    children: [
+      {
+        path: "/nre/nreProjectManageMent",
+        component: () => import("@/views/nre/nreProjectManageMent.vue"),
+        name: "nreProjectManageMent",
+        meta: {
+          title: "项目管理部nre"
+        }
+      },
+      {
+        path: "/nre/nrePilotprojects",
+        component: () => import("@/views/nre/nrePilotprojects.vue"),
+        name: "nrePilotprojects",
+        meta: {
+          title: "产品部nre"
+        }
+      },
+      {
+        path: "/nre/nreResourcesDepartment",
+        component: () => import("@/views/nre/nreResourcesDepartment.vue"),
+        name: "nreResourcesDepartment",
+        meta: {
+          title: "资源部nre"
+        }
+      },
+      {
+        path: "/nre/nreExperimentItems",
+        component: () => import("@/views/nre/nreExperimentItems.vue"),
+        name: "nreExperimentItems",
+        meta: {
+          title: "品保部实验nre"
+        }
+      },
+      {
+        path: "/nre/nreQCDepartment",
+        component: () => import("@/views/nre/nreQCDepartment.vue"),
+        name: "nreQCDepartment",
+        meta: {
+          title: "品保部-检具nre"
+        }
+      },
+      {
+        path: "/nre/nreMarketingDepartment",
+        component: () => import("@/views/nre/nreMarketingDepartment.vue"),
+        name: "nreMarketingDepartment",
+        meta: {
+          title: "营销部nre"
+        }
+      },
+      {
+        path: "/nre/engineeringDepartment",
+        component: () => import("@/views/nre/engineeringDepartment.vue"),
+        name: "engineeringDepartment",
+        meta: {
+          title: "工程部nre"
+        }
+      },
+      {
+        path: "/nre/nrePricelist",
+        component: () => import("@/views/nre/nrePricelist.vue"),
+        name: "nrePricelist",
+        meta: {
+          title: "核价表nre"
+        }
+      },
+      {
+        path: "/nre/costInformation",
+        component: () => import("@/views/nre/costInformation.vue"),
+        name: "costInformation",
+        meta: {
+          title: "成本信息表"
+        }
+      }
+    ]
+  },
+  {
+    path: "/dashboard",
+    redirect: "/dashboard/index",
+    component: Layout,
+    children: [
+      {
+        path: "/dashboard/index",
+        component: () => import("@/views/dashboard/index.vue"),
+        name: "Dashboard",
+        meta: {
+          title: "核价看板"
         }
       }
     ]
@@ -171,6 +367,45 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+  {
+    path: "/quoteAnalysis",
+    redirect: "/quoteAnalysis/index",
+    component: Layout,
+    children: [
+      {
+        path: "/quoteAnalysis/index",
+        component: () => import("@/views/quoteAnalysis/index.vue"),
+        name: "quoteAnalysis",
+        meta: {
+          title: "报价分析看板"
+        }
+      },
+      {
+        path: "/quoteAnalysis/statementAnalysisBoard",
+        component: () => import("@/views/quoteAnalysis/statementAnalysisBoard.vue"),
+        name: "statementAnalysisBoard",
+        meta: {
+          hidden: true
+        }
+      }
+    ]
+  },
+  {
+    path: "/marketingQuotation",
+    redirect: "/marketingQuotation/index",
+    component: Layout,
+    children: [
+      {
+        path: "/marketingQuotation/index",
+        component: () => import("@/views/marketingQuotation/index.vue"),
+        name: "marketingQuotation",
+        meta: {
+          title: "营销部报价"
+        }
+      }
+    ]
+  },
+
   {
     path: "/departmentManage",
     redirect: "/departmentManage/index",
@@ -210,21 +445,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: "/structuralMaterialImport",
-    redirect: "/structuralMaterialImport/index",
-    component: Layout,
-    children: [
-      {
-        path: "/structuralMaterialImport/index",
-        component: () => import("@/views/structuralMaterialImport/index.vue"),
-        name: "structuralMaterialImport",
-        meta: {
-          title: "结构料导入"
-        }
-      }
-    ]
-  },
+
   {
     path: "/bomView",
     redirect: "/bomView/index",
@@ -240,32 +461,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: "/bomVerify",
-    redirect: "/bomVerify/construction",
-    component: Layout,
-    meta: {
-      title: "Bom单价审核"
-    },
-    children: [
-      {
-        path: "/bomVerify/construction",
-        component: () => import("@/views/bomVerify/construction.vue"),
-        name: "bomVerifyConstruction",
-        meta: {
-          title: "结构件单价审核"
-        }
-      },
-      {
-        path: "/bomVerify/electronic",
-        component: () => import("@/views/bomVerify/electronic.vue"),
-        name: "bomVerifyElectronic",
-        meta: {
-          title: "电子料单价审核"
-        }
-      }
-    ]
-  },
+
   // {
   //   path: "/processManagement",
   //   redirect: "/processManagement/index",
@@ -371,47 +567,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
   {
-    path: "/bomLoss",
-    redirect: "/bomLoss/indexElec",
-    component: Layout,
-    meta: {
-      title: "bom损耗率表单"
-    },
-    children: [
-      {
-        path: "/bomLoss/indexElec",
-        component: () => import("@/views/bomLoss/indexElec.vue"),
-        name: "bomLossElec",
-        meta: {
-          title: "电子bom损耗率表单"
-        }
-      },
-      {
-        path: "/bomLoss/indexStruct",
-        component: () => import("@/views/bomLoss/indexStruct.vue"),
-        name: "bomLossStruct",
-        meta: {
-          title: "结构bom损耗率表单"
-        }
-      }
-    ]
-  },
-  {
-    path: "/processImport",
-    redirect: "/processImport/index",
-    component: Layout,
-    children: [
-      {
-        path: "/processImport/index",
-        component: () => import("@/views/processImport/index.vue"),
-        name: "processImport",
-        meta: {
-          title: "工序导入"
-        }
-      }
-    ]
-  },
-  {
     path: "/summaryTable",
     redirect: "/summaryTable/index",
     component: Layout,
@@ -426,111 +581,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  {
-    path: "/quoteAnalysis",
-    redirect: "/quoteAnalysis/index",
-    component: Layout,
-    children: [
-      {
-        path: "/quoteAnalysis/index",
-        component: () => import("@/views/quoteAnalysis/index.vue"),
-        name: "quoteAnalysis",
-        meta: {
-          title: "报价分析看板"
-        }
-      },
-      {
-        path: "/quoteAnalysis/statementAnalysisBoard",
-        component: () => import("@/views/quoteAnalysis/statementAnalysisBoard.vue"),
-        name: "statementAnalysisBoard",
-        meta: {
-          hidden: true
-        }
-      }
-    ]
-  },
-  {
-    path: "/nre",
-    redirect: "/nre/nreProjectManageMent",
-    component: Layout,
-    meta: {
-      title: "nre"
-    },
-    children: [
-      {
-        path: "/nre/nreProjectManageMent",
-        component: () => import("@/views/nre/nreProjectManageMent.vue"),
-        name: "nreProjectManageMent",
-        meta: {
-          title: "项目管理部nre"
-        }
-      },
-      {
-        path: "/nre/nrePilotprojects",
-        component: () => import("@/views/nre/nrePilotprojects.vue"),
-        name: "nrePilotprojects",
-        meta: {
-          title: "产品部nre"
-        }
-      },
-      {
-        path: "/nre/nreExperimentItems",
-        component: () => import("@/views/nre/nreExperimentItems.vue"),
-        name: "nreExperimentItems",
-        meta: {
-          title: "品保部实验nre"
-        }
-      },
-      {
-        path: "/nre/nreQCDepartment",
-        component: () => import("@/views/nre/nreQCDepartment.vue"),
-        name: "nreQCDepartment",
-        meta: {
-          title: "品保部-检具nre"
-        }
-      },
-      {
-        path: "/nre/nreResourcesDepartment",
-        component: () => import("@/views/nre/nreResourcesDepartment.vue"),
-        name: "nreResourcesDepartment",
-        meta: {
-          title: "资源部nre"
-        }
-      },
-      {
-        path: "/nre/nreMarketingDepartment",
-        component: () => import("@/views/nre/nreMarketingDepartment.vue"),
-        name: "nreMarketingDepartment",
-        meta: {
-          title: "营销部nre"
-        }
-      },
-      {
-        path: "/nre/engineeringDepartment",
-        component: () => import("@/views/nre/engineeringDepartment.vue"),
-        name: "engineeringDepartment",
-        meta: {
-          title: "工程部nre"
-        }
-      },
-      {
-        path: "/nre/nrePricelist",
-        component: () => import("@/views/nre/nrePricelist.vue"),
-        name: "nrePricelist",
-        meta: {
-          title: "核价表nre"
-        }
-      },
-      {
-        path: "/nre/costInformation",
-        component: () => import("@/views/nre/costInformation.vue"),
-        name: "costInformation",
-        meta: {
-          title: "成本信息表"
-        }
-      }
-    ]
-  },
+
   // {
   //   path: "/link",
   //   component: Layout,
@@ -576,47 +627,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "reportQuery",
         meta: {
           title: "报表查询"
-        }
-      }
-    ]
-  },
-  {
-    path: "/resourcesDepartment",
-    redirect: "/resourcesDepartment/index",
-    component: Layout,
-    meta: {
-      title: "资源部"
-    },
-    children: [
-      {
-        path: "/resourcesDepartment/electronic",
-        component: () => import("@/views/resourcesDepartment/electronic.vue"),
-        name: "electronic",
-        meta: {
-          title: "电子料单价录入界面"
-        }
-      },
-      {
-        path: "/resourcesDepartment/construction",
-        component: () => import("@/views/resourcesDepartment/construction.vue"),
-        name: "construction",
-        meta: {
-          title: "结构件单价录入界面"
-        }
-      }
-    ]
-  },
-  {
-    path: "/trAudit",
-    redirect: "/trAudit/index",
-    component: Layout,
-    children: [
-      {
-        path: "/trAudit/index",
-        component: () => import("@/views/trAudit/index.vue"),
-        name: "trAudit",
-        meta: {
-          title: "Tr主方案"
         }
       }
     ]
