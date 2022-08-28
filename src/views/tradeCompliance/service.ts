@@ -7,3 +7,11 @@ export function GetTradeComplianceCheckFromDateBase(data: { AuditFlowId: number;
     data
   })
 }
+
+export function GeneralManagerQuoteCheck(data: { AuditFlowId: number; ProductId: number; isAgree: boolean }): any {
+  return request({
+    url: "/api/services/app/FinanceCheck/GeneralManagerQuoteCheck",
+    method: "post",
+    data
+  })
+}
