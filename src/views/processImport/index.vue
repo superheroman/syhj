@@ -118,7 +118,8 @@
           </template>
         </el-table>
         <div style="float: right" class="m-2">
-          <el-button type="primary" @click="submit">提交</el-button>
+          <!-- <el-button type="primary" @click="handleSubmit">提交</el-button> -->
+          <el-button type="primary" @click="handleSaveWorkingHour">保存</el-button>
         </div>
       </el-card>
       <el-card style="margin-top: 20px">
@@ -148,7 +149,8 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-row align="middle" justify="end" style="margin-top: 20px">
+        <el-row align="middle" justify="end" m="2">
+          <el-button type="primary" @click="handleSubmit">提交</el-button>
           <el-button type="primary" @click="handleSaveTangentHours">保存</el-button>
         </el-row>
       </el-card>
@@ -160,9 +162,14 @@ import { reactive, onMounted } from "vue"
 import { ElMessage, UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import { downloadWorkingHoursInfo, SaveWorkingHour, SaveTangentHours, getTangentHoursList } from "./service"
+import {
+  downloadWorkingHoursInfo,
+  SaveWorkingHour,
+  SaveTangentHours,
+  getTangentHoursList,
+  SubmitWorkingHourAndSwitchLine
+} from "./service"
 import getQuery from "@/utils/getQuery"
-import { getYears } from "../pmDepartment/service"
 const { auditFlowId = 1, productId = 1 }: any = getQuery
 
 const data = reactive<{
@@ -237,7 +244,7 @@ const downLoadTemplate = async () => {
   // data.setVisible = false
 }
 
-const submit = async () => {
+const handleSaveWorkingHour = async () => {
   try {
     let { success }: any = await SaveWorkingHour({
       auditFlowId,
@@ -251,18 +258,21 @@ const submit = async () => {
   }
 }
 
+const handleSubmit = async () => {
+  await SubmitWorkingHourAndSwitchLine(auditFlowId)
+  ElMessage.success("提交成功！")
+}
+
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
 })
 
 const getAllSop = async () => {
-  const { result } = (await getYears(auditFlowId)) || {}
-  data.tangent = result.map((item: number) => ({ laborTime: 0, machineHours: 0, personnelNumber: 0, year: item }))
+  // data.tangent = result.map((item: number) => ({ laborTime: 0, machineHours: 0, personnelNumber: 0, year: item }))
 
-  let res: any = getTangentHoursList(auditFlowId, productId)
-  console.log(res)
-  // res.result.tangentHoursDetailList
+  let { result } = await getTangentHoursList(auditFlowId, productId)
+  data.tangent = result?.tangentHoursDetailList || []
 }
 
 // 保存切线工时
