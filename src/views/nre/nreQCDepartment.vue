@@ -62,7 +62,7 @@
 
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { QADepartmentTestModel, QADepartmentQCModel } from "./data.type"
+import { QADepartmentTestModel } from "./data.type"
 import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment } from "./common/request"
 import { ElMessage } from "element-plus"
@@ -75,7 +75,7 @@ const { auditFlowId = 1, productId = 1 }: any = getQuery()
  */
 const data = reactive<{
   qaTestDepartments: QADepartmentTestModel[]
-  qaqcDepartments: QADepartmentQCModel[]
+  qaqcDepartments: any
 }>({
   qaTestDepartments: [],
   qaqcDepartments: []
@@ -100,14 +100,10 @@ const submit = async () => {
   try {
     const { success } = await PostQADepartment({
       auditFlowId,
-      qaDepartments: [
+      qcGaugeDtoModels: [
         {
           productId,
-          qaTestDepartments: data.qaTestDepartments.map((item) => ({
-            ...item,
-            cost: (item.unitPrice || 0) * (item.count || 0)
-          })),
-          qaqcDepartments: data.qaqcDepartments.map((item) => ({
+          qaqcDepartments: data.qaqcDepartments.map((item: any) => ({
             ...item,
             allCost: (item.unitPrice || 0) * (item.count || 0)
           }))
