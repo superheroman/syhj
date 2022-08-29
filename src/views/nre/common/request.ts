@@ -1,6 +1,5 @@
 import { request } from "@/utils/service"
 import {
-  QADepartmentPartModel,
   ProductDepartmentModel,
   ProjectManagementModel,
   ResourcesManagementModel,
@@ -45,22 +44,14 @@ export function PostProductDepartment(data: {
 }
 
 // 品保部 录入
-export function PostQADepartment(data: {
-  /**
-   * 流程Id
-   */
-  auditFlowId?: number
-  /**
-   * 带零件id 的 品保录入模型
-   */
-  qaDepartments?: QADepartmentPartModel[] | null
-}): any {
+export function PostQADepartment(data: any): any {
   return request({
-    url: "/api/services/app/NrePricing/PostQADepartment",
+    url: "/api/services/app/NrePricing/PostQcGauge",
     method: "post",
     data
   })
 }
+
 // Nre 品保部=>试验项目 录入
 export function PostExperimentItems(data: {
   /**

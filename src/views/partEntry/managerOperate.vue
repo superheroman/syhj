@@ -66,7 +66,7 @@
               <!-- <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
                 <el-button type="primary">文件上传</el-button>
               </el-upload> -->
-              <el-upload action="api/services/app/FileCommonService/UploadFile" :on-success="handleSuccess" :limit="1">
+              <el-upload action="/api/services/app/FileCommonService/UploadFile" :on-success="handleSuccess" :limit="1">
                 <el-button type="primary">文件上传</el-button>
               </el-upload>
             </el-form-item>
@@ -91,34 +91,19 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
 
 import { PostManagement } from "@/api/partEntry"
-import { UserInputInfo } from "./data.type"
 import type { UploadProps } from "element-plus"
-
-// import { useStore } from "vuex"
-// import { useRoute, useRouter } from "vue-router"
-// import type { TabsPaneContext } from "element-plus"
-// import { Edit, View as IconView } from "@element-plus/icons-vue"
-const formData: UserInputInfo = reactive({
-  // electronicEngineerNum: "",
-  // engineeringTechnologyNum: "",
+import getQuery from "@/utils/getQuery"
+import { ElMessage } from "element-plus"
+const formData: any = reactive({
   fileId: null,
-  financeNum: "",
   isFirst: true,
-  isNRE: true,
-  // productionManagementNum: "",
-  // qualityNum: "",
-  // resourceManagementNum: "",
-  // structureEngineerNum: "",
-
-  auditFlowId: 1,
+  auditFlowId: null,
   electronicEngineerId: undefined,
   engineerLossRateId: undefined,
   engineerWorkHourId: undefined,
-
   id: 0,
-
   product: null,
-  productId: 1,
+  productId: null,
   productManageId: undefined,
   qualityBenchId: undefined,
   qualityToolId: undefined,
@@ -159,9 +144,10 @@ const options = [
   }
 ]
 const save = async () => {
-  console.log(formData)
-  let res = await PostManagement(formData)
-  console.log(res)
+  let res: any = await PostManagement(formData)
+  if (res.success) {
+    ElMessage.success("提交成功")
+  }
 }
 /**
  * 仓库
@@ -183,23 +169,9 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
-  // let res: any = await GetUserInput()
-  // let {
-  //   electronicEngineer,
-  //   structureEngineer,
-  //   resourceManagement,
-  //   engineeringTechnology,
-  //   finance,
-  //   productionManagement,
-  //   quality
-  // } = res.result
-  // users.electronicEngineer = electronicEngineer
-  // users.structureEngineer = structureEngineer
-  // users.resourceManagement = resourceManagement
-  // users.engineeringTechnology = engineeringTechnology
-  // users.finance = finance
-  // users.productionManagement = productionManagement
-  // users.quality = quality
+  let query = getQuery()
+  formData.auditFlowId = query.auditFlowId ? Number(query.auditFlowId) : 1
+  formData.productId = query.productId ? Number(query.productId) : 1
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

@@ -72,8 +72,24 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   NProgress.start()
   const roles = userStore.roles
   permissionStore.setRoutes(roles)
+  // 结合setting里的切换一起使用
   next()
-  NProgress.done()
+  // const notInclude = ["/todoCenter/index", "/login"]
+  // const productId = window.sessionStorage.getItem("productId")
+  // if (!to.query.productId || to.query.productId !== productId) {
+  //   if (productId) {
+  //     to.query.productId = productId
+  //     debugger
+  //     next({
+  //       path: to.path,
+  //       query: to.query
+  //     })
+  //   } else {
+  //     next()
+  //   }
+  // } else {
+  //   next()
+  // }
 })
 router.afterEach(() => {
   NProgress.done()

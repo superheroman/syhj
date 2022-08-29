@@ -114,7 +114,7 @@
         <el-upload
           v-model:file-list="fileList"
           :show-file-list="false"
-          action="api/services/app/FileCommonService/UploadFile"
+          action="/api/services/app/FileCommonService/UploadFile"
           :on-success="handleSuccess"
           :on-change="handleFileChange"
           style="float: right"
@@ -124,11 +124,33 @@
         <!-- 产品总成本推移图 -->
         <div id="selectCostChart" />
         <div style="float: right; margin: 20px 0">
-          <el-button type="primary">同意</el-button>
-          <el-button type="primary">退回</el-button>
+          <el-button type="primary" @click="setPriceBoardStateAgree(true)">同意</el-button>
+          <el-button type="primary" @click="dialogVisible = true">退回</el-button>
         </div>
       </el-card>
     </el-card>
+    <el-dialog v-model="dialogVisible" title="退回选择">
+      <el-checkbox-group v-model="checkList">
+        <el-checkbox label="StructBomImport">产品部-结构工程师</el-checkbox>
+        <el-checkbox label="">产品部-电子工程师（EMC）</el-checkbox>
+        <el-checkbox label="ElectronicBomImport">产品部-电子工程师（BOM）</el-checkbox>
+        <el-checkbox label="NreInputGage">品质保证部-检具费录入</el-checkbox>
+        <el-checkbox label="NreInputTest">品质保证部-实验费录入</el-checkbox>
+        <el-checkbox label="NreInputOther">项目管理部-项目经理（NRE录入）</el-checkbox>
+        <el-checkbox label="LossRateInput">工程技术部-损耗率录入</el-checkbox>
+        <el-checkbox label="ManHourImport">工程技术部-工序工时录入</el-checkbox>
+        <el-checkbox label="LogisticsCostInput">生产管理部-物流成本录入</el-checkbox>
+        <el-checkbox label="StructPriceInput">资源部管理部-结构资源开发（模具单击录入）</el-checkbox>
+        <el-checkbox label="">资源部管理部-结构资源开发（产品单价录入）</el-checkbox>
+        <el-checkbox label="ElectronicPriceInput">资源部管理部-电子资源开发</el-checkbox>
+      </el-checkbox-group>
+      <template #footer>
+        <span>
+          <el-button @click="dialogVisible = false">取消</el-button>
+          <el-button type="primary" @click="setPriceBoardStateAgree(false)">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -147,17 +169,21 @@ import {
   GetLogisticsCost,
   GetManufacturingCost,
   GetGoTable,
-  addPricingPanelTrProgrammeId
+  addPricingPanelTrProgrammeId,
+  SetPriceBoardState
 } from "../service"
 import getQuery from "@/utils/getQuery"
 import { downloadFileExcel } from "@/utils/index"
 import type { UploadProps, UploadUserFile } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
 let costChart: any = null
 let percentageCostChart: any = null
 let selectCostChart: any = null
+let dialogVisible = ref(false)
+let checkList = ref([])
 const fileList = ref<UploadUserFile[]>([])
 const data = reactive<Record<string, any>>({
   product: "",
@@ -431,6 +457,28 @@ const getGoTableChartData = async () => {
         data: value
       }
     })
+  })
+}
+
+// 同意该审核
+const setPriceBoardStateAgree = async (isAgree: boolean) => {
+  ElMessageBox.confirm("确定执行该操作?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let res: any
+    if (isAgree) {
+      res = await SetPriceBoardState(AuditFlowId, isAgree)
+    } else {
+      res = await SetPriceBoardState(AuditFlowId, isAgree, checkList.value)
+    }
+    if (res.result.success) {
+      ElMessage({
+        type: "success",
+        message: "操作成功"
+      })
+    }
   })
 }
 

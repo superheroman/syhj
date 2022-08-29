@@ -14,7 +14,7 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建用户</el-button>
       <el-button type="primary" @click="downLoadTemplate">用户导入模板下载</el-button>
       <el-upload
-        action="api/services/app/User/ExcelImport"
+        action="/api/services/app/User/ExcelImport"
         :on-success="handleSuccess"
         :show-file-list="false"
         style="margin-left: 20px"
@@ -23,7 +23,7 @@
         <el-button type="primary">用户导入</el-button>
       </el-upload>
     </div>
-    <el-table :data="data.tableData" style="width: 100%">
+    <el-table :data="data.tableData">
       <el-table-column label="id" prop="id" />
       <!-- <el-table-column label="用户名" prop="userName" /> -->
       <el-table-column label="姓名" prop="name" />
@@ -86,11 +86,13 @@
         <!-- <el-form-item label="邮箱" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.emailAddress" />
         </el-form-item> -->
-        <el-form-item label="密码" :label-width="data.formLabelWidth">
+        <el-form-item label="密码" :label-width="data.formLabelWidth" v-if="!data.isEdit">
           <el-input v-model="data.userForm.password" />
         </el-form-item>
         <el-form-item label="角色选择" :label-width="data.formLabelWidth">
-          <el-select v-model="data.userForm.roleNames" />
+          <el-select v-model="data.userForm.roleNames" multiple>
+            <el-option :value="item.name" v-for="item in data.roleOption" :key="item.id" :label="item.name" />
+          </el-select>
         </el-form-item>
         <el-form-item label="部门" :label-width="data.formLabelWidth">
           <!-- <el-cascader v-model="data.userForm.departmentId" :options="data.departmentOptions" /> -->
@@ -112,7 +114,7 @@
         <el-form-item label="管理员密码" :label-width="data.formLabelWidth">
           <el-input v-model="data.psResetForm.adminPassword" type="password" />
         </el-form-item>
-        <el-form-item label="新密码" :label-width="data.formLabelWidth">
+        <el-form-item label="用户新密码" :label-width="data.formLabelWidth">
           <el-input v-model="data.psResetForm.newPassword" type="password" />
         </el-form-item>
       </el-form>
@@ -141,7 +143,9 @@ import {
   deActivateUser,
   getUserList,
   changePasswordAd,
-  DownloadFile
+  DownloadFile,
+  RoleParams,
+  getRoleList
 } from "./service"
 import { getRootDepartment } from "@/api/departmentManage"
 import type { FormInstance } from "element-plus"
@@ -296,6 +300,16 @@ const getList = async () => {
   data.tableData = res.result.items
   data.total = res.result.totalCount
 }
+const getRoleOption = async () => {
+  let params: RoleParams = {
+    keyword: "",
+    maxResultCount: 100,
+    skipCount: 0
+  }
+
+  let res: any = await getRoleList(params)
+  data.roleOption = res.result.items
+}
 const activeChange = (val: boolean, row: User) => {
   if (val) {
     activateUser(row.id)
@@ -343,6 +357,7 @@ onMounted(async () => {
   res.result.items.forEach((item: any) => {
     data.departmentOptions.push(item)
   })
+  getRoleOption()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

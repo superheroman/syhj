@@ -39,13 +39,19 @@
       <el-descriptions-item label="做成/日期"> {{ data.tradeComplianceCheck.creationTime }} </el-descriptions-item>
       <!-- <el-descriptions-item label="审核/日期"> {{ data.tradeComplianceCheck.deletionTime }} </el-descriptions-item> -->
     </el-descriptions>
+    <div style="float: right; margin: 20px 0">
+      <el-button @click="agree(false)">拒绝</el-button>
+      <el-button type="primary" @click="agree(true)">同意</el-button>
+    </div>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { GetTradeComplianceCheckFromDateBase } from "./service"
+import { GetTradeComplianceCheckFromDateBase, GeneralManagerQuoteCheck } from "./service"
 import { ProductMaterialInfo, TradeComplianceCheck } from "./data.type"
+import { ElMessage, ElMessageBox } from "element-plus"
+
 import getQuery from "@/utils/getQuery"
 
 const { AuditFlowId = 1, ProductId = 1 }: any = getQuery()
@@ -76,7 +82,26 @@ const initFetch = async () => {
   data.tradeComplianceCheck = result.tradeComplianceCheck || {}
   console.log(result, "res")
 }
-
+const agree = async (isAgree: boolean) => {
+  ElMessageBox.confirm("确定执行该操作?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let res: any = await GeneralManagerQuoteCheck({
+      AuditFlowId,
+      ProductId,
+      isAgree
+    })
+    console.log(res)
+    if (res.result.success) {
+      ElMessage({
+        type: "success",
+        message: "操作成功"
+      })
+    }
+  })
+}
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">

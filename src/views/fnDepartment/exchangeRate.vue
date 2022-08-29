@@ -14,7 +14,7 @@
       <div class="exchangeRate__btn-container">
         <el-button type="primary" @click="data.dialogVisible = true">新增汇率</el-button>
       </div>
-      <el-table :data="data.tableData" style="width: 100%">
+      <el-table :data="data.tableData">
         <el-table-column label="货币币种" prop="exchangeRateKind" />
         <el-table-column label="汇率">
           <template #default="scope">
@@ -165,18 +165,18 @@ const handleDelete = (index: number, row: RateItem) => {
     type: "warning"
   }).then(async () => {
     let res: any = await deleteExchangeRate(row.id)
-    if (res.code === "200") {
+    if (res.success) {
       ElMessage({
         type: "success",
         message: "删除成功"
       })
+      getList()
     }
   })
 }
 const clearForm = () => {
   data.isEdit = false
   data.editForm = {
-    id: null,
     exchangeRateKind: "",
     exchangeRateValue: [
       {

@@ -583,7 +583,7 @@
             <el-form-item>
               <el-upload
                 v-model:file-list="fileList"
-                action="api/services/app/FileCommonService/UploadFile"
+                action="/api/services/app/FileCommonService/UploadFile"
                 :on-success="handleSuccess"
                 :on-change="handleFileChange"
                 multiple

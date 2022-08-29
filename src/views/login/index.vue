@@ -52,12 +52,6 @@ const state = reactive({
           })
           .catch(() => {
             state.loading = false
-            debugger
-            router.push({ path: "/" }).catch((err) => {
-              console.warn(err)
-            })
-            // state.createCode()
-            // state.loginForm.password = ""
           })
       } else {
         return false
