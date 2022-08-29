@@ -73,6 +73,9 @@ const state = reactive({
             <el-dropdown-item divided @click="state.logout">
               <span style="display: block">退出登录</span>
             </el-dropdown-item>
+            <el-dropdown-item divided @click="state.logout">
+              <span style="display: block">修改密码</span>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

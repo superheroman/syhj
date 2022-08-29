@@ -18,7 +18,7 @@
         </el-row>
       </template>
       <el-card>
-        <el-table :data="data.tableData" border style="width: 100%" height="700">
+        <el-table :data="data.tableData" border height="700">
           <el-table-column label="设备部分" class-name="columnColor1">
             <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="`equipmentPart-${index}`">
               <el-table-column
@@ -117,10 +117,10 @@
             </el-table-column>
           </template>
         </el-table>
-        <div style="float: right" class="m-2">
+        <el-row align="middle" justify="end" style="margin-top: 20px">
           <!-- <el-button type="primary" @click="handleSubmit">提交</el-button> -->
           <el-button type="primary" @click="handleSaveWorkingHour">保存</el-button>
-        </div>
+        </el-row>
       </el-card>
       <el-card style="margin-top: 20px">
         <template #header>
@@ -128,37 +128,44 @@
             <span>根线/切线工时</span>
           </el-row>
         </template>
-        <el-row align="middle" style="width: 350px; flex-wrap: nowrap"
-          >UPH值: <el-input style="width: 180px" class="m-2" v-model="data.uph" type="number" placeholder="请输入UPH值"
-        /></el-row>
-        <el-table :data="data.tangent">
-          <el-table-column label="年份" prop="year" />
-          <el-table-column label="人工工时" prop="`laborTime`" width="175">
-            <template #default="{ row }">
-              <el-input-number v-model="row.laborTime" :min="0" controls-position="right" />
-            </template>
-          </el-table-column>
-          <el-table-column label="标准机器工时" prop="machineHours" width="175">
-            <template #default="{ row }">
-              <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
-            </template>
-          </el-table-column>
-          <el-table-column label="人员数量" prop="personnelNumber" width="175">
-            <template #default="{ row }">
-              <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
-            </template>
-          </el-table-column>
-        </el-table>
-        <el-row align="middle" justify="end" m="2">
-          <el-button type="primary" @click="handleSubmit">提交</el-button>
-          <el-button type="primary" @click="handleSaveTangentHours">保存</el-button>
-        </el-row>
+        <el-row align="middle" style="width: 350px; flex-wrap: nowrap">UPH值: {{ data.uph }}</el-row>
+        <!-- <el-input style="width: 180px" class="m-2" v-model="data.uph" type="number" placeholder="请输入UPH值"/> -->
+        <el-form :model="data.tangentForm" ref="tangentFormRef">
+          <el-table :data="data.tangent" height="500">
+            <el-table-column label="年份" prop="year" />
+            <el-table-column label="人工工时" prop="`laborTime`" width="175">
+              <template #default="{ row }">
+                <el-form-item :prop="`laborTime.${row.$index}.laborTime`" :rules="[{ required: true }]">
+                  <el-input-number v-model="row.laborTime" :min="0" controls-position="right" />
+                </el-form-item>
+              </template>
+            </el-table-column>
+            <el-table-column label="标准机器工时" prop="machineHours" width="175">
+              <template #default="{ row }">
+                <el-form-item :prop="`laborTime.${row.$index}.machineHours`" :rules="[{ required: true }]">
+                  <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
+                </el-form-item>
+              </template>
+            </el-table-column>
+            <el-table-column label="人员数量" prop="personnelNumber" width="175">
+              <template #default="{ row }">
+                <el-form-item :prop="`laborTime.${row.$index}.personnelNumber`" :rules="[{ required: true }]">
+                  <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
+                </el-form-item>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-row align="middle" justify="end" style="margin-top: 20px">
+            <el-button type="primary" @click="handleSubmit(tangentFormRef)">提交</el-button>
+            <el-button type="primary" @click="handleSaveTangentHours(tangentFormRef)">保存</el-button>
+          </el-row>
+        </el-form>
       </el-card>
     </el-card>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted } from "vue"
+import { reactive, onMounted, ref } from "vue"
 import { ElMessage, UploadProps } from "element-plus"
 // import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
@@ -170,19 +177,10 @@ import {
   SubmitWorkingHourAndSwitchLine
 } from "./service"
 import getQuery from "@/utils/getQuery"
+import type { FormInstance } from "element-plus"
 const { auditFlowId = 1, productId = 1 }: any = getQuery
 
-const data = reactive<{
-  tableData: any
-  retrospectPart: any
-  toolingFixturePart: any
-  equipmentPart: any
-  downloadSetForm: any
-  humanMachineHoursDetailList: any[]
-  sop: any[]
-  tangent: any[]
-  uph: number | null
-}>({
+const data = reactive<any>({
   tableData: [],
   downloadSetForm: {
     number: 0
@@ -193,11 +191,13 @@ const data = reactive<{
   humanMachineHoursDetailList: [],
   sop: [],
   tangent: [], // 根线/切线工时
-  uph: null
+  uph: null,
+  tangentForm: {}
 })
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
 // }
+const tangentFormRef = ref<FormInstance>()
 
 const formatterArr = (key: string, childKey = "equipmentDetails") => {
   return Math.max.apply(
@@ -276,18 +276,24 @@ const getAllSop = async () => {
 }
 
 // 保存切线工时
-const handleSaveTangentHours = async () => {
+const handleSaveTangentHours = async (formEl: any) => {
   try {
-    const { success } = await SaveTangentHours({
-      uph: Number(data.uph || 0),
-      auditFlowId,
-      productId,
-      tangentHoursDetailList: data.tangent
+    await formEl.validate(async (valid: any, fields: any) => {
+      if (valid) {
+        const { success } = await SaveTangentHours({
+          uph: Number(data.uph || 0),
+          auditFlowId,
+          productId,
+          tangentHoursDetailList: data.tangent
+        })
+        if (!success) throw Error()
+        ElMessage.success("请求成功！")
+      } else {
+        console.log("error submit!", fields)
+      }
     })
-    if (!success) throw Error()
-    ElMessage.success("请求成功！")
   } catch {
-    ElMessage.error("请求失败")
+    ElMessage.error("请填写正确表单")
   }
 }
 </script>
