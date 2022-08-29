@@ -190,7 +190,7 @@ export function getUserListByRoleName(roleName: string) {
     method: "get",
     data: {
       roleName,
-      maxResultCount: 20,
+      maxResultCount: 100,
       skipCount: 0
     }
   })
