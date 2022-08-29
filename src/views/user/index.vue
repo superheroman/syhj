@@ -90,8 +90,8 @@
           <el-input v-model="data.userForm.password" />
         </el-form-item>
         <el-form-item label="角色选择" :label-width="data.formLabelWidth">
-          <el-select v-model="data.userForm.roleNames">
-            <!-- <option value=""></option> -->
+          <el-select v-model="data.userForm.roleNames" multiple>
+            <el-option :value="item.name" v-for="item in data.roleOption" :key="item.id" :label="item.name" />
           </el-select>
         </el-form-item>
         <el-form-item label="部门" :label-width="data.formLabelWidth">
@@ -160,7 +160,9 @@ import {
   getUserList,
   changePassword,
   changePasswordAd,
-  DownloadFile
+  DownloadFile,
+  RoleParams,
+  getRoleList
 } from "./service"
 import { getRootDepartment } from "@/api/departmentManage"
 import type { FormInstance } from "element-plus"
@@ -204,6 +206,7 @@ const data = reactive({
     password: "",
     departmentId: ""
   },
+  roleOption: [] as any[],
   psForm: {
     currentPassword: "",
     newPassword: ""
@@ -325,6 +328,16 @@ const getList = async () => {
   data.tableData = res.result.items
   data.total = res.result.totalCount
 }
+const getRoleOption = async () => {
+  let params: RoleParams = {
+    keyword: "",
+    maxResultCount: 100,
+    skipCount: 0
+  }
+
+  let res: any = await getRoleList(params)
+  data.roleOption = res.result.items
+}
 const activeChange = (val: boolean, row: User) => {
   if (val) {
     activateUser(row.id)
@@ -372,6 +385,7 @@ onMounted(async () => {
   res.result.items.forEach((item: any) => {
     data.departmentOptions.push(item)
   })
+  getRoleOption()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

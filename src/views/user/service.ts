@@ -1,5 +1,10 @@
 import { request } from "@/utils/service"
 import { CreateUserDto, UserDto, PasswordInfo, ResetPasswordAd, UserParams } from "./data.type"
+export interface RoleParams {
+  keyword?: string
+  skipCount: number
+  maxResultCount: number
+}
 /** 创建用户 */
 export function createUser(data: CreateUserDto) {
   return request({
@@ -79,5 +84,14 @@ export function DownloadFile() {
     url: "/api/services/app/User/GetImportTemplate",
     method: "get",
     responseType: "blob"
+  })
+}
+
+/** 角色列表 */
+export function getRoleList(data: RoleParams) {
+  return request({
+    url: "/api/services/app/Role/GetAll",
+    method: "get",
+    data
   })
 }
