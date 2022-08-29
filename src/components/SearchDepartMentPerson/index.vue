@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-select v-model="value" :multiple="multiple" filterable placeholder="请选择姓名">
-      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
+      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="String(item.id)" />
     </el-select>
   </div>
 </template>

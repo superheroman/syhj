@@ -24,7 +24,7 @@ export function addPricingPanelTrProgrammeId(auditFlowId: number, fileManagement
 export function downloadFile(fileId: number) {
   return request({
     url: "/api/services/app/FileCommonService/DownloadFile",
-    method: "post",
+    method: "get",
     data: {
       fileId
     },

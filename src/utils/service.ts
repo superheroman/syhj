@@ -47,6 +47,7 @@ function createService() {
       // 默认格式先加上
       const error = apiData.error
       if (error) {
+        console.log(error, "responseError")
         ElMessage.error(error)
         // return Promise.reject(new Error(error))
       }
@@ -55,6 +56,7 @@ function createService() {
     (error) => {
       // status 是 HTTP 状态码
       const status = get(error, "response.status")
+      console.log(status, error, "error@@@@")
       switch (status) {
         case 400:
           error.message = "请求错误"

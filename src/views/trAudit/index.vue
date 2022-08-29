@@ -49,7 +49,7 @@ const save = async (isAgree: boolean) => {
     // let res: any = await addPricingPanelTrProgrammeId(auditFlowId.value, trFileId)
     // console.log(res)
     let res: any = await setTRMainSolutionState({
-      auditFlowId: window.sessionStorage.getItem("auditFlowId"),
+      auditFlowId: 5,
       trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
       isAgree
     })
@@ -57,20 +57,25 @@ const save = async (isAgree: boolean) => {
   }
 }
 const downLoad = async () => {
+  console.log(trFileId, "trFileId")
   if (trFileId) {
-    let res: any = await downloadFile(trFileId)
-    const blob = res
-    const reader = new FileReader()
-    reader.readAsDataURL(blob)
-    reader.onload = function () {
-      let url = URL.createObjectURL(new Blob([blob]))
-      let a = document.createElement("a")
-      document.body.appendChild(a) //此处增加了将创建的添加到body当中
-      a.href = url
-      a.download = "tr主方案.xlsx"
-      a.target = "_blank"
-      a.click()
-      a.remove() //将a标签移除
+    try {
+      let res: any = await downloadFile(Number(trFileId))
+      const blob = res
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = function () {
+        let url = URL.createObjectURL(new Blob([blob]))
+        let a = document.createElement("a")
+        document.body.appendChild(a) //此处增加了将创建的添加到body当中
+        a.href = url
+        a.download = "tr主方案.xlsx"
+        a.target = "_blank"
+        a.click()
+        a.remove() //将a标签移除
+      }
+    } catch (err) {
+      console.log(err, "downLoadError")
     }
   }
 }
@@ -78,7 +83,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
-  let auditFlowId = window.sessionStorage.getItem("auditFlowId") || 1
+  let auditFlowId = window.sessionStorage.getItem("auditFlowId") || 5
   let res: any = await getAuditFlowVersion(Number(auditFlowId))
   data.form.title = res.result.title
   trFileId = res.result.solutionFileIdentifier
