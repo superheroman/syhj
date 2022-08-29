@@ -44,7 +44,7 @@
       <el-table-column label="操作" width="300" fixed="right">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          <el-button size="small" @click="handlePsEdit(scope.$index, scope.row)">密码修改</el-button>
+          <!-- <el-button size="small" @click="handlePsEdit(scope.$index, scope.row)">密码修改</el-button> -->
           <el-button size="small" @click="handlePsResetEdit(scope.$index, scope.row)">重置密码</el-button>
           <el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
@@ -109,22 +109,6 @@
         </span>
       </template>
     </el-dialog>
-    <el-dialog v-model="data.psVisible" title="修改密码">
-      <el-form :model="data.psForm">
-        <el-form-item label="旧密码" :label-width="data.formLabelWidth">
-          <el-input v-model="data.psForm.currentPassword" type="password" />
-        </el-form-item>
-        <el-form-item label="新密码" :label-width="data.formLabelWidth">
-          <el-input v-model="data.psForm.newPassword" type="password" />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="data.psVisible = false">取消</el-button>
-          <el-button type="primary" @click="updatePassword">保存</el-button>
-        </span>
-      </template>
-    </el-dialog>
     <el-dialog v-model="data.psResetVisible" title="重置密码">
       <el-form :model="data.psResetForm">
         <el-form-item label="管理员密码" :label-width="data.formLabelWidth">
@@ -158,7 +142,6 @@ import {
   activateUser,
   deActivateUser,
   getUserList,
-  changePassword,
   changePasswordAd,
   DownloadFile,
   RoleParams,
@@ -179,7 +162,7 @@ const userForm = ref<FormInstance>()
 /**
  * 数据部分
  */
-const data = reactive({
+const data = reactive<any>({
   tableData: [],
   dialogVisible: false,
   psVisible: false,
@@ -205,11 +188,6 @@ const data = reactive({
     roleNames: [],
     password: "",
     departmentId: ""
-  } as any,
-  roleOption: [] as any[],
-  psForm: {
-    currentPassword: "",
-    newPassword: ""
   },
   psResetForm: {
     adminPassword: "",
@@ -242,10 +220,10 @@ const saveUser = async () => {
     data.dialogVisible = false
   }
 }
-const handlePsEdit = (index: number, row: User) => {
-  console.log(index, row)
-  data.psVisible = true
-}
+// const handlePsEdit = (index: number, row: User) => {
+//   console.log(index, row)
+//   data.psVisible = true
+// }
 const clearForm = () => {
   data.isEdit = false
   data.userForm = {
@@ -290,12 +268,6 @@ const handleDelete = (index: number, row: User) => {
 }
 const handlePageChange = () => {
   getList()
-}
-const updatePassword = async () => {
-  let res: any = await changePassword(data.psForm)
-  if (res.success) {
-    data.psVisible = false
-  }
 }
 const resetPassword = async () => {
   let params = Object.assign(

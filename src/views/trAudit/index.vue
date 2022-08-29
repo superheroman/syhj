@@ -60,7 +60,7 @@ const downLoad = async () => {
   console.log(trFileId, "trFileId")
   if (trFileId) {
     try {
-      let res: any = await downloadFile(Number(trFileId))
+      let res: any = await downloadFile(trFileId)
       const blob = res
       const reader = new FileReader()
       reader.readAsDataURL(blob)

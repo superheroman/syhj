@@ -9,6 +9,7 @@ import BreadCrumb from "../BreadCrumb/index.vue"
 import Hamburger from "../Hamburger/index.vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import Screenfull from "@/components/Screenfull/index.vue"
+import { changePassword } from "@/api/user"
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -25,7 +26,14 @@ const showScreenfull = computed(() => {
   return settingsStore.showScreenfull
 })
 
-const state = reactive({
+const updatePassword = async () => {
+  let res: any = await changePassword(state.psForm)
+  if (res.success) {
+    state.psVisible = false
+  }
+}
+
+const state = reactive<any>({
   toggleSideBar: () => {
     appStore.toggleSidebar(false)
   },
@@ -34,6 +42,11 @@ const state = reactive({
     router.push("/login").catch((err) => {
       console.warn(err)
     })
+  },
+  psVisible: false,
+  psForm: {
+    currentPassword: "",
+    newPassword: ""
   }
 })
 </script>
@@ -73,12 +86,28 @@ const state = reactive({
             <el-dropdown-item divided @click="state.logout">
               <span style="display: block">退出登录</span>
             </el-dropdown-item>
-            <el-dropdown-item divided @click="state.logout">
+            <el-dropdown-item divided @click="state.psVisible = true">
               <span style="display: block">修改密码</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-dialog v-model="state.psVisible" title="修改密码">
+        <el-form :model="state.psForm">
+          <el-form-item label="旧密码" :label-width="state.formLabelWidth">
+            <el-input v-model="state.psForm.currentPassword" type="password" />
+          </el-form-item>
+          <el-form-item label="新密码" :label-width="state.formLabelWidth">
+            <el-input v-model="state.psForm.newPassword" type="password" />
+          </el-form-item>
+        </el-form>
+        <template #footer>
+          <span class="dialog-footer">
+            <el-button @click="state.psVisible = false">取消</el-button>
+            <el-button type="primary" @click="updatePassword">保存</el-button>
+          </span>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
