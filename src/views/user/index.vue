@@ -23,7 +23,7 @@
         <el-button type="primary">用户导入</el-button>
       </el-upload>
     </div>
-    <el-table :data="data.tableData" style="width: 100%">
+    <el-table :data="data.tableData">
       <el-table-column label="id" prop="id" />
       <!-- <el-table-column label="用户名" prop="userName" /> -->
       <el-table-column label="姓名" prop="name" />
@@ -86,7 +86,7 @@
         <!-- <el-form-item label="邮箱" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.emailAddress" />
         </el-form-item> -->
-        <el-form-item label="密码" :label-width="data.formLabelWidth">
+        <el-form-item label="密码" :label-width="data.formLabelWidth" v-if="!data.isEdit">
           <el-input v-model="data.userForm.password" />
         </el-form-item>
         <el-form-item label="角色选择" :label-width="data.formLabelWidth">
@@ -130,7 +130,7 @@
         <el-form-item label="管理员密码" :label-width="data.formLabelWidth">
           <el-input v-model="data.psResetForm.adminPassword" type="password" />
         </el-form-item>
-        <el-form-item label="新密码" :label-width="data.formLabelWidth">
+        <el-form-item label="用户新密码" :label-width="data.formLabelWidth">
           <el-input v-model="data.psResetForm.newPassword" type="password" />
         </el-form-item>
       </el-form>
@@ -205,7 +205,7 @@ const data = reactive({
     roleNames: [],
     password: "",
     departmentId: ""
-  },
+  } as any,
   roleOption: [] as any[],
   psForm: {
     currentPassword: "",
