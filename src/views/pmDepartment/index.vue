@@ -164,8 +164,7 @@ const data = reactive({
     quantityPerBox: "",
     remarks: "",
     pictureId: ""
-  },
-  id: null
+  }
 })
 
 onBeforeMount(() => {
@@ -229,7 +228,6 @@ onMounted(async () => {
   // 获取运费信息
   let res: any = await getProductFreight({ auditFlowId: data.auditFlowId, productId: data.productId })
   data.logisticsForm = res.result
-  data.id = res.result.id
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
@@ -256,8 +254,7 @@ const submit = () => {
   let res: any = saveProductionControl({
     auditFlowId,
     productId,
-    infoList,
-    id: data.id
+    infoList
   })
   if (res.success) {
     ElMessage.success("提交成功")
