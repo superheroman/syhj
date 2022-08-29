@@ -66,7 +66,7 @@
               <!-- <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
                 <el-button type="primary">文件上传</el-button>
               </el-upload> -->
-              <el-upload action="api/services/app/FileCommonService/UploadFile" :on-success="handleSuccess" :limit="1">
+              <el-upload action="/api/services/app/FileCommonService/UploadFile" :on-success="handleSuccess" :limit="1">
                 <el-button type="primary">文件上传</el-button>
               </el-upload>
             </el-form-item>

@@ -14,7 +14,7 @@
       <el-button type="primary" @click="data.dialogVisible = true">创建用户</el-button>
       <el-button type="primary" @click="downLoadTemplate">用户导入模板下载</el-button>
       <el-upload
-        action="api/services/app/User/ExcelImport"
+        action="/api/services/app/User/ExcelImport"
         :on-success="handleSuccess"
         :show-file-list="false"
         style="margin-left: 20px"
@@ -90,7 +90,9 @@
           <el-input v-model="data.userForm.password" />
         </el-form-item>
         <el-form-item label="角色选择" :label-width="data.formLabelWidth">
-          <el-select v-model="data.userForm.roleNames" />
+          <el-select v-model="data.userForm.roleNames">
+            <!-- <option value=""></option> -->
+          </el-select>
         </el-form-item>
         <el-form-item label="部门" :label-width="data.formLabelWidth">
           <!-- <el-cascader v-model="data.userForm.departmentId" :options="data.departmentOptions" /> -->
