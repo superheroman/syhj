@@ -96,14 +96,12 @@ import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 const formData: any = reactive({
   fileId: null,
-  financeNum: "",
   isFirst: true,
-  isNRE: true,
   auditFlowId: null,
   electronicEngineerId: undefined,
   engineerLossRateId: undefined,
   engineerWorkHourId: undefined,
-  id: null,
+  id: 0,
   product: null,
   productId: null,
   productManageId: undefined,
