@@ -170,6 +170,7 @@ const handleDelete = (index: number, row: RateItem) => {
         type: "success",
         message: "删除成功"
       })
+      getList()
     }
   })
 }
