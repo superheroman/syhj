@@ -278,7 +278,7 @@ const getAllSop = async () => {
 // 保存切线工时
 const handleSaveTangentHours = async (formEl: any) => {
   try {
-    await formEl.validate((valid: any, fields: any) => {
+    await formEl.validate(async (valid: any, fields: any) => {
       if (valid) {
         const { success } = await SaveTangentHours({
           uph: Number(data.uph || 0),
