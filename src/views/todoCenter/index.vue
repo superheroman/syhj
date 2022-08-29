@@ -20,7 +20,7 @@
     <el-card class="card">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="待办" name="upcoming">
-          <el-table :data="auditFlowIdInfoList" style="width: 100%">
+          <el-table :data="auditFlowIdInfoList">
             <el-table-column type="expand">
               <template #default="scopeP">
                 <el-table :data="scopeP.row.auditFlowRightDetailList">
@@ -43,7 +43,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="已办/查看" name="check">
-          <el-table :data="auditFlowIdInfoListCheck" style="width: 100%">
+          <el-table :data="auditFlowIdInfoListCheck">
             <el-table-column type="expand">
               <template #default="scopeP">
                 <el-table :data="scopeP.row.auditFlowRightDetailList">
@@ -73,7 +73,7 @@
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { savaNewAuditFlowInfo, getAllAuditFlowInfos, getAuditFlowNewVersionByProjectName } from "./service"
+import { getAllAuditFlowInfos, getAuditFlowNewVersionByProjectName } from "./service"
 import type { FormInstance, FormRules } from "element-plus"
 
 import urlMap from "./constant"
@@ -124,17 +124,25 @@ const saveNew = async (formEl: FormInstance | undefined) => {
   }
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      let res: any = await savaNewAuditFlowInfo(form)
-      if (res.success) {
-        router.push({
-          path: "/demandApply/index",
-          query: {
-            projectName: form.quoteProjectName,
-            projectCode: form.quoteProjectNumber,
-            quoteVersion: form.quoteVersion
-          }
-        })
-      }
+      // let res: any = await savaNewAuditFlowInfo(form)
+      // if (res.success) {
+      //   router.push({
+      //     path: "/demandApply/index",
+      //     query: {
+      //       projectName: form.quoteProjectName,
+      //       projectCode: form.quoteProjectNumber,
+      //       quoteVersion: form.quoteVersion
+      //     }
+      //   })
+      // }
+      router.push({
+        path: "/demandApply/index",
+        query: {
+          projectName: form.quoteProjectName,
+          projectCode: form.quoteProjectNumber,
+          quoteVersion: form.quoteVersion
+        }
+      })
     } else {
       console.log("error submit!", fields)
     }
