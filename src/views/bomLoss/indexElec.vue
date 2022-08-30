@@ -31,6 +31,7 @@ import { getElecOldLossRateInfo, saveLossRateInfo, getYears, getElecLossRateType
 import { ElMessage } from "element-plus"
 import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
+import _ from "lodash"
 
 /**
  * 路由对象
@@ -62,7 +63,8 @@ let productId = 1
 let isOld = "false"
 const submit = async () => {
   let bomLossData = [] as any[]
-  bomLossData.concat(data.bomLossElecData)
+  bomLossData = _.cloneDeep(data.bomLossElecData)
+  // bomLossData.concat(data.bomLossElecData)
   let res: any = await saveLossRateInfo({
     auditFlowId: auditFlowId,
     productId: productId,
