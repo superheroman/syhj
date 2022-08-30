@@ -13,8 +13,8 @@
         <el-table-column prop="encapsulationSize" label="封装（需要体现PAD的数量）" />
       </el-table>
       <div style="margin: 10px 0; float: right">
-        <el-button @click="agree(1, false)">拒绝</el-button>
         <el-button type="primary" @click="agree(1, true)">同意</el-button>
+        <el-button @click="agree(1, false)" type="danger">拒绝</el-button>
       </div>
     </div>
   </div>

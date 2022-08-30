@@ -6,6 +6,8 @@ const urlMap = {
   ElectronicBomImport: "/electronicImport/index",
   ElectronicBomAudit: "/bomView/elec",
   StructPriceInput: "/resourcesDepartment/construction", //结构单价录入界面
+  ElecBomPriceAudit: "/bomVerify/electronic", //电子bom单价审核界面
+  StructBomPriceAudit: "/bomVerify/construction", //StructBomPriceAudit
   ElectronicPriceInput: "/resourcesDepartment/electronic", //电子单价录入界面
   BomPriceAudit: "/bomVerify/index", // bom单价审核
   ElecLossRateInput: "/bomLoss/indexElec",
