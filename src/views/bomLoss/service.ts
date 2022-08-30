@@ -1,7 +1,7 @@
 import { request } from "@/utils/service"
-import { auditFlowInfo, LossRateListDto } from "./data.type"
+import { auditFlowInfo } from "./data.type"
 
-export function saveLossRateInfo(data: LossRateListDto) {
+export function saveLossRateInfo(data: any) {
   return request({
     url: "/api/services/app/LossRate/SaveLossRateInfo",
     method: "post",
