@@ -138,7 +138,7 @@ import {
 import getQuery from "@/utils/getQuery"
 
 const { auditFlowId = 1 }: any = getQuery()
-
+console.log(auditFlowId, "auditFlowId")
 // 获取仓库的值
 const store = useUserStore()
 // 电子料 - table数据
@@ -166,6 +166,7 @@ onMounted(() => {
 // 获取初始化数据
 const fetchInitData = async () => {
   try {
+    console.log(auditFlowId, "fetchInitData")
     const {
       success,
       result: { electronicBomList: tempData }

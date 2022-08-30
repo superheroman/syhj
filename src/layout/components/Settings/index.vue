@@ -2,12 +2,12 @@
 import { reactive, onMounted } from "vue"
 import { useProductStore } from "@/store/modules/productList"
 import getQuery from "@/utils/getQuery"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 // const reload: any = inject("reload")
 
 const route = useRoute()
 
-// const router = useRouter()
+const router = useRouter()
 
 const productStore = useProductStore()
 const state = reactive({
@@ -47,6 +47,13 @@ const emit = defineEmits(["change"])
 const handleChange = (productId: any) => {
   console.log(productId)
   productStore.setProductId(productId)
+  router.push({
+    path: route.path,
+    query: {
+      auditFlowId: state.auditFlowId,
+      productId: state.productId
+    }
+  })
   window.history.replaceState(
     { productId },
     "",

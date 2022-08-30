@@ -39,6 +39,7 @@
       <versionDetail
         :priceEvaluationTableList="data.priceEvaluationTableList"
         :marketingQuotationData="data.marketingQuotationData"
+        :auditFlowId="data.auditFlowId"
       />
     </el-dialog>
   </div>
@@ -106,7 +107,8 @@ const data = reactive<any>({
   priceEvaluationTableList: [],
   visible: false,
   versionsEnum: {},
-  marketingQuotationData: null // 报价表
+  marketingQuotationData: null, // 报价表
+  auditFlowId: null
 })
 
 const queryTable = async (formValue: any) => {
@@ -124,9 +126,10 @@ const queryTable = async (formValue: any) => {
   console.log(result, "queryTable")
 }
 
-const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable }: any) => {
+const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable, auditFlowId }: any) => {
   data.priceEvaluationTableList = priceEvaluationTableList
   data.marketingQuotationData = quotationTable
+  data.auditFlowId = auditFlowId
   data.visible = true
 }
 

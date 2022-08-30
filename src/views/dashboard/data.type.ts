@@ -118,3 +118,35 @@ export interface YearListDto {
    */
   name?: null | string
 }
+
+/**
+ *  ，设置投入量方法 参数输入
+ */
+export interface SetPriceEvaluationTableInputCountType {
+  /**
+   * 审批流程主表Id
+   */
+  auditFlowId: number
+  /**
+   * 模组数量
+   */
+  modelCountInputCount: ModelCountInputCount[]
+}
+
+/**
+ * ModelCountInputCount，模组投入数量
+ */
+export interface ModelCountInputCount {
+  /**
+   * 投入量
+   */
+  inputCount: number
+  /**
+   * 模组数量Id（即零件Id）
+   */
+  modelCountId: number
+  /**
+   * 年份
+   */
+  year: number
+}

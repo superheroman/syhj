@@ -204,9 +204,6 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getYears } from "../pmDepartment/service"
 
 const props = defineProps({
-  detail: {
-    type: Object
-  },
   priceEvaluationTableList: {
     type: Array
   },
@@ -228,10 +225,9 @@ const modeEnnum = [
     value: 2
   }
 ]
-const data = reactive({
+const data = reactive<any>({
   mode: 1,
-  sopData: [],
-  visible: props.visible
+  sopData: []
 })
 
 const handleChangeMode = (val: number) => {

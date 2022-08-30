@@ -12,6 +12,7 @@
           产品核价表下载
         </el-button>
         <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表下载</el-button>
+        <el-button type="primary" class="m-2" @click="data.createVisible = true"> 生成核价表 </el-button>
       </el-row>
       <el-row class="m-2">
         <el-radio-group v-model="data.mode" @change="handleChangeMode">
@@ -151,6 +152,30 @@
         </span>
       </template>
     </el-dialog>
+    <el-dialog v-model="data.createVisible" title="生成核价表">
+      <el-table :data="data.priceEvaluationTableInputCount">
+        <el-table-column prop="productName" label="产品名称" width="180" />
+        <el-table-column prop="year" label="年份" width="80">
+          <template #default="{ row }">
+            <el-select v-model="row.year" class="m-2" placeholder="请选择年份" @change="fetchAllData">
+              <el-option v-for="item in data.yearsOptions" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column prop="inputCount" label="投入量" width="180">
+          <template #default="{ row }">
+            <el-input v-model="row.inputCount" placeholder="请输入投入量" />
+          </template>
+        </el-table-column>
+      </el-table>
+      <template #footer>
+        <span>
+          <el-button @click="data.createVisible = false">取消</el-button>
+          <el-button @click="handleCreatePriceEvaluation" type="primary">设置投入量和年份</el-button>
+          <el-button @click="handleSetPriceEvaluationTableInputCount" type="primary">生成核价表</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script setup lang="ts">
@@ -170,12 +195,17 @@ import {
   GetManufacturingCost,
   GetGoTable,
   addPricingPanelTrProgrammeId,
-  SetPriceBoardState
+  SetPriceBoardState,
+  GetPriceEvaluationTableInputCount,
+  SetPriceEvaluationTableInputCount,
+  CreatePriceEvaluationTable
 } from "../service"
 import getQuery from "@/utils/getQuery"
 import { downloadFileExcel } from "@/utils/index"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage, ElMessageBox } from "element-plus"
+import debounce from "lodash/debounce"
+
 const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
@@ -196,7 +226,9 @@ const data = reactive<Record<string, any>>({
   manufactureData: [],
   logisticsData: [],
   qualityData: [],
-  productInputs: 0
+  productInputs: 0,
+  createVisible: false,
+  priceEvaluationTableInputCount: [] //核价表投入量和年份
 })
 
 const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
@@ -227,6 +259,7 @@ onBeforeMount(() => {})
 
 onMounted(() => {
   init()
+  getPriceEvaluationTableInputCount()
 })
 
 const init = async () => {
@@ -253,6 +286,14 @@ const initChart = () => {
     selectCostChart.resize()
     costChart.resize()
   }
+}
+
+const getPriceEvaluationTableInputCount = async () => {
+  const {
+    result: { items = [] }
+  }: any = await GetPriceEvaluationTableInputCount(AuditFlowId)
+  data.priceEvaluationTableInputCount = items
+  console.log(items, "getPriceEvaluationTableInputCount")
 }
 
 // 初始化下拉项数据
@@ -507,6 +548,19 @@ const handleChangeMode = () => {
       break
   }
 }
+
+// 生成核价表
+const handleCreatePriceEvaluation = debounce(async () => {
+  await CreatePriceEvaluationTable(AuditFlowId)
+}, 500)
+
+// 设置投入量和年份
+const handleSetPriceEvaluationTableInputCount = debounce(async () => {
+  await SetPriceEvaluationTableInputCount({
+    auditFlowId: AuditFlowId,
+    modelCountInputCount: data.priceEvaluationTableInputCount
+  })
+}, 500)
 </script>
 
 <style lang="scss" scoped>
