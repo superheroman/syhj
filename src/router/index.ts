@@ -450,7 +450,26 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/bomView",
     redirect: "/bomView/index",
     component: Layout,
+    meta: {
+      title: "Bom查看"
+    },
     children: [
+      {
+        path: "/bomView/elec",
+        component: () => import("@/views/bomView/elec.vue"),
+        name: "elecView",
+        meta: {
+          title: "电子料Bom查看"
+        }
+      },
+      {
+        path: "/bomView/struc",
+        component: () => import("@/views/bomView/struc.vue"),
+        name: "strucView",
+        meta: {
+          title: "结构料Bom查看"
+        }
+      },
       {
         path: "/bomView/index",
         component: () => import("@/views/bomView/index.vue"),

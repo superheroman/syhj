@@ -1,9 +1,10 @@
 const urlMap = {
   TRAuditMKT: "/trAudit/index?trCheckType=1", //市场部TR主方案审核界面"
   TRAuditR_D: "/trAudit/index?trCheckType=2", //"产品开发部TR主方案审核"
-  StructBomImport: "/structuralMaterialImport/index",
+  StructBomAudit: "/bomView/struc", //结构bom审核界面
+  StructBomImport: "/structuralMaterialImport/index", //结构bom导入界面
   ElectronicBomImport: "/electronicImport/index",
-  ElectronicBomAudit: "/electronicImport/index",
+  ElectronicBomAudit: "/bomView/elec",
   StructPriceInput: "/resourcesDepartment/construction", //结构单价录入界面
   ElectronicPriceInput: "/resourcesDepartment/electronic", //电子单价录入界面
   BomPriceAudit: "/bomVerify/index", // bom单价审核

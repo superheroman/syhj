@@ -250,16 +250,18 @@ export function SaveProductDevelopmentInput(data: SaveBOM) {
     data
   })
 }
-export function GetStructionBom() {
+export function GetStructionBom(data: any) {
   return request({
     url: "/api/services/app/StructionBom/FindStructureBomByProcess",
-    method: "post"
+    method: "post",
+    data
   })
 }
-export function GetElectronicBom() {
+export function GetElectronicBom(data: any) {
   return request({
     url: "/api/services/app/ElectronicBom/FindElectronicBomByProcess",
-    method: "post"
+    method: "post",
+    data
   })
 }
 
@@ -268,5 +270,13 @@ export function getBomTemplate() {
     url: "/api/services/app/FileCommonService/DownloadStructionBom",
     method: "post",
     responseType: "blob"
+  })
+}
+
+export function SetBomState(data: any) {
+  return request({
+    url: "/api/services/app/BomCheck/SetBomState",
+    method: "post",
+    data
   })
 }
