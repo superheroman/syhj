@@ -65,21 +65,19 @@ const submit = async () => {
   let bomLossData = [] as any[]
   bomLossData = _.cloneDeep(data.bomLossElecData)
   // bomLossData.concat(data.bomLossElecData)
-  let res: any = await saveLossRateInfo({
-    auditFlowId: auditFlowId,
-    productId: productId,
-    lossRateDtoList: bomLossData.map((item: any) => {
-      return {
-        ...item,
-        lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
-          return {
-            year: i.year,
-            rate: (Number(i.rate) / 100).toFixed(4)
-          }
-        })
-      }
-    })
+  let lossRateDtoList = bomLossData.map((item: any) => {
+    return {
+      ...item,
+      lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
+        return {
+          year: i.year,
+          rate: (Number(i.rate) / 100).toFixed(4)
+        }
+      })
+    }
   })
+  debugger
+  let res: any = await saveLossRateInfo(lossRateDtoList)
   if (res.success) {
     ElMessage({
       type: "success",
