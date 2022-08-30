@@ -40,3 +40,6 @@ a:hover {
 div:focus {
   outline: none;
 }
+.el-table__body-wrapper .el-scrollbar__bar {
+  display: block !important;
+}

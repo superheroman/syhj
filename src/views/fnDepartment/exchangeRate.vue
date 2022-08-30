@@ -103,6 +103,7 @@ import { Plus, Minus } from "@element-plus/icons-vue"
 /**
  * 数据部分
  */
+let nowDateYear = new Date().getFullYear()
 const data = reactive({
   searchForm: {
     exchangeRateKind: "",
@@ -110,11 +111,12 @@ const data = reactive({
     skipCount: 0
   },
   isEdit: false,
+
   editForm: {
     exchangeRateKind: "",
     exchangeRateValue: [
       {
-        year: "",
+        year: nowDateYear,
         value: ""
       }
     ]
@@ -126,8 +128,9 @@ const data = reactive({
   total: 0
 })
 const addYearItem = () => {
+  nowDateYear++
   data.editForm.exchangeRateValue.push({
-    year: "",
+    year: nowDateYear,
     value: ""
   })
 }

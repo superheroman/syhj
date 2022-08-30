@@ -35,7 +35,9 @@
         </el-table-column>
         <el-table-column label="增值税率" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.vatRate" />
+            <el-input v-model="row.vatRate">
+              <template #append>%</template>
+            </el-input>
           </template>
         </el-table-column>
         <el-table-column label="人均跟线数量">

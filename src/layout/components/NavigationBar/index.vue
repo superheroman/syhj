@@ -58,6 +58,7 @@ const state = reactive<any>({
     <div class="right-menu">
       <Screenfull v-if="showScreenfull" class="right-menu-item" />
       <ThemeSwitch v-if="showThemeSwitch" class="right-menu-item" />
+      <span>{{ userStore.userInfo.name }}</span>
       <el-dropdown class="right-menu-item">
         <el-avatar :icon="UserFilled" :size="34" />
         <template #dropdown>
@@ -83,11 +84,11 @@ const state = reactive<any>({
             <a target="_blank" href="https://gitee.com/un-pany/v3-admin">
               <el-dropdown-item>V3-Admin Gitee</el-dropdown-item>
             </a> -->
-            <el-dropdown-item divided @click="state.logout">
-              <span style="display: block">退出登录</span>
-            </el-dropdown-item>
             <el-dropdown-item divided @click="state.psVisible = true">
               <span style="display: block">修改密码</span>
+            </el-dropdown-item>
+            <el-dropdown-item divided @click="state.logout">
+              <span style="display: block">退出登录</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

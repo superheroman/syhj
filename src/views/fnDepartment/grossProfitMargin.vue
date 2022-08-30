@@ -14,7 +14,7 @@
       <div class="grossProfitMargin__btn-container">
         <el-button type="primary" @click="data.dialogVisible = true">新增毛利率方案</el-button>
       </div>
-      <el-table :data="data.tableData" style="width: 100%">
+      <el-table :data="data.tableData">
         <el-table-column label="毛利率方案" prop="grossMarginName" />
         <el-table-column label="毛利率">
           <template #default="scope">
@@ -59,13 +59,14 @@
           <el-form-item label="毛利率值">
             <el-input
               v-model="item.value"
-              placeholder="Please input"
+              placeholder="请输入毛利率"
+              style="margin-bottom: 20px"
               v-for="(item, index) in data.editForm.grossMarginPrice"
               :key="index"
-              style="margin-bottom: 20px"
             >
               <template #append>
                 <el-button-group>
+                  <el-button disabled>%</el-button>
                   <el-button :icon="Plus" @click="addGrossMarginItem" />
                   <el-button
                     :icon="Minus"

@@ -22,6 +22,8 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getAuditFlowVersion, downloadFile, setTRMainSolutionState } from "./service"
 // import useQueryData from "@/hook/useQueryData"
 import getQuery from "@/utils/getQuery"
+import { ElMessage, ElMessageBox } from "element-plus"
+
 let { trCheckType } = getQuery()
 
 // import { useRoute, useRouter } from "vue-router"
@@ -46,14 +48,20 @@ const data = reactive({
 let trFileId: null | number = null
 const save = async (isAgree: boolean) => {
   if (trFileId) {
-    // let res: any = await addPricingPanelTrProgrammeId(auditFlowId.value, trFileId)
-    // console.log(res)
-    let res: any = await setTRMainSolutionState({
-      auditFlowId: 5,
-      trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
-      isAgree
+    ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning"
+    }).then(async () => {
+      let res: any = await setTRMainSolutionState({
+        auditFlowId: 5,
+        trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
+        isAgree
+      })
+      if (res.success) {
+        ElMessage.success("操作成功")
+      }
     })
-    console.log(res)
   }
 }
 const downLoad = async () => {

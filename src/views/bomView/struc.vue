@@ -2,7 +2,7 @@
   <div class="bomView">
     <div class="bomView__child">
       <h4>结构料</h4>
-      <el-button type="primary" @click="jumpToImport(2)" style="float: right; margin: 10px 0">结构料导入</el-button>
+      <!-- <el-button type="primary" @click="jumpToImport(2)" style="float: right; margin: 10px 0">结构料导入</el-button> -->
       <el-table :data="data.structuralData" border style="width: 100%" height="500">
         <el-table-column prop="categoryName" label="物料大类" width="180" />
         <el-table-column prop="typeName" label="物料种类" width="180" />
@@ -29,9 +29,9 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-import { useRouter } from "vue-router"
+// import { useRouter } from "vue-router"
 import { GetStructionBom, SetBomState } from "@/api/bom"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 
 import getQuery from "@/utils/getQuery"
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
@@ -43,7 +43,7 @@ const { auditFlowId = 1, productId = 1 }: any = getQuery()
 // /**
 //  * 路由实例
 //  */
-const router = useRouter()
+// const router = useRouter()
 //console.log('1-开始创建组件-setup')
 /**
  * 数据部分
@@ -52,27 +52,33 @@ const data = reactive({
   electronicData: [],
   structuralData: []
 })
-const jumpToImport = (type: number) => {
-  if (type === 1) {
-    router.push({
-      path: "/electronicImport/index"
-    })
-  } else {
-    router.push({
-      path: "/structuralMaterialImport/index"
-    })
-  }
-}
+// const jumpToImport = (type: number) => {
+//   if (type === 1) {
+//     router.push({
+//       path: "/electronicImport/index"
+//     })
+//   } else {
+//     router.push({
+//       path: "/structuralMaterialImport/index"
+//     })
+//   }
+// }
 const agree = async (bomCheckType: number, isAgree: boolean) => {
-  let res: any = await SetBomState({
-    auditFlowId: auditFlowId,
-    productId: productId,
-    bomCheckType,
-    isAgree
+  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let res: any = await SetBomState({
+      auditFlowId: auditFlowId,
+      productId: productId,
+      bomCheckType,
+      isAgree
+    })
+    if (res.success) {
+      ElMessage.success("操作成功")
+    }
   })
-  if (res.success) {
-    ElMessage.success("操作成功")
-  }
 }
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')

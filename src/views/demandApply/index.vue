@@ -145,7 +145,7 @@
         <div class="demand-apply__btn-container">
           <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
         </div>
-        <el-table :data="pcsTableData" style="width: 100%" border :summary-method="getSummaries" show-summary>
+        <el-table :data="pcsTableData" border :summary-method="getSummaries" show-summary>
           <el-table-column label="车厂" width="180" fixed="left">
             <template #default="{ row }">
               <el-input v-model="row.carFactory" />
@@ -502,7 +502,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item label="客户目标价:" prop="customerTargetPrice">
+            <el-form-item label="客户目标价（整套）:" prop="customerTargetPrice">
               <el-input v-model="state.quoteForm.customerTargetPrice" />
             </el-form-item>
           </el-col>

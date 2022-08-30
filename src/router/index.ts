@@ -541,7 +541,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/fnDepartment/fulllifeCycle.vue"),
         name: "fulllifeCycle",
         meta: {
-          title: "全生命周期维护"
+          title: "制造成本计算参数维护"
         }
       },
       {
