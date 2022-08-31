@@ -2,7 +2,7 @@ import { request } from "@/utils/service"
 import { SaveProductionControlInfo, productParams } from "./data.type"
 
 /** 获取年份 */
-export function getYears(auditFlowId: number): any {
+export function getYears(auditFlowId: number | undefined): any {
   return request({
     url: "/api/services/app/ProductionControl/GetAllYearsFrom",
     method: "get",

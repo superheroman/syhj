@@ -9,7 +9,7 @@ import BreadCrumb from "../BreadCrumb/index.vue"
 import Hamburger from "../Hamburger/index.vue"
 import ThemeSwitch from "@/components/ThemeSwitch/index.vue"
 import Screenfull from "@/components/Screenfull/index.vue"
-import { changePassword } from "@/api/user"
+import { changePasswordAd } from "@/api/user"
 
 const router = useRouter()
 const appStore = useAppStore()
@@ -27,7 +27,7 @@ const showScreenfull = computed(() => {
 })
 
 const updatePassword = async () => {
-  let res: any = await changePassword(state.psForm)
+  let res: any = await changePasswordAd(state.psForm)
   if (res.success) {
     state.psVisible = false
   }

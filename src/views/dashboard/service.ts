@@ -1,5 +1,5 @@
 import { request } from "@/utils/service"
-import { GetLossCostProps } from "./data.type"
+import { GetLossCostProps, SetPriceEvaluationTableInputCountType } from "./data.type"
 
 // 核价看板-【产品选择】下拉框下拉数据
 export function GetPricingPanelProductSelectList(data: { AuditFlowId: number }) {
@@ -130,6 +130,37 @@ export function SetPriceBoardState(auditFlowId: number, isAgree: boolean, backPr
       auditFlowId,
       isAgree,
       backProcessIdentifiers
+    }
+  })
+}
+
+// 获取核价表模组的InputCount（投入量）和年份
+export function GetPriceEvaluationTableInputCount(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/GetPriceEvaluationTableInputCount",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}
+
+// 设置投入量和年份
+export function SetPriceEvaluationTableInputCount(data: SetPriceEvaluationTableInputCountType) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/SetPriceEvaluationTableInputCount",
+    method: "post",
+    data
+  })
+}
+
+// 生成核价表
+export function CreatePriceEvaluationTable(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/CreatePriceEvaluationTable",
+    method: "post",
+    data: {
+      auditFlowId
     }
   })
 }
