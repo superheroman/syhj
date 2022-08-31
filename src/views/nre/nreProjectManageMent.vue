@@ -156,7 +156,7 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.type"
-import { PostProjectManagement } from "./common/request"
+import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import getQuery from "@/utils/getQuery"
@@ -220,14 +220,22 @@ const submit = async () => {
   }
 }
 
+const initFetch = async () => {
+  const { result } = await GetReturnProjectManagement(auditFlowId)
+  console.log(result, "res")
+}
+
 onBeforeMount(async () => {
   let nreReasons: any = await getDictionaryAndDetail("NreReasons") //落地工厂
   data.nreResonOptions = nreReasons.result.financeDictionaryDetailList
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
+
 onMounted(() => {
+  initFetch()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
+
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">

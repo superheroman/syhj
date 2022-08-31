@@ -135,7 +135,7 @@ import { ElMessage } from "element-plus"
 const store = useUserStore()
 
 console.log(store.userInfo, "store")
-const { auditFlowId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 // 结构料 - table数据
 const constructionBomList = ref<any>([])
@@ -188,9 +188,11 @@ const queryModlueNumber = () => {
   data.visiable = true
 }
 
+// 获取项目走量的数据
 const fetchModuleNumberData = async () => {
   const { result } = await GetProjectGoQuantity({ Id: auditFlowId })
   data.modelCountYear = result
+  data.moduleNumber = result
 }
 
 // 确认结构料单价行数据
@@ -198,7 +200,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
-      structuralMaterialEntering: [{ ...record, productId: 1 }],
+      structuralMaterialEntering: [{ ...record, productId }],
       auditFlowId
     })
     if (!success) throw Error()
