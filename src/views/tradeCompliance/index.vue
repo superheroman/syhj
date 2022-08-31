@@ -54,7 +54,7 @@ import { ElMessage, ElMessageBox } from "element-plus"
 
 import getQuery from "@/utils/getQuery"
 
-const { AuditFlowId = 1, ProductId = 1 }: any = getQuery()
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 /**
  * 数据部分
@@ -77,7 +77,7 @@ onMounted(() => {
 })
 
 const initFetch = async () => {
-  const { result } = await GetTradeComplianceCheckFromDateBase({ AuditFlowId, ProductId })
+  const { result } = await GetTradeComplianceCheckFromDateBase({ AuditFlowId: auditFlowId, ProductId: productId })
   data.productMaterialInfos = result.productMaterialInfos || []
   data.tradeComplianceCheck = result.tradeComplianceCheck || {}
   console.log(result, "res")
@@ -89,8 +89,8 @@ const agree = async (isAgree: boolean) => {
     type: "warning"
   }).then(async () => {
     let res: any = await GeneralManagerQuoteCheck({
-      AuditFlowId,
-      ProductId,
+      AuditFlowId: auditFlowId,
+      ProductId: productId,
       isAgree
     })
     console.log(res)

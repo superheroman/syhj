@@ -142,3 +142,14 @@ export function GetPricingForm(data: { Id: number; productId: number }): any {
     data
   })
 }
+
+/**Nre项目管理部 获取版本录入过的值 */
+export function GetReturnProjectManagement(Id: number): any {
+  return request({
+    url: "/api/services/app/NrePricing/GetReturnProjectManagement",
+    method: "get",
+    data: {
+      Id
+    }
+  })
+}
