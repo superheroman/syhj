@@ -8,6 +8,7 @@
             <el-upload
               action="/api/services/app/WorkingHours/UploadExcel"
               :on-success="handleSuccess"
+              :on-error="handleError"
               :show-file-list="false"
               class="m-2"
             >
@@ -224,6 +225,10 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
     }
     data.humanMachineHoursDetailList = new Array(formatterArr("humanMachineHoursDetailList", null))
   }
+}
+
+const handleError = () => {
+  ElMessage.error("上传失败")
 }
 
 const downLoadTemplate = async () => {

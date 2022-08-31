@@ -1,7 +1,7 @@
 <template>
   <div class="margin-top">
     <el-card class="table-wrap" header="电子料单价录入界面">
-      <el-table :data="electronicBomList" style="width: 100%" height="500">
+      <el-table :data="electronicBomList" height="75vh">
         <el-table-column prop="categoryName" label="物料大类" width="180" />
         <el-table-column prop="typeName" label="物料种类" width="180" />
         <el-table-column prop="sapItemNum" label="物料编号" width="180" />
@@ -126,7 +126,7 @@
             <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
               修改
             </el-button>
-            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, 1)">取消</el-button>
+            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
           </template>
         </el-table-column>
       </el-table>

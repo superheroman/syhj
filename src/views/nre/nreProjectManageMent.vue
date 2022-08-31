@@ -223,6 +223,9 @@ const submit = async () => {
 const initFetch = async () => {
   const { result } = await GetReturnProjectManagement(auditFlowId)
   console.log(result, "res")
+  data.handPieceCost = result[0].handPieceCost
+  data.restsCost = result[0].restsCost
+  data.travelExpense = result[0].travelExpense
 }
 
 onBeforeMount(async () => {
