@@ -24,7 +24,7 @@ import { getAuditFlowVersion, downloadFile, setTRMainSolutionState } from "./ser
 import getQuery from "@/utils/getQuery"
 import { ElMessage, ElMessageBox } from "element-plus"
 
-let { trCheckType } = getQuery()
+let { trCheckType, auditFlowId } = getQuery()
 
 // import { useRoute, useRouter } from "vue-router"
 /**
@@ -91,7 +91,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
-  let auditFlowId = window.sessionStorage.getItem("auditFlowId") || 5
+  // let auditFlowId = window.sessionStorage.getItem("auditFlowId") || 5
   let res: any = await getAuditFlowVersion(Number(auditFlowId))
   data.form.title = res.result.title
   trFileId = res.result.solutionFileIdentifier

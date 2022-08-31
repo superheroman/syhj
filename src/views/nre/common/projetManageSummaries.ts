@@ -66,3 +66,41 @@ export const getOtherCostSummaries = (param: RestsCostSummaryMethodProps) => {
 
   return sums
 }
+
+// 差旅费
+export const getTravelCostSummaries = (param: any) => {
+  const { columns, data } = param
+  const sums: string[] = []
+  columns.forEach((column: any, index: any) => {
+    if (index === 2) {
+      sums[index] = "费用合计/天"
+      return
+    }
+    if (index === 4) {
+      sums[index] = "费用合计"
+      return
+    }
+    const values = data.map((item: any) => Number(item.costSky))
+    if (!values.every((value: any) => Number.isNaN(value)) && index === 3) {
+      sums[index] = `¥ ${values.reduce((prev: any, curr: any) => {
+        if (!Number.isNaN(curr)) {
+          return prev + curr
+        } else {
+          return prev
+        }
+      }, 0)}`
+    }
+    const valuesC = data.map((item: any) => Number(item.cost))
+    if (!valuesC.every((value: any) => Number.isNaN(value)) && index === 5) {
+      sums[index] = `¥ ${valuesC.reduce((prev: any, curr: any) => {
+        if (!Number.isNaN(curr)) {
+          return prev + curr
+        } else {
+          return prev
+        }
+      }, 0)}`
+    }
+  })
+
+  return sums
+}

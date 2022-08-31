@@ -150,12 +150,15 @@ const saveNew = async (formEl: FormInstance | undefined) => {
 }
 
 const clickToPage = (row: any, scopeP: any) => {
-  window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
+  // window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
   productStore.setProductList(scopeP.row.auditFlowId) // 只在这里执行获取零件列表
+  let pathItem: any = urlMap[row.processIdentifier as keyof typeof urlMap]
   router.push({
-    path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
+    // path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
+    path: `${pathItem.path}`,
     query: {
-      auditFlowId: scopeP.row.auditFlowId
+      auditFlowId: scopeP.row.auditFlowId,
+      right: row.right
     }
   })
 }
@@ -180,7 +183,7 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let res: any = await getAllAuditFlowInfos()
-  // 待办
+  // 待办2
   if (res.result) {
     auditFlowIdInfoList.value = _.cloneDeep(res.result)
     auditFlowIdInfoList.value.forEach((item: any) => {
@@ -188,7 +191,7 @@ onMounted(async () => {
         return i.right === 2
       })
     })
-    // 已办
+    // 已办1
     auditFlowIdInfoListCheck.value = _.cloneDeep(res.result)
     auditFlowIdInfoListCheck.value.forEach((item: any) => {
       item.auditFlowRightDetailList = item.auditFlowRightDetailList.filter((i: any) => {

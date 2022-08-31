@@ -6,47 +6,36 @@ import { useRoute, useRouter } from "vue-router"
 // const reload: any = inject("reload")
 
 const route = useRoute()
-
 const router = useRouter()
-
 const productStore = useProductStore()
 const state = reactive({
   productId: "",
-  productList: productStore.productList,
   auditFlowId: ""
 })
 
 onMounted(async () => {
+  // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
   let { auditFlowId, productId } = getQuery()
-  console.log("onMounted")
-  state.auditFlowId = String(auditFlowId)
   if (auditFlowId) {
     await productStore.setProductList(Number(auditFlowId))
-    state.productList = productStore.productList
   }
   if (productId) {
+    //如url中存在productId则选中
     state.productId = String(productId)
-    console.log(state.productId)
   }
 })
 
 const emit = defineEmits(["change"])
 
 const handleChange = (productId: any) => {
-  console.log(productId)
+  let { query } = route
+  query.productId = productId
+  let newQuery = Object.assign({ productId }, { ...query })
   productStore.setProductId(productId)
   router.push({
     path: route.path,
-    query: {
-      auditFlowId: state.auditFlowId,
-      productId: productId
-    }
+    query: newQuery
   })
-  // window.history.replaceState(
-  //   { productId },
-  //   "",
-  //   `${route.path}?auditFlowId=${state.auditFlowId}&productId=${productId}`
-  // )
   emit("change")
 }
 </script>
@@ -56,7 +45,7 @@ const handleChange = (productId: any) => {
     <div>
       <h3 class="drawer-title">零件切换</h3>
       <el-radio-group v-model="state.productId" size="large" @change="handleChange">
-        <div style="margin-bottom: 10px" v-for="item in state.productList" :key="item.id">
+        <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
           <el-radio :label="item.id + ''" border>{{ item.product }}</el-radio>
         </div>
       </el-radio-group>

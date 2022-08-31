@@ -19,14 +19,10 @@ export const useProductStore = defineStore({
     async setProductList(id: number) {
       const res: any = await getProductByAuditFlowId(id)
       this.productList = res.result
-      // this.productId = res.result?.length > 0 ? res.result[0].id : ""
-      // if (this.productId) {
-      //   window.sessionStorage.setItem("productId", this.productId + "")
-      // }
     },
     setProductId(id: number | string) {
       this.productId = id
-      window.sessionStorage.setItem("productId", this.productId + "")
+      // window.sessionStorage.setItem("productId", this.productId + "")
     }
   }
 })

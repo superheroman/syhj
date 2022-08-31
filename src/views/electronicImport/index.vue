@@ -1,5 +1,6 @@
 <template>
   <div class="electronic-import">
+    <CustomerSpecificity />
     <div class="electronic-import__btn-container">
       <el-form :inline="true">
         <el-form-item label="">
@@ -66,6 +67,7 @@ import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
 import { SaveElectronicBom, DownloadFile } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
+import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 
 let auditFlowId = 1
 let productId = 1

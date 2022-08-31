@@ -1,5 +1,6 @@
 <template>
   <div class="bomView">
+    <CustomerSpecificity />
     <div class="bomView__child">
       <h4>结构料</h4>
       <!-- <el-button type="primary" @click="jumpToImport(2)" style="float: right; margin: 10px 0">结构料导入</el-button> -->
@@ -30,6 +31,8 @@
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRouter } from "vue-router"
+import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+
 import { GetStructionBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
 

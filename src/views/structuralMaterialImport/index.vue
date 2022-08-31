@@ -1,5 +1,6 @@
 <template>
   <div class="electronic-import">
+    <CustomerSpecificity />
     <div class="electronic-import__btn-container">
       <el-form :inline="true">
         <el-form-item label="">
@@ -126,6 +127,7 @@ import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
 import { SaveStructionBom, SaveBOM, getBomTemplate, SaveProductDevelopmentInput } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
+import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 
 let auditFlowId = 0
 let productId = 0

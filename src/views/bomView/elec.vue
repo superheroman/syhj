@@ -1,5 +1,6 @@
 <template>
   <div class="bomView">
+    <CustomerSpecificity />
     <div class="bomView__child">
       <h4>电子料</h4>
       <!-- <el-button type="primary" @click="jumpToImport(1)" style="float: right; margin: 10px 0">电子料导入</el-button> -->
@@ -25,7 +26,7 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRouter } from "vue-router"
 import { GetElectronicBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
-
+import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import getQuery from "@/utils/getQuery"
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
 

@@ -100,7 +100,14 @@
           <el-button type="primary" @click="addTravelCostData">新增</el-button>
         </el-row>
       </template>
-      <el-table :data="data.travelExpense" style="width: 100%" border height="300">
+      <el-table
+        :data="data.travelExpense"
+        style="width: 100%"
+        border
+        height="300"
+        show-summary
+        :summary-method="getTravelCostSummaries"
+      >
         <el-table-column type="index" width="50" />
         <el-table-column label="事由" width="150">
           <template #default="{ row }">
@@ -157,7 +164,11 @@
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.type"
 import { PostProjectManagement } from "./common/request"
-import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
+import {
+  getHandPieceCostSummaries,
+  getOtherCostSummaries,
+  getTravelCostSummaries
+} from "./common/projetManageSummaries"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import getQuery from "@/utils/getQuery"
 
