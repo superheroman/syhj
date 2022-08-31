@@ -206,7 +206,7 @@ import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage, ElMessageBox } from "element-plus"
 import debounce from "lodash/debounce"
 
-const { AuditFlowId = 1, ModelCountId = 1 }: any = getQuery()
+const { auditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
 
 let costChart: any = null
@@ -233,7 +233,7 @@ const data = reactive<Record<string, any>>({
 
 const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
   console.log(res)
-  let response: any = await addPricingPanelTrProgrammeId(AuditFlowId, res.result.fileId)
+  let response: any = await addPricingPanelTrProgrammeId(auditFlowId, res.result.fileId)
   if (response.success) {
     console.log(response, "response")
     console.log("上传成功")
@@ -291,7 +291,7 @@ const initChart = () => {
 const getPriceEvaluationTableInputCount = async () => {
   const {
     result: { items = [] }
-  }: any = await GetPriceEvaluationTableInputCount(AuditFlowId)
+  }: any = await GetPriceEvaluationTableInputCount(auditFlowId)
   data.priceEvaluationTableInputCount = items
   console.log(items, "getPriceEvaluationTableInputCount")
 }
@@ -305,7 +305,7 @@ const fetchOptionsData = async () => {
 // 核价看板-【产品选择】下拉框下拉数据
 const getPricingPanelProductSelectList = async () => {
   try {
-    const ProductSelectRes: any = await GetPricingPanelProductSelectList({ AuditFlowId })
+    const ProductSelectRes: any = await GetPricingPanelProductSelectList({ AuditFlowId: auditFlowId })
     data.productOptions = ProductSelectRes?.result?.items
   } catch (err: any) {
     console.log(err, "[ 获取下拉数据失败 ]")
@@ -315,7 +315,7 @@ const getPricingPanelProductSelectList = async () => {
 // 核价看板-[时间选择]下拉框下拉数据
 const getPricingPanelTimeSelectList = async () => {
   try {
-    const PanelTimeSelectRes: any = await GetPricingPanelTimeSelectList({ AuditFlowId })
+    const PanelTimeSelectRes: any = await GetPricingPanelTimeSelectList({ AuditFlowId: auditFlowId })
     data.yearsOptions = PanelTimeSelectRes?.result?.items
     data.year = data.yearsOptions[0].id
     console.log(data.year, data.yearsOptions[0].id, "getPricingPanelTimeSelectList")
@@ -330,7 +330,7 @@ const getBomCost = async () => {
     console.log(data.year, "getBomCost")
     const { result }: any = await GetBomCost({
       Year: data.year,
-      AuditFlowId,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     data.bomData = result || []
@@ -345,7 +345,7 @@ const getLossCost = async () => {
   try {
     const { result }: any = await GetLossCost({
       Year: data.year,
-      AuditFlowId,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     data.lossData = result || []
@@ -360,7 +360,7 @@ const getQualityCost = async () => {
   try {
     const { result }: any = await GetQualityCost({
       Year: data.year,
-      AuditFlowId,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     data.qualityData = [result] || []
@@ -374,7 +374,7 @@ const handleFetchPriceEvaluationTableDownload = async () => {
   try {
     const res: any = await PriceEvaluationTableDownload({
       Year: data.year,
-      AuditFlowId: 1,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
 
@@ -390,7 +390,7 @@ const handleFethNreTableDownload = async () => {
   try {
     const res: any = await NreTableDownload({
       Year: data.year,
-      AuditFlowId: 1,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     downloadFileExcel(res, "NRE核价表")
@@ -405,7 +405,7 @@ const getLogisticsCost = async () => {
   try {
     const { result }: any = await GetLogisticsCost({
       Year: data.year,
-      AuditFlowId: 1,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     data.logisticsData = result
@@ -420,7 +420,7 @@ const getManufacturingCost = async () => {
   try {
     const { result }: any = await GetManufacturingCost({
       Year: data.year,
-      AuditFlowId,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     data.manufactureData = result
@@ -435,7 +435,7 @@ const getPricingPanelProportionOfProductCost = async () => {
   try {
     const { result }: any = await GetPricingPanelProportionOfProductCost({
       Year: data.year,
-      AuditFlowId,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     const value = result?.items.map((val: any) => ({ value: val.proportion?.toFixed(2) || 0, name: val.name }))
@@ -459,7 +459,7 @@ const getPricingPanelProfit = async () => {
   try {
     const { result }: any = await GetPricingPanelProfit({
       Year: data.year,
-      AuditFlowId,
+      AuditFlowId: auditFlowId,
       ModelCountId
     })
     const val = result?.items?.map((val: any) => Math.floor(val.proportion))
@@ -483,7 +483,7 @@ const getPricingPanelProfit = async () => {
 const getGoTableChartData = async () => {
   const {
     result: { items = [] }
-  }: any = await GetGoTable({ AuditFlowId, ModelCountId, InputCount: data.productInputs })
+  }: any = await GetGoTable({ AuditFlowId: auditFlowId, ModelCountId, InputCount: data.productInputs })
   const value = items.map((item: any) => Math.floor(item.value)) || []
   const years = items.map((val: any) => val.year) || []
   selectCostChart = initCharts("selectCostChart", {
@@ -510,9 +510,9 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
   }).then(async () => {
     let res: any
     if (isAgree) {
-      res = await SetPriceBoardState(AuditFlowId, isAgree)
+      res = await SetPriceBoardState(auditFlowId, isAgree)
     } else {
-      res = await SetPriceBoardState(AuditFlowId, isAgree, checkList.value)
+      res = await SetPriceBoardState(auditFlowId, isAgree, checkList.value)
     }
     if (res.result.success) {
       ElMessage({
@@ -551,13 +551,13 @@ const handleChangeMode = () => {
 
 // 生成核价表
 const handleCreatePriceEvaluation = debounce(async () => {
-  await CreatePriceEvaluationTable(AuditFlowId)
+  await CreatePriceEvaluationTable(auditFlowId)
 }, 500)
 
 // 设置投入量和年份
 const handleSetPriceEvaluationTableInputCount = debounce(async () => {
   await SetPriceEvaluationTableInputCount({
-    auditFlowId: AuditFlowId,
+    auditFlowId,
     modelCountInputCount: data.priceEvaluationTableInputCount
   })
 }, 500)

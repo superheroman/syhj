@@ -1,7 +1,7 @@
 <template>
   <div class="margin-top">
     <el-card class="table-wrap" header="电子料单价录入界面">
-      <el-table :data="electronicBomList" style="width: 100%" height="500">
+      <el-table :data="electronicBomList" height="75vh">
         <el-table-column prop="categoryName" label="物料大类" width="180" />
         <el-table-column prop="typeName" label="物料种类" width="180" />
         <el-table-column prop="sapItemNum" label="物料编号" width="180" />
@@ -19,7 +19,20 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <!-- <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
+        <el-table-column prop="currency" label="币种" width="150">
+          <template #default="scope">
+            <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
+              <el-option
+                v-for="item in exchangeSelectOptions"
+                :key="item.id"
+                :label="item.exchangeRateKind"
+                :value="item.exchangeRateKind"
+              />
+            </el-select>
+            <!-- <el-input v-model="scope.row.currency" v-if="scope.row.isEdit" /> -->
+          </template>
+        </el-table-column>
+        <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
           <el-table-column
             v-for="(item, index) in allColums?.systemiginalCurrencyYears"
             :key="item"
@@ -31,7 +44,7 @@
               <span>{{ scope.row.systemiginalCurrency[index].value }}</span>
             </template>
           </el-table-column>
-        </el-table-column> -->
+        </el-table-column>
         <el-table-column prop="inTheRate" label="年降率">
           <el-table-column
             v-for="(item, index) in allColums?.inTheRateYears"
@@ -113,7 +126,7 @@
             <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
               修改
             </el-button>
-            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, 1)">取消</el-button>
+            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -135,6 +148,7 @@ import {
   PostElectronicMaterialEntering,
   PosToriginalCurrencyCalculate
 } from "./common/request"
+import { getExchangeRate } from "./../demandApply/service"
 import getQuery from "@/utils/getQuery"
 
 const { auditFlowId = 1 }: any = getQuery()
@@ -153,6 +167,15 @@ const allColums = reactive<any>({
   standardMoneyYears: [] // 本位币
 })
 
+const exchangeSelectOptions = ref<any>([])
+
+const fetchOptionsData = async () => {
+  const exchangeSelect: any = await getExchangeRate({
+    maxResultCount: 100,
+    skipCount: 0
+  })
+  exchangeSelectOptions.value = exchangeSelect.result.items || []
+}
 onBeforeMount(() => {
   console.log(store.userInfo, "store")
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
@@ -161,12 +184,12 @@ onBeforeMount(() => {
 onMounted(() => {
   console.log(electronicBomList.value, "electronicBomList")
   fetchInitData()
+  fetchOptionsData()
 })
 
 // 获取初始化数据
 const fetchInitData = async () => {
   try {
-    console.log(auditFlowId, "fetchInitData")
     const {
       success,
       result: { electronicBomList: tempData }

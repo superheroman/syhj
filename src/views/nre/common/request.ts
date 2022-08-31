@@ -142,3 +142,47 @@ export function GetPricingForm(data: { Id: number; productId: number }): any {
     data
   })
 }
+
+/**Nre项目管理部 获取版本录入过的值 */
+export function GetReturnProjectManagement(Id: number): any {
+  return request({
+    url: "/api/services/app/NrePricing/GetReturnProjectManagement",
+    method: "get",
+    data: {
+      Id
+    }
+  })
+}
+
+/**Nre 品保部=>试验项目 版本录入过的值 */
+export function GetReturnExperimentItems(Id: number): any {
+  return request({
+    url: "/api/services/app/NrePricing/GetReturnExperimentItems",
+    method: "get",
+    data: {
+      Id
+    }
+  })
+}
+
+/**Nre 品保部=>项目制程QC量检具 录入过的值 */
+export function GetReturnQcGauge(Id: number): any {
+  return request({
+    url: "/api/services/app/NrePricing/GetReturnQcGauge",
+    method: "get",
+    data: {
+      Id
+    }
+  })
+}
+
+/** Ner 营销部 录入过的值 */
+export function GetReturnInitialSalesDepartment(Id: number): any {
+  return request({
+    url: "/api/services/app/NrePricing/GetReturnInitialSalesDepartment",
+    method: "get",
+    data: {
+      Id
+    }
+  })
+}

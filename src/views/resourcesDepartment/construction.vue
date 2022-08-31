@@ -5,9 +5,9 @@
     </el-row>
     <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
       <el-card m="2" :header="item.superTypeName">
-        <el-table :data="item.structureMaterial" style="width: 100%" height="500">
+        <el-table :data="item.structureMaterial" height="500">
           <el-table-column label="bom">
-            <el-table-column type="index" label="序号" width="50" />
+            <el-table-column type="index" label="序号" width="80" />
             <el-table-column prop="categoryName" label="物料大类" width="150" />
             <el-table-column prop="typeName" label="物料种类" width="150" />
             <el-table-column prop="sapItemNum" label="物料编号" width="150" />
@@ -29,7 +29,6 @@
                     :value="item.exchangeRateKind"
                   />
                 </el-select>
-                <!-- <el-input v-model="scope.row.currency" v-if="scope.row.isEdit" /> -->
               </template>
             </el-table-column>
           </el-table-column>
@@ -135,7 +134,7 @@ import { ElMessage } from "element-plus"
 const store = useUserStore()
 
 console.log(store.userInfo, "store")
-const { auditFlowId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 // 结构料 - table数据
 const constructionBomList = ref<any>([])
@@ -188,9 +187,11 @@ const queryModlueNumber = () => {
   data.visiable = true
 }
 
+// 获取项目走量的数据
 const fetchModuleNumberData = async () => {
   const { result } = await GetProjectGoQuantity({ Id: auditFlowId })
-  data.modelCountYear = result
+  data.moduleNumberSop = result[0].modelCountYear
+  data.moduleNumber = result
 }
 
 // 确认结构料单价行数据
@@ -198,11 +199,10 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
   try {
     const { success, result } = await PostStructuralMemberEntering({
       isSubmit,
-      structuralMaterialEntering: [{ ...record, productId: 1 }],
+      structuralMaterialEntering: [{ ...record, productId }],
       auditFlowId
     })
     if (!success) throw Error()
-    record.peopleName = "admin"
     ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
     fetchInitData()
     console.log(result, "handleSubmit")
