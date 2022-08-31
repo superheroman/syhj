@@ -30,18 +30,6 @@ onMounted(async () => {
   }
 })
 
-// watch(
-//   () => state.productId,
-//   (productId) => {
-//     productStore.setProductId(productId)
-//     window.history.replaceState(
-//       { productId },
-//       "",
-//       `${route.path}?auditFlowId=${state.auditFlowId}&productId=${productId}`
-//     )
-//     reload()
-//   }
-// )
 const emit = defineEmits(["change"])
 
 const handleChange = (productId: any) => {
@@ -51,14 +39,14 @@ const handleChange = (productId: any) => {
     path: route.path,
     query: {
       auditFlowId: state.auditFlowId,
-      productId: state.productId
+      productId: productId
     }
   })
-  window.history.replaceState(
-    { productId },
-    "",
-    `${route.path}?auditFlowId=${state.auditFlowId}&productId=${productId}`
-  )
+  // window.history.replaceState(
+  //   { productId },
+  //   "",
+  //   `${route.path}?auditFlowId=${state.auditFlowId}&productId=${productId}`
+  // )
   emit("change")
 }
 </script>
