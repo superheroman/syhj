@@ -154,14 +154,12 @@
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column
-              label="人员数量"
-              prop="personnelNumber"
-              width="175"
-              :rules="[{ required: true, message: '请输入人员数量', trigger: 'change' }]"
-            >
+            <el-table-column label="人员数量" prop="personnelNumber" width="175">
               <template #default="{ row, $index }">
-                <el-form-item :prop="`tangent.${$index}.personnelNumber`">
+                <el-form-item
+                  :prop="`tangent.${$index}.personnelNumber`"
+                  :rules="[{ required: true, message: '请输入人员数量', trigger: 'change' }]"
+                >
                   <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
