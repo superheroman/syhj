@@ -169,7 +169,7 @@
           </el-table>
           <el-row align="middle" justify="end" style="margin-top: 20px">
             <el-button type="primary" @click="handleSaveTangentHours(tangentFormRef)">保存</el-button>
-            <el-button type="primary" @click="handleSubmit(tangentFormRef)">提交</el-button>
+            <el-button type="primary" :disabled="!data.isSaved" @click="handleSubmit(tangentFormRef)">提交</el-button>
           </el-row>
         </el-form>
       </el-card>
@@ -207,7 +207,8 @@ const data = reactive<any>({
   tangentForm: {
     tangent: [] // 根线/切线工时
   },
-  years: []
+  years: [],
+  isSaved: false
 })
 
 const tangentFormRef = ref<FormInstance>()
@@ -289,26 +290,27 @@ const handleSubmit = async (formEl: FormInstance | undefined) => {
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
-  // 获取年份
-  let { result } = (await getYears(auditFlowId)) as any
-  if (!result.length) return
-  data.years = result
-  data.tangentForm.tangent = result.map((year: any) => {
-    return {
-      year,
-      laborTime: null,
-      machineHours: null,
-      personnelNumber: null
-    }
-  })
-  console.log(data.tangentForm, "data.tangent")
 })
 
 const getAllSop = async () => {
-  // data.tangent = result.map((item: number) => ({ laborTime: 0, machineHours: 0, personnelNumber: 0, year: item }))
-
-  let { result } = await getTangentHoursList(auditFlowId, productId)
-  data.tangentForm.tangent = result?.tangentHoursDetailList || []
+  const {
+    result: { tangentHoursDetailList = [] }
+  }: any = await getTangentHoursList(auditFlowId, productId)
+  if (!tangentHoursDetailList.length) {
+    // 获取年份
+    const { result = [] } = (await getYears(auditFlowId)) as any
+    data.tangentForm.tangent =
+      result?.map((item: any) => ({
+        year: item,
+        laborTime: null,
+        machineHours: null,
+        personnelNumber: null
+      })) || []
+    data.isSaved = false
+    return
+  }
+  data.isSaved = true
+  data.tangentForm.tangent = tangentHoursDetailList || []
 }
 
 // 保存切线工时
@@ -320,7 +322,7 @@ const handleSaveTangentHours = async (formEl: any) => {
           uph: Number(data.uph || 0),
           auditFlowId,
           productId,
-          tangentHoursDetailList: data.tangent
+          tangentHoursDetailList: data.tangentForm.tangent
         })
         if (!success) throw Error()
         ElMessage.success("请求成功！")
