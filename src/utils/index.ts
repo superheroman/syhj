@@ -24,3 +24,24 @@ export const downloadFileExcel = (res: any, fileName: string) => {
     a.remove() //将a标签移除
   }
 }
+
+// 获取参数
+export function getQueryParam(key: string) {
+  if (!key) {
+    return false
+  }
+
+  let value = ""
+  const paramStr = window.location.search ? window.location.search.substr(1) : ""
+
+  if (paramStr) {
+    paramStr.split("&").forEach(function (param) {
+      const arr = param.split("=")
+      if (arr[0] == key) {
+        value = arr[1]
+      }
+    })
+  }
+
+  return value
+}

@@ -4,7 +4,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           手板件费用
-          <el-button type="primary" @click="addHandboardCost">新增</el-button>
+          <el-button type="primary" @click="addHandboardCost" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -58,7 +58,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           其它费用
-          <el-button type="primary" @click="addOtherCostData">新增</el-button>
+          <el-button type="primary" @click="addOtherCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -97,7 +97,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           差旅费
-          <el-button type="primary" @click="addTravelCostData">新增</el-button>
+          <el-button type="primary" @click="addTravelCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -155,7 +155,7 @@
     </el-card>
 
     <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
   </div>
 </template>
