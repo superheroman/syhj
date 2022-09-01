@@ -83,6 +83,7 @@
           <template #default="scope">
             <el-button link @click="handleSubmit(scope.row, 0)" type="danger" v-havedone>确认</el-button>
             <el-button
+              v-if="scope.row.isEntering"
               :disabled="scope.row.isSubmit"
               link
               @click="handleSubmit(scope.row, 1)"

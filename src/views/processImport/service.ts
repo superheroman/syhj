@@ -40,7 +40,7 @@ export function getTangentHoursList(auditFlowId: number, productId: number): any
 export function SubmitWorkingHourAndSwitchLine(auditFlowId: number): any {
   return request({
     url: "/api/services/app/WorkingHours/SubmitWorkingHourAndSwitchLine",
-    method: "get",
+    method: "post",
     data: {
       auditFlowId
     }
