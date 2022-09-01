@@ -135,22 +135,22 @@
           <el-table :data="data.tangent" height="500">
             <el-table-column label="年份" prop="year" />
             <el-table-column label="人工工时" prop="`laborTime`" width="175">
-              <template #default="{ row }">
-                <el-form-item :prop="`laborTime.${row.$index}.laborTime`" :rules="[{ required: true }]">
+              <template #default="{ row, $index }">
+                <el-form-item :prop="`laborTime.${$index}.laborTime`">
                   <el-input-number v-model="row.laborTime" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column label="标准机器工时" prop="machineHours" width="175">
-              <template #default="{ row }">
-                <el-form-item :prop="`laborTime.${row.$index}.machineHours`" :rules="[{ required: true }]">
+              <template #default="{ row, $index }">
+                <el-form-item :prop="`laborTime.${$index}.machineHours`">
                   <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column label="人员数量" prop="personnelNumber" width="175">
-              <template #default="{ row }">
-                <el-form-item :prop="`laborTime.${row.$index}.personnelNumber`" :rules="[{ required: true }]">
+              <template #default="{ row, $index }">
+                <el-form-item :prop="`laborTime.${$index}.personnelNumber`">
                   <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
