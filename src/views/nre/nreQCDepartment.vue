@@ -4,15 +4,15 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           项目制程QC量检具
-          <el-button type="primary" @click="addQaqcDepartmentsData">新增</el-button>
+          <el-button type="primary" @click="addQaqcDepartmentsData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
         :data="data.qaqcDepartments"
-        style="width: 100%"
         border
         :summary-method="getQaqcDepartmentsSummaries"
         show-summary
+        height="72vh"
       >
         <el-table-column type="index" width="50" />
         <el-table-column label="项目制程QC量检具" width="180">
@@ -48,36 +48,32 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template #default="{ $index }">
-            <el-button @click="deleteQaqcDepartmentsData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteQaqcDepartmentsData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
+        <div style="float: right; margin: 20px 0">
+          <el-button type="primary" @click="submit" v-havedone>提交</el-button>
+        </div>
       </el-table>
     </el-card>
-
-    <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { QADepartmentTestModel } from "./data.type"
 import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
-import { PostQADepartment } from "./common/request"
+import { PostQADepartment, GetReturnQcGauge } from "./common/request"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 /**
  * 数据部分
  */
 const data = reactive<{
-  qaTestDepartments: QADepartmentTestModel[]
   qaqcDepartments: any
 }>({
-  qaTestDepartments: [],
   qaqcDepartments: []
 })
 
@@ -100,15 +96,13 @@ const submit = async () => {
   try {
     const { success } = await PostQADepartment({
       auditFlowId,
-      qcGaugeDtoModels: [
-        {
-          productId,
-          qaqcDepartments: data.qaqcDepartments.map((item: any) => ({
-            ...item,
-            allCost: (item.unitPrice || 0) * (item.count || 0)
-          }))
-        }
-      ]
+      qcGaugeDtoModel: {
+        productId,
+        qaqcDepartments: data.qaqcDepartments.map((item: any) => ({
+          ...item,
+          allCost: (item.unitPrice || 0) * (item.count || 0)
+        }))
+      }
     })
     if (!success) throw Error()
     ElMessage.success("提交成功")
@@ -116,12 +110,17 @@ const submit = async () => {
     ElMessage.error("提交失败")
   }
 }
+const initFetch = async () => {
+  const { result } = await GetReturnQcGauge(auditFlowId, productId)
+  data.qaqcDepartments = result?.qaqcDepartments || []
+}
 
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
 onMounted(() => {
+  initFetch()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 

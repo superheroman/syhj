@@ -3,100 +3,105 @@
     <el-row justify="end">
       <el-button m="2" type="primary" @click="queryModlueNumber">查看项目走量</el-button>
     </el-row>
-    <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
-      <el-card m="2" :header="item.superTypeName">
-        <el-table :data="item.structureMaterial" height="500">
-          <el-table-column label="bom">
-            <el-table-column type="index" label="序号" width="80" />
-            <el-table-column prop="categoryName" label="物料大类" width="150" />
-            <el-table-column prop="typeName" label="物料种类" width="150" />
-            <el-table-column prop="sapItemNum" label="物料编号" width="150" />
-            <el-table-column prop="drawingNumName" label="图号名称" width="150" />
-            <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
-            <el-table-column prop="sapItemName" label="材料" width="150" />
-            <el-table-column prop="weightNumber" label="重量g" width="150" />
-            <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
-            <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
-            <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
-            <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
-            <el-table-column prop="currency" label="币种" width="150">
-              <template #default="scope">
-                <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
-                  <el-option
-                    v-for="item in exchangeSelectOptions"
-                    :key="item.id"
-                    :label="item.exchangeRateKind"
-                    :value="item.exchangeRateKind"
-                  />
-                </el-select>
-              </template>
-            </el-table-column>
+    <el-card m="2">
+      <el-table :data="constructionBomList" height="72vh">
+        <el-table-column label="bom">
+          <el-table-column type="index" label="序号" width="80" />
+          <el-table-column prop="categoryName" label="物料大类" width="150" />
+          <el-table-column prop="typeName" label="物料种类" width="150" />
+          <el-table-column prop="sapItemNum" label="物料编号" width="150" />
+          <el-table-column prop="drawingNumName" label="图号名称" width="150" />
+          <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
+          <el-table-column prop="sapItemName" label="材料" width="150" />
+          <el-table-column prop="weightNumber" label="重量g" width="150" />
+          <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
+          <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
+          <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
+          <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
+          <el-table-column prop="currency" label="币种" width="150">
+            <template #default="scope">
+              <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
+                <el-option
+                  v-for="item in exchangeSelectOptions"
+                  :key="item.id"
+                  :label="item.exchangeRateKind"
+                  :value="item.exchangeRateKind"
+                />
+              </el-select>
+            </template>
           </el-table-column>
-          <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
+        </el-table-column>
+        <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
               <el-input v-if="scope.row.isEdit" v-model="scope.row.materialsSystemPrice" />
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-          <el-table-column prop="iginalCurrency" label="原币">
-            <el-table-column
-              v-for="(item, iginalCurrencyIndex) in data?.sop"
-              :key="`construction-iginalCurrency${item}`"
-              :label="`${item?.toString()}`"
-              :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
-              width="180"
-            >
-              <template #default="scope">
-                <el-input-number
-                  v-if="scope.row.isEdit"
-                  v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
-                  controls-position="right"
-                  :min="0"
-                  @blur="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
-                />
-                <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
-              </template>
-            </el-table-column>
-          </el-table-column>
-          <el-table-column prop="standardMoney" label="本位币">
-            <el-table-column
-              v-for="(item, index) in data?.sop"
-              :key="`construction-standardMoney${item}`"
-              :label="`${item?.toString()}`"
-              :prop="`standardMoney[${index}].value`"
-              width="180"
-            />
-          </el-table-column>
-          <el-table-column prop="moq" label="MOQ" width="180">
-            <template #default="{ row }">
-              <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
-              <span v-if="!row.isEdit">{{ row.moq }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
-            <template #default="{ row }">
-              <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" controls-position="right" :min="0" />
-              <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="peopleName" label="确认人" />
-          <el-table-column label="操作" fixed="right" width="200">
+        <el-table-column prop="iginalCurrency" label="原币">
+          <el-table-column
+            v-for="(item, iginalCurrencyIndex) in data?.sop"
+            :key="`construction-iginalCurrency${item}`"
+            :label="`${item?.toString()}`"
+            :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
+            width="180"
+          >
             <template #default="scope">
-              <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
-              <el-button :disabled="scope.row.isSubmit" link @click="handleSubmit(scope.row, 1)" type="warning">
-                提交
-              </el-button>
-              <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
-                修改
-              </el-button>
-              <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
+              <el-input-number
+                v-if="scope.row.isEdit"
+                v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
+                controls-position="right"
+                :min="0"
+                @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
+              />
+              <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
             </template>
           </el-table-column>
-        </el-table>
-      </el-card>
-    </div>
+        </el-table-column>
+        <el-table-column prop="standardMoney" label="本位币">
+          <el-table-column
+            v-for="(item, index) in data?.sop"
+            :key="`construction-standardMoney${item}`"
+            :label="`${item?.toString()}`"
+            :prop="`standardMoney[${index}].value`"
+            width="180"
+          />
+        </el-table-column>
+        <el-table-column prop="moq" label="MOQ" width="180">
+          <template #default="{ row }">
+            <el-input-number v-if="row.isEdit" v-model="row.moq" controls-position="right" :min="0" />
+            <span v-if="!row.isEdit">{{ row.moq }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="rebateMoney" label="物料返利金额" width="180">
+          <template #default="{ row }">
+            <el-input-number v-if="row.isEdit" v-model="row.rebateMoney" controls-position="right" :min="0" />
+            <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column prop="peopleName" label="确认人" />
+        <el-table-column label="操作" fixed="right" width="200">
+          <template #default="scope">
+            <el-button link @click="handleSubmit(scope.row, 0)" type="danger" v-havedone>确认</el-button>
+            <el-button
+              v-if="scope.row.isEntering"
+              :disabled="scope.row.isSubmit"
+              link
+              @click="handleSubmit(scope.row, 1)"
+              type="warning"
+              v-havedone
+            >
+              提交
+            </el-button>
+            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary" v-havedone>
+              修改
+            </el-button>
+            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)" v-havedone>取消</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
     <el-dialog v-model="data.visiable" title="项目走量">
-      <el-table :data="data.moduleNumber" style="width: 100%" height="500">
+      <el-table :data="data.moduleNumber" height="500">
         <el-table-column prop="productName" label="产品" width="150" />
         <el-table-column prop="productTypeName" label="产品小类" width="150" />
         <!-- <el-table-column prop="marketShare" label="市场份额" width="150" />
@@ -218,12 +223,12 @@ const fetchSopYear = async () => {
 }
 
 // 根据原币计算
-const handleCalculationIginalCurrency = async (row: any, bomIndex: number, iginalCurrencyIndex: number) => {
+const handleCalculationIginalCurrency = async (row: any, iginalCurrencyIndex: number) => {
   try {
-    const { success, result } = await ToriginalCurrencyStructural([row])
+    const { success, result } = await ToriginalCurrencyStructural(row)
     if (!success && !result.length) throw Error()
     const res = { ...(result[0] || {}), isEdit: true }
-    constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex] = res
+    constructionBomList.value.structureMaterial[iginalCurrencyIndex] = res
   } catch (err) {
     console.log
     ElMessage.error("计算失败~")

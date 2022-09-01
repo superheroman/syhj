@@ -312,29 +312,29 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         }
       },
       {
-        path: "/nre/engineeringDepartment",
-        component: () => import("@/views/nre/engineeringDepartment.vue"),
-        name: "engineeringDepartment",
-        meta: {
-          title: "工程部nre"
-        }
-      },
-      {
         path: "/nre/nrePricelist",
         component: () => import("@/views/nre/nrePricelist.vue"),
         name: "nrePricelist",
         meta: {
           title: "核价表nre"
         }
-      },
-      {
-        path: "/nre/costInformation",
-        component: () => import("@/views/nre/costInformation.vue"),
-        name: "costInformation",
-        meta: {
-          title: "成本信息表"
-        }
       }
+      // {
+      //   path: "/nre/engineeringDepartment",
+      //   component: () => import("@/views/nre/engineeringDepartment.vue"),
+      //   name: "engineeringDepartment",
+      //   meta: {
+      //     title: "工程部nre"
+      //   }
+      // },
+      // {
+      //   path: "/nre/costInformation",
+      //   component: () => import("@/views/nre/costInformation.vue"),
+      //   name: "costInformation",
+      //   meta: {
+      //     title: "成本信息表"
+      //   }
+      // }
     ]
   },
   {
@@ -635,10 +635,10 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       {
         path: "/versionManagement/operationRecord",
         component: () => import("@/views/versionManagement/operationRecord.vue"),
-        name: "operationRecord",
-        meta: {
-          title: "时效性管理"
-        }
+        name: "operationRecord"
+        // meta: {
+        //   title: "时效性管理",
+        // }
       },
       {
         path: "/versionManagement/reportQuery",
@@ -646,6 +646,21 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         name: "reportQuery",
         meta: {
           title: "报表查询"
+        }
+      }
+    ]
+  },
+  {
+    path: "/archive",
+    redirect: "/archive/index",
+    component: Layout,
+    children: [
+      {
+        path: "/archive/index",
+        component: () => import("@/views/archive/index.vue"),
+        name: "archive",
+        meta: {
+          title: "归档"
         }
       }
     ]

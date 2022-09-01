@@ -1,5 +1,5 @@
 import { useRoute } from "vue-router"
-function getQuery() {
+function getQuery(): any {
   const route = useRoute()
   // const { auditFlowId, productId } = route.query
   // const query = {

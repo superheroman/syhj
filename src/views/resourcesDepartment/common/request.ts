@@ -2,18 +2,18 @@ import { request } from "@/utils/service"
 import { ElectronicDto, ConstructionModel } from "../data.type"
 
 // 资源部输入时,加载电子料结构件初始值
-export function GetElectronic(data: { id: number }): any {
+export function GetElectronic(auditFlowId: number, productId: number): any {
   return request({
-    url: "/api/services/app/ResourceEntering/GetElectronic",
+    url: "/api/services/app/ResourceEntering/GetElectronicSingle",
     method: "get",
-    data
+    data: { auditFlowId, productId }
   })
 }
 
 // 计算电子料单价录入 根据汇率计算
 export function PostElectronicMaterialCalculate(data: ElectronicDto[]): any {
   return request({
-    url: "/api/services/app/ResourceEntering/PostElectronicMaterialCalculate",
+    url: "/api/services/app/ResourceEntering/PostElectronicMaterialCalculateSingle",
     method: "post",
     data
   })
@@ -22,7 +22,7 @@ export function PostElectronicMaterialCalculate(data: ElectronicDto[]): any {
 // 计算电子料单价录入 根据原币计算
 export function PosToriginalCurrencyCalculate(data: ElectronicDto[]): any {
   return request({
-    url: "/api/services/app/ResourceEntering/PosToriginalCurrencyCalculate",
+    url: "/api/services/app/ResourceEntering/PosToriginalCurrencyCalculateSingle",
     method: "post",
     data
   })
@@ -44,7 +44,7 @@ export function PostElectronicMaterialEntering(data: {
 // 资源部输入时,加载结构料初始值
 export function GetStructural(data: { id: number }): any {
   return request({
-    url: "/api/services/app/ResourceEntering/GetStructural",
+    url: "/api/services/app/ResourceEntering/GetStructuralSingle",
     method: "get",
     data
   })
@@ -64,9 +64,9 @@ export function PostStructuralMemberEntering(data: {
 }
 
 // 计算结构料单价录入 ==>根据原币计算
-export function ToriginalCurrencyStructural(data: ElectronicDto[]): any {
+export function ToriginalCurrencyStructural(data: ElectronicDto): any {
   return request({
-    url: "/api/services/app/ElectronicStructuralMethod/ToriginalCurrencyStructural",
+    url: "/api/services/app/ResourceEntering/PosToriginalCurrencyStructuralSingle",
     method: "post",
     data
   })
@@ -77,15 +77,6 @@ export function GetProjectGoQuantity(data: { Id: number }): any {
   return request({
     url: "/api/services/app/ResourceEntering/GetProjectGoQuantity",
     method: "get",
-    data
-  })
-}
-
-// Bom审核
-export function SetBomState(data: { auditFlowId: number; bomCheckType: number; isAgree: boolean }): any {
-  return request({
-    url: "/api/services/app/BomCheck/SetBomState",
-    method: "post",
     data
   })
 }

@@ -25,42 +25,39 @@
     </el-card>
 
     <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
-import { GetInitialSalesDepartment, PostSalesDepartment } from "./common/request"
+import { GetInitialSalesDepartment, PostSalesDepartment, GetReturnInitialSalesDepartment } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { NreMarketingDepartmentModel } from "./data.type"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
 
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, right = 1 }: any = getQuery()
 
 const mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
 
 const initFetch = async () => {
-  try {
-    const { success, result } = await GetInitialSalesDepartment({ id: auditFlowId, productId })
-    if (!success) throw Error()
-    console.log(result, "result")
-    mouldInventoryData.value = result
-  } catch (err) {
-    console.log(err, "GetInitialSalesDepartment result")
-  }
+  const { result } = await GetInitialSalesDepartment(auditFlowId)
+  console.log(result, "result")
+  mouldInventoryData.value = result
+}
+
+const queryDoneData = async () => {
+  const { result } = await GetReturnInitialSalesDepartment(auditFlowId)
+  console.log(result, "result")
+  mouldInventoryData.value = result
 }
 
 const submit = async () => {
-  try {
-    const { success } = await PostSalesDepartment(mouldInventoryData.value)
-    if (!success) throw Error()
-    ElMessage.success("提交成功~")
-  } catch (err) {
-    console.log(err, "[ PostSalesDepartment ERROR ]")
-  }
+  const { success } = await PostSalesDepartment(mouldInventoryData.value)
+  if (!success) throw Error()
+  ElMessage.success("提交成功~")
 }
 
 onBeforeMount(() => {
@@ -69,7 +66,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
-  initFetch()
+  right === 1 ? queryDoneData() : initFetch()
 })
 
 watchEffect(() => {})

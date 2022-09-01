@@ -4,7 +4,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           工装类
-          <el-button type="primary" @click="addHandboardCost">新增</el-button>
+          <el-button type="primary" @click="addHandboardCost" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -48,7 +48,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deletehandboardCost($index)" type="danger">删除</el-button>
+            <el-button @click="deletehandboardCost($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,7 +58,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           治具类
-          <el-button type="primary" @click="addOtherCostData">新增</el-button>
+          <el-button type="primary" @click="addOtherCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -87,7 +87,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteOtherCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteOtherCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -97,7 +97,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           软件类
-          <el-button type="primary" @click="addTravelCostData">新增</el-button>
+          <el-button type="primary" @click="addTravelCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table :data="data.travelExpense" style="width: 100%" border height="300">
@@ -134,7 +134,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteTravelCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteTravelCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -144,7 +144,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           生产设备
-          <el-button type="primary" @click="addTravelCostData">新增</el-button>
+          <el-button type="primary" @click="addTravelCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table :data="data.travelExpense" style="width: 100%" border height="300">
@@ -181,14 +181,14 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteTravelCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteTravelCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
     <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
   </div>
 </template>
@@ -196,14 +196,16 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.type"
-import { PostProjectManagement } from "./common/request"
+import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
+import getQuery from "@/utils/getQuery"
 
+const { auditFlowId = 1, productId = 1 } = getQuery()
 /**
  * 数据部分
  */
 const data = reactive({
-  handPieceCost: [{ partName: "", partNumber: "", unitPrice: 1, quantity: 4, cost: 4 }] as HandPieceCostModel[],
+  handPieceCost: [] as HandPieceCostModel[],
   restsCost: [] as RestsCostModel[],
   travelExpense: [] as TravelExpenseModel[]
 })
@@ -235,19 +237,17 @@ const addTravelCostData = () => {
 const submit = async () => {
   try {
     const res = await PostProjectManagement({
-      projectManagements: [
-        {
-          ...data,
-          handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
-            return {
-              ...item,
-              cost: (item.unitPrice || 0) * (item.quantity || 0)
-            }
-          }),
-          productId: 123
-        }
-      ],
-      auditFlowId: 111
+      projectManagement: {
+        ...data,
+        handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
+          return {
+            ...item,
+            cost: (item.unitPrice || 0) * (item.quantity || 0)
+          }
+        }),
+        productId
+      },
+      auditFlowId
     })
     console.log(res, "RES")
   } catch (err) {
@@ -255,12 +255,24 @@ const submit = async () => {
   }
 }
 
+const initFetch = async () => {
+  const { result } = await GetReturnProjectManagement(productId, auditFlowId)
+  if (!result) return
+  const { handPieceCost, restsCost, travelExpense } = result || {}
+  data.handPieceCost = handPieceCost || []
+  data.restsCost = restsCost || []
+  data.travelExpense = travelExpense || []
+}
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
+
 onMounted(() => {
+  initFetch()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
+
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">

@@ -132,25 +132,36 @@
         <el-row align="middle" style="width: 350px; flex-wrap: nowrap">UPH值:</el-row>
         <el-input style="width: 180px" class="m-2" v-model="data.uph" type="number" placeholder="请输入UPH值" />
         <el-form :model="data.tangentForm" ref="tangentFormRef">
-          <el-table :data="data.tangent" height="500">
+          <el-table :data="data.tangentForm.tangent" height="500">
             <el-table-column label="年份" prop="year" />
             <el-table-column label="人工工时" prop="`laborTime`" width="175">
               <template #default="{ row, $index }">
-                <el-form-item :prop="`laborTime.${$index}.laborTime`">
+                <el-form-item
+                  :prop="`tangent.${$index}.laborTime`"
+                  :rules="[{ required: true, message: '请输入人工工时', trigger: 'change' }]"
+                >
                   <el-input-number v-model="row.laborTime" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
             <el-table-column label="标准机器工时" prop="machineHours" width="175">
               <template #default="{ row, $index }">
-                <el-form-item :prop="`laborTime.${$index}.machineHours`">
+                <el-form-item
+                  :prop="`tangent.${$index}.machineHours`"
+                  :rules="[{ required: true, message: '请输入标准机器工时', trigger: 'change' }]"
+                >
                   <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="人员数量" prop="personnelNumber" width="175">
+            <el-table-column
+              label="人员数量"
+              prop="personnelNumber"
+              width="175"
+              :rules="[{ required: true, message: '请输入人员数量', trigger: 'change' }]"
+            >
               <template #default="{ row, $index }">
-                <el-form-item :prop="`laborTime.${$index}.personnelNumber`">
+                <el-form-item :prop="`tangent.${$index}.personnelNumber`">
                   <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
@@ -192,9 +203,10 @@ const data = reactive<any>({
   equipmentPart: { equipmentDetails: [] }, // 设备部分
   humanMachineHoursDetailList: [],
   sop: [],
-  tangent: [], // 根线/切线工时
   uph: null,
-  tangentForm: {},
+  tangentForm: {
+    tangent: [] // 根线/切线工时
+  },
   years: []
 })
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
@@ -202,7 +214,7 @@ const data = reactive<any>({
 // }
 const tangentFormRef = ref<FormInstance>()
 
-const formatterArr = (key: string, childKey = "equipmentDetails") => {
+const formatterArr = (key: string, childKey: any = "equipmentDetails") => {
   return Math.max.apply(
     null,
     data.tableData.map((item: any) => {
@@ -265,9 +277,15 @@ const handleSaveWorkingHour = async () => {
   }
 }
 
-const handleSubmit = async () => {
-  await SubmitWorkingHourAndSwitchLine(auditFlowId)
-  ElMessage.success("提交成功！")
+const handleSubmit = async (formEl: FormInstance | undefined) => {
+  await formEl?.validate(async (valid) => {
+    if (valid) {
+      await SubmitWorkingHourAndSwitchLine(auditFlowId)
+      ElMessage.success("提交成功！")
+    } else {
+      ElMessage.error("请填写正确数据！")
+    }
+  })
 }
 
 onMounted(async () => {
@@ -275,15 +293,17 @@ onMounted(async () => {
   getAllSop()
   // 获取年份
   let { result } = (await getYears(auditFlowId)) as any
+  if (!result.length) return
   data.years = result
-  data.tangent = result.map((year: any) => {
+  data.tangentForm.tangent = result.map((year: any) => {
     return {
       year,
-      laborTime: "",
-      machineHours: "",
-      personnelNumber: ""
+      laborTime: null,
+      machineHours: null,
+      personnelNumber: null
     }
   })
+  console.log(data.tangentForm, "data.tangent")
 })
 
 const getAllSop = async () => {

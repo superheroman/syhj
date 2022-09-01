@@ -16,10 +16,10 @@ export function PostProjectManagement(data: {
   /**
    * Nre核价 项目管理部 实体
    */
-  projectManagements?: ProjectManagementModel[] | null
+  projectManagement?: ProjectManagementModel | null
 }): any {
   return request({
-    url: "/api/services/app/NrePricing/PostProjectManagement",
+    url: "/api/services/app/NrePricing/PostProjectManagementSingle",
     method: "post",
     data
   })
@@ -34,19 +34,19 @@ export function PostProductDepartment(data: {
   /**
    * 实验费 实体类
    */
-  productDepartmentModels?: ProductDepartmentModel[] | null
+  productDepartmentModel?: ProductDepartmentModel | null
 }): any {
   return request({
-    url: "/api/services/app/NrePricing/PostProductDepartment",
+    url: "/api/services/app/NrePricing/PostProductDepartmentSingle",
     method: "post",
     data
   })
 }
 
-// 品保部 录入
+// Nre 品保部=>项目制程QC量检具 录入(单个零件)
 export function PostQADepartment(data: any): any {
   return request({
-    url: "/api/services/app/NrePricing/PostQcGauge",
+    url: "/api/services/app/NrePricing/PostQcGaugeSingle",
     method: "post",
     data
   })
@@ -61,10 +61,10 @@ export function PostExperimentItems(data: {
   /**
    * 带零件id 的 品保录入模型
    */
-  experimentItems?: ExperimentItemsModel[] | null
+  experimentItem?: ExperimentItemsModel | null
 }): any {
   return request({
-    url: "/api/services/app/NrePricing/PostExperimentItems",
+    url: "/api/services/app/NrePricing/PostExperimentItemsSingle",
     method: "post",
     data
   })
@@ -79,48 +79,51 @@ export function PostResourcesManagement(data: {
   /**
    * Nre核价  资源部录入 实体
    */
-  resourcesManagementModels?: ResourcesManagementModel[] | null
+  resourcesManagementModel?: ResourcesManagementModel | null
 }): any {
   return request({
-    url: "/api/services/app/NrePricing/PostResourcesManagement",
+    url: "/api/services/app/NrePricing/PostResourcesManagementSingle",
     method: "post",
     data
   })
 }
 
 // 资源部录入初始值
-export function GetInitialResourcesManagement(data: { id: number }): any {
+export function GetInitialResourcesManagement(auditFlowId: number, productId: number): any {
   return request({
-    url: "/api/services/app/NrePricing/GetInitialResourcesManagement",
+    url: "/api/services/app/NrePricing/GetInitialResourcesManagementSingle",
     method: "get",
-    data
+    data: {
+      auditFlowId,
+      productId
+    }
   })
 }
 
 // 计算 模具清单的 数量以及费用
 export function PostCalculateMouldInventory(data: {
   /**
-   * 流程Id
+   * 零件Id
    */
-  auditFlowId?: number
+  productId?: number
   /**
    * Nre核价  资源部录入 实体
    */
-  resourcesManagementModels?: ResourcesManagementModel[] | null
+  mouldInventory?: ResourcesManagementModel | null
 }): any {
   return request({
-    url: "/api/services/app/NrePricing/PostCalculateMouldInventory",
+    url: "/api/services/app/NrePricing/PostCalculateMouldInventorySingle",
     method: "post",
     data
   })
 }
 
 // Ner 营销部录入初始值
-export function GetInitialSalesDepartment(data: { Id: number; productId: number }): any {
+export function GetInitialSalesDepartment(Id: number): any {
   return request({
     url: "/api/services/app/NrePricing/GetInitialSalesDepartment",
     method: "get",
-    data
+    data: { Id }
   })
 }
 
@@ -133,7 +136,7 @@ export function PostSalesDepartment(data: NreMarketingDepartmentModel[]): any {
   })
 }
 
-/**NRE费用模块 */
+/**NRE 核价表 */
 
 export function GetPricingForm(data: { Id: number; productId: number }): any {
   return request({
@@ -143,40 +146,43 @@ export function GetPricingForm(data: { Id: number; productId: number }): any {
   })
 }
 
-/**Nre项目管理部 获取版本录入过的值 */
-export function GetReturnProjectManagement(Id: number): any {
+// Nre项目管理部 获取版本录入过的值
+export function GetReturnProjectManagement(auditFlowId: number, productId: number): any {
   return request({
-    url: "/api/services/app/NrePricing/GetReturnProjectManagement",
+    url: "/api/services/app/NrePricing/GetReturnProjectManagementSingle",
     method: "get",
     data: {
-      Id
+      auditFlowId,
+      productId
     }
   })
 }
 
-/**Nre 品保部=>试验项目 版本录入过的值 */
-export function GetReturnExperimentItems(Id: number): any {
+// Nre项目管理部 获取版本录入过的值
+export function GetReturnExperimentItems(auditFlowId: number, productId: number): any {
   return request({
-    url: "/api/services/app/NrePricing/GetReturnExperimentItems",
+    url: "/api/services/app/NrePricing/GetReturnExperimentItemsSingle",
     method: "get",
     data: {
-      Id
+      auditFlowId,
+      productId
     }
   })
 }
 
-/**Nre 品保部=>项目制程QC量检具 录入过的值 */
-export function GetReturnQcGauge(Id: number): any {
+// Nre 品保部=>项目制程QC量检具 录入过的值(单个零件)
+export function GetReturnQcGauge(auditFlowId: number, productId: number): any {
   return request({
-    url: "/api/services/app/NrePricing/GetReturnQcGauge",
+    url: "/api/services/app/NrePricing/GetReturnQcGaugeSingle",
     method: "get",
     data: {
-      Id
+      auditFlowId,
+      productId
     }
   })
 }
 
-/** Ner 营销部 录入过的值 */
+// Ner 营销部 录入过的值
 export function GetReturnInitialSalesDepartment(Id: number): any {
   return request({
     url: "/api/services/app/NrePricing/GetReturnInitialSalesDepartment",
