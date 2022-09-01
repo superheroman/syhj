@@ -22,8 +22,8 @@ const state = reactive({
   codeUrl: "",
   /** 登录表单 */
   loginForm: {
-    userNameOrEmailAddress: "admin",
-    password: "123qwe"
+    userNameOrEmailAddress: "601218",
+    password: "123456"
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
@@ -129,9 +129,9 @@ const formLabelWidth = "100px"
           <el-button :loading="state.loading" type="primary" size="large" @click.prevent="state.handleLogin">
             登 录
           </el-button>
-          <div>
+          <!-- <div>
             <el-button type="primary" size="large" @click.prevent="dialogVisible = true"> 注册 </el-button>
-          </div>
+          </div> -->
         </el-form>
       </div>
     </div>

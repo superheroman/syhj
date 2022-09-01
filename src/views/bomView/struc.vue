@@ -37,7 +37,7 @@ import { GetStructionBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
 
 import getQuery from "@/utils/getQuery"
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 /**
  * 路由对象

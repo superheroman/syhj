@@ -1,6 +1,6 @@
 <template>
   <div class="todo-center">
-    <el-card class="card">
+    <el-card class="card" v-if="isProductManager">
       <el-form :model="form" inline :rules="rules" ref="projectFormRef">
         <el-form-item label="项目名称" prop="quoteProjectName">
           <el-input v-model="form.quoteProjectName" />
@@ -82,6 +82,7 @@ import { useRouter } from "vue-router"
 import _ from "lodash"
 import { useProductStore } from "@/store/modules/productList"
 // import getQuery from "@/utils/getQuery"
+
 const productStore = useProductStore()
 const projectFormRef = ref<FormInstance>()
 
@@ -113,6 +114,7 @@ const form = reactive({
 // let auditFlowIds = ref([])
 let auditFlowIdInfoList = ref([])
 let auditFlowIdInfoListCheck = ref([])
+let isProductManager = ref(false)
 // let userStorage = window.sessionStorage.getItem("user")
 // let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const saveNew = async (formEl: FormInstance | undefined) => {
@@ -153,13 +155,17 @@ const clickToPage = (row: any, scopeP: any) => {
   // window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
   productStore.setProductList(scopeP.row.auditFlowId) // 只在这里执行获取零件列表
   let pathItem: any = urlMap[row.processIdentifier as keyof typeof urlMap]
+  let query = {
+    auditFlowId: scopeP.row.auditFlowId,
+    right: row.right
+  } as any
+  if (window.sessionStorage.getItem("productId")) {
+    query.productId = window.sessionStorage.getItem("productId")
+  }
   router.push({
     // path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
     path: `${pathItem.path}`,
-    query: {
-      auditFlowId: scopeP.row.auditFlowId,
-      right: row.right
-    }
+    query
   })
 }
 /**
@@ -198,6 +204,16 @@ onMounted(async () => {
         return i.right === 1
       })
     })
+  }
+  try {
+    let userStorage = window.sessionStorage.getItem("user")
+    let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
+    let usetRoleNames = userInfo.userRole.items.map((item: any) => item.name)
+    if (usetRoleNames.includes("营销部-业务员")) {
+      isProductManager.value = true
+    }
+  } catch (error) {
+    console.log(error)
   }
 })
 watchEffect(() => {})

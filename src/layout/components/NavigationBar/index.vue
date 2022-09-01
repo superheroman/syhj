@@ -16,6 +16,8 @@ const appStore = useAppStore()
 const settingsStore = useSettingsStore()
 const userStore = useUserStore()
 
+let userStorage = window.sessionStorage.getItem("user")
+let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const sidebar = computed(() => {
   return appStore.sidebar
 })
@@ -58,7 +60,7 @@ const state = reactive<any>({
     <div class="right-menu">
       <Screenfull v-if="showScreenfull" class="right-menu-item" />
       <ThemeSwitch v-if="showThemeSwitch" class="right-menu-item" />
-      <span>{{ userStore.userInfo.name }}</span>
+      <span>{{ userInfo.name }}</span>
       <el-dropdown class="right-menu-item">
         <el-avatar :icon="UserFilled" :size="34" />
         <template #dropdown>

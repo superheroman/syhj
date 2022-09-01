@@ -463,7 +463,15 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <el-form-item label="贸易方式:" prop="tradeMode">
-              <el-input v-model="state.quoteForm.tradeMode" />
+              <el-select v-model="state.quoteForm.tradeMode" placeholder="Select">
+                <el-option
+                  v-for="item in state.TradeMethodOptions"
+                  :key="item.id"
+                  :label="item.displayName"
+                  :value="item.id"
+                />
+              </el-select>
+              <!-- <el-input v-model="state.quoteForm.tradeMode" /> -->
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -598,13 +606,13 @@
         >
       </el-card>
     </el-form>
-    <div class="demand-apply__step">
+    <!-- <div class="demand-apply__step">
       <el-steps :active="1" direction="vertical">
         <el-step title="Step 1" description="Some description" />
         <el-step title="Step 2" description="Some description" />
         <el-step title="Step 3" description="Some description" />
       </el-steps>
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts" setup>
@@ -732,17 +740,17 @@ const state = reactive({
     allocationOfEquipmentCost: true,
     reliabilityCost: true,
     developmentCost: true,
-    landingFactory: 0,
+    landingFactory: "",
     productInformation: [] as any,
     tradeMode: "",
-    salesType: 0,
+    salesType: "",
     paymentMethod: "",
-    currency: 0,
+    currency: "",
     customerTargetPrice: 0,
     exchangeRate: 0,
     customerSpecialRequest: "",
-    shippingType: 0,
-    packagingType: 0,
+    shippingType: "",
+    packagingType: "",
     placeOfDelivery: "",
     deadline: new Date(),
     projectManager: "",
@@ -772,6 +780,7 @@ const state = reactive({
   shippingTypeOptions: [] as unknown as Options[],
   packagingTypeOptions: [] as unknown as Options[],
   TypeSelectOptions: [] as unknown as Options[],
+  TradeMethodOptions: [] as unknown as Options[],
   ExchangeSelectOptions: [] as any
 })
 const fileList = ref<UploadUserFile[]>([])
@@ -1159,6 +1168,9 @@ onMounted(async () => {
 
     let typeSelect: any = await getDictionaryAndDetail("TypeSelect") //类型
     state.TypeSelectOptions = typeSelect.result.financeDictionaryDetailList
+
+    let tradeMethodSelect: any = await getDictionaryAndDetail("TradeMethod") //类型
+    state.TradeMethodOptions = tradeMethodSelect.result.financeDictionaryDetailList
 
     let exchangeSelect: any = await getExchangeRate({
       maxResultCount: 100,

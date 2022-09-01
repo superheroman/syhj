@@ -22,6 +22,7 @@ onMounted(async () => {
   if (productId) {
     //如url中存在productId则选中
     state.productId = String(productId)
+    window.sessionStorage.setItem("productId", state.productId)
   }
 })
 
@@ -32,6 +33,7 @@ const handleChange = (productId: any) => {
   query.productId = productId
   let newQuery = Object.assign({ productId }, { ...query })
   productStore.setProductId(productId)
+  window.sessionStorage.setItem("productId", productId)
   router.push({
     path: route.path,
     query: newQuery

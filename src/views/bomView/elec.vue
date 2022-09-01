@@ -28,7 +28,7 @@ import { GetElectronicBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import getQuery from "@/utils/getQuery"
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 /**
  * 路由对象
