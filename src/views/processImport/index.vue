@@ -129,8 +129,8 @@
             <span>根线/切线工时</span>
           </el-row>
         </template>
-        <el-row align="middle" style="width: 350px; flex-wrap: nowrap">UPH值: {{ data.uph }}</el-row>
-        <!-- <el-input style="width: 180px" class="m-2" v-model="data.uph" type="number" placeholder="请输入UPH值"/> -->
+        <el-row align="middle" style="width: 350px; flex-wrap: nowrap">UPH值:</el-row>
+        <el-input style="width: 180px" class="m-2" v-model="data.uph" type="number" placeholder="请输入UPH值" />
         <el-form :model="data.tangentForm" ref="tangentFormRef">
           <el-table :data="data.tangent" height="500">
             <el-table-column label="年份" prop="year" />
@@ -179,7 +179,7 @@ import {
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
-const { auditFlowId = 1, productId = 1 }: any = getQuery
+const { auditFlowId, productId }: any = getQuery()
 
 const data = reactive<any>({
   tableData: [],
