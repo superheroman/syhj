@@ -4,7 +4,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           工装类
-          <el-button type="primary" @click="addHandboardCost">新增</el-button>
+          <el-button type="primary" @click="addHandboardCost" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -48,7 +48,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deletehandboardCost($index)" type="danger">删除</el-button>
+            <el-button @click="deletehandboardCost($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -58,7 +58,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           治具类
-          <el-button type="primary" @click="addOtherCostData">新增</el-button>
+          <el-button type="primary" @click="addOtherCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -87,7 +87,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteOtherCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteOtherCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -97,7 +97,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           软件类
-          <el-button type="primary" @click="addTravelCostData">新增</el-button>
+          <el-button type="primary" @click="addTravelCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table :data="data.travelExpense" style="width: 100%" border height="300">
@@ -134,7 +134,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteTravelCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteTravelCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -144,7 +144,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           生产设备
-          <el-button type="primary" @click="addTravelCostData">新增</el-button>
+          <el-button type="primary" @click="addTravelCostData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table :data="data.travelExpense" style="width: 100%" border height="300">
@@ -181,14 +181,14 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteTravelCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteTravelCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
     <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
   </div>
 </template>

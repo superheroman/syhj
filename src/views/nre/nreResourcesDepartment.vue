@@ -44,8 +44,8 @@
         </el-table-column>
       </el-table>
       <div style="float: right; margin: 20px 0">
-        <el-button type="primary" @click="handleCalculation">计算</el-button>
-        <el-button type="primary" @click="submit">提交</el-button>
+        <el-button type="primary" @click="handleCalculation" v-havedone>计算</el-button>
+        <el-button type="primary" @click="submit" v-havedone>提交</el-button>
       </div>
     </el-card>
   </el-card>

@@ -4,7 +4,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           项目制程QC量检具
-          <el-button type="primary" @click="addQaqcDepartmentsData">新增</el-button>
+          <el-button type="primary" @click="addQaqcDepartmentsData" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -48,11 +48,11 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right">
           <template #default="{ $index }">
-            <el-button @click="deleteQaqcDepartmentsData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteQaqcDepartmentsData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
         <div style="float: right; margin: 20px 0">
-          <el-button type="primary" @click="submit">提交</el-button>
+          <el-button type="primary" @click="submit" v-havedone>提交</el-button>
         </div>
       </el-table>
     </el-card>

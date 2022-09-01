@@ -25,7 +25,7 @@
     </el-card>
 
     <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
   </div>
 </template>

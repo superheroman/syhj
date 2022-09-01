@@ -4,7 +4,7 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           实验费用
-          <el-button type="primary" @click="addLaboratoryFeeModel">新增</el-button>
+          <el-button type="primary" @click="addLaboratoryFeeModel" v-havedone>新增</el-button>
         </el-row>
       </template>
       <el-table
@@ -98,14 +98,14 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteLaboratoryFeeModel($index)" type="danger">删除</el-button>
+            <el-button @click="deleteLaboratoryFeeModel($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
 
     <div style="float: right; margin: 20px 0">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
   </div>
 </template>
