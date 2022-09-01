@@ -168,8 +168,8 @@
             </el-table-column>
           </el-table>
           <el-row align="middle" justify="end" style="margin-top: 20px">
-            <el-button type="primary" @click="handleSubmit(tangentFormRef)">提交</el-button>
             <el-button type="primary" @click="handleSaveTangentHours(tangentFormRef)">保存</el-button>
+            <el-button type="primary" @click="handleSubmit(tangentFormRef)">提交</el-button>
           </el-row>
         </el-form>
       </el-card>
@@ -209,9 +209,7 @@ const data = reactive<any>({
   },
   years: []
 })
-// const handleClick = (tab: TabsPaneContext, event: Event) => {
-//   console.log(tab, event)
-// }
+
 const tangentFormRef = ref<FormInstance>()
 
 const formatterArr = (key: string, childKey: any = "equipmentDetails") => {
@@ -310,7 +308,7 @@ const getAllSop = async () => {
   // data.tangent = result.map((item: number) => ({ laborTime: 0, machineHours: 0, personnelNumber: 0, year: item }))
 
   let { result } = await getTangentHoursList(auditFlowId, productId)
-  data.tangent = result?.tangentHoursDetailList || []
+  data.tangentForm.tangent = result?.tangentHoursDetailList || []
 }
 
 // 保存切线工时
