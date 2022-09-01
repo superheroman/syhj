@@ -21,8 +21,8 @@
         <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="200" />
       </el-table>
       <div style="margin: 10px 0; float: right">
-        <el-button type="primary" @click="agree(2, true)">同意</el-button>
-        <el-button @click="agree(2, false)" type="danger">拒绝</el-button>
+        <el-button type="primary" @click="agree(2, true)" v-havedone>同意</el-button>
+        <el-button @click="agree(2, false)" type="danger" v-havedone>拒绝</el-button>
       </div>
     </div>
   </div>

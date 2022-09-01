@@ -8,7 +8,7 @@
             <el-form-item label="标题:" prop="title">
               <el-input v-model="state.quoteForm.title">
                 <template #append>
-                  <el-button @click="generateTitle">自动生成</el-button>
+                  <el-button @click="generateTitle" v-havedone>自动生成</el-button>
                 </template>
               </el-input>
             </el-form-item>
@@ -143,7 +143,7 @@
         <h5>项目走量</h5>
         <h6>终端走量（单位：PCS）</h6>
         <div class="demand-apply__btn-container">
-          <el-button type="primary" class="demand-apply__add-btn" @click="addPCS">新增</el-button>
+          <el-button type="primary" class="demand-apply__add-btn" @click="addPCS" v-havedone>新增</el-button>
         </div>
         <el-table :data="pcsTableData" border :summary-method="getSummaries" show-summary>
           <el-table-column label="车厂" width="180" fixed="left">
@@ -170,7 +170,7 @@
         </el-table>
         <h6>模组数量</h6>
         <div class="demand-apply__btn-container">
-          <el-button type="primary" class="demand-apply__add-btn" @click="addProduct">新增模组</el-button>
+          <el-button type="primary" class="demand-apply__add-btn" @click="addProduct" v-havedone>新增模组</el-button>
         </div>
         <el-table :data="moduleTableData" style="width: 100%" border>
           <el-table-column type="index" width="50" />
@@ -593,7 +593,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-button type="primary" size="large" style="float: right; margin: 20px 0" @click="save(refForm)"
+        <el-button type="primary" size="large" style="float: right; margin: 20px 0" @click="save(refForm)" v-havedone
           >提交</el-button
         >
       </el-card>

@@ -85,8 +85,8 @@
       </el-table>
     </el-card>
     <el-row justify="end" style="margin-top: 20px">
-      <el-button type="primary" @click="handleGeneralManagerQuoteCheck(true)">同意</el-button>
-      <el-button type="danger" @click="handleGeneralManagerQuoteCheck(false)">拒绝</el-button>
+      <el-button type="primary" @click="handleGeneralManagerQuoteCheck(true)" v-havedone>同意</el-button>
+      <el-button type="danger" @click="handleGeneralManagerQuoteCheck(false)" v-havedone>拒绝</el-button>
     </el-row>
   </el-card>
 </template>

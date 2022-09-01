@@ -96,6 +96,7 @@ export const useUserStore = defineStore({
       this.token = ""
       this.roles = []
       resetRouter()
+      router.push({ path: "/login" })
     },
     /** 重置 token */
     resetToken() {

@@ -39,7 +39,7 @@
         </el-table-column>
       </el-table>
       <div style="float: right; margin: 20px 0">
-        <el-button @click="submit" type="primary">提交</el-button>
+        <el-button @click="submit" type="primary" v-havedone>提交</el-button>
       </div>
     </el-card>
     <el-dialog v-model="data.dialogFormVisible" title="物流基础信息">
