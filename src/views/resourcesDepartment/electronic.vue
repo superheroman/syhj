@@ -119,14 +119,20 @@
         <el-table-column prop="peopleName" label="确认人" />
         <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
-            <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
-            <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 1)" type="warning">
+            <el-button link @click="handleSubmit(scope.row, 0)" type="danger" v-havedone>确认</el-button>
+            <el-button
+              link
+              :disabled="scope.row.isSubmit"
+              @click="handleSubmit(scope.row, 1)"
+              type="warning"
+              v-havedone
+            >
               提交
             </el-button>
-            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
+            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary" v-havedone>
               修改
             </el-button>
-            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
+            <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)" v-havedone>取消</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -151,7 +157,7 @@ import {
 import { getExchangeRate } from "./../demandApply/service"
 import getQuery from "@/utils/getQuery"
 
-const { auditFlowId = 1 }: any = getQuery()
+const { auditFlowId = 1, productId }: any = getQuery()
 console.log(auditFlowId, "auditFlowId")
 // 获取仓库的值
 const store = useUserStore()
@@ -189,25 +195,18 @@ onMounted(() => {
 
 // 获取初始化数据
 const fetchInitData = async () => {
-  try {
-    const {
-      success,
-      result: { electronicBomList: tempData }
-    } = await GetElectronic({ id: auditFlowId })
-    if (!success) throw Error()
-    console.log(tempData, "获取初始化数据")
-    electronicBomList.value = tempData
-    // 初始化表头数据
-    const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
-      electronicBomList?.value[0] || {}
-    allColums.materialsUseCountYears = materialsUseCount?.map((item) => item.year) || []
-    allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item) => item.year) || []
-    allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
-    allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
-    allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
-  } catch (err) {
-    console.log(err, "[ 初始化失败 ]")
-  }
+  const { result } = await GetElectronic(auditFlowId, productId)
+  if (!result) return false
+  console.log(result, "获取初始化数据")
+  electronicBomList.value = result
+  // 初始化表头数据
+  const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
+    electronicBomList?.value[0] || {}
+  allColums.materialsUseCountYears = materialsUseCount?.map((item) => item.year) || []
+  allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item) => item.year) || []
+  allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
+  allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
+  allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
 }
 
 // 提交电子料单价行数据
@@ -235,7 +234,7 @@ const handleEdit = (row: any, isEdit: boolean) => {
 // 根据汇率计算
 const handleCalculation = async (row: any, index: number) => {
   try {
-    const { success, result } = await PostElectronicMaterialCalculate([row])
+    const { success, result } = await PostElectronicMaterialCalculate(row)
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result[0] || {}), isEdit: true }
     console.log(success, "handleSubmit")
@@ -248,7 +247,7 @@ const handleCalculation = async (row: any, index: number) => {
 // 根据原币计算
 const handleCalculationIginalCurrency = async (row: any, index: number) => {
   try {
-    const { success, result } = await PosToriginalCurrencyCalculate([row])
+    const { success, result } = await PosToriginalCurrencyCalculate(row)
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result[0] || {}), isEdit: true }
     console.log(success, "handleSubmit")

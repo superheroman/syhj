@@ -1,7 +1,7 @@
 <template>
   <el-card class="wrap m-2">
     <el-card class="table-wrap" header="电子料单价">
-      <el-table :data="electronicBomList" style="width: 100%" height="500">
+      <el-table :data="electronicBomList" style="width: 100%" height="75vh">
         <el-table-column prop="categoryName" label="物料大类" width="150" />
         <el-table-column prop="typeName" label="物料种类" width="150" />
         <el-table-column prop="sapItemNum" label="物料编号" width="150" />
@@ -67,8 +67,8 @@
       </el-row> -->
     </el-card>
     <el-row justify="end" style="margin-top: 20px">
-      <el-button type="primary" @click="handleSetBomState(true)">同意</el-button>
-      <el-button type="danger" @click="handleSetBomState(false)">拒绝</el-button>
+      <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
+      <el-button type="danger" @click="handleSetBomState(false)" v-havedone>拒绝</el-button>
     </el-row>
   </el-card>
 </template>
@@ -76,13 +76,13 @@
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { ElectronicDto } from "../resourcesDepartment/data.type"
-import { GetElectronic, SetBomState } from "../resourcesDepartment/common/request"
+import { GetBOMElectronicSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { ElMessageBox } from "element-plus"
 
-const { auditFlowId = 1 }: any = getQuery()
+const { auditFlowId = 1, productId }: any = getQuery()
 
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])
@@ -114,25 +114,17 @@ const fetchOptionsData = async () => {
 
 // 获取电子料初始化数据
 const fetchElectronicInitData = async () => {
-  try {
-    const {
-      success,
-      result: { electronicBomList: tempData }
-    } = await GetElectronic({ id: auditFlowId })
-    if (!success) throw Error()
-    console.log(tempData, "获取初始化数据")
-    electronicBomList.value = tempData
-    // 初始化表头数据
-    const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
-      electronicBomList?.value[0] || {}
-    allColums.materialsUseCountYears = materialsUseCount?.map((item) => item.year) || []
-    allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item) => item.year) || []
-    allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
-    allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
-    allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
-  } catch (err) {
-    console.log(err, "[ 初始化失败 ]")
-  }
+  const { result } = await GetBOMElectronicSingle(auditFlowId, productId)
+  console.log(result, "获取初始化数据")
+  electronicBomList.value = result
+  // 初始化表头数据
+  const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
+    electronicBomList?.value[0] || {}
+  allColums.materialsUseCountYears = materialsUseCount?.map((item) => item.year) || []
+  allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item) => item.year) || []
+  allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
+  allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
+  allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
 }
 
 const fetchSopYear = async () => {
