@@ -175,7 +175,8 @@ import {
   SaveWorkingHour,
   SaveTangentHours,
   getTangentHoursList,
-  SubmitWorkingHourAndSwitchLine
+  SubmitWorkingHourAndSwitchLine,
+  getYears
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
@@ -193,7 +194,8 @@ const data = reactive<any>({
   sop: [],
   tangent: [], // 根线/切线工时
   uph: null,
-  tangentForm: {}
+  tangentForm: {},
+  years: []
 })
 // const handleClick = (tab: TabsPaneContext, event: Event) => {
 //   console.log(tab, event)
@@ -271,6 +273,17 @@ const handleSubmit = async () => {
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
+  // 获取年份
+  let { result } = (await getYears(auditFlowId)) as any
+  data.years = result
+  data.tangent = result.map((year: any) => {
+    return {
+      year,
+      laborTime: "",
+      machineHours: "",
+      personnelNumber: ""
+    }
+  })
 })
 
 const getAllSop = async () => {
