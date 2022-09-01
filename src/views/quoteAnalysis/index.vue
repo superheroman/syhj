@@ -3,8 +3,8 @@
     <div style="margin: 20px 0">
       <el-button type="primary" @click="downLoad" style="margin-left: 10px">成本信息表下载</el-button>
       <el-button-group style="margin-right: 10px; float: right">
-        <el-button type="primary" @click="postOffer(1)">报价</el-button>
-        <el-button type="primary" @click="postOffer(0)">不报价</el-button>
+        <el-button type="primary" @click="postOffer(1)" v-havedone>报价</el-button>
+        <el-button type="primary" @click="postOffer(0)" v-havedone>不报价</el-button>
       </el-button-group>
     </div>
     <el-card class="card">

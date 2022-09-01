@@ -48,7 +48,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deletehandboardCost($index)" type="danger">删除</el-button>
+            <el-button @click="deletehandboardCost($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,7 +87,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteOtherCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteOtherCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -148,7 +148,7 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="90">
           <template #default="{ $index }">
-            <el-button @click="deleteTravelCostData($index)" type="danger">删除</el-button>
+            <el-button @click="deleteTravelCostData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
       </el-table>

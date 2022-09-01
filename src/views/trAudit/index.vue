@@ -9,8 +9,8 @@
           <el-button @click="downLoad">点击下载附件</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="save(true)">同意</el-button>
-          <el-button @click="save(false)">拒绝</el-button>
+          <el-button type="primary" @click="save(true)" v-havedone>同意</el-button>
+          <el-button @click="save(false)" v-havedone>拒绝</el-button>
         </el-form-item>
       </el-form>
     </el-card>

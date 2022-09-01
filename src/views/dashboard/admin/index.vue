@@ -147,8 +147,8 @@
       </el-checkbox-group>
       <template #footer>
         <span>
-          <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="setPriceBoardStateAgree(false)">确定</el-button>
+          <el-button @click="dialogVisible = false" v-havedone>取消</el-button>
+          <el-button type="primary" @click="setPriceBoardStateAgree(false)" v-havedone>确定</el-button>
         </span>
       </template>
     </el-dialog>

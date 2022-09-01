@@ -67,7 +67,7 @@
                 <el-button type="primary">文件上传</el-button>
               </el-upload> -->
               <el-upload action="/api/services/app/FileCommonService/UploadFile" :on-success="handleSuccess" :limit="1">
-                <el-button type="primary">文件上传</el-button>
+                <el-button type="primary" v-havedone>文件上传</el-button>
               </el-upload>
             </el-form-item>
           </el-col>
@@ -81,7 +81,7 @@
         </el-row>
       </el-card>
     </el-form>
-    <el-button @click="save" type="primary" style="float: right" size="large">保存录入</el-button>
+    <el-button @click="save" type="primary" style="float: right" size="large" v-havedone>保存录入</el-button>
   </div>
 </template>
 

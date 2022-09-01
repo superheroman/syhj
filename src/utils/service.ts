@@ -63,6 +63,8 @@ function createService() {
           break
         case 401:
           error.message = "未授权，请登录"
+          useUserStoreHook().logout()
+          // location.reload()
           break
         case 403:
           // token 过期时，直接退出登录并强制刷新页面（会重定向到登录页）
