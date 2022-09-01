@@ -86,11 +86,11 @@
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { QADepartmentTestModel } from "./data.type"
 import { getQaTestDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
-import { PostExperimentItems } from "./common/request"
+import { PostExperimentItems, GetReturnExperimentItems } from "./common/request"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 /**
  * 数据部分
@@ -124,15 +124,13 @@ const submit = async () => {
   try {
     const { success } = await PostExperimentItems({
       auditFlowId,
-      experimentItems: [
-        {
-          productId,
-          qaTestDepartments: data.experimentItems.map((item) => ({
-            ...item,
-            allCost: (item.unitPrice || 0) * (item.count || 0)
-          }))
-        }
-      ]
+      experimentItem: {
+        productId,
+        qaTestDepartments: data.experimentItems.map((item) => ({
+          ...item,
+          allCost: (item.unitPrice || 0) * (item.count || 0)
+        }))
+      }
     })
     if (!success) throw Error()
     ElMessage.success("提交成功")
@@ -142,11 +140,17 @@ const submit = async () => {
   }
 }
 
+const initFetch = async () => {
+  const { result } = await GetReturnExperimentItems(auditFlowId, productId)
+  data.experimentItems = result?.qaTestDepartments || []
+}
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
 onMounted(() => {
+  initFetch()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 

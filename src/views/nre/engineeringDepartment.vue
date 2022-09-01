@@ -196,14 +196,16 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.type"
-import { PostProjectManagement } from "./common/request"
+import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
+import getQuery from "@/utils/getQuery"
 
+const { auditFlowId = 1, productId = 1 } = getQuery()
 /**
  * 数据部分
  */
 const data = reactive({
-  handPieceCost: [{ partName: "", partNumber: "", unitPrice: 1, quantity: 4, cost: 4 }] as HandPieceCostModel[],
+  handPieceCost: [] as HandPieceCostModel[],
   restsCost: [] as RestsCostModel[],
   travelExpense: [] as TravelExpenseModel[]
 })
@@ -235,19 +237,17 @@ const addTravelCostData = () => {
 const submit = async () => {
   try {
     const res = await PostProjectManagement({
-      projectManagements: [
-        {
-          ...data,
-          handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
-            return {
-              ...item,
-              cost: (item.unitPrice || 0) * (item.quantity || 0)
-            }
-          }),
-          productId: 123
-        }
-      ],
-      auditFlowId: 111
+      projectManagement: {
+        ...data,
+        handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
+          return {
+            ...item,
+            cost: (item.unitPrice || 0) * (item.quantity || 0)
+          }
+        }),
+        productId
+      },
+      auditFlowId
     })
     console.log(res, "RES")
   } catch (err) {
@@ -255,12 +255,24 @@ const submit = async () => {
   }
 }
 
+const initFetch = async () => {
+  const { result } = await GetReturnProjectManagement(productId, auditFlowId)
+  if (!result) return
+  const { handPieceCost, restsCost, travelExpense } = result || {}
+  data.handPieceCost = handPieceCost || []
+  data.restsCost = restsCost || []
+  data.travelExpense = travelExpense || []
+}
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
+
 onMounted(() => {
+  initFetch()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
+
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">

@@ -115,12 +115,12 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { PostProductDepartment } from "./common/request"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import { LaboratoryFeeModel } from "./data.type"
-import useQueryData from "@/hook/useQueryData"
+import getQuery from "@/utils/getQuery"
 
 const deleteLaboratoryFeeModel = (i: number) => {
   data.laboratoryFeeModels.splice(i, 1)
 }
-let { auditFlowId, productId } = useQueryData()
+let { auditFlowId, productId } = getQuery()
 const addLaboratoryFeeModel = () => {
   data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, quantity: 0 })
 }
@@ -128,8 +128,8 @@ const addLaboratoryFeeModel = () => {
 const submit = async () => {
   try {
     const res = await PostProductDepartment({
-      auditFlowId: auditFlowId.value,
-      productDepartmentModels: [{ ...data, productId: productId.value }]
+      auditFlowId,
+      productDepartmentModel: { ...data, productId }
     })
     console.log(res, "[PostProductDepartment RES]")
   } catch (err) {

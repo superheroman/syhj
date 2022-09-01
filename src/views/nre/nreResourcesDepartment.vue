@@ -1,61 +1,53 @@
 <template>
   <el-card>
-    <template v-for="(item, index) in data.mouldData" :key="item.productId">
-      <el-card class="margin-top" :header="`零件${item.productId}`">
-        <el-table
-          :data="item.mouldInventoryModels"
-          style="width: 100%"
-          border
-          :summary-method="getMouldSummaries"
-          show-summary
-        >
-          <el-table-column type="index" width="50" />
-          <el-table-column label="模具名称" prop="modelName" width="180">
-            <!-- <template #default="{ row }">
+    <el-card class="margin-top">
+      <el-table :data="data.resourceData" border :summary-method="getMouldSummaries" show-summary height="72vh">
+        <el-table-column type="index" width="50" />
+        <el-table-column label="模具名称" prop="modelName" width="180">
+          <!-- <template #default="{ row }">
               <el-input v-model="row.modelName" />
             </template> -->
-          </el-table-column>
-          <el-table-column label="模穴数" width="180">
-            <template #default="{ row }">
-              <el-input-number v-model="row.moldCavityCount" :min="0" controls-position="right" />
-            </template>
-          </el-table-column>
-          <el-table-column label="模次数" width="180">
-            <template #default="{ row }">
-              <el-input-number v-model="row.modelNumber" :min="0" controls-position="right" />
-            </template>
-          </el-table-column>
-          <el-table-column label="数量" prop="count" width="180">
-            <template #default="{ row }">
-              <el-input-number
-                v-model="row.count"
-                controls-position="right"
-                :min="0"
-                v-if="row.modelName === '吸塑/包材'"
-              />
-              <div v-else>
-                {{ row.count }}
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="单价" width="180">
-            <template #default="{ row }">
-              <el-input-number v-model="row.unitPrice" :min="0" controls-position="right" />
-            </template>
-          </el-table-column>
-          <el-table-column label="费用">
-            <template #default="{ row }">
-              <!-- <el-input v-model="row.cost" /> -->
-              {{ row.unitPrice * row.count }}
-            </template>
-          </el-table-column>
-        </el-table>
-        <div style="float: right; margin: 20px 0">
-          <el-button type="primary" @click="handleCalculation(item, index)">计算</el-button>
-          <el-button type="primary" @click="submit(item)">提交</el-button>
-        </div>
-      </el-card>
-    </template>
+        </el-table-column>
+        <el-table-column label="模穴数" width="180">
+          <template #default="{ row }">
+            <el-input-number v-model="row.moldCavityCount" :min="0" controls-position="right" />
+          </template>
+        </el-table-column>
+        <el-table-column label="模次数" width="180">
+          <template #default="{ row }">
+            <el-input-number v-model="row.modelNumber" :min="0" controls-position="right" />
+          </template>
+        </el-table-column>
+        <el-table-column label="数量" prop="count" width="180">
+          <template #default="{ row }">
+            <el-input-number
+              v-model="row.count"
+              controls-position="right"
+              :min="0"
+              v-if="row.modelName === '吸塑/包材'"
+            />
+            <div v-else>
+              {{ row.count }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价" width="180">
+          <template #default="{ row }">
+            <el-input-number v-model="row.unitPrice" :min="0" controls-position="right" />
+          </template>
+        </el-table-column>
+        <el-table-column label="费用">
+          <template #default="{ row }">
+            <!-- <el-input v-model="row.cost" /> -->
+            {{ row.unitPrice * row.count }}
+          </template>
+        </el-table-column>
+      </el-table>
+      <div style="float: right; margin: 20px 0">
+        <el-button type="primary" @click="handleCalculation">计算</el-button>
+        <el-button type="primary" @click="submit">提交</el-button>
+      </div>
+    </el-card>
   </el-card>
 </template>
 
@@ -66,47 +58,39 @@ import { getMouldSummaries } from "./common/mouldSummaries"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 
-const { auditFlowId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 const data = reactive<any>({
-  mouldData: [],
+  resourceData: [],
   resourcesManagementModels: []
 })
 
 const initFetch = async () => {
-  const { result } = await GetInitialResourcesManagement({ id: auditFlowId })
-  data.mouldData = result.mouldInventoryModels
-  data.resourcesManagementModels = result.mouldInventoryModels
+  const { result } = await GetInitialResourcesManagement(auditFlowId, productId)
+  data.resourceData = result?.mouldInventoryModels || []
+  data.resourcesManagementModels = result?.mouldInventoryModels
 }
 
-const submit = async (record: any) => {
+const submit = async () => {
   await PostResourcesManagement({
     auditFlowId,
-    resourcesManagementModels: [
-      {
-        mouldInventory: record.mouldInventoryModels,
-        productId: record.productId
-      }
-    ]
+    resourcesManagementModel: {
+      mouldInventory: data.resourceData,
+      productId
+    }
   })
 }
 
-const handleCalculation = async (record: any, i: number) => {
-  console.log(record, "record")
+const handleCalculation = async () => {
   try {
     const { result, success } = await PostCalculateMouldInventory({
-      auditFlowId,
-      resourcesManagementModels: [
-        {
-          mouldInventory: record.mouldInventoryModels,
-          productId: record.productId
-        }
-      ]
+      mouldInventory: data.resourceData,
+      productId
     })
     if (!success) ElMessage.success("计算成功")
-    const { mouldInventory = [] }: any = result[0] || []
-    data.mouldData[i].mouldInventoryModels = mouldInventory.map((item: any, index: number) => {
-      if (item.modelName === "吸塑/包材") return data.mouldData[i].mouldInventoryModels[index]
+    const { mouldInventory = [] }: any = result || []
+    data.resourceData = mouldInventory.map((item: any, index: number) => {
+      if (item.modelName === "吸塑/包材") return data.resourceData[index]
       return item
     })
     console.log(result, "[PostCalculateMouldInventory res]")

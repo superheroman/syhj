@@ -178,7 +178,7 @@ const { auditFlowId = 1, productId = 1 }: any = getQuery()
  * 数据部分
  */
 const data = reactive({
-  handPieceCost: [{ partName: "", partNumber: "", unitPrice: 0, quantity: 0, cost: 0 }] as HandPieceCostModel[],
+  handPieceCost: [] as HandPieceCostModel[],
   restsCost: [] as RestsCostModel[],
   travelExpense: [] as TravelExpenseModel[],
   nreResonOptions: [] as any[]
@@ -211,18 +211,16 @@ const addTravelCostData = () => {
 const submit = async () => {
   try {
     const res = await PostProjectManagement({
-      projectManagements: [
-        {
-          ...data,
-          handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
-            return {
-              ...item,
-              cost: (item.unitPrice || 0) * (item.quantity || 0)
-            }
-          }),
-          productId
-        }
-      ],
+      projectManagement: {
+        ...data,
+        handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
+          return {
+            ...item,
+            cost: (item.unitPrice || 0) * (item.quantity || 0)
+          }
+        }),
+        productId
+      },
       auditFlowId
     })
     console.log(res, "RES")
@@ -232,11 +230,11 @@ const submit = async () => {
 }
 
 const initFetch = async () => {
-  const { result } = await GetReturnProjectManagement(auditFlowId)
+  const { result } = await GetReturnProjectManagement(auditFlowId, productId)
   console.log(result, "res")
-  data.handPieceCost = result[0].handPieceCost
-  data.restsCost = result[0].restsCost
-  data.travelExpense = result[0].travelExpense
+  data.handPieceCost = result.handPieceCost
+  data.restsCost = result.restsCost
+  data.travelExpense = result.travelExpense
 }
 
 onBeforeMount(async () => {
