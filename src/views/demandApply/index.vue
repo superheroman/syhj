@@ -1027,7 +1027,7 @@ const generateTitle = () => {
   let nowDate = dayjs(quoteForm.draftDate ? quoteForm.draftDate : new Date()).format("YYYY-MM-DD")
   let userDepartment = quoteForm.draftingDepartment
   let title = `${nowDate + userDepartment}关于${
-    quoteForm.customerName + quoteForm.projectName + state.quoteVersion
+    quoteForm.customerName + quoteForm.projectName + "第" + state.quoteVersion + "版"
   }的核价报价申请`
   state.quoteForm.title = title
 }
