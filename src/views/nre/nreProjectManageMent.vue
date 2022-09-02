@@ -171,7 +171,9 @@ import {
 import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 /**
@@ -210,7 +212,7 @@ const addTravelCostData = () => {
 
 const submit = async () => {
   try {
-    const res = await PostProjectManagement({
+    const { success } = await PostProjectManagement({
       projectManagement: {
         ...data,
         handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
@@ -223,7 +225,8 @@ const submit = async () => {
       },
       auditFlowId
     })
-    console.log(res, "RES")
+    if (success) jumpTodoCenter()
+    console.log(success, "RES")
   } catch (err) {
     console.log(err, "PostProjectManagement err")
   }

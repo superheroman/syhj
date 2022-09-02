@@ -57,7 +57,9 @@ import { PostResourcesManagement, GetInitialResourcesManagement, PostCalculateMo
 import { getMouldSummaries } from "./common/mouldSummaries"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 const data = reactive<any>({
@@ -72,13 +74,18 @@ const initFetch = async () => {
 }
 
 const submit = async () => {
-  await PostResourcesManagement({
-    auditFlowId,
-    resourcesManagementModel: {
-      mouldInventory: data.resourceData,
-      productId
-    }
-  })
+  try {
+    const { success } = await PostResourcesManagement({
+      auditFlowId,
+      resourcesManagementModel: {
+        mouldInventory: data.resourceData,
+        productId
+      }
+    })
+    if (success) jumpTodoCenter
+  } catch (err) {
+    console.log(err, "【资源部提交报错】")
+  }
 }
 
 const handleCalculation = async () => {

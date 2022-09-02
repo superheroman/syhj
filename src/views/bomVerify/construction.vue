@@ -1,7 +1,12 @@
 <template>
   <el-card class="wrap m-2">
-    <el-card header="结构料单价审核" class="table-wrap">
-      <el-table :data="constructionBomList" style="width: 100%" height="75vh">
+    <el-card
+      v-for="item in constructionBomList"
+      :header="item.superTypeName"
+      :key="item.superTypeName"
+      class="table-wrap"
+    >
+      <el-table :data="item.structureMaterial" style="width: 100%" height="75vh">
         <el-table-column label="bom" align="center">
           <el-table-column type="index" label="序号" width="70" />
           <el-table-column prop="categoryName" label="物料大类" width="150" />
@@ -38,7 +43,7 @@
           <el-table-column
             v-for="(item, index) in allColums?.sop"
             :key="item"
-            :label="`Sop + ${index + 1}`"
+            :label="`${item}`"
             :prop="`sop[${index}].value`"
             width="150"
           />
@@ -61,6 +66,9 @@ import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { ElMessageBox } from "element-plus"
+import useJump from "@/hook/useJump"
+
+const { jumpTodoCenter } = useJump()
 
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
@@ -106,11 +114,12 @@ const handleSetBomState = (isAgree: boolean) => {
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    await SetBomState({
+    const { success } = await SetBomState({
       isAgree,
       auditFlowId,
       bomCheckType: 4
     })
+    if (success) jumpTodoCenter()
   })
 }
 

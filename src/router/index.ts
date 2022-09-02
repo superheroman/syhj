@@ -160,7 +160,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/resourcesDepartment/electronic.vue"),
         name: "electronic",
         meta: {
-          title: "电子料单价录入界面"
+          title: "电子料单价录入"
         }
       },
       {
@@ -168,7 +168,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/resourcesDepartment/construction.vue"),
         name: "construction",
         meta: {
-          title: "结构件单价录入界面"
+          title: "结构bom单价录入"
         }
       }
     ]
@@ -182,19 +182,19 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "/bomVerify/construction",
-        component: () => import("@/views/bomVerify/construction.vue"),
-        name: "bomVerifyConstruction",
-        meta: {
-          title: "结构件单价审核"
-        }
-      },
-      {
         path: "/bomVerify/electronic",
         component: () => import("@/views/bomVerify/electronic.vue"),
         name: "bomVerifyElectronic",
         meta: {
           title: "电子料单价审核"
+        }
+      },
+      {
+        path: "/bomVerify/construction",
+        component: () => import("@/views/bomVerify/construction.vue"),
+        name: "bomVerifyConstruction",
+        meta: {
+          title: "结构bom单价审核"
         }
       }
     ]

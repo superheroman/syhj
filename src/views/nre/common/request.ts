@@ -192,3 +192,15 @@ export function GetReturnInitialSalesDepartment(Id: number): any {
     }
   })
 }
+
+// 产品部-电子工程师 录入过的值(单个零件)
+export function GetProductDepartment(auditFlowId: number, productId: number): any {
+  return request({
+    url: "/api/services/app/NrePricing/GetProductDepartmentSingle",
+    method: "get",
+    data: {
+      auditFlowId,
+      productId
+    }
+  })
+}
