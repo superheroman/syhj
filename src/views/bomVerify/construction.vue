@@ -43,7 +43,7 @@
           <el-table-column
             v-for="(item, index) in allColums?.sop"
             :key="item"
-            :label="`Sop + ${index + 1}`"
+            :label="`${item}`"
             :prop="`sop[${index}].value`"
             width="150"
           />
