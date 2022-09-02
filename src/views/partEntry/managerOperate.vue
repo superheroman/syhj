@@ -102,7 +102,6 @@ const formData: any = reactive({
   engineerLossRateId: undefined,
   engineerWorkHourId: undefined,
   id: 0,
-  product: null,
   productId: null,
   productManageId: undefined,
   qualityBenchId: undefined,
@@ -111,28 +110,12 @@ const formData: any = reactive({
   resourceStructId: undefined,
   structureEngineerId: undefined
 })
-// interface user {
-//   department?: null | string
-//   id: number
-//   position?: null | string
-//   userName?: string
-//   userNum?: null | string
-// }
+
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
-  console.log(res)
   if (res.success) {
     formData.fileId = res.result.fileId
   }
 }
-// const users = reactive({
-//   electronicEngineer: [] as user[],
-//   structureEngineer: [] as user[],
-//   resourceManagement: [] as user[],
-//   engineeringTechnology: [] as user[],
-//   finance: [] as user[],
-//   productionManagement: [] as user[],
-//   quality: [] as user[]
-// })
 const options = [
   {
     value: true,
@@ -170,9 +153,12 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let query = getQuery()
-  formData.auditFlowId = query.auditFlowId ? Number(query.auditFlowId) : 1
-  formData.productId = query.productId ? Number(query.productId) : 1
-  //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  if (query.auditFlowId) {
+    formData.auditFlowId = Number(query.auditFlowId)
+  }
+  if (query.productId) {
+    formData.productId = Number(query.productId)
+  }
 })
 watchEffect(() => {})
 // 使用toRefs解构

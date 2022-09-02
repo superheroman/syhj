@@ -4,7 +4,7 @@ const urlMap = {
   StructBomAudit: { path: "/bomView/struc", query: {} }, //结构bom审核界面
   StructBomImport: { path: "/structuralMaterialImport/index", query: {} }, //结构bom导入界面
   ElectronicBomImport: { path: "/electronicImport/index", query: {} },
-  ElectronicBomAudit: { path: "/bomView/elec", query: {} },
+  ElectronicBomAudit: { path: "/bomView/elec", query: {} }, //电子bom审核界面
   StructPriceInput: { path: "/resourcesDepartment/construction", query: {} }, //结构单价录入界面
   ElecBomPriceAudit: { path: "/bomVerify/electronic", query: {} }, //电子bom单价审核界面
   StructBomPriceAudit: { path: "/bomVerify/construction", query: {} }, //StructBomPriceAudit

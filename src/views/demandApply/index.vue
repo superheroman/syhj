@@ -158,13 +158,20 @@
           </el-table-column>
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="100">
             <template #default="{ row }">
-              <el-input v-model="row.pcsYearList[index].quantity" @input="pcsYearQuantitySum(row)" />
+              <!-- {{ row.pcsYearList[index] }} -->
+              <el-input v-model="row.pcsYearList[index].quantity" @change="pcsYearQuantitySum(row)" />
             </template>
           </el-table-column>
-          <el-table-column prop="rowSum" label="合计" />
+          <el-table-column prop="rowSum" label="合计">
+            <template #default="{ row }">
+              {{ getRowSum(row) }}
+            </template>
+          </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
-              <el-button @click="deletePcs($index)" type="danger" :disabled="pcsTableData.length === 1">删除</el-button>
+              <el-button @click="deletePcs($index)" type="danger" :disabled="pcsTableData.length === 1" v-havedone>
+                删除
+              </el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -227,7 +234,11 @@
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
-              <el-button @click="deleteProduct($index)" type="danger" :disabled="moduleTableData.length === 1"
+              <el-button
+                @click="deleteProduct($index)"
+                type="danger"
+                :disabled="moduleTableData.length === 1"
+                v-havedone
                 >删除</el-button
               >
             </template>
@@ -617,7 +628,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
-import { productTypeMap, Pcs, YearListItem, modelCount, productModel, specifyModel, requireData } from "./data.type"
+import { productTypeMap, Pcs, YearListItem, modelCount } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import { useRoute } from "vue-router"
 // import { Search } from "@element-plus/icons-vue"
@@ -625,7 +636,7 @@ import { useRoute } from "vue-router"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 import _ from "lodash"
-import { saveApplyInfo, getExchangeRate } from "./service"
+import { saveApplyInfo, getExchangeRate, getPriceEvaluationStartData } from "./service"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
@@ -712,6 +723,15 @@ const getSummaries = (param: SummaryMethodProps) => {
 }
 let userStorage = window.sessionStorage.getItem("user")
 let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
+let isEdit = false //是否查看
+
+const getRowSum = (row: any) => {
+  if (Array.isArray(row.pcsYearList) && row.pcsYearList.length > 0) {
+    return row.pcsYearList
+      .map((item: any) => item.quantity)
+      .reduce((prev: any, curr: any) => Number(prev) + Number(curr))
+  }
+}
 const state = reactive({
   quoteForm: {
     title: "" as any,
@@ -753,7 +773,7 @@ const state = reactive({
     packagingType: "",
     placeOfDelivery: "",
     deadline: new Date(),
-    projectManager: "",
+    projectManager: undefined,
     sorFile: [] as any,
     reason: "",
     auditFlowId: 1 //默认先给一个5
@@ -829,7 +849,7 @@ const save = async (formEl: FormInstance | undefined) => {
   })
 }
 //终端走量（PCS）table
-const pcsTableData: Pcs[] = reactive([
+let pcsTableData: any = ref([
   {
     carFactory: "",
     carModel: "",
@@ -838,7 +858,7 @@ const pcsTableData: Pcs[] = reactive([
   }
 ])
 //模组数量table
-const moduleTableData: modelCount[] = reactive([
+let moduleTableData: any = ref([
   {
     partNumber: "",
     product: "",
@@ -852,9 +872,9 @@ const moduleTableData: modelCount[] = reactive([
 ])
 
 //要求
-const requireTableData: requireData[] = reactive([])
+let requireTableData: any = ref([])
 
-const productTableData: productModel[] = reactive([
+let productTableData: any = ref([
   {
     name: "",
     sensor: "",
@@ -881,7 +901,7 @@ const productTableData: productModel[] = reactive([
   }
 ])
 
-const specifyTableData: specifyModel[] = reactive([])
+let specifyTableData: any = ref([])
 const addPCS = () => {
   // let newLine = {
   //   carFactory: "",
@@ -889,7 +909,7 @@ const addPCS = () => {
   //   pcsYearList: [] as YearListItem[],
   //   sum: 0
   // }
-  pcsTableData.push(_.cloneDeep(pcsTableData[0]))
+  pcsTableData.value.push(_.cloneDeep(pcsTableData.value[0]))
   // pcsTableData.push(Object.assign({}, _.cloneDeep(pcsTableData[0]), newLine))
 }
 const addProduct = () => {
@@ -916,8 +936,8 @@ const addProduct = () => {
     manufactureProcess: "",
     installationPosition: ""
   }
-  productTableData.push(Object.assign(_.cloneDeep(productTableData[0]), newLineP))
-  let moduleTableDataNew = Object.assign(_.cloneDeep(moduleTableData[0]), {
+  productTableData.value.push(Object.assign(_.cloneDeep(productTableData.value[0]), newLineP))
+  let moduleTableDataNew = Object.assign(_.cloneDeep(moduleTableData.value[0]), {
     partNumber: "",
     product: "",
     productType: 0,
@@ -926,12 +946,12 @@ const addProduct = () => {
     singleCarProductsQuantity: 0,
     modelTotal: 0
   })
-  moduleTableDataNew.modelCountYearList.forEach((item) => {
+  moduleTableDataNew.modelCountYearList.forEach((item: any) => {
     item.quantity = ""
   })
-  moduleTableData.push(moduleTableDataNew)
+  moduleTableData.value.push(moduleTableDataNew)
   // 每次执行添加都对模组上的产品名称进行复制
-  productTableData.forEach((item, index) => {
+  productTableData.value.forEach((item: any, index: any) => {
     item.name = moduleTableData[index].product
     item.product = moduleTableData[index].product
   })
@@ -954,7 +974,8 @@ const yearChange = (val: number | undefined) => {
 watch(
   () => state.yearCols,
   (val) => {
-    pcsTableData.forEach((row) => {
+    if (isEdit) return
+    pcsTableData.value.forEach((row: any) => {
       row.pcsYearList = val.map((item) => {
         return {
           year: item,
@@ -962,7 +983,7 @@ watch(
         }
       })
     })
-    moduleTableData.forEach((row) => {
+    moduleTableData.value.forEach((row: any) => {
       row.modelCountYearList = val.map((item) => {
         return {
           year: item,
@@ -971,9 +992,9 @@ watch(
       })
     })
     // 要求表格动态加载行数
-    requireTableData.splice(0, requireTableData.length)
+    requireTableData.value.splice(0, requireTableData.value.length)
     val.forEach((year) => {
-      requireTableData.push({
+      requireTableData.value.push({
         year,
         annualDeclineRate: 0,
         annualRebateRequirements: 0,
@@ -986,12 +1007,12 @@ watch(
 watch(
   moduleTableData,
   (val) => {
-    val.forEach((item, index) => {
+    val.forEach((item: any, index: any) => {
       // 同步带入下面表格的名称
-      productTableData[index].name = item.product
-      productTableData[index].product = item.product
-      moduleTableData.forEach((row) => {
-        row.modelCountYearList.forEach((item, index) => {
+      productTableData.value[index].name = item.product
+      productTableData.value[index].product = item.product
+      moduleTableData.value.forEach((row: any) => {
+        row.modelCountYearList.forEach((item: any, index: any) => {
           if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && state.sumArr[index]) {
             item.quantity =
               (row.marketShare * row.moduleCarryingRate * row.singleCarProductsQuantity * state.sumArr[index]) / 10000
@@ -1007,11 +1028,11 @@ watch(
   { deep: true }
 )
 const deleteProduct = (i: number) => {
-  moduleTableData.splice(i, 1)
-  productTableData.splice(i, 1)
+  moduleTableData.value.splice(i, 1)
+  productTableData.value.splice(i, 1)
 }
 const deletePcs = (i: number) => {
-  pcsTableData.splice(i, 1)
+  pcsTableData.value.splice(i, 1)
 }
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
@@ -1032,15 +1053,15 @@ const generateTitle = () => {
   state.quoteForm.title = title
 }
 const generateCustomTable = () => {
-  specifyTableData.splice(0, specifyTableData.length) // 清空数据
-  productTableData.forEach((item) => {
+  specifyTableData.value.splice(0, specifyTableData.value.length) // 清空数据
+  productTableData.value.forEach((item: any) => {
     if (item.sensorTypeSelect !== productTypeMap.recommend) {
       let price = item.sensorPrice
       let productName = item.name
       let main = "sensor"
       let type = item.sensor
       let productType = productTypeMap[item.sensorTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
-      specifyTableData.push({
+      specifyTableData.value.push({
         price,
         productName,
         main,
@@ -1054,7 +1075,7 @@ const generateCustomTable = () => {
       let main = "lens"
       let type = item.lens
       let productType = productTypeMap[item.lensTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
-      specifyTableData.push({
+      specifyTableData.value.push({
         price,
         productName,
         main,
@@ -1068,7 +1089,7 @@ const generateCustomTable = () => {
       let main = "isp"
       let type = item.isp
       let productType = productTypeMap[item.ispTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
-      specifyTableData.push({
+      specifyTableData.value.push({
         price,
         productName,
         main,
@@ -1082,7 +1103,7 @@ const generateCustomTable = () => {
       let main = "serialChip"
       let type = item.serialChip
       let productType = productTypeMap[item.serialChipTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
-      specifyTableData.push({
+      specifyTableData.value.push({
         price,
         productName,
         main,
@@ -1096,7 +1117,7 @@ const generateCustomTable = () => {
       let main = "led"
       let type = item.led
       let productType = productTypeMap[item.ledTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
-      specifyTableData.push({
+      specifyTableData.value.push({
         price,
         productName,
         main,
@@ -1179,6 +1200,21 @@ onMounted(async () => {
     state.ExchangeSelectOptions = exchangeSelect.result.items
   } catch (error) {
     console.log(error)
+  }
+  if (query.auditFlowId) {
+    // 查看
+    let viewDataRes: any = await getPriceEvaluationStartData(query.auditFlowId)
+    if (viewDataRes.result) {
+      isEdit = true
+      state.quoteForm = viewDataRes.result
+      const sopTime: number = viewDataRes.result.sopTime
+      state.quoteForm.sopTime = dayjs([sopTime]).format("YYYY")
+      pcsTableData.value = viewDataRes.result.pcs
+      yearChange(viewDataRes.result.projectCycle)
+      productTableData.value = viewDataRes.result.productInformation
+      moduleTableData.value = viewDataRes.result.modelCount
+      requireTableData.value = viewDataRes.result.requirement
+    }
   }
 })
 defineExpose({

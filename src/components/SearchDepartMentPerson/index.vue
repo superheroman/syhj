@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-select v-model="value" :multiple="multiple" filterable placeholder="请选择姓名">
-      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="String(item.id)" />
+      <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id" />
     </el-select>
   </div>
 </template>
@@ -11,15 +11,15 @@
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "vue"
 import { getUserListByRoleName } from "@/api/user"
 
-const value = ref("")
+const value = ref<number | undefined>(undefined)
 const props = defineProps({
   multiple: {
     type: Boolean,
     default: false
   },
   modelValue: {
-    type: String,
-    default: ""
+    type: Number,
+    default: undefined
   },
   roleName: {
     type: String,
@@ -28,14 +28,18 @@ const props = defineProps({
 })
 const emit = defineEmits(["update:modelValue"])
 watch(value, (val) => {
-  console.log(val, props)
   emit("update:modelValue", val)
 })
+watch(
+  () => props.modelValue,
+  (val) => {
+    value.value = val
+  }
+)
 
 watch(
   () => props.roleName,
   (val) => {
-    console.log(val)
     getList(val)
   }
 )
@@ -46,25 +50,9 @@ interface user {
 }
 const options = ref<user[]>([])
 
-// /**
-//  * 路由对象
-//  */
-// const route = useRoute()
-// /**
-//  * 路由实例
-//  */
-// const router = useRouter()
-//console.log('1-开始创建组件-setup')
-/**
- * 数据部分
- */
 const data = reactive({})
 onBeforeMount(() => {
   getList(props.roleName)
-  //console.log('2.组件挂载页面之前执行----onBeforeMount')
-  // list.value = states.map((item) => {
-  //   return { value: `value:${item}`, label: `label:${item}` }
-  // })
 })
 const getList = async (query: string) => {
   let res: any = await getUserListByRoleName(query)

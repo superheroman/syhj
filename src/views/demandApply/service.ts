@@ -1,7 +1,7 @@
 import { request } from "@/utils/service"
-import { InputModal, RatePage } from "./data.type"
+import { RatePage } from "./data.type"
 /** 录入 */
-export function saveApplyInfo(data: InputModal) {
+export function saveApplyInfo(data: any) {
   return request({
     url: "/api/services/app/PriceEvaluation/PriceEvaluationStart",
     method: "post",
@@ -29,5 +29,15 @@ export function getPriceEvaluationTable(data: {
     url: "/api/services/app/PriceEvaluation/GetPriceEvaluationTable",
     method: "get",
     data
+  })
+}
+
+export function getPriceEvaluationStartData(auditFlowId: any) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/GetPriceEvaluationStartData",
+    method: "get",
+    data: {
+      auditFlowId
+    }
   })
 }
