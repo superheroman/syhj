@@ -176,13 +176,10 @@ const fetchOptionsData = async () => {
 // 获取初始化数据
 const fetchInitData = async () => {
   try {
-    const {
-      success,
-      result: { structureMaterial: tempData }
-    } = await GetStructural({ auditFlowId, productId })
-    console.log(tempData, "获取初始化数据")
+    const { success, result } = await GetStructural({ auditFlowId, productId })
+    // console.log(tempData, "获取初始化数据")
     if (!success) throw Error()
-    constructionBomList.value = tempData
+    constructionBomList.value = result
   } catch (err) {
     console.log(err, "[ 初始化失败 ]")
   }
