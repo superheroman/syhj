@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref } from "vue"
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue"
 import { useAppStore, DeviceType } from "@/store/modules/app"
 import { useSettingsStore } from "@/store/modules/settings"
-import { AppMain, NavigationBar, Settings, Sidebar, TagsView, RightPanel } from "./components"
+import { AppMain, NavigationBar, Sidebar, TagsView, RightPanel } from "./components"
+import { useRoute } from "vue-router"
+
 import useResize from "./useResize"
 
 let isRouterAlive = ref(true)
@@ -50,6 +52,16 @@ onMounted(() => {
 onBeforeUnmount(() => {
   removeEventListenerResize()
 })
+
+const route = useRoute()
+watch(
+  () => route.name,
+  (value) => {
+    if (value) {
+      console.log(value)
+    }
+  }
+)
 </script>
 
 <template>
@@ -62,8 +74,8 @@ onBeforeUnmount(() => {
         <TagsView v-if="showTagsView" />
       </div>
       <AppMain v-if="isRouterAlive" />
-      <RightPanel v-show="showSettings">
-        <Settings @change="reload" />
+      <RightPanel v-show="showSettings" @change="reload">
+        <!-- <Settings @change="reload" /> -->
       </RightPanel>
     </div>
   </div>

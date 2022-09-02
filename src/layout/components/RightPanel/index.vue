@@ -1,7 +1,9 @@
 <script lang="ts" setup>
-import { ref } from "vue"
-import { Setting } from "@element-plus/icons-vue"
-
+// import { Setting } from "@element-plus/icons-vue"
+import { ref, reactive, onMounted } from "vue"
+import { useProductStore } from "@/store/modules/productList"
+import getQuery from "@/utils/getQuery"
+import { useRoute, useRouter } from "vue-router"
 defineProps({
   buttonTop: {
     type: Number,
@@ -10,28 +12,69 @@ defineProps({
 })
 
 const show = ref(false)
+
+const emit = defineEmits(["change"])
+const route = useRoute()
+const router = useRouter()
+const productStore = useProductStore()
+const state = reactive({
+  productId: 0,
+  auditFlowId: ""
+})
+
+onMounted(async () => {
+  // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
+  let { productId, auditFlowId } = getQuery()
+  if (auditFlowId) {
+    await productStore.setProductList(Number(auditFlowId))
+  }
+  if (productId) {
+    //如url中存在productId则选中
+    state.productId = Number(productId)
+    window.sessionStorage.setItem("productId", String(state.productId))
+  }
+})
+const handleChange = (productId: any) => {
+  let { query } = route
+  query.productId = productId
+  let newQuery = Object.assign({ productId }, { ...query })
+  productStore.setProductId(productId)
+  window.sessionStorage.setItem("productId", productId)
+  router.push({
+    path: route.path,
+    query: newQuery
+  })
+  emit("change")
+}
 </script>
 
 <template>
   <div class="handle-button" :style="{ top: buttonTop + 'px' }" @click="show = true">
-    <el-icon :size="24">
-      <Setting />
-    </el-icon>
+    <span>零件列表</span>
   </div>
   <el-drawer v-model="show" size="300px" :with-header="false">
-    <slot />
+    <div class="drawer-container">
+      <div>
+        <h3 class="drawer-title">零件切换</h3>
+        <el-radio-group v-model="state.productId" size="large" @change="handleChange">
+          <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
+            <el-radio :label="item.id" border>{{ item.product }}</el-radio>
+          </div>
+        </el-radio-group>
+      </div>
+    </div>
   </el-drawer>
 </template>
 
 <style lang="scss" scoped>
 .handle-button {
-  width: 48px;
+  width: 60px;
   height: 48px;
   background-color: #152d3d;
   position: absolute;
   right: 0px;
   text-align: center;
-  font-size: 24px;
+  font-size: 14px;
   border-radius: 6px 0 0 6px !important;
   z-index: 10;
   cursor: pointer;
@@ -40,5 +83,23 @@ const show = ref(false)
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.drawer-container {
+  padding: 24px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  .drawer-title {
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 22px;
+  }
+  .drawer-item {
+    font-size: 14px;
+    padding: 12px 0;
+  }
+  .drawer-switch {
+    float: right;
+  }
 }
 </style>
