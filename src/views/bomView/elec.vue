@@ -28,6 +28,10 @@ import { GetElectronicBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
+
+const { jumpTodoCenter } = useJump()
+
 const { auditFlowId, productId }: any = getQuery()
 
 /**
@@ -70,6 +74,7 @@ const agree = async (bomCheckType: number, isAgree: boolean) => {
       isAgree
     })
     if (res.success) {
+      jumpTodoCenter()
       ElMessage.success("操作成功")
     }
   })

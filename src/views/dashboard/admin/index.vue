@@ -205,9 +205,11 @@ import { downloadFileExcel } from "@/utils/index"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage, ElMessageBox } from "element-plus"
 import debounce from "lodash/debounce"
-
-const { auditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 import * as echarts from "echarts"
+import useJump from "@/hook/useJump"
+
+const { jumpTodoCenter } = useJump()
+const { auditFlowId = 1, ModelCountId = 1 }: any = getQuery()
 
 let costChart: any = null
 let percentageCostChart: any = null
@@ -515,6 +517,7 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
       res = await SetPriceBoardState(auditFlowId, isAgree, checkList.value)
     }
     if (res.result.success) {
+      jumpTodoCenter()
       ElMessage({
         type: "success",
         message: "操作成功"
