@@ -7,6 +7,7 @@
       <el-table :data="constructionBomList" height="72vh">
         <el-table-column label="bom">
           <el-table-column type="index" label="序号" width="80" />
+          <el-table-column prop="superTypeName" label="超级大种类" width="150" v-if="data.isShow" />
           <el-table-column prop="categoryName" label="物料大类" width="150" />
           <el-table-column prop="typeName" label="物料种类" width="150" />
           <el-table-column prop="sapItemNum" label="物料编号" width="150" />
@@ -148,7 +149,8 @@ const data = reactive<any>({
   sop: [], // 表单子列
   visiable: false,
   moduleNumber: [], // 项目走量
-  moduleNumberSop: []
+  moduleNumberSop: [],
+  isShow: false
 })
 
 const exchangeSelectOptions = ref<any>([])
@@ -177,9 +179,17 @@ const fetchOptionsData = async () => {
 const fetchInitData = async () => {
   try {
     const { success, result } = await GetStructural({ auditFlowId, productId })
+    let structureMaterial: any[] = []
+    result.forEach((item: any) => {
+      item.structureMaterial.forEach((listItem: any) => {
+        listItem.superTypeName = item.superTypeName
+        structureMaterial.push(listItem)
+      })
+    })
     // console.log(tempData, "获取初始化数据")
     if (!success) throw Error()
-    constructionBomList.value = result
+    data.isShow = true
+    constructionBomList.value = structureMaterial
   } catch (err) {
     console.log(err, "[ 初始化失败 ]")
   }
