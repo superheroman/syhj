@@ -179,7 +179,7 @@ const fetchInitData = async () => {
     const {
       success,
       result: { constructionBomList: tempData }
-    } = await GetStructural({ id: auditFlowId })
+    } = await GetStructural({ auditFlowId, productId })
     console.log(tempData, "获取初始化数据")
     if (!success) throw Error()
     constructionBomList.value = tempData
