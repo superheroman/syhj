@@ -49,6 +49,7 @@ export function GeneralManagerQuoteCheck(data: {
    */
   auditFlowId?: number
   isAgree: boolean
+  opinionDescription: string
 }): any {
   return request({
     url: "/api/services/app/GeneralManagerCheck/GeneralManagerQuoteCheck",

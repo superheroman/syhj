@@ -8,4 +8,5 @@ export interface TRMainSolutionState {
    */
   isAgree?: boolean
   trCheckType?: number
+  opinionDescription: string
 }

@@ -49,15 +49,16 @@ let trFileId: null | number = null
 let solutionFileName = "" //文件名
 const save = async (isAgree: boolean) => {
   if (trFileId) {
-    ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+    ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       type: "warning"
-    }).then(async () => {
+    }).then(async (val) => {
       let res: any = await setTRMainSolutionState({
         auditFlowId: 5,
         trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
-        isAgree
+        isAgree,
+        opinionDescription: !isAgree ? val : ""
       })
       if (res.success) {
         ElMessage.success("操作成功")

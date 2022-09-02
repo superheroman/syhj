@@ -135,15 +135,16 @@ const fetchSopYear = async () => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
-  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val) => {
     const { success } = await SetBomState({
       isAgree,
       auditFlowId,
-      bomCheckType: 3
+      bomCheckType: 3,
+      opinionDescription: !isAgree ? val : ""
     })
     if (success) jumpTodoCenter()
   })
