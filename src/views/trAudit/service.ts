@@ -28,7 +28,11 @@ export function downloadFile(fileId: number) {
     data: {
       fileId
     },
-    responseType: "blob"
+    responseType: "blob",
+    onDownloadProgress: function (progressEvent: any) {
+      console.log(((progressEvent.loaded / progressEvent.total) * 100).toFixed(2) + "%")
+      // 对原生进度事件的处理
+    }
   })
 }
 export function setTRMainSolutionState(data: TRMainSolutionState) {

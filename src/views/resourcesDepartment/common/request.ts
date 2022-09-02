@@ -42,7 +42,7 @@ export function PostElectronicMaterialEntering(data: {
 }
 
 // 资源部输入时,加载结构料初始值
-export function GetStructural(data: { id: number }): any {
+export function GetStructural(data: any): any {
   return request({
     url: "/api/services/app/ResourceEntering/GetStructuralSingle",
     method: "get",

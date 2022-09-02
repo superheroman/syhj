@@ -141,7 +141,7 @@ const handleSetBomState = (isAgree: boolean) => {
     await SetBomState({
       isAgree,
       auditFlowId,
-      bomCheckType: 4
+      bomCheckType: 3
     })
   })
 }

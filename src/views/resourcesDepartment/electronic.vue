@@ -13,11 +13,7 @@
             :label="`${item}`"
             :prop="`materialsUseCount[${index}].value`"
             width="180"
-          >
-            <template #default="scope">
-              <span>{{ scope.row.materialsUseCount[index].value }}</span>
-            </template>
-          </el-table-column>
+          />
         </el-table-column>
         <el-table-column prop="currency" label="币种" width="150">
           <template #default="scope">
@@ -29,7 +25,6 @@
                 :value="item.exchangeRateKind"
               />
             </el-select>
-            <!-- <el-input v-model="scope.row.currency" v-if="scope.row.isEdit" /> -->
           </template>
         </el-table-column>
         <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
@@ -39,11 +34,7 @@
             :label="`${item}`"
             :prop="`systemiginalCurrency[${index}].value`"
             width="180"
-          >
-            <template #default="scope">
-              <span>{{ scope.row.systemiginalCurrency[index].value }}</span>
-            </template>
-          </el-table-column>
+          />
         </el-table-column>
         <el-table-column prop="inTheRate" label="年降率">
           <el-table-column
@@ -61,7 +52,7 @@
               >
                 <template #append> % </template>
               </el-input>
-              <span v-if="!scope.row.isEdit">{{ scope.row.inTheRate[index].value }}</span>
+              <span v-else>{{ scope.row?.inTheRate[index]?.value }}</span>
             </template>
           </el-table-column>
         </el-table-column>
@@ -75,7 +66,7 @@
           >
             <template #default="scope">
               <el-input-number
-                v-if="scope.row.isEdit"
+                v-if="scope.row.isEdit && scope.row?.iginalCurrency && scope.row?.iginalCurrency[index]?.value"
                 v-model="scope.row.iginalCurrency[index].value"
                 controls-position="right"
                 :min="0"
@@ -92,17 +83,7 @@
             :label="`${item?.toString()}`"
             :prop="`standardMoney[${index}].value`"
             width="180"
-          >
-            <!-- <template #default="scope">
-              <el-input-number
-                v-if="scope.row.isEdit"
-                v-model="scope.row.standardMoney[index].value"
-                controls-position="right"
-                :min="0"
-              />
-              <span v-if="!scope.row.isEdit">{{ scope.row.standardMoney[index].value }}</span>
-            </template> -->
-          </el-table-column>
+          />
         </el-table-column>
         <el-table-column prop="moq" label="MOQ" width="180">
           <template #default="{ row }">
@@ -199,15 +180,15 @@ const fetchInitData = async () => {
   const { result } = await GetElectronic(auditFlowId, productId)
   if (!result) return false
   console.log(result, "获取初始化数据")
-  electronicBomList.value = result
+
   // 初始化表头数据
-  const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } =
-    electronicBomList?.value[0] || {}
+  const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } = result[0] || {}
   allColums.materialsUseCountYears = materialsUseCount?.map((item) => item.year) || []
   allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item) => item.year) || []
   allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
   allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
   allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
+  electronicBomList.value = result
 }
 
 // 提交电子料单价行数据
@@ -237,7 +218,7 @@ const handleCalculation = async (row: any, index: number) => {
   try {
     const { success, result } = await PostElectronicMaterialCalculate(row)
     if (!success && !result.length) throw Error()
-    electronicBomList.value[index] = { ...(result[0] || {}), isEdit: true }
+    electronicBomList.value[index] = { ...(result || {}), isEdit: true }
     console.log(success, "handleSubmit")
   } catch (err) {
     console.log
@@ -250,7 +231,7 @@ const handleCalculationIginalCurrency = async (row: any, index: number) => {
   try {
     const { success, result } = await PosToriginalCurrencyCalculate(row)
     if (!success && !result.length) throw Error()
-    electronicBomList.value[index] = { ...(result[0] || {}), isEdit: true }
+    electronicBomList.value[index] = { ...(result || {}), isEdit: true }
     console.log(success, "handleSubmit")
   } catch (err) {
     console.log
