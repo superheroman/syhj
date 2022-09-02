@@ -126,7 +126,7 @@
       <el-card style="margin-top: 20px">
         <template #header>
           <el-row align="middle" justify="space-between">
-            <span>根线/切线工时</span>
+            <span>跟线/切线工时</span>
           </el-row>
         </template>
         <el-row align="middle" style="width: 350px; flex-wrap: nowrap">UPH值:</el-row>

@@ -120,7 +120,7 @@
           :on-change="handleFileChange"
           style="float: right"
         >
-          <el-button>TR主方案上传</el-button>
+          <el-button>TR方案上传</el-button>
         </el-upload>
         <!-- 产品总成本推移图 -->
         <div id="selectCostChart" />
