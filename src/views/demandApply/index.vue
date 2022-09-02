@@ -630,7 +630,7 @@
 import { ref, reactive, onMounted, toRefs, watch } from "vue"
 import { productTypeMap, Pcs, YearListItem, modelCount } from "./data.type"
 import getQuery from "@/utils/getQuery"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 // import { Search } from "@element-plus/icons-vue"
 
 import type { UploadProps, UploadUserFile } from "element-plus"
@@ -806,6 +806,7 @@ const state = reactive({
 const fileList = ref<UploadUserFile[]>([])
 const yearCount = ref(0)
 let route = useRoute()
+let router = useRouter()
 const pcsYearQuantitySum = (row: Pcs) => {
   let rowSum = 0
   row.pcsYearList.forEach((item: any) => {
@@ -840,6 +841,9 @@ const save = async (formEl: FormInstance | undefined) => {
         ElMessage({
           type: "success",
           message: "保存成功"
+        })
+        router.push({
+          path: "/todoCenter/index"
         })
       }
     } else {
