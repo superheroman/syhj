@@ -66,7 +66,7 @@
           >
             <template #default="scope">
               <el-input-number
-                v-if="scope.row.isEdit && scope.row?.iginalCurrency && scope.row?.iginalCurrency[index]?.value"
+                v-if="scope.row.isEdit"
                 v-model="scope.row.iginalCurrency[index].value"
                 controls-position="right"
                 :min="0"
