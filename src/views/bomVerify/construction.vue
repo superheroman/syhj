@@ -1,5 +1,5 @@
 <template>
-  <el-card class="wrap m-2">
+  <el-card class="wrap m-2" header="结构bom单价审核">
     <el-card
       v-for="item in constructionBomList"
       :header="item.superTypeName"
@@ -109,15 +109,16 @@ const fetchConstructionInitData = async () => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
-  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val) => {
     const { success } = await SetBomState({
       isAgree,
       auditFlowId,
-      bomCheckType: 4
+      bomCheckType: 4,
+      opinionDescription: !isAgree ? val : ""
     })
     if (success) jumpTodoCenter()
   })

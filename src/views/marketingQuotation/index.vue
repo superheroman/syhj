@@ -138,14 +138,15 @@ const fetchSopYear = async () => {
 }
 
 const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
-  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "报价审核", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "报价审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val) => {
     const { success } = await GeneralManagerQuoteCheck({
       isAgree,
-      auditFlowId
+      auditFlowId,
+      opinionDescription: !isAgree ? val : ""
     })
     if (success) jumpTodoCenter()
   })
