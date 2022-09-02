@@ -65,7 +65,9 @@ import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment, GetReturnQcGauge } from "./common/request"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 /**
@@ -105,6 +107,7 @@ const submit = async () => {
       }
     })
     if (!success) throw Error()
+    jumpTodoCenter()
     ElMessage.success("提交成功")
   } catch (err) {
     ElMessage.error("提交失败")

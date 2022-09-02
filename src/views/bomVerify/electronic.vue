@@ -81,7 +81,9 @@ import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { ElMessageBox } from "element-plus"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId }: any = getQuery()
 
 // 电子料 - table数据
@@ -138,11 +140,12 @@ const handleSetBomState = (isAgree: boolean) => {
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    await SetBomState({
+    const { success } = await SetBomState({
       isAgree,
       auditFlowId,
       bomCheckType: 3
     })
+    if (success) jumpTodoCenter()
   })
 }
 

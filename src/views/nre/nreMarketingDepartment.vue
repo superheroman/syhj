@@ -37,7 +37,9 @@ import { getMouldSummaries } from "./common/mouldSummaries"
 import { NreMarketingDepartmentModel } from "./data.type"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId, right = 1 }: any = getQuery()
 
 const mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
@@ -55,9 +57,14 @@ const queryDoneData = async () => {
 }
 
 const submit = async () => {
-  const { success } = await PostSalesDepartment(mouldInventoryData.value)
-  if (!success) throw Error()
-  ElMessage.success("提交成功~")
+  try {
+    const { success } = await PostSalesDepartment(mouldInventoryData.value)
+    if (!success) throw Error()
+    jumpTodoCenter()
+    ElMessage.success("提交成功~")
+  } catch (err) {
+    ElMessage.success("提交失败~")
+  }
 }
 
 onBeforeMount(() => {

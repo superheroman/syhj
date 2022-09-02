@@ -199,7 +199,9 @@ import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.t
 import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId = 1 } = getQuery()
 /**
  * 数据部分
@@ -236,7 +238,7 @@ const addTravelCostData = () => {
 
 const submit = async () => {
   try {
-    const res = await PostProjectManagement({
+    const { success } = await PostProjectManagement({
       projectManagement: {
         ...data,
         handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
@@ -249,7 +251,8 @@ const submit = async () => {
       },
       auditFlowId
     })
-    console.log(res, "RES")
+    console.log(success, "RES")
+    if (success) jumpTodoCenter()
   } catch (err) {
     console.log(err, "[PostProjectManagement ERROR]")
   }
