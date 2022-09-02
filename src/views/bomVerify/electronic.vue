@@ -81,7 +81,9 @@ import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { ElMessageBox } from "element-plus"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId }: any = getQuery()
 
 // 电子料 - table数据
@@ -133,16 +135,18 @@ const fetchSopYear = async () => {
 }
 
 const handleSetBomState = (isAgree: boolean) => {
-  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
-    await SetBomState({
+  }).then(async (val) => {
+    const { success } = await SetBomState({
       isAgree,
       auditFlowId,
-      bomCheckType: 3
+      bomCheckType: 3,
+      opinionDescription: !isAgree ? val : ""
     })
+    if (success) jumpTodoCenter()
   })
 }
 

@@ -24,7 +24,12 @@ export function GetBOMStructuralSingle(auditFlowId: number, productId: number): 
 }
 
 // Bom审核
-export function SetBomState(data: { auditFlowId: number; bomCheckType: number; isAgree: boolean }): any {
+export function SetBomState(data: {
+  auditFlowId: number
+  bomCheckType: number
+  isAgree: boolean
+  opinionDescription: string
+}): any {
   return request({
     url: "/api/services/app/BomCheck/SetBomState",
     method: "post",

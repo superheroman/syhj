@@ -37,6 +37,9 @@ import { GetStructionBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
 
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
+
+const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 /**
@@ -67,18 +70,20 @@ const data = reactive({
 //   }
 // }
 const agree = async (bomCheckType: number, isAgree: boolean) => {
-  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val) => {
     let res: any = await SetBomState({
       auditFlowId: auditFlowId,
       productId: productId,
       bomCheckType,
-      isAgree
+      isAgree,
+      opinionDescription: !isAgree ? val : ""
     })
     if (res.success) {
+      jumpTodoCenter()
       ElMessage.success("操作成功")
     }
   })

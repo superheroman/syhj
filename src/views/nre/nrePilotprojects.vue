@@ -112,29 +112,19 @@
 
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { PostProductDepartment } from "./common/request"
+import { PostProductDepartment, GetProductDepartment } from "./common/request"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import { LaboratoryFeeModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const deleteLaboratoryFeeModel = (i: number) => {
   data.laboratoryFeeModels.splice(i, 1)
 }
 let { auditFlowId, productId } = getQuery()
 const addLaboratoryFeeModel = () => {
   data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, quantity: 0 })
-}
-
-const submit = async () => {
-  try {
-    const res = await PostProductDepartment({
-      auditFlowId,
-      productDepartmentModel: { ...data, productId }
-    })
-    console.log(res, "[PostProductDepartment RES]")
-  } catch (err) {
-    console.log(err, "[PostProductDepartment err]")
-  }
 }
 
 /**
@@ -146,10 +136,28 @@ const data = reactive<{
   laboratoryFeeModels: []
 })
 
+const initFetch = async () => {
+  const { result } = (await GetProductDepartment(auditFlowId, productId)) || {}
+  data.laboratoryFeeModels = result.laboratoryFeeModels || []
+}
+
+const submit = async () => {
+  try {
+    const { success } = await PostProductDepartment({
+      auditFlowId,
+      productDepartmentModel: { ...data, productId }
+    })
+    if (success) jumpTodoCenter()
+    console.log(success, "[PostProductDepartment RES]")
+  } catch (err) {
+    console.log(err, "[PostProductDepartment err]")
+  }
+}
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(() => {
+  initFetch()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

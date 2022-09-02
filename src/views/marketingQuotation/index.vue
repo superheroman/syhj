@@ -97,7 +97,9 @@ import { GetQuotationList, GeneralManagerQuoteCheck } from "./service"
 import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
 import { ElMessageBox } from "element-plus"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1 }: any = getQuery()
 /**
  * 数据部分
@@ -136,15 +138,17 @@ const fetchSopYear = async () => {
 }
 
 const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
-  ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "报价审核", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "报价审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
-    await GeneralManagerQuoteCheck({
+  }).then(async (val) => {
+    const { success } = await GeneralManagerQuoteCheck({
       isAgree,
-      auditFlowId
+      auditFlowId,
+      opinionDescription: !isAgree ? val : ""
     })
+    if (success) jumpTodoCenter()
   })
 }
 
