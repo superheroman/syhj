@@ -73,7 +73,7 @@ const downLoad = async () => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
       reader.onload = function () {
-        let url = URL.createObjectURL(new Blob([blob]))
+        let url = URL.createObjectURL(new Blob([blob], { type: "application/zip" }))
         let a = document.createElement("a")
         document.body.appendChild(a) //此处增加了将创建的添加到body当中
         a.href = url
