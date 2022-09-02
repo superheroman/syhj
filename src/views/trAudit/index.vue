@@ -46,6 +46,7 @@ const data = reactive({
   }
 })
 let trFileId: null | number = null
+let solutionFileName = "" //文件名
 const save = async (isAgree: boolean) => {
   if (trFileId) {
     ElMessageBox.confirm(`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
@@ -73,11 +74,11 @@ const downLoad = async () => {
       const reader = new FileReader()
       reader.readAsDataURL(blob)
       reader.onload = function () {
-        let url = URL.createObjectURL(new Blob([blob], { type: "application/zip" }))
+        let url = URL.createObjectURL(new Blob([blob]))
         let a = document.createElement("a")
         document.body.appendChild(a) //此处增加了将创建的添加到body当中
         a.href = url
-        a.download = "tr主方案.zip"
+        a.download = solutionFileName
         a.target = "_blank"
         a.click()
         a.remove() //将a标签移除
@@ -95,6 +96,7 @@ onMounted(async () => {
   let res: any = await getAuditFlowVersion(Number(auditFlowId))
   data.form.title = res.result.title
   trFileId = res.result.solutionFileIdentifier
+  solutionFileName = res.result.solutionFileName
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
