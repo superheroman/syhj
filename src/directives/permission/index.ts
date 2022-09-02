@@ -31,3 +31,42 @@ export const havedone: Directive = {
     }
   }
 }
+
+export const drag: Directive = {
+  mounted(el) {
+    el.onmousedown = function (e: any) {
+      //做到浏览器兼容
+      e = e || window.event
+      const diffX = e.clientX - el.offsetLeft
+      const diffY = e.clientY - el.offsetTop
+      //当拉着box移动时
+      document.onmousemove = function (e) {
+        // 浏览器兼容
+        e = e || window.event
+        let left = e.clientX - diffX
+        let top = e.clientY - diffY
+
+        if (left < 0) {
+          left = 0
+        } else if (left > window.innerWidth - el.offsetWidth) {
+          left = window.innerWidth - el.offsetWidth
+        }
+
+        if (top < 0) {
+          top = 0
+        } else if (top > window.innerHeight - el.offsetHeight) {
+          top = window.innerHeight - el.offsetHeight
+        }
+
+        el.style.left = left + "px"
+        el.style.top = top + "px"
+      }
+
+      // 当鼠标抬起时
+      document.onmouseup = function () {
+        this.onmousemove = null
+        this.onmouseup = null
+      }
+    }
+  }
+}
