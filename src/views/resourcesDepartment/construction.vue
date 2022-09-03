@@ -13,7 +13,7 @@
             <el-table-column prop="sapItemNum" label="物料编号" width="150" />
             <el-table-column prop="drawingNumName" label="图号名称" width="150" />
             <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
-            <el-table-column prop="sapItemName" label="材料" width="150" />
+            <el-table-column prop="materialName" label="材料" width="150" />
             <el-table-column prop="weightNumber" label="重量g" width="150" />
             <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
             <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
@@ -181,7 +181,7 @@ const queryModlueNumber = () => {
 // 获取项目走量的数据
 const fetchModuleNumberData = async () => {
   const { result } = await GetProjectGoQuantity({ Id: auditFlowId })
-  data.moduleNumberSop = result[0].modelCountYear
+  data.moduleNumberSop = result[0]?.modelCountYear
   data.moduleNumber = result
 }
 
@@ -213,7 +213,7 @@ const handleCalculationIginalCurrency = async (row: any, bomIndex: number, igina
   try {
     const { success, result } = await ToriginalCurrencyStructural(row)
     if (!success && !result.length) throw Error()
-    const res = { ...(result[0] || {}), isEdit: true }
+    const res = { ...(result || {}), isEdit: true }
     constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex] = res
   } catch (err) {
     console.log
