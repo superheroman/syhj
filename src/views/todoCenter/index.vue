@@ -53,6 +53,7 @@
                       {{ scope.row.isRetype ? "是" : "否" }}
                     </template>
                   </el-table-column>
+                  <el-table-column label="流转说明" prop="jumpDescription" />
                   <el-table-column label="跳转至流程">
                     <template #default="scope">
                       <el-button @click="clickToPage(scope.row, scopeP)">跳转</el-button>

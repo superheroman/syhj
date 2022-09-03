@@ -68,7 +68,6 @@ const data = reactive({
 
 let auditFlowId = 1
 let productId = 1
-let isOld = "false"
 const submit = async () => {
   let bomLossData = [] as any[]
   // bomLossData.concat(data.bomLossStructData)
@@ -110,20 +109,26 @@ onMounted(async () => {
   let query = getQuery()
   auditFlowId = query.auditFlowId ? Number(query.auditFlowId) : 1
   productId = query.productId ? Number(query.productId) : 1
+  let right = query.right
   let { result } = (await getYears(auditFlowId)) as any
   data.years = result
-  if (isOld === "true") {
+  if (right === "1") {
     let resOldStruct: any = await getStructOldLossRateInfo({ auditFlowId, productId })
     data.bomLossStructData = resOldStruct.result
+    data.bomLossStructData.forEach((item: any) => {
+      item.lossRateYearList.forEach((it: any) => {
+        it.rate = Number(it.rate) * 100
+      })
+    })
   } else {
     //  结构料初始值
     let resStruct: any = await getStructLossRateType({ auditFlowId, productId })
     data.bomLossStructData = resStruct.result
+    data.bomLossStructData.forEach((item: any) => {
+      item.lossRateYearList = []
+      item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
+    })
   }
-  data.bomLossStructData.forEach((item: any) => {
-    item.lossRateYearList = []
-    item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
-  })
 })
 watchEffect(() => {})
 // 使用toRefs解构

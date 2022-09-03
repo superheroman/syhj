@@ -61,9 +61,8 @@ const data = reactive({
   years: [] as number[]
 })
 
-let auditFlowId = 1
-let productId = 1
-let isOld = "false"
+let auditFlowId = 0
+let productId = 0
 const submit = async () => {
   let bomLossData = [] as any[]
   bomLossData = _.cloneDeep(data.bomLossElecData)
@@ -96,23 +95,30 @@ onBeforeMount(() => {
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   let query = getQuery()
-  auditFlowId = query.auditFlowId ? Number(query.auditFlowId) : 1
-  productId = query.productId ? Number(query.productId) : 1
+  auditFlowId = query.auditFlowId ? Number(query.auditFlowId) : 0
+  productId = query.productId ? Number(query.productId) : 0
+  let right = query.right
   let { result } = (await getYears(auditFlowId)) as any
   data.years = result
-  if (isOld === "true") {
+  if (right === "1") {
+    // 已办查看老数据
     let resOldElec: any = await getElecOldLossRateInfo({ auditFlowId, productId })
     data.bomLossElecData = resOldElec.result
+    data.bomLossElecData.forEach((item: any) => {
+      item.lossRateYearList.forEach((it: any) => {
+        it.rate = Number(it.rate) * 100
+      })
+    })
   } else {
     // let res: any = await getLossRateType({ auditFlowId, productId })
     // 获取电子料 结构料初始值
     let resElec: any = await getElecLossRateType({ auditFlowId, productId })
     data.bomLossElecData = resElec.result
+    data.bomLossElecData.forEach((item: any) => {
+      item.lossRateYearList = []
+      item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
+    })
   }
-  data.bomLossElecData.forEach((item: any) => {
-    item.lossRateYearList = []
-    item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
-  })
 })
 watchEffect(() => {})
 // 使用toRefs解构
