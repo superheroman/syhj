@@ -10,3 +10,12 @@ export function getSorFile(auditFlowId: any) {
     responseType: "blob"
   })
 }
+export function getSorByAuditFlowId(auditFlowId: any) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/GetSorByAuditFlowId",
+    method: "post",
+    data: {
+      auditFlowId
+    }
+  })
+}

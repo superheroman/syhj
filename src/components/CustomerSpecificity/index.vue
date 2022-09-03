@@ -14,8 +14,7 @@
 <script lang="ts" setup>
 import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { useRoute } from "vue-router"
-import { getSorFile } from "./service"
-import { downloadFileExcel } from "@/utils/index"
+import { getSorFile, getSorByAuditFlowId } from "./service"
 
 /**
  * 路由对象
@@ -30,20 +29,36 @@ const route = useRoute()
  */
 const data = reactive({})
 const text = ref("")
+let sorFileName = ""
 const downLoadSor = async () => {
   let { auditFlowId } = route.query
-  try {
-    const res: any = await getSorFile(auditFlowId)
-    downloadFileExcel(res, "SOR文件")
-    // console.log(result, "产品核价表下载")
-  } catch (err: any) {
-    console.log(err, "[ SOR文件下载失败 ]")
+  let res: any = await getSorFile(auditFlowId)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = sorFileName
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
   }
 }
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
-onMounted(() => {
+onMounted(async () => {
+  let { auditFlowId } = route.query
+  try {
+    const res: any = await getSorByAuditFlowId(auditFlowId)
+    text.value = res.result.customerSpecialRequest
+    sorFileName = res.result.sorFileName
+  } catch (err: any) {
+    console.log(err)
+  }
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})
