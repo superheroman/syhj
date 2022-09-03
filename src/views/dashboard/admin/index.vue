@@ -133,7 +133,7 @@
     <el-dialog v-model="dialogVisible" title="退回选择">
       <el-checkbox-group v-model="checkList">
         <el-checkbox label="StructBomImport">产品部-结构工程师</el-checkbox>
-        <el-checkbox label="">产品部-电子工程师（EMC）</el-checkbox>
+        <el-checkbox label="NreInputEmc">产品部-电子工程师（EMC）</el-checkbox>
         <el-checkbox label="ElectronicBomImport">产品部-电子工程师（BOM）</el-checkbox>
         <el-checkbox label="NreInputGage">品质保证部-检具费录入</el-checkbox>
         <el-checkbox label="NreInputTest">品质保证部-实验费录入</el-checkbox>
@@ -141,8 +141,8 @@
         <el-checkbox label="LossRateInput">工程技术部-损耗率录入</el-checkbox>
         <el-checkbox label="ManHourImport">工程技术部-工序工时录入</el-checkbox>
         <el-checkbox label="LogisticsCostInput">生产管理部-物流成本录入</el-checkbox>
-        <el-checkbox label="StructPriceInput">资源部管理部-结构资源开发（模具单击录入）</el-checkbox>
-        <el-checkbox label="">资源部管理部-结构资源开发（产品单价录入）</el-checkbox>
+        <el-checkbox label="NreInputMould">资源部管理部-结构资源开发（模具单击录入）</el-checkbox>
+        <el-checkbox label="StructPriceInput">资源部管理部-结构资源开发（产品单价录入）</el-checkbox>
         <el-checkbox label="ElectronicPriceInput">资源部管理部-电子资源开发</el-checkbox>
       </el-checkbox-group>
       <template #footer>
