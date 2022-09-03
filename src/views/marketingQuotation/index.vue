@@ -146,7 +146,7 @@ const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
     const { success } = await GeneralManagerQuoteCheck({
       isAgree,
       auditFlowId,
-      opinionDescription: !isAgree ? val : ""
+      opinionDescription: !isAgree ? val?.value : ""
     })
     if (success) jumpTodoCenter()
   })

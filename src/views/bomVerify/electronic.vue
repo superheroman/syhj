@@ -144,7 +144,7 @@ const handleSetBomState = (isAgree: boolean) => {
       isAgree,
       auditFlowId,
       bomCheckType: 3,
-      opinionDescription: !isAgree ? val : ""
+      opinionDescription: !isAgree ? val?.value : ""
     })
     if (success) jumpTodoCenter()
   })
