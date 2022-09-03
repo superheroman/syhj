@@ -8,7 +8,7 @@ const currentRole = ref("")
 let userStorage = window.sessionStorage.getItem("user")
 let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const roles = computed(() => {
-  return userInfo.userRole.items[0].name
+  return userInfo.userRole?.items[0]?.name
 })
 
 onBeforeMount(() => {

@@ -209,7 +209,7 @@ import * as echarts from "echarts"
 import useJump from "@/hook/useJump"
 
 const { jumpTodoCenter } = useJump()
-const { auditFlowId = 1, modelCountId = 3 }: any = getQuery()
+const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 let costChart: any = null
 let percentageCostChart: any = null
@@ -333,7 +333,7 @@ const getBomCost = async () => {
     const { result }: any = await GetBomCost({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     data.bomData = result || []
     console.log(result, "获取 bom成本（含损耗）汇总表")
@@ -348,7 +348,7 @@ const getLossCost = async () => {
     const { result }: any = await GetLossCost({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     data.lossData = result || []
     console.log(result, "获取损耗成本")
@@ -363,7 +363,7 @@ const getQualityCost = async () => {
     const { result }: any = await GetQualityCost({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     data.qualityData = [result] || []
   } catch (err: any) {
@@ -377,7 +377,7 @@ const handleFetchPriceEvaluationTableDownload = async () => {
     const res: any = await PriceEvaluationTableDownload({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
 
     downloadFileExcel(res, "产品核价表")
@@ -393,7 +393,7 @@ const handleFethNreTableDownload = async () => {
     const res: any = await NreTableDownload({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     downloadFileExcel(res, "NRE核价表")
     console.log(res, "NreTableDownload")
@@ -408,7 +408,7 @@ const getLogisticsCost = async () => {
     const { result }: any = await GetLogisticsCost({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     data.logisticsData = result
     console.log(result, "物流成本汇总表")
@@ -423,7 +423,7 @@ const getManufacturingCost = async () => {
     const { result }: any = await GetManufacturingCost({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     data.manufactureData = result
     console.log(result, "getPricingPanelProfit")
@@ -438,7 +438,7 @@ const getPricingPanelProportionOfProductCost = async () => {
     const { result }: any = await GetPricingPanelProportionOfProductCost({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     const value = result?.items.map((val: any) => ({ value: val.proportion?.toFixed(2) || 0, name: val.name }))
     percentageCostChart.setOption({
@@ -462,7 +462,7 @@ const getPricingPanelProfit = async () => {
     const { result }: any = await GetPricingPanelProfit({
       Year: data.year,
       AuditFlowId: auditFlowId,
-      ModelCountId: modelCountId
+      ModelCountId: productId
     })
     const val = result?.items?.map((val: any) => Math.floor(val.proportion))
     console.log(val, "getPricingPanelProfit")
@@ -485,7 +485,7 @@ const getPricingPanelProfit = async () => {
 const getGoTableChartData = async () => {
   const {
     result: { items = [] }
-  }: any = await GetGoTable({ AuditFlowId: auditFlowId, ModelCountId: modelCountId, InputCount: data.productInputs })
+  }: any = await GetGoTable({ AuditFlowId: auditFlowId, ModelCountId: productId, InputCount: data.productInputs })
   const value = items.map((item: any) => Math.floor(item.value)) || []
   const years = items.map((val: any) => val.year) || []
   selectCostChart = initCharts("selectCostChart", {
