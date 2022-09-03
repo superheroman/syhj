@@ -39,13 +39,31 @@
               <span v-if="!scope.row.isEdit">{{ scope.row.materialsSystemPrice }}</span>
             </template>
           </el-table-column> -->
-        <el-table-column label="Sop" align="center" v-if="allColums?.sop.length">
+        <!-- <el-table-column label="Sop" align="center" v-if="allColums?.sop.length">
           <el-table-column
             v-for="(item, index) in allColums?.sop"
             :key="item"
             :label="`${item}`"
             :prop="`sop[${index}].value`"
             width="150"
+          />
+        </el-table-column> -->
+        <el-table-column prop="iginalCurrency" label="原币">
+          <el-table-column
+            v-for="(item, iginalCurrencyIndex) in allColums?.sop"
+            :key="`construction-iginalCurrency${item}`"
+            :label="`${item?.toString()}`"
+            :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
+            width="180"
+          />
+        </el-table-column>
+        <el-table-column prop="standardMoney" label="本位币">
+          <el-table-column
+            v-for="(item, index) in allColums?.sop"
+            :key="`construction-standardMoney${item}`"
+            :label="`${item?.toString()}`"
+            :prop="`standardMoney[${index}].value`"
+            width="180"
           />
         </el-table-column>
         <el-table-column prop="pricingEndTime" label="确认人" />

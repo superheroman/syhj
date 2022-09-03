@@ -181,7 +181,7 @@ const queryModlueNumber = () => {
 // 获取项目走量的数据
 const fetchModuleNumberData = async () => {
   const { result } = await GetProjectGoQuantity({ Id: auditFlowId })
-  data.moduleNumberSop = result[0].modelCountYear
+  data.moduleNumberSop = result[0]?.modelCountYear
   data.moduleNumber = result
 }
 
@@ -213,7 +213,7 @@ const handleCalculationIginalCurrency = async (row: any, bomIndex: number, igina
   try {
     const { success, result } = await ToriginalCurrencyStructural(row)
     if (!success && !result.length) throw Error()
-    const res = { ...(result[0] || {}), isEdit: true }
+    const res = { ...(result || {}), isEdit: true }
     constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex] = res
   } catch (err) {
     console.log
