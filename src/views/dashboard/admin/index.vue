@@ -2,9 +2,9 @@
   <div class="dashboard">
     <el-card class="m-2">
       <el-row align="middle">
-        <el-select class="m-2" v-model="data.product" placeholder="请选择产品" @change="fetchAllData">
+        <!-- <el-select class="m-2" v-model="data.product" placeholder="请选择产品" @change="fetchAllData">
           <el-option v-for="item in data.productOptions" :key="item.id" :label="item.name" :value="item.id" />
-        </el-select>
+        </el-select> -->
         <el-select v-model="data.year" class="m-2" placeholder="请选择年份" @change="fetchAllData">
           <el-option v-for="item in data.yearsOptions" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
@@ -185,7 +185,7 @@ import {
   GetBomCost,
   GetLossCost,
   GetQualityCost,
-  GetPricingPanelProductSelectList,
+  // GetPricingPanelProductSelectList,
   GetPricingPanelTimeSelectList,
   GetPricingPanelProportionOfProductCost,
   GetPricingPanelProfit,
@@ -218,10 +218,8 @@ let dialogVisible = ref(false)
 let checkList = ref([])
 const fileList = ref<UploadUserFile[]>([])
 const data = reactive<Record<string, any>>({
-  product: "",
   year: "",
   mode: "1",
-  productOptions: [],
   yearsOptions: [],
   bomData: [],
   lossData: [],
@@ -301,18 +299,18 @@ const getPriceEvaluationTableInputCount = async () => {
 // 初始化下拉项数据
 const fetchOptionsData = async () => {
   await getPricingPanelTimeSelectList()
-  getPricingPanelProductSelectList()
+  // getPricingPanelProductSelectList()
 }
 
 // 核价看板-【产品选择】下拉框下拉数据
-const getPricingPanelProductSelectList = async () => {
-  try {
-    const ProductSelectRes: any = await GetPricingPanelProductSelectList({ AuditFlowId: auditFlowId })
-    data.productOptions = ProductSelectRes?.result?.items
-  } catch (err: any) {
-    console.log(err, "[ 获取下拉数据失败 ]")
-  }
-}
+// const getPricingPanelProductSelectList = async () => {
+//   try {
+//     const ProductSelectRes: any = await GetPricingPanelProductSelectList({ AuditFlowId: auditFlowId })
+//     data.productOptions = ProductSelectRes?.result?.items
+//   } catch (err: any) {
+//     console.log(err, "[ 获取下拉数据失败 ]")
+//   }
+// }
 
 // 核价看板-[时间选择]下拉框下拉数据
 const getPricingPanelTimeSelectList = async () => {
