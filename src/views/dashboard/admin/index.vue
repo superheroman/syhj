@@ -155,7 +155,7 @@
     <el-dialog v-model="data.createVisible" title="生成核价表">
       <el-table :data="data.priceEvaluationTableInputCount">
         <el-table-column prop="productName" label="产品名称" width="180" />
-        <el-table-column prop="year" label="年份" width="80">
+        <el-table-column prop="year" label="年份">
           <template #default="{ row }">
             <el-select v-model="row.year" class="m-2" placeholder="请选择年份" @change="fetchAllData">
               <el-option v-for="item in data.yearsOptions" :key="item.id" :label="item.name" :value="item.id" />
@@ -164,15 +164,15 @@
         </el-table-column>
         <el-table-column prop="inputCount" label="投入量" width="180">
           <template #default="{ row }">
-            <el-input v-model="row.inputCount" placeholder="请输入投入量" />
+            <el-input-number controls-position="right" v-model="row.inputCount" placeholder="请输入投入量" />
           </template>
         </el-table-column>
       </el-table>
       <template #footer>
         <span>
           <el-button @click="data.createVisible = false">取消</el-button>
-          <el-button @click="handleCreatePriceEvaluation" type="primary">设置投入量和年份</el-button>
-          <el-button @click="handleSetPriceEvaluationTableInputCount" type="primary">生成核价表</el-button>
+          <el-button @click="handleSetPriceEvaluationTableInputCount" type="primary">设置投入量和年份</el-button>
+          <el-button @click="handleCreatePriceEvaluation" type="primary">生成核价表</el-button>
         </span>
       </template>
     </el-dialog>
@@ -554,14 +554,17 @@ const handleChangeMode = () => {
 // 生成核价表
 const handleCreatePriceEvaluation = debounce(async () => {
   await CreatePriceEvaluationTable(auditFlowId)
+  ElMessage.success("生成成功！")
 }, 500)
 
 // 设置投入量和年份
 const handleSetPriceEvaluationTableInputCount = debounce(async () => {
   await SetPriceEvaluationTableInputCount({
     auditFlowId,
-    modelCountInputCount: data.priceEvaluationTableInputCount
+    modelCountInputCount: data.priceEvaluationTableInputCount.map((item: any) => ({ ...item, modelCountId: productId }))
   })
+  ElMessage.success("设置成功！")
+  getPriceEvaluationTableInputCount()
 }, 500)
 </script>
 
