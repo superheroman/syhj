@@ -60,7 +60,7 @@
           />
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150" />
-        <el-table-column prop="pricingEndTime" label="确认人" />
+        <el-table-column prop="peopleName" label="确认人" />
       </el-table>
       <!-- <el-row justify="end">
         <el-button class="margin-top" @click="handleCalculation" type="primary"> 计算 </el-button>
