@@ -58,7 +58,7 @@ const save = async (isAgree: boolean) => {
         auditFlowId: 5,
         trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
         isAgree,
-        opinionDescription: !isAgree ? val : ""
+        opinionDescription: !isAgree ? val?.value : ""
       })
       if (res.success) {
         ElMessage.success("操作成功")

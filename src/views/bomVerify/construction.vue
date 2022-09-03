@@ -66,7 +66,7 @@
             width="180"
           />
         </el-table-column>
-        <el-table-column prop="pricingEndTime" label="确认人" />
+        <el-table-column prop="peopleName" label="确认人" />
       </el-table>
     </el-card>
     <el-row justify="end" style="margin-top: 20px">
@@ -136,7 +136,7 @@ const handleSetBomState = (isAgree: boolean) => {
       isAgree,
       auditFlowId,
       bomCheckType: 4,
-      opinionDescription: !isAgree ? val : ""
+      opinionDescription: !isAgree ? val.value : ""
     })
     if (success) jumpTodoCenter()
   })

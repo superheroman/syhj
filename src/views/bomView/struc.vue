@@ -80,7 +80,7 @@ const agree = async (bomCheckType: number, isAgree: boolean) => {
       productId: productId,
       bomCheckType,
       isAgree,
-      opinionDescription: !isAgree ? val : ""
+      opinionDescription: !isAgree ? val?.value : ""
     })
     if (res.success) {
       jumpTodoCenter()
