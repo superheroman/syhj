@@ -48,7 +48,11 @@
             :label="`${item}`"
             :prop="`iginalCurrency[${index}].value`"
             width="150"
-          />
+          >
+            <template #default="{ row }">
+              {{ row.iginalCurrency[index]?.value?.toFixed(2) || 0 }}
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column prop="standardMoney" label="本位币">
           <el-table-column
@@ -57,7 +61,11 @@
             :label="`${item}`"
             :prop="`standardMoney[${index}].value`"
             width="150"
-          />
+          >
+            <template #default="{ row }">
+              {{ row.standardMoney[index]?.value?.toFixed(2) || 0 }}
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150" />
         <el-table-column prop="peopleName" label="确认人" />
