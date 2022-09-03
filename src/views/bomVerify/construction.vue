@@ -55,7 +55,11 @@
             :label="`${item?.toString()}`"
             :prop="`iginalCurrency[${iginalCurrencyIndex}].value`"
             width="180"
-          />
+          >
+            <template #default="{ row }">
+              {{ row.iginalCurrency[iginalCurrencyIndex]?.value?.toFixed(2) || 0 }}
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column prop="standardMoney" label="本位币">
           <el-table-column
@@ -64,7 +68,11 @@
             :label="`${item?.toString()}`"
             :prop="`standardMoney[${index}].value`"
             width="180"
-          />
+          >
+            <template #default="{ row }">
+              {{ row.standardMoney[index]?.value?.toFixed(2) || 0 }}
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column prop="peopleName" label="确认人" />
       </el-table>
