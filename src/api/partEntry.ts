@@ -47,3 +47,14 @@ export function GetUserInput() {
     method: "get"
   })
 }
+
+//根据流程号查询项目经理录入
+export function getManagement(auditFlowId: any) {
+  return request({
+    url: "/api/services/app/UserInput/getManagement",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}

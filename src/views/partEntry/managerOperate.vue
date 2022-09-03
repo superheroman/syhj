@@ -90,11 +90,11 @@
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
 
-import { PostManagement } from "@/api/partEntry"
+import { PostManagement, getManagement } from "@/api/partEntry"
 import type { UploadProps } from "element-plus"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
-const formData: any = reactive({
+let formData: any = reactive({
   fileId: null,
   isFirst: true,
   auditFlowId: null,
@@ -158,6 +158,13 @@ onMounted(async () => {
   }
   if (query.productId) {
     formData.productId = Number(query.productId)
+  }
+  if (query.right) {
+    let res: any = await getManagement(query.auditFlowId)
+    let keys = Object.keys(formData)
+    keys.forEach((key) => {
+      formData[key] = res.result[key]
+    })
   }
 })
 watchEffect(() => {})
