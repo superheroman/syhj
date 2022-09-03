@@ -13,7 +13,7 @@ export function getSorFile(auditFlowId: any) {
 export function getSorByAuditFlowId(auditFlowId: any) {
   return request({
     url: "/api/services/app/ProductDevelopmentInput/GetSorByAuditFlowId",
-    method: "post",
+    method: "get",
     data: {
       auditFlowId
     }
