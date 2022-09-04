@@ -201,7 +201,7 @@ import {
   CreatePriceEvaluationTable
 } from "../service"
 import getQuery from "@/utils/getQuery"
-import { downloadFileExcel } from "@/utils/index"
+import { downloadFileExcel, downloadFileZip } from "@/utils/index"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage, ElMessageBox } from "element-plus"
 import debounce from "lodash/debounce"
@@ -378,7 +378,7 @@ const handleFetchPriceEvaluationTableDownload = async () => {
       ModelCountId: productId
     })
 
-    downloadFileExcel(res, "产品核价表")
+    downloadFileZip(res, "产品核价表")
     // console.log(result, "产品核价表下载")
   } catch (err: any) {
     console.log(err, "[ 产品核价表下载据失败 ]")
