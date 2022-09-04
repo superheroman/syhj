@@ -41,14 +41,6 @@ export const constantRoutes: Array<RouteRecordRaw> = [
           title: "待办中心"
         }
       }
-      // {
-      //   path: "/productList/index",
-      //   component: () => import("@/views/productList/index.vue"),
-      //   name: "productList",
-      //   meta: {
-      //     title: "零件列表"
-      //   }
-      // }
     ]
   },
   {

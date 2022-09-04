@@ -4,6 +4,11 @@ import { ref, reactive, onMounted } from "vue"
 import { useProductStore } from "@/store/modules/productList"
 import getQuery from "@/utils/getQuery"
 import { useRoute, useRouter } from "vue-router"
+import IntroJs from "intro.js" // introjs库
+import "intro.js/introjs.css" // introjs默认css样式
+// introjs还提供了多种主题，可以通过以下方式引入
+// import "intro.js/themes/introjs-modern.css"
+
 defineProps({
   buttonTop: {
     type: Number,
@@ -32,6 +37,16 @@ onMounted(async () => {
     //如url中存在productId则选中
     state.productId = Number(productId)
     window.sessionStorage.setItem("productId", String(state.productId))
+  } else {
+    let intro = IntroJs().setOptions({
+      steps: [
+        {
+          element: document.querySelector(".handle-button"),
+          intro: "录入前请先选择零件"
+        }
+      ]
+    })
+    intro.start()
   }
 })
 const handleChange = (productId: any) => {

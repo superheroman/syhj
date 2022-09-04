@@ -20,7 +20,7 @@
     <el-card class="card">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="待办" name="upcoming">
-          <el-table :data="auditFlowIdInfoList">
+          <el-table :data="auditFlowIdInfoList" default-expand-all>
             <el-table-column type="expand">
               <template #default="scopeP">
                 <el-table :data="scopeP.row.auditFlowRightDetailList">
@@ -30,6 +30,7 @@
                       {{ scope.row.isRetype ? "是" : "否" }}
                     </template>
                   </el-table-column>
+                  <el-table-column label="流转说明" prop="jumpDescription" />
                   <el-table-column label="跳转至流程">
                     <template #default="scope">
                       <el-button @click="clickToPage(scope.row, scopeP)">跳转</el-button>
@@ -43,7 +44,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="已办/查看" name="check">
-          <el-table :data="auditFlowIdInfoListCheck">
+          <el-table :data="auditFlowIdInfoListCheck" default-expand-all>
             <el-table-column type="expand">
               <template #default="scopeP">
                 <el-table :data="scopeP.row.auditFlowRightDetailList">
