@@ -83,7 +83,7 @@ const handleChange = (productId: any) => {
 
 <style lang="scss" scoped>
 .handle-button {
-  width: 60px;
+  width: 90px;
   height: 48px;
   background-color: #152d3d;
   position: absolute;

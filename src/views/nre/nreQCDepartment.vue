@@ -25,7 +25,7 @@
             <el-input v-model="row.unitPrice" />
           </template>
         </el-table-column>
-        <el-table-column label="数量（set）" width="180">
+        <el-table-column label="数量（set）" width="220">
           <template #default="{ row }">
             <el-input-number v-model="row.count" :min="0" controls-position="right" />
           </template>
