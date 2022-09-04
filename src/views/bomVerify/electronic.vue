@@ -1,7 +1,7 @@
 <template>
   <el-card class="wrap m-2">
     <el-card class="table-wrap" header="电子料单价">
-      <el-table :data="electronicBomList" style="width: 100%" height="75vh">
+      <el-table :data="electronicBomList" style="width: 100%" v-loading="loading" height="75vh">
         <el-table-column prop="categoryName" label="物料大类" width="150" />
         <el-table-column prop="typeName" label="物料种类" width="150" />
         <el-table-column prop="sapItemNum" label="物料编号" width="150" />
@@ -96,7 +96,7 @@ const { auditFlowId = 1, productId }: any = getQuery()
 
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])
-
+const loading = ref(true)
 // 表单子列
 const allColums = reactive<any>({
   sop: []
@@ -115,11 +115,17 @@ onMounted(() => {
 })
 
 const fetchOptionsData = async () => {
-  const exchangeSelect: any = await getExchangeRate({
-    maxResultCount: 100,
-    skipCount: 0
-  })
-  exchangeSelectOptions.value = exchangeSelect.result.items || []
+  try {
+    loading.value = true
+    const exchangeSelect: any = await getExchangeRate({
+      maxResultCount: 100,
+      skipCount: 0
+    })
+    exchangeSelectOptions.value = exchangeSelect.result.items || []
+    loading.value = false
+  } catch {
+    loading.value = false
+  }
 }
 
 // 获取电子料初始化数据

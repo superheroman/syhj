@@ -6,7 +6,7 @@
       :key="item.superTypeName"
       class="table-wrap"
     >
-      <el-table :data="item.structureMaterial" style="width: 100%" height="75vh">
+      <el-table :data="item.structureMaterial" style="width: 100%" height="75vh" v-loading="loading">
         <el-table-column label="bom" align="center">
           <el-table-column type="index" label="序号" width="70" />
           <el-table-column prop="categoryName" label="物料大类" width="150" />
@@ -100,7 +100,7 @@ const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 // 结构料 - table数据
 const constructionBomList = ref<ConstructionDto[]>([])
-
+const loading = ref(false)
 // 表单子列
 const allColums = reactive<any>({
   sop: []
@@ -129,9 +129,15 @@ const fetchOptionsData = async () => {
 
 // 获取结构料初始化数据
 const fetchConstructionInitData = async () => {
-  const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
-  console.log(result, "获取初始化数据")
-  constructionBomList.value = result
+  try {
+    loading.value = true
+    const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
+    console.log(result, "获取初始化数据")
+    constructionBomList.value = result
+    loading.value = false
+  } catch {
+    loading.value = false
+  }
 }
 
 const handleSetBomState = (isAgree: boolean) => {
