@@ -42,7 +42,7 @@ onMounted(async () => {
       steps: [
         {
           element: document.querySelector(".handle-button"),
-          intro: "录入前请先选择零件"
+          intro: "录入零件数据前请先选择零件"
         }
       ]
     })
@@ -83,14 +83,15 @@ const handleChange = (productId: any) => {
 
 <style lang="scss" scoped>
 .handle-button {
-  width: 90px;
+  width: 60px;
   height: 48px;
   background-color: #152d3d;
   position: absolute;
-  right: 0px;
+  right: 15px;
   text-align: center;
   font-size: 14px;
-  border-radius: 6px 0 0 6px !important;
+  // border-radius: 6px 0 0 6px !important;
+  border-radius: 6px !important;
   z-index: 10;
   cursor: pointer;
   pointer-events: auto;

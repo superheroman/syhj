@@ -247,7 +247,7 @@
         <h6>要求</h6>
         <el-table :data="requireTableData" style="width: 100%; margin: 20px 0" border>
           <el-table-column label="年份" width="180" prop="year" />
-          <el-table-column label="年降率(%)">
+          <el-table-column label="客户年降率(%)">
             <template #default="{ row }">
               <el-input v-model="row.annualDeclineRate">
                 <template #append>%</template>
