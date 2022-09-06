@@ -70,7 +70,7 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { createRole, updateRole, deleteRole, RoleParams, getRoleList, getPermissionList } from "@/api/role"
+import { createRole, deleteRole, RoleParams, getRoleList, getPermissionList } from "@/api/role"
 interface PermissionDto {
   /**
    * 权限描述
@@ -121,7 +121,7 @@ const data = reactive({
 const saveUser = async () => {
   let res: any = null
   if (data.isEdit) {
-    res = await updateRole(data.roleForm)
+    res = await createRole(data.roleForm)
   } else {
     res = await createRole(data.roleForm)
   }
