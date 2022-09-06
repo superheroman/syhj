@@ -12,7 +12,7 @@
     </div>
 
     <div class="role__btn-container">
-      <el-button type="primary" @click="data.dialogVisible = true">创建角色</el-button>
+      <el-button type="primary" @click="handleCreateRole">创建角色</el-button>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
@@ -70,7 +70,7 @@
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { ElMessage, ElMessageBox } from "element-plus"
-import { createRole, deleteRole, RoleParams, getRoleList, getPermissionList } from "@/api/role"
+import { createRole, updateRole, deleteRole, RoleParams, getRoleList, getPermissionList } from "@/api/role"
 interface PermissionDto {
   /**
    * 权限描述
@@ -113,7 +113,7 @@ const data = reactive({
     name: "",
     description: "",
     grantedPermissions: []
-  },
+  } as any,
   permissionList: [] as PermissionDto[],
   isEdit: false
 })
@@ -121,7 +121,7 @@ const data = reactive({
 const saveUser = async () => {
   let res: any = null
   if (data.isEdit) {
-    res = await createRole(data.roleForm)
+    res = await updateRole(data.roleForm)
   } else {
     res = await createRole(data.roleForm)
   }
@@ -195,6 +195,10 @@ const search = () => {
 }
 const handlePageChange = () => {
   getList()
+}
+const handleCreateRole = () => {
+  data.dialogVisible = true
+  data.isEdit = false
 }
 // const tableData: role[] = [
 //   {
