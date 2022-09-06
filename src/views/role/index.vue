@@ -12,7 +12,7 @@
     </div>
 
     <div class="role__btn-container">
-      <el-button type="primary" @click="data.dialogVisible = true">创建角色</el-button>
+      <el-button type="primary" @click="handleCreateRole">创建角色</el-button>
     </div>
     <el-table :data="data.tableData" style="width: 100%">
       <el-table-column label="id" prop="id" />
@@ -113,7 +113,7 @@ const data = reactive({
     name: "",
     description: "",
     grantedPermissions: []
-  },
+  } as any,
   permissionList: [] as PermissionDto[],
   isEdit: false
 })
@@ -195,6 +195,10 @@ const search = () => {
 }
 const handlePageChange = () => {
   getList()
+}
+const handleCreateRole = () => {
+  data.dialogVisible = true
+  data.isEdit = false
 }
 // const tableData: role[] = [
 //   {

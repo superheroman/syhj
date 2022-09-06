@@ -19,6 +19,18 @@
             </template>
           </el-table-column>
         </el-table-column>
+        <el-table-column prop="currency" label="币种" width="150">
+          <!-- <template #default="scope">
+            <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
+              <el-option
+                v-for="item in exchangeSelectOptions"
+                :key="item.id"
+                :label="item.exchangeRateKind"
+                :value="item.exchangeRateKind"
+              />
+            </el-select>
+          </template> -->
+        </el-table-column>
         <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
           <el-table-column
             v-for="(item, index) in allColums?.systemiginalCurrencyYears"

@@ -29,6 +29,7 @@ const init = async () => {
   const { result } = await GetDownloadList({})
   data.tableData = result || []
 }
+
 const fullscreenLoading = ref(false)
 /**
  * 数据部分

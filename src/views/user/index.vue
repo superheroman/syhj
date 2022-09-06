@@ -278,6 +278,7 @@ const resetPassword = async () => {
   )
 
   let res: any = await changePasswordAd(params)
+  ElMessage.success("重置密码成功！")
   if (res.success) {
     data.psVisible = false
   }
