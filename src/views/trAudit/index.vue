@@ -55,7 +55,7 @@ const save = async (isAgree: boolean) => {
       type: "warning"
     }).then(async (val) => {
       let res: any = await setTRMainSolutionState({
-        auditFlowId: 5,
+        auditFlowId,
         trCheckType: trCheckType ? Number(trCheckType) : 1, //1：“市场部TR主方案审核”，2：“产品开发部TR主方案审
         isAgree,
         opinionDescription: !isAgree ? val?.value : ""
