@@ -45,15 +45,7 @@ onMounted(() => {
   // 判断当前页面路由是否在白名单内
   if (wahiteRotes.includes(router.currentRoute.value.name)) {
     showPanel.value = true
-    const intro = IntroJs().setOptions({
-      steps: [
-        {
-          element: document.querySelector(".handle-button"),
-          intro: "录入零件数据前请先选择零件"
-        }
-      ]
-    })
-    intro.start()
+    init()
   } else showPanel.value = false
 })
 
