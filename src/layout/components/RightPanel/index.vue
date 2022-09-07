@@ -30,11 +30,10 @@ const state = reactive({
 })
 
 watch(
-  () => router.currentRoute.value.name,
-  (oldV, newV) => {
-    console.log(oldV, newV, "监听路由变化")
+  () => route.name,
+  (newV) => {
     // 判断当前页面路由是否在白名单内
-    if (wahiteRotes.includes(oldV)) {
+    if (wahiteRotes.includes(newV)) {
       showPanel.value = true
       init()
     } else showPanel.value = false
@@ -42,8 +41,9 @@ watch(
 )
 
 onMounted(() => {
+  console.log(route, "route")
   // 判断当前页面路由是否在白名单内
-  if (wahiteRotes.includes(router.currentRoute.value.name)) {
+  if (wahiteRotes.includes(route.name)) {
     showPanel.value = true
     init()
   } else showPanel.value = false
@@ -51,24 +51,28 @@ onMounted(() => {
 
 const init = async () => {
   // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
-  const { productId, auditFlowId } = getQuery()
-  if (auditFlowId) {
-    await productStore.setProductList(Number(auditFlowId))
-  }
-  if (productId) {
-    //如url中存在productId则选中
-    state.productId = Number(productId)
-    window.sessionStorage.setItem("productId", String(state.productId))
-  } else {
-    const intro = IntroJs().setOptions({
-      steps: [
-        {
-          element: document.querySelector(".handle-button"),
-          intro: "录入零件数据前请先选择零件"
-        }
-      ]
-    })
-    intro.start()
+  try {
+    const { productId, auditFlowId } = getQuery() || {}
+    if (auditFlowId) {
+      await productStore.setProductList(Number(auditFlowId))
+    }
+    if (productId) {
+      //如url中存在productId则选中
+      state.productId = Number(productId)
+      window.sessionStorage.setItem("productId", String(state.productId))
+    } else {
+      const intro = IntroJs().setOptions({
+        steps: [
+          {
+            element: document.querySelector(".handle-button"),
+            intro: "录入零件数据前请先选择零件"
+          }
+        ]
+      })
+      intro.start()
+    }
+  } catch (err) {
+    console.log(err, "出错啦")
   }
 }
 // // 监听路由变化
