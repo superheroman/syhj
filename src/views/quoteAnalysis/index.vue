@@ -239,7 +239,7 @@ const router = useRouter()
 //console.log('1-开始创建组件-setup')
 
 let dialogVisible = ref(false)
-let ProjectUnitPrice = {
+let ProjectUnitPrice: any = {
   title: {
     text: "项目单价对比"
   },

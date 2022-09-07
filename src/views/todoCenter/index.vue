@@ -210,7 +210,7 @@ onMounted(async () => {
   try {
     let userStorage = window.sessionStorage.getItem("user")
     let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
-    let usetRoleNames = userInfo.userRole.items.map((item: any) => item.name)
+    let usetRoleNames = userInfo?.userRole?.items?.map((item: any) => item.name) || []
     if (usetRoleNames.includes("营销部-业务员")) {
       isProductManager.value = true
     }
