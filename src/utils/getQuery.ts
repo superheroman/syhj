@@ -1,7 +1,7 @@
 import { useRoute } from "vue-router"
 function getQuery(): any {
   const route = useRoute()
-  return route.query
+  return route?.query
 }
 
 export default getQuery

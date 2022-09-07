@@ -93,7 +93,7 @@
 
 <script setup lang="ts">
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { GetQuotationList, GeneralManagerQuoteCheck } from "./service"
+import { GetQuotationList, PostAuditQuotationList } from "./service"
 import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
 import { ElMessageBox } from "element-plus"
@@ -143,8 +143,9 @@ const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
     cancelButtonText: "取消",
     type: "warning"
   }).then(async (val) => {
-    const { success } = await GeneralManagerQuoteCheck({
-      isAgree,
+    const { success } = await PostAuditQuotationList({
+      ...data.marketingQuotationData,
+      isPass: isAgree,
       auditFlowId,
       opinionDescription: !isAgree ? val?.value : ""
     })

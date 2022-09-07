@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 // import { Setting } from "@element-plus/icons-vue"
-import { ref, reactive, onMounted } from "vue"
+import { ref, reactive, onMounted, watch } from "vue"
 import { useProductStore } from "@/store/modules/productList"
 import getQuery from "@/utils/getQuery"
 import { useRoute, useRouter } from "vue-router"
+import { wahiteRotes } from "./common/const"
 import IntroJs from "intro.js" // introjs库
 import "intro.js/introjs.css" // introjs默认css样式
 // introjs还提供了多种主题，可以通过以下方式引入
@@ -17,6 +18,7 @@ defineProps({
 })
 
 const show = ref(false)
+let showPanel = ref(false)
 
 const emit = defineEmits(["change"])
 const route = useRoute()
@@ -27,28 +29,57 @@ const state = reactive({
   auditFlowId: ""
 })
 
-onMounted(async () => {
-  // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
-  let { productId, auditFlowId } = getQuery()
-  if (auditFlowId) {
-    await productStore.setProductList(Number(auditFlowId))
+watch(
+  () => route.name,
+  (newV) => {
+    // 判断当前页面路由是否在白名单内
+    if (wahiteRotes.includes(newV)) {
+      showPanel.value = true
+      init()
+    } else showPanel.value = false
   }
-  if (productId) {
-    //如url中存在productId则选中
-    state.productId = Number(productId)
-    window.sessionStorage.setItem("productId", String(state.productId))
-  } else {
-    let intro = IntroJs().setOptions({
-      steps: [
-        {
-          element: document.querySelector(".handle-button"),
-          intro: "录入零件数据前请先选择零件"
-        }
-      ]
-    })
-    intro.start()
-  }
+)
+
+onMounted(() => {
+  console.log(route, "route")
+  // 判断当前页面路由是否在白名单内
+  if (wahiteRotes.includes(route.name)) {
+    showPanel.value = true
+    init()
+  } else showPanel.value = false
 })
+
+const init = async () => {
+  // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
+  try {
+    const { productId, auditFlowId } = getQuery() || {}
+    if (auditFlowId) {
+      await productStore.setProductList(Number(auditFlowId))
+    }
+    if (productId) {
+      //如url中存在productId则选中
+      state.productId = Number(productId)
+      window.sessionStorage.setItem("productId", String(state.productId))
+    } else {
+      const intro = IntroJs().setOptions({
+        steps: [
+          {
+            element: document.querySelector(".handle-button"),
+            intro: "录入零件数据前请先选择零件"
+          }
+        ]
+      })
+      intro.start()
+    }
+  } catch (err) {
+    console.log(err, "出错啦")
+  }
+}
+// // 监听路由变化
+// onBeforeRouteUpdate((to) => {
+//   console.log(to, "onBeforeRouteUpdate")
+// })
+
 const handleChange = (productId: any) => {
   let { query } = route
   query.productId = productId
@@ -64,21 +95,23 @@ const handleChange = (productId: any) => {
 </script>
 
 <template>
-  <div class="handle-button" :style="{ top: buttonTop + 'px' }" @click="show = true">
-    <span>零件列表</span>
-  </div>
-  <el-drawer v-model="show" size="300px" :with-header="false">
-    <div class="drawer-container">
-      <div>
-        <h3 class="drawer-title">零件切换</h3>
-        <el-radio-group v-model="state.productId" size="large" @change="handleChange">
-          <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
-            <el-radio :label="item.id" border>{{ item.product }}</el-radio>
-          </div>
-        </el-radio-group>
-      </div>
+  <div>
+    <div class="handle-button" :style="{ top: buttonTop + 'px' }" @click="show = true" v-if="showPanel">
+      <span>零件列表</span>
     </div>
-  </el-drawer>
+    <el-drawer v-model="show" size="300px" :with-header="false">
+      <div class="drawer-container">
+        <div>
+          <h3 class="drawer-title">零件切换</h3>
+          <el-radio-group v-model="state.productId" size="large" @change="handleChange">
+            <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
+              <el-radio :label="item.id" border>{{ item.product }}</el-radio>
+            </div>
+          </el-radio-group>
+        </div>
+      </div>
+    </el-drawer>
+  </div>
 </template>
 
 <style lang="scss" scoped>
