@@ -252,12 +252,14 @@ const handleDelete = (index: number, row: User) => {
     type: "warning"
   })
     .then(async () => {
-      let res = await deleteUser(row.id)
+      let res: any = await deleteUser(row.id)
       console.log(res)
-      ElMessage({
-        type: "success",
-        message: "删除成功"
-      })
+      if (res.success) {
+        ElMessage({
+          type: "success",
+          message: "删除成功"
+        })
+      }
     })
     .catch(() => {
       ElMessage({
@@ -278,8 +280,8 @@ const resetPassword = async () => {
   )
 
   let res: any = await changePasswordAd(params)
-  ElMessage.success("重置密码成功！")
   if (res.success) {
+    ElMessage.success("重置密码成功！")
     data.psVisible = false
   }
 }

@@ -46,7 +46,7 @@ function createService() {
       }
       // 默认格式先加上
       const error = apiData.error
-      if (error) {
+      if (error && !apiData.success) {
         console.log(error, "responseError")
         ElMessage.error(error)
         // return Promise.reject(new Error(error))
