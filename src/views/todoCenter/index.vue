@@ -157,10 +157,7 @@ const clickToPage = (row: any, scopeP: any) => {
   // window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
   productStore.setProductList(scopeP.row.auditFlowId) // 只在这里执行获取零件列表
   let pathItem: any = urlMap[row.processIdentifier as keyof typeof urlMap]
-  let query = {
-    auditFlowId: scopeP.row.auditFlowId,
-    right: row.right
-  } as any
+  let query: any = Object.assign({ auditFlowId: scopeP.row.auditFlowId, right: row.right }, pathItem.query)
   if (window.sessionStorage.getItem("productId")) {
     query.productId = window.sessionStorage.getItem("productId")
   }

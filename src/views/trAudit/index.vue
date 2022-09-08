@@ -23,6 +23,8 @@ import { getAuditFlowVersion, downloadFile, setTRMainSolutionState } from "./ser
 // import useQueryData from "@/hook/useQueryData"
 import getQuery from "@/utils/getQuery"
 import { ElMessage, ElMessageBox } from "element-plus"
+import { useRoute } from "vue-router"
+const route = useRoute()
 
 let { trCheckType, auditFlowId } = getQuery()
 
@@ -90,6 +92,12 @@ const downLoad = async () => {
   }
 }
 onBeforeMount(() => {
+  if (trCheckType === "1") {
+    route.meta.title = "市场部" + route.meta.title
+  } else if (trCheckType === "2") {
+    route.meta.title = "产品开发部" + route.meta.title
+  }
+
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
