@@ -455,9 +455,9 @@ onMounted(async () => {
   chart1 = initCharts("unitpriceChart", ProjectUnitPrice)
   chart2 = initCharts("revenueGrossMarginChart", RevenueGrossMargin)
   let query = getQuery()
-  data.auditFlowId = Number(query.auditFlowId) || 1
+  data.auditFlowId = Number(query.auditFlowId)
 
-  let { result } = (await getStatementAnalysisBoard(1)) as any
+  let { result } = (await getStatementAnalysisBoard(data.auditFlowId)) as any
   let { nre, unitPrice, pooledAnalysis, productBoard, projectBoard } = result
   data.nre = nre
   data.unitPrice = unitPrice
