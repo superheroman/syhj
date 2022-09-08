@@ -19,7 +19,7 @@ export function postCalculateFullGrossMargin(row: any, auditFlowId: number, unit
       productBoards: [
         {
           modelCountId: row.modelCountId,
-          offerUnitPrice: unitPrice
+          unitPrice: Number(unitPrice)
         }
       ]
     }
