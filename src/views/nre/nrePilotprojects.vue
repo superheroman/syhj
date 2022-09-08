@@ -145,7 +145,14 @@ const submit = async () => {
   try {
     const { success } = await PostProductDepartment({
       auditFlowId,
-      productDepartmentModel: { ...data, productId }
+      productDepartmentModel: {
+        productId,
+        laboratoryFeeModels:
+          data.laboratoryFeeModels.map((item) => ({
+            ...item,
+            allCost: (item.unitPrice || 0) * (item.quantity || 0)
+          })) || []
+      }
     })
     if (success) jumpTodoCenter()
     console.log(success, "[PostProductDepartment RES]")
