@@ -410,7 +410,7 @@ const postOffer = (isOffer: number) => {
   console.log(res)
 }
 const downLoad = async () => {
-  let res: any = await getDownloadMessage(1, "成本信息表")
+  let res: any = await getDownloadMessage(data.auditFlowId, "成本信息表")
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
