@@ -345,9 +345,9 @@
               <el-input v-model="row.sensor" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.sensorTypeSelect">
-                    <el-option label="我司推荐" :value="1" />
-                    <el-option label="客户指定" :value="2" />
-                    <el-option label="客户供应" :value="3" />
+                    <el-option label="我司推荐" value="1" />
+                    <el-option label="客户指定" value="2" />
+                    <el-option label="客户供应" value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -363,9 +363,9 @@
               <el-input v-model="row.lens" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.lensTypeSelect">
-                    <el-option label="我司推荐" :value="1" />
-                    <el-option label="客户指定" :value="2" />
-                    <el-option label="客户供应" :value="3" />
+                    <el-option label="我司推荐" value="1" />
+                    <el-option label="客户指定" value="2" />
+                    <el-option label="客户供应" value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -381,9 +381,9 @@
               <el-input v-model="row.isp" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.ispTypeSelect">
-                    <el-option label="我司推荐" :value="1" />
-                    <el-option label="客户指定" :value="2" />
-                    <el-option label="客户供应" :value="3" />
+                    <el-option label="我司推荐" value="1" />
+                    <el-option label="客户指定" value="2" />
+                    <el-option label="客户供应" value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -399,9 +399,9 @@
               <el-input v-model="row.serialChip" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.serialChipTypeSelect">
-                    <el-option label="我司推荐" :value="1" />
-                    <el-option label="客户指定" :value="2" />
-                    <el-option label="客户供应" :value="3" />
+                    <el-option label="我司推荐" value="1" />
+                    <el-option label="客户指定" value="2" />
+                    <el-option label="客户供应" value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -417,9 +417,9 @@
               <el-input v-model="row.cable" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.cableTypeSelect">
-                    <el-option label="我司推荐" :value="1" />
-                    <el-option label="客户指定" :value="2" />
-                    <el-option label="客户供应" :value="3" />
+                    <el-option label="我司推荐" value="1" />
+                    <el-option label="客户指定" value="2" />
+                    <el-option label="客户供应" value="3" />
                   </el-select>
                 </template>
                 <template #append>
@@ -435,9 +435,9 @@
               <el-input v-model="row.led" placeholder="品牌/型号">
                 <template #prepend>
                   <el-select v-model="row.ledTypeSelect">
-                    <el-option label="我司推荐" :value="1" />
-                    <el-option label="客户指定" :value="2" />
-                    <el-option label="客户供应" :value="3" />
+                    <el-option label="我司推荐" value="1" />
+                    <el-option label="客户指定" value="2" />
+                    <el-option label="客户供应" value="3" />
                   </el-select>
                 </template>
                 <template #append>
