@@ -30,7 +30,7 @@ const state = reactive({
     userNameOrEmailAddress: [{ required: true, message: "请输入用户名", trigger: "blur" }],
     password: [
       { required: true, message: "请输入密码", trigger: "blur" },
-      { min: 6, max: 16, message: "长度在 8 到 16 个字符", trigger: "blur" }
+      { min: 6, max: 16, message: "长度在 6 到 16 个字符", trigger: "blur" }
     ]
   },
   /** 登录逻辑 */
