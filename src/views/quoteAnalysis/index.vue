@@ -111,10 +111,10 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率">
-            <template #default="{ row }">
+          <el-table-column label="毛利率" prop="grossMargin">
+            <!-- <template #default="{ row }">
               <el-input v-model="row.offeGrossMargin" />
-            </template>
+            </template> -->
           </el-table-column>
         </el-table-column>
         <el-table-column
@@ -405,7 +405,8 @@ const postOffer = (isOffer: number) => {
     },
     projectBoard: data.projectBoard,
     isOffer,
-    auditFlowId: data.auditFlowId
+    auditFlowId: data.auditFlowId,
+    nre: data.nre
   })
   console.log(res)
 }

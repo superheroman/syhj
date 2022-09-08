@@ -58,7 +58,12 @@ const queryDoneData = async () => {
 
 const submit = async () => {
   try {
-    const { success } = await PostSalesDepartment(mouldInventoryData.value)
+    const { success } = await PostSalesDepartment(
+      mouldInventoryData.value?.map((item) => ({
+        ...item,
+        offerMoney: (item.pricingMoney || 0) * (item.offerCoefficient || 0)
+      })) || []
+    )
     if (!success) throw Error()
     jumpTodoCenter()
     ElMessage.success("提交成功~")

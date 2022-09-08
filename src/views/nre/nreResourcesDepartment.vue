@@ -78,7 +78,10 @@ const submit = async () => {
     const { success } = await PostResourcesManagement({
       auditFlowId,
       resourcesManagementModel: {
-        mouldInventory: data.resourceData,
+        mouldInventory: data.resourceData.map((item: any) => ({
+          ...item,
+          cost: (item.unitPrice || 0) * (item.count || 0)
+        })),
         productId
       }
     })
