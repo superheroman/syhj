@@ -86,7 +86,7 @@
         <el-table-column label="目标价（内部）">
           <el-table-column label="单价" prop="interiorTargetUnitPrice">
             <template #default="{ row }">
-              {{ row.interiorTargetUnitPrice.toFixed(2) }}
+              {{ row?.interiorTargetUnitPrice?.toFixed(2) }}
             </template>
           </el-table-column>
           <el-table-column label="毛利率" prop="interiorTargetGrossMargin">
@@ -96,15 +96,38 @@
           </el-table-column>
         </el-table-column>
         <el-table-column label="目标价（客户）">
-          <el-table-column label="单价" prop="clientTargetUnitPrice" />
-          <el-table-column label="毛利率" prop="clientTargetGrossMargin" />
+          <el-table-column label="单价" prop="clientTargetUnitPrice">
+            <template #default="scope">
+              <el-input v-model="scope.row.clientTargetUnitPrice">
+                <template #append>
+                  <el-button
+                    @click="
+                      calculateFullGrossMargin(
+                        scope.row,
+                        scope.$index,
+                        scope.row.clientTargetUnitPrice,
+                        'clientTargetGrossMargin'
+                      )
+                    "
+                    >计算</el-button
+                  >
+                </template>
+              </el-input>
+            </template>
+          </el-table-column>
+          <el-table-column label="毛利率" prop="clientTargetGrossMargin">
+            <template #default="{ row }">
+              {{ row.clientTargetGrossMargin?.toFixed(2) || "-" }}
+            </template>
+          </el-table-column>
         </el-table-column>
         <el-table-column label="本次报价">
           <el-table-column label="单价">
             <template #default="scope">
               <el-input v-model="scope.row.offerUnitPrice">
                 <template #append>
-                  <el-button @click="calculateFullGrossMargin(scope.row, scope.$index, scope.row.offerUnitPrice)"
+                  <el-button
+                    @click="calculateFullGrossMargin(scope.row, scope.$index, scope.row.offerUnitPrice, 'grossMargin')"
                     >计算</el-button
                   >
                 </template>
@@ -112,9 +135,9 @@
             </template>
           </el-table-column>
           <el-table-column label="毛利率" prop="grossMargin">
-            <!-- <template #default="{ row }">
-              <el-input v-model="row.offeGrossMargin" />
-            </template> -->
+            <template #default="{ row }">
+              {{ row.grossMargin?.toFixed(2) || "-" }}
+            </template>
           </el-table-column>
         </el-table-column>
         <el-table-column
@@ -225,6 +248,7 @@ import {
 } from "./service"
 import { NreMarketingDepartmentModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
+import debounce from "lodash/debounce"
 
 // let mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
 
@@ -361,12 +385,15 @@ const data = reactive({
   auditFlowId: 1,
   dialogTable: []
 })
-const calculateFullGrossMargin = async (row: any, index: number, unitPrice: number) => {
+const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPrice: number, key: string) => {
   // console.log(data.auditFlowId)
-  let res: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
+  let { result }: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
   // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
-  row.offeGrossMargin = res.result.productBoardGrosses[0].offeGrossMargin
-}
+
+  const { grossMargin } = result?.productBoardGrosses[0] || ""
+  console.log(grossMargin, "毛利率计算")
+  data.productBoard[index][key] = grossMargin
+}, 300)
 const setData = () => {
   ProjectUnitPrice.series = data.productBoard.map((item: any) => {
     return {
