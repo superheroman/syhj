@@ -35,7 +35,7 @@ watch(
     // 判断当前页面路由是否在白名单内
     if (wahiteRotes.includes(newV)) {
       showPanel.value = true
-      init()
+      // init()
     } else showPanel.value = false
   }
 )
