@@ -454,13 +454,17 @@ const downLoad = async () => {
   }
 }
 const toProductPriceList = () => {
+  let query = getQuery()
   router.push({
-    path: "/nupriceManagement/productPriceList"
+    path: "/nupriceManagement/productPriceList",
+    query
   })
 }
 const toNREPriceList = () => {
+  let query = getQuery()
   router.push({
-    path: "/nre/nrePricelist"
+    path: "/nre/nrePricelist",
+    query
   })
 }
 const openDialog = () => {
