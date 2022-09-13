@@ -185,7 +185,8 @@ import {
   SaveTangentHours,
   getTangentHoursList,
   SubmitWorkingHourAndSwitchLine,
-  getYears
+  getYears,
+  QueryWorkingHour
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
@@ -286,9 +287,16 @@ const handleSubmit = async (formEl: FormInstance | undefined) => {
   })
 }
 
+const init = async () => {
+  const { result }: any = QueryWorkingHour(auditFlowId, productId) || {}
+  if (result.workingHourDetailList?.length) {
+    data.tableData = result.workingHourDetailList
+  }
+}
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
+  init()
 })
 
 const getAllSop = async () => {
