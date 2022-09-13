@@ -123,7 +123,7 @@ const submit = async () => {
   try {
     const { success } = await PostExperimentItems({
       auditFlowId,
-      experimentItem: {
+      experimentItems: {
         productId,
         qaTestDepartments: data.experimentItems.map((item) => ({
           ...item,

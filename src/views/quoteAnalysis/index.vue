@@ -45,7 +45,7 @@
         <el-table-column label="产品" prop="productName" width="150" />
         <el-table-column label="单车产品数量" prop="productNumber" width="150" />
         <el-table-column
-          :label="'测算' + (index + 1) + item.grossMargin"
+          :label="item.grossMargin + '%'"
           v-for="(item, index) in data.unitPrice[0].grossMarginList"
           :key="index"
           width="150"
@@ -65,7 +65,7 @@
       <el-table :data="data.pooledAnalysis" style="width: 100%" border v-if="data.pooledAnalysis.length > 0">
         <el-table-column label="项目名称" prop="projectName" width="150" />
         <el-table-column
-          :label="'测算' + (index + 1) + item.grossMargin"
+          :label="item.grossMargin + '%'"
           v-for="(item, index) in data.pooledAnalysis[0]?.grossMarginList"
           :key="index"
           width="150"
@@ -217,9 +217,13 @@
         <el-card class="table-wrap" :header="item.project">
           <el-table :data="[item]" style="width: 100%">
             <template v-for="(yearItem, i) in item.yearList" :key="yearItem">
-              <el-table-column :prop="`yearList.${i}.value`" :label="yearItem.year" />
+              <el-table-column :prop="`yearList.${i}.value`" :label="yearItem.year">
+                <template #default="{ row }">
+                  {{ row.yearList[i].value.toFixed(2) }}
+                </template>
+              </el-table-column>
             </template>
-            <el-table-column prop="grossMargin" label="毛利率" />
+            <el-table-column prop="grossMargin" label="毛利率" :formatter="getTofixed" />
             <el-table-column prop="totak" label="总和" />
           </el-table>
         </el-card>
@@ -261,7 +265,9 @@ import debounce from "lodash/debounce"
  */
 const router = useRouter()
 //console.log('1-开始创建组件-setup')
-
+const getTofixed = (row: any) => {
+  return row.grossMargin?.toFixed(2)
+}
 let dialogVisible = ref(false)
 let ProjectUnitPrice: any = {
   title: {
@@ -454,13 +460,17 @@ const downLoad = async () => {
   }
 }
 const toProductPriceList = () => {
+  let query = getQuery()
   router.push({
-    path: "/nupriceManagement/productPriceList"
+    path: "/nupriceManagement/productPriceList",
+    query
   })
 }
 const toNREPriceList = () => {
+  let query = getQuery()
   router.push({
-    path: "/nre/nrePricelist"
+    path: "/nre/nrePricelist",
+    query
   })
 }
 const openDialog = () => {

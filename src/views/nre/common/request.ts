@@ -61,7 +61,7 @@ export function PostExperimentItems(data: {
   /**
    * 带零件id 的 品保录入模型
    */
-  experimentItem?: ExperimentItemsModel | null
+  experimentItems?: ExperimentItemsModel | null
 }): any {
   return request({
     url: "/api/services/app/NrePricing/PostExperimentItemsSingle",
