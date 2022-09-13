@@ -265,7 +265,7 @@ const downLoadTemplate = async () => {
 const handleSaveWorkingHour = async () => {
   try {
     let { success }: any = await SaveWorkingHour({
-      auditFlowId,
+      auditFlowId: Number(auditFlowId),
       productId,
       workingHourDetailList: data.tableData
     })
@@ -288,11 +288,12 @@ const handleSubmit = async (formEl: FormInstance | undefined) => {
 }
 
 const init = async () => {
-  const { result }: any = QueryWorkingHour(auditFlowId, productId) || {}
+  const { result }: any = (await QueryWorkingHour(auditFlowId, productId)) || {}
   if (result.workingHourDetailList?.length) {
     data.tableData = result.workingHourDetailList
   }
 }
+
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
@@ -306,13 +307,7 @@ const getAllSop = async () => {
   if (!tangentHoursDetailList.length) {
     // 获取年份
     const { result = [] } = (await getYears(auditFlowId)) as any
-    data.tangentForm.tangent =
-      result?.map((item: any) => ({
-        year: item,
-        laborTime: null,
-        machineHours: null,
-        personnelNumber: null
-      })) || []
+    data.tangentForm.tangent = result || []
     data.isSaved = false
     return
   }
