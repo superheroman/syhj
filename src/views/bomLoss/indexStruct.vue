@@ -38,9 +38,9 @@ import { ElMessage } from "element-plus"
 import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import _ from "lodash"
-import useJump from "@/hook/useJump"
+// import useJump from "@/hook/useJump"
 
-const { jumpTodoCenter } = useJump()
+// const { jumpTodoCenter } = useJump()
 /**
  * 路由对象
  */
@@ -85,7 +85,7 @@ const submit = async () => {
   })
   let res: any = await saveLossRateInfo(lossRateDtoList)
   if (res.success) {
-    jumpTodoCenter()
+    // jumpTodoCenter()
     ElMessage({
       type: "success",
       message: "提交成功"

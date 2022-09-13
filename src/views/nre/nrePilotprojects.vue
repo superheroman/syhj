@@ -116,9 +116,8 @@ import { PostProductDepartment, GetProductDepartment } from "./common/request"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import { LaboratoryFeeModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
-import useJump from "@/hook/useJump"
+import { ElMessage } from "element-plus"
 
-const { jumpTodoCenter } = useJump()
 const deleteLaboratoryFeeModel = (i: number) => {
   data.laboratoryFeeModels.splice(i, 1)
 }
@@ -154,7 +153,7 @@ const submit = async () => {
           })) || []
       }
     })
-    if (success) jumpTodoCenter()
+    if (success) ElMessage.success("提交成功！")
     console.log(success, "[PostProductDepartment RES]")
   } catch (err) {
     console.log(err, "[PostProductDepartment err]")

@@ -189,9 +189,7 @@ import {
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
-import useJump from "@/hook/useJump"
 
-const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 const data = reactive<any>({
@@ -282,7 +280,6 @@ const handleSubmit = async (formEl: FormInstance | undefined) => {
     if (valid) {
       await SubmitWorkingHourAndSwitchLine(auditFlowId)
       ElMessage.success("提交成功！")
-      jumpTodoCenter()
     } else {
       ElMessage.error("请填写正确数据！")
     }

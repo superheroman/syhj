@@ -89,7 +89,7 @@ const submit = async () => {
   if (res.success) {
     ElMessage({
       type: "success",
-      message: "保存成功"
+      message: "提交成功"
     })
   }
 }
