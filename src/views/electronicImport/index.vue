@@ -117,12 +117,12 @@ const downLoadTemplate = async () => {
   data.setVisible = false
 }
 const submit = async () => {
-  let res: any = await SaveElectronicBom({
+  let { success }: any = await SaveElectronicBom({
     auditFlowId,
     productId,
     electronicBomDtos: data.tableData
   })
-  console.log(res)
+  success && ElMessage.success("提交成功！")
 }
 onMounted(async () => {
   let query = getQuery()
