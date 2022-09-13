@@ -196,7 +196,12 @@ const submit = async () => {
   let params: SaveBOM = Object.assign({ auditFlowId, productId, structureBomDtos: data.tableData }, data.logisticsForm)
   let res: any = await SaveStructionBom(params)
   let resO: any = await SaveProductDevelopmentInput(params)
-  console.log(res, resO)
+  if (res.success && resO.success) {
+    ElMessage({
+      message: "保存成功",
+      type: "success"
+    })
+  }
 }
 </script>
 <style lang="scss" scoped>

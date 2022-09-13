@@ -122,7 +122,12 @@ const submit = async () => {
     productId,
     electronicBomDtos: data.tableData
   })
-  console.log(res)
+  if (res.success) {
+    ElMessage({
+      message: "保存成功",
+      type: "success"
+    })
+  }
 }
 onMounted(async () => {
   let query = getQuery()
