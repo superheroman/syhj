@@ -1,12 +1,28 @@
 <template>
-  <div>
+  <el-card m="2">
+    <el-row>
+      <div v-if="pageType === 'result'">
+        是否为全生命周期：
+        <el-select placeholder="请选择" v-model="data.isAll">
+          <el-option v-for="opt in options" :key="opt.label" :label="opt.label" :value="opt.value" />
+        </el-select>
+      </div>
+      <el-row justify="space-between" v-else>
+        <EZFilter :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
+        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
+          产品核价表下载
+        </el-button>
+      </el-row>
+    </el-row>
+
     <el-card class="card">
       <template #header>
         <div class="card-header">
           <span>项目核价表（量产/样品）</span>
         </div>
       </template>
-      <el-table :data="data.material" style="width: 100%" border>
+
+      <el-table :data="data.material" border>
         <el-table-column type="index" width="50" />
         <el-table-column label="sap" prop="sap" width="180" />
         <el-table-column label="材料名称" prop="materialName" width="180" />
@@ -85,18 +101,23 @@
       </el-table>
     </el-card>
     <!-- <div>{{totalCost}}</div> -->
-  </div>
+    <el-descriptions :column="3" border>
+      <el-descriptions-item label="日期"> {{ data.date }} </el-descriptions-item>
+      <el-descriptions-item label="投出量"> {{ data.inputCount }} </el-descriptions-item>
+      <el-descriptions-item label="需求量"> {{ data.requiredCount }} </el-descriptions-item>
+    </el-descriptions>
+  </el-card>
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 // import { useRoute, useRouter } from "vue-router"
-import { getPriceEvaluationTable } from "./service"
-
-let auditFlowId = 0
-let productId = 0
-let inputCount = 0
-let year = 0
+import { getPriceEvaluationTable, getPriceEvaluationTableResult, PriceEvaluationTableDownload } from "./service"
+import getQuery from "@/utils/getQuery"
+import EZFilter from "@/components/EZFilter/index.vue"
+import { getYears } from "../pmDepartment/service"
+import { downloadFileZip } from "@/utils/index"
+const { auditFlowId, productId, pageType } = getQuery()
 
 /**
  * 路由对象
@@ -110,16 +131,55 @@ let year = 0
 /**
  * 数据部分
  */
+const changeYears = (val: any) => (data.year = val)
+
 const data = reactive({
   material: [],
   manufacturingCost: [],
   lossCost: [],
-  otherCostItem: []
+  otherCostItem: [],
+  isAll: 0,
+  date: "",
+  inputCount: "",
+  requiredCount: "",
+  year: "",
+  filterNnum: [
+    {
+      label: "年份",
+      key: "year",
+      role: "select",
+      options: [],
+      onchange: changeYears
+    },
+    {
+      label: "投入量",
+      key: "inputCount"
+    }
+  ]
 })
-onBeforeMount(() => {
-  //console.log('2.组件挂载页面之前执行----onBeforeMount')
-})
-onMounted(async () => {
+
+const options = [
+  {
+    label: "是",
+    value: 1
+  },
+  {
+    label: "否",
+    value: 0
+  }
+]
+
+const fetchPriceEvaluationTableResult = async () => {
+  const { result }: any = await getPriceEvaluationTableResult({
+    auditFlowId,
+    productId,
+    isAll: !!data.isAll
+  })
+  console.log(result)
+}
+
+const fetchPriceEvaluationTable = async (props?: any) => {
+  const { inputCount, year } = props
   let res: any = await getPriceEvaluationTable({
     auditFlowId,
     productId,
@@ -131,13 +191,39 @@ onMounted(async () => {
   data.manufacturingCost = manufacturingCost
   data.lossCost = lossCost
   data.otherCostItem = otherCostItem
+}
+
+const fetchSopYear = async () => {
+  const { result } = (await getYears(auditFlowId)) || {}
+  data.filterNnum[0].options = result.map((item: any) => ({ label: item })) || []
+}
+
+// 产品核价表下载
+const handleFetchPriceEvaluationTableDownload = async () => {
+  try {
+    const res: any = await PriceEvaluationTableDownload({
+      Year: data.year,
+      AuditFlowId: auditFlowId,
+      ModelCountId: productId
+    })
+
+    downloadFileZip(res, "产品核价表")
+    // console.log(result, "产品核价表下载")
+  } catch (err: any) {
+    console.log(err, "[ 产品核价表下载据失败 ]")
+  }
+}
+
+onBeforeMount(() => {
+  //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
+
+onMounted(async () => {
+  fetchSopYear()
+  pageType === "result" && fetchPriceEvaluationTableResult()
+})
+
 watchEffect(() => {})
-// 使用toRefs解构
-// let { } = { ...toRefs(data) }
-defineExpose({
-  ...toRefs(data)
-})
 </script>
 <style scoped lang="scss">
 .card {

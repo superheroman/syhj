@@ -69,7 +69,7 @@ const props = defineProps({
   },
   initFilterValue: {
     type: Object as PropType<Record<string, any>>,
-    required: true
+    required: false
   },
   onSubmit: {
     type: Function

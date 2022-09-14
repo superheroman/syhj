@@ -97,6 +97,12 @@
             <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="备注">
+          <template #default="{ row }">
+            <el-input v-if="row.isEdit" v-model="row.remark" />
+            <span v-if="!row.isEdit">{{ row.remark }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="peopleName" label="确认人" />
         <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
@@ -183,11 +189,11 @@ const fetchInitData = async () => {
 
   // 初始化表头数据
   const { materialsUseCount, systemiginalCurrency, inTheRate, iginalCurrency, standardMoney } = result[0] || {}
-  allColums.materialsUseCountYears = materialsUseCount?.map((item) => item.year) || []
-  allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item) => item.year) || []
-  allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
-  allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
-  allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
+  allColums.materialsUseCountYears = materialsUseCount?.map((item: any) => item.year) || []
+  allColums.systemiginalCurrencyYears = systemiginalCurrency?.map((item: any) => item.year) || []
+  allColums.inTheRateYears = inTheRate?.map((item: any) => item.year) || []
+  allColums.iginalCurrencyYears = iginalCurrency?.map((item: any) => item.year) || []
+  allColums.standardMoneyYears = standardMoney?.map((item: any) => item.year) || []
   electronicBomList.value = result
 }
 

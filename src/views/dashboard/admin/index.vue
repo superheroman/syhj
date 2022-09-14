@@ -8,10 +8,11 @@
         <el-select v-model="data.year" class="m-2" placeholder="请选择年份" @change="fetchAllData">
           <el-option v-for="item in data.yearsOptions" :key="item.id" :label="item.name" :value="item.id" />
         </el-select>
-        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
-          产品核价表下载
-        </el-button>
-        <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表下载</el-button>
+        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload"> 产品核价表 </el-button>
+        <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表</el-button>
+        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload('result')"
+          >查看生成的核价表</el-button
+        >
         <el-button type="primary" class="m-2" @click="data.createVisible = true"> 生成核价表 </el-button>
       </el-row>
       <el-row class="m-2">
@@ -27,87 +28,88 @@
 
     <el-card class="m-2">
       <el-row :gutter="20">
-        <el-col :span="14">
-          <el-card header="成本明细表">
-            <!-- Bom成本  -->
-            <el-table v-if="data.mode === '1'" :data="data.bomData" border height="675">
-              <el-table-column prop="superType" label="超级大种类" width="180" />
-              <el-table-column prop="materialName" label="材料名称" width="180" />
-              <el-table-column prop="typeName" label="物料种类" width="180" />
-              <el-table-column prop="categoryName" label="物料大类" width="150" />
-              <el-table-column prop="assemblyCount" label="装配数量" />
-              <el-table-column prop="materialPrice" label="材料单价（原币）" width="180" />
-              <el-table-column prop="currencyText" label="币别" width="150" />
-              <el-table-column prop="exchangeRate" label="汇率" width="150" />
-              <el-table-column prop="materialPriceCyn" label="材料单价（人民币）" width="180" />
-              <el-table-column prop="totalMoneyCyn" label="合计金额（人民币）" width="180" />
-              <el-table-column prop="loss" label="损耗" width="150" />
-              <el-table-column prop="materialCost" label="材料成本（含损耗）" width="180" />
-              <el-table-column prop="inputCount" label="投入量" width="150" />
-              <el-table-column prop="purchaseCount" label="采购量" width="150" />
-              <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="150" />
-              <el-table-column prop="moq" label="MOQ" />
-              <el-table-column prop="availableInventory" label="可用库存" width="150" />
-              <el-table-column prop="remarks" label="备注" />
-            </el-table>
-            <!-- 损耗成本  -->
-            <el-table v-if="data.mode === '2'" :data="data.lossData" height="675">
-              <el-table-column prop="name" label="成本项目" width="180" />
-              <el-table-column prop="wastageCost" label="损耗成本" width="180" />
-              <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="180" />
-            </el-table>
-            <!-- 制造成本  -->
-            <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
-              <!-- <el-table-column prop="sapItemNum" label="项目" width="180" /> -->
-              <el-table-column prop="gradientKy" label="梯度K/Y" width="180" />
-              <!-- <el-table-column prop="typeName" label="年份" width="180" /> -->
-              <el-table-column prop="manufacturingCostDirect" label="直接制造成本">
-                <el-table-column prop="manufacturingCostDirect.directLabor" label="直接人工" width="150" />
-                <el-table-column prop="manufacturingCostDirect.equipmentDepreciation" label="设备折旧" width="150" />
-                <el-table-column prop="manufacturingCostDirect.lineChangeCost" label="换线成本" width="150" />
-                <el-table-column prop="manufacturingCostDirect.manufacturingExpenses" label="制造费用" width="150" />
-                <el-table-column prop="manufacturingCostDirect.subtotal" label="小计" width="150" />
-              </el-table-column>
-              <el-table-column prop="manufacturingCostIndirect" label="间接制造成本">
-                <el-table-column prop="manufacturingCostIndirect.directLabor" label="直接人工" width="150" />
-                <el-table-column prop="manufacturingCostIndirect.equipmentDepreciation" label="设备折旧" width="150" />
-                <!-- <el-table-column prop="manufacturingCostIndirect.typeName" label="换线成本" width="180" /> -->
-                <el-table-column prop="manufacturingCostIndirect.manufacturingExpenses" label="制造费用" width="150" />
-                <el-table-column prop="manufacturingCostIndirect.subtotal" label="小计" width="150" />
-              </el-table-column>
-            </el-table>
-            <!-- 物流成本  -->
-            <el-table :data="data.logisticsData" border v-if="data.mode === '4'" height="675">
-              <el-table-column prop="year" label="年份" width="80" />
-              <el-table-column prop="freight" label="运费/月" width="180" />
-              <el-table-column prop="monthEndDemand" label="月底需求量" width="180" />
-              <el-table-column prop="storageExpenses" label="仓储费用/元" width="180" />
-              <el-table-column prop="perPackagingPrice" label="单PCS包装价格/元" width="150" />
-              <el-table-column prop="perFreight" label="单PCS运输费" width="150" />
-              <el-table-column prop="perTotalLogisticsCost" label="单PCS总物流料成本" width="180" />
-            </el-table>
-            <!-- 质量成本  -->
-            <el-table :data="data.qualityData" v-if="data.mode === '5'" border height="675">
-              <el-table-column prop="productCategory" label="产品类别" />
-              <el-table-column prop="costProportion" label="成本比例" />
-              <el-table-column prop="qualityCost" label="质量成本（MAX）" />
-            </el-table>
-          </el-card>
-        </el-col>
-
-        <el-col :span="10">
-          <el-card>
+        <el-card header="成本明细表">
+          <!-- Bom成本  -->
+          <el-table v-if="data.mode === '1'" :data="data.bomData" border height="675">
+            <el-table-column prop="superType" label="超级大种类" width="180" />
+            <el-table-column prop="materialName" label="材料名称" width="180" />
+            <el-table-column prop="typeName" label="物料种类" width="180" />
+            <el-table-column prop="categoryName" label="物料大类" width="150" />
+            <el-table-column prop="assemblyCount" label="装配数量" />
+            <el-table-column prop="materialPrice" label="材料单价（原币）" width="180" />
+            <el-table-column prop="currencyText" label="币别" width="150" />
+            <el-table-column prop="exchangeRate" label="汇率" width="150" />
+            <el-table-column prop="materialPriceCyn" label="材料单价（人民币）" width="180" />
+            <el-table-column prop="totalMoneyCyn" label="合计金额（人民币）" width="180" />
+            <el-table-column prop="loss" label="损耗" width="150" />
+            <el-table-column prop="materialCost" label="材料成本（含损耗）" width="180" />
+            <el-table-column prop="inputCount" label="投入量" width="150" />
+            <el-table-column prop="purchaseCount" label="采购量" width="150" />
+            <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="150" />
+            <el-table-column prop="moq" label="MOQ" />
+            <el-table-column prop="availableInventory" label="可用库存" width="150" />
+            <el-table-column prop="remarks" label="备注" />
+          </el-table>
+          <!-- 损耗成本  -->
+          <el-table v-if="data.mode === '2'" :data="data.lossData" height="675">
+            <el-table-column prop="name" label="成本项目" width="180" />
+            <el-table-column prop="wastageCost" label="损耗成本" width="180" />
+            <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="180" />
+          </el-table>
+          <!-- 制造成本  -->
+          <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
+            <!-- <el-table-column prop="sapItemNum" label="项目" width="180" /> -->
+            <el-table-column prop="gradientKy" label="梯度K/Y" width="180" />
+            <!-- <el-table-column prop="typeName" label="年份" width="180" /> -->
+            <el-table-column prop="manufacturingCostDirect" label="直接制造成本">
+              <el-table-column prop="manufacturingCostDirect.directLabor" label="直接人工" width="150" />
+              <el-table-column prop="manufacturingCostDirect.equipmentDepreciation" label="设备折旧" width="150" />
+              <el-table-column prop="manufacturingCostDirect.lineChangeCost" label="换线成本" width="150" />
+              <el-table-column prop="manufacturingCostDirect.manufacturingExpenses" label="制造费用" width="150" />
+              <el-table-column prop="manufacturingCostDirect.subtotal" label="小计" width="150" />
+            </el-table-column>
+            <el-table-column prop="manufacturingCostIndirect" label="间接制造成本">
+              <el-table-column prop="manufacturingCostIndirect.directLabor" label="直接人工" width="150" />
+              <el-table-column prop="manufacturingCostIndirect.equipmentDepreciation" label="设备折旧" width="150" />
+              <!-- <el-table-column prop="manufacturingCostIndirect.typeName" label="换线成本" width="180" /> -->
+              <el-table-column prop="manufacturingCostIndirect.manufacturingExpenses" label="制造费用" width="150" />
+              <el-table-column prop="manufacturingCostIndirect.subtotal" label="小计" width="150" />
+            </el-table-column>
+          </el-table>
+          <!-- 物流成本  -->
+          <el-table :data="data.logisticsData" border v-if="data.mode === '4'" height="675">
+            <el-table-column prop="year" label="年份" width="80" />
+            <el-table-column prop="freight" label="运费/月" width="180" />
+            <el-table-column prop="monthEndDemand" label="月底需求量" width="180" />
+            <el-table-column prop="storageExpenses" label="仓储费用/元" width="180" />
+            <el-table-column prop="perPackagingPrice" label="单PCS包装价格/元" width="150" />
+            <el-table-column prop="perFreight" label="单PCS运输费" width="150" />
+            <el-table-column prop="perTotalLogisticsCost" label="单PCS总物流料成本" width="180" />
+          </el-table>
+          <!-- 质量成本  -->
+          <el-table :data="data.qualityData" v-if="data.mode === '5'" border height="675">
+            <el-table-column prop="productCategory" label="产品类别" />
+            <el-table-column prop="costProportion" label="成本比例" />
+            <el-table-column prop="qualityCost" label="质量成本（MAX）" />
+          </el-table>
+        </el-card>
+      </el-row>
+      <el-card>
+        <el-row>
+          <el-col :span="12">
             <div class="dashboard__footer">
               <!-- 饼图 -->
               <div id="percentageCostChart" />
             </div>
+          </el-col>
+          <el-col :span="12">
             <div class="dashboard__body">
               <!-- 总成本图 -->
               <div id="costChart" />
             </div>
-          </el-card>
-        </el-col>
-      </el-row>
+          </el-col>
+        </el-row>
+      </el-card>
       <el-card style="margin-top: 10px">
         <div>
           产品投入量：<el-input placeholder="请输入产品投入量" v-model="data.productInputs" style="width: 200px" />
@@ -189,8 +191,6 @@ import {
   GetPricingPanelTimeSelectList,
   GetPricingPanelProportionOfProductCost,
   GetPricingPanelProfit,
-  PriceEvaluationTableDownload,
-  NreTableDownload,
   GetLogisticsCost,
   GetManufacturingCost,
   GetGoTable,
@@ -201,12 +201,12 @@ import {
   CreatePriceEvaluationTable
 } from "../service"
 import getQuery from "@/utils/getQuery"
-import { downloadFileExcel, downloadFileZip } from "@/utils/index"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage, ElMessageBox } from "element-plus"
 import debounce from "lodash/debounce"
 import * as echarts from "echarts"
 import useJump from "@/hook/useJump"
+import router from "@/router"
 
 const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
@@ -370,34 +370,28 @@ const getQualityCost = async () => {
 }
 
 // 产品核价表下载
-const handleFetchPriceEvaluationTableDownload = async () => {
-  try {
-    const res: any = await PriceEvaluationTableDownload({
-      Year: data.year,
-      AuditFlowId: auditFlowId,
-      ModelCountId: productId
-    })
-
-    downloadFileZip(res, "产品核价表")
-    // console.log(result, "产品核价表下载")
-  } catch (err: any) {
-    console.log(err, "[ 产品核价表下载据失败 ]")
-  }
+const handleFetchPriceEvaluationTableDownload = async (pageType?: string) => {
+  router.push({
+    path: `/nupriceManagement/productPriceList`,
+    query: {
+      pageType: pageType || "",
+      auditFlowId,
+      productId,
+      year: data.year
+    }
+  })
 }
 
 // NRE核价表下载
 const handleFethNreTableDownload = async () => {
-  try {
-    const res: any = await NreTableDownload({
-      Year: data.year,
-      AuditFlowId: auditFlowId,
-      ModelCountId: productId
-    })
-    downloadFileExcel(res, "NRE核价表")
-    console.log(res, "NreTableDownload")
-  } catch (err: any) {
-    console.log(err, "[ NRE核价表下载 失败 ]")
-  }
+  router.push({
+    path: "/nre/nrePricelist",
+    query: {
+      year: data.year,
+      auditFlowId,
+      productId
+    }
+  })
 }
 
 // 获取 物流成本汇总表

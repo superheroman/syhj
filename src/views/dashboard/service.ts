@@ -55,26 +55,6 @@ export function GetPricingPanelProfit(data: GetLossCostProps) {
   })
 }
 
-// 初版产品核价表下载
-export function PriceEvaluationTableDownload(data: GetLossCostProps) {
-  return request({
-    url: "/api/services/app/PriceEvaluation/PriceEvaluationTableDownload",
-    method: "get",
-    data,
-    responseType: "blob"
-  })
-}
-
-//  初版NRE核价表下载
-export function NreTableDownload(data: GetLossCostProps) {
-  return request({
-    url: "/api/services/app/PriceEvaluation/NreTableDownload",
-    method: "get",
-    data,
-    responseType: "blob"
-  })
-}
-
 // 获取 bom成本（含损耗）汇总表
 export function GetBomCost(data: GetLossCostProps) {
   return request({

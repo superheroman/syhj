@@ -204,3 +204,13 @@ export function GetProductDepartment(auditFlowId: number, productId: number): an
     }
   })
 }
+
+//  初版NRE核价表下载
+export function NreTableDownload(data: any) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/NreTableDownload",
+    method: "get",
+    data,
+    responseType: "blob"
+  })
+}

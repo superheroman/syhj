@@ -80,6 +80,7 @@
           </el-table-column>
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150" />
+        <el-table-column prop="remark" label="备注" />
         <el-table-column prop="peopleName" label="确认人" />
       </el-table>
       <!-- <el-row justify="end">
