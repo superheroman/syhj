@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { GetTradeComplianceCheckFromDateBase, GeneralManagerQuoteCheck } from "./service"
+import { GetTradeComplianceCheckFromDateBase, IsTradeComplianceCheck } from "./service"
 import { ProductMaterialInfo, TradeComplianceCheck } from "./data.type"
 import { ElMessage, ElMessageBox } from "element-plus"
 
@@ -88,7 +88,7 @@ const agree = async (isAgree: boolean) => {
     cancelButtonText: "取消",
     type: "warning"
   }).then(async () => {
-    let res: any = await GeneralManagerQuoteCheck({
+    let res: any = await IsTradeComplianceCheck({
       AuditFlowId: auditFlowId,
       ProductId: productId,
       isAgree

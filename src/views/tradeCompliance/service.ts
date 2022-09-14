@@ -8,9 +8,9 @@ export function GetTradeComplianceCheckFromDateBase(data: { AuditFlowId: number;
   })
 }
 
-export function GeneralManagerQuoteCheck(data: { AuditFlowId: number; ProductId: number; isAgree: boolean }): any {
+export function IsTradeComplianceCheck(data: { AuditFlowId: number; ProductId: number; isAgree: boolean }): any {
   return request({
-    url: "/api/services/app/FinanceCheck/GeneralManagerQuoteCheck",
+    url: "/api/services/app/FinanceCheck/IsTradeComplianceCheck",
     method: "post",
     data
   })

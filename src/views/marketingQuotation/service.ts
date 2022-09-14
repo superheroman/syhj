@@ -42,18 +42,18 @@ export function PostAuditQuotationList(data: {
   })
 }
 
-// 总经理报价审批
-export function GeneralManagerQuoteCheck(data: {
-  /**
-   * 流程Id
-   */
-  auditFlowId?: number
-  isAgree: boolean
-  opinionDescription: string
-}): any {
-  return request({
-    url: "/api/services/app/GeneralManagerCheck/GeneralManagerQuoteCheck",
-    method: "post",
-    data
-  })
-}
+// // 总经理报价审批
+// export function GeneralManagerQuoteCheck(data: {
+//   /**
+//    * 流程Id
+//    */
+//   auditFlowId?: number
+//   isAgree: boolean
+//   opinionDescription: string
+// }): any {
+//   return request({
+//     url: "/api/services/app/GeneralManagerCheck/GeneralManagerQuoteCheck",
+//     method: "post",
+//     data
+//   })
+// }
