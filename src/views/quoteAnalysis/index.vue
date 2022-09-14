@@ -10,7 +10,7 @@
     <el-card class="card">
       <template #header>
         <div class="card-header">
-          <span>Nre</span>
+          <span>NRE</span>
         </div>
       </template>
       <el-table :data="data.nre" style="width: 100%" border show-summary>

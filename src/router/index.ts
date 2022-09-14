@@ -144,7 +144,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/resourcesDepartment/index",
     component: Layout,
     meta: {
-      title: "Bom单价录入"
+      title: "BOM单价录入"
     },
     children: [
       {
@@ -160,7 +160,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/resourcesDepartment/construction.vue"),
         name: "construction",
         meta: {
-          title: "结构bom单价录入"
+          title: "结构BOM单价录入"
         }
       }
     ]
@@ -170,7 +170,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomVerify/construction",
     component: Layout,
     meta: {
-      title: "Bom单价审核"
+      title: "BOM单价审核"
     },
     children: [
       {
@@ -186,7 +186,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/bomVerify/construction.vue"),
         name: "bomVerifyConstruction",
         meta: {
-          title: "结构bom单价审核"
+          title: "结构BOM单价审核"
         }
       }
     ]
@@ -196,7 +196,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomLoss/indexElec",
     component: Layout,
     meta: {
-      title: "bom损耗率表单"
+      title: "BOM损耗率表单"
     },
     children: [
       {
@@ -204,7 +204,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/bomLoss/indexElec.vue"),
         name: "bomLossElec",
         meta: {
-          title: "电子bom损耗率表单"
+          title: "电子BOM损耗率表单"
         }
       },
       {
@@ -212,7 +212,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/bomLoss/indexStruct.vue"),
         name: "bomLossStruct",
         meta: {
-          title: "结构bom损耗率表单"
+          title: "结构BOM损耗率表单"
         }
       }
     ]
@@ -252,7 +252,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/nre/nreProjectManageMent",
     component: Layout,
     meta: {
-      title: "nre"
+      title: "NRE"
     },
     children: [
       {
@@ -260,7 +260,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nreProjectManageMent.vue"),
         name: "nreProjectManageMent",
         meta: {
-          title: "项目管理部nre"
+          title: "项目管理部NRE"
         }
       },
       {
@@ -268,7 +268,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nrePilotprojects.vue"),
         name: "nrePilotprojects",
         meta: {
-          title: "产品部nre"
+          title: "产品部NRE"
         }
       },
       {
@@ -276,7 +276,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nreResourcesDepartment.vue"),
         name: "nreResourcesDepartment",
         meta: {
-          title: "资源部nre"
+          title: "资源部NRE"
         }
       },
       {
@@ -284,7 +284,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nreExperimentItems.vue"),
         name: "nreExperimentItems",
         meta: {
-          title: "品保部实验nre"
+          title: "品保部实验NRE"
         }
       },
       {
@@ -292,7 +292,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nreQCDepartment.vue"),
         name: "nreQCDepartment",
         meta: {
-          title: "品保部-检具nre"
+          title: "品保部-检具NRE"
         }
       },
       {
@@ -300,7 +300,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nreMarketingDepartment.vue"),
         name: "nreMarketingDepartment",
         meta: {
-          title: "营销部nre"
+          title: "营销部NRE"
         }
       },
       {
@@ -308,7 +308,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/nre/nrePricelist.vue"),
         name: "nrePricelist",
         meta: {
-          title: "核价表nre"
+          title: "核价表NRE"
         }
       }
       // {
@@ -316,7 +316,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       //   component: () => import("@/views/nre/engineeringDepartment.vue"),
       //   name: "engineeringDepartment",
       //   meta: {
-      //     title: "工程部nre"
+      //     title: "工程部NRE"
       //   }
       // },
       // {
@@ -443,7 +443,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomView/index",
     component: Layout,
     meta: {
-      title: "Bom查看"
+      title: "BOM查看"
     },
     children: [
       {
@@ -451,7 +451,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/bomView/elec.vue"),
         name: "elecView",
         meta: {
-          title: "电子料Bom查看"
+          title: "电子料BOM查看"
         }
       },
       {
@@ -459,7 +459,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/bomView/struc.vue"),
         name: "strucView",
         meta: {
-          title: "结构料Bom查看"
+          title: "结构料BOM查看"
         }
       },
       {
@@ -467,7 +467,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/bomView/index.vue"),
         name: "bomView",
         meta: {
-          title: "Bom查看"
+          title: "BOM查看"
         }
       }
     ]
