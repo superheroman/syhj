@@ -79,7 +79,7 @@ export function PostResourcesManagement(data: {
   /**
    * Nre核价  资源部录入 实体
    */
-  resourcesManagementModel?: ResourcesManagementModel | null
+  resourcesManagementModels?: ResourcesManagementModel | null
 }): any {
   return request({
     url: "/api/services/app/NrePricing/PostResourcesManagementSingle",

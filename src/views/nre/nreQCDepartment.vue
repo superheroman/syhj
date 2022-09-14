@@ -95,7 +95,7 @@ const addQaqcDepartmentsData = () => {
 const submit = async () => {
   const { success } = await PostQADepartment({
     auditFlowId,
-    qcGaugeDtoModel: {
+    qcGaugeDtoModels: {
       productId,
       qaqcDepartments: data.qaqcDepartments.map((item: any) => ({
         ...item,
