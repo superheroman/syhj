@@ -34,7 +34,7 @@ export function PostProductDepartment(data: {
   /**
    * 实验费 实体类
    */
-  productDepartmentModel?: ProductDepartmentModel | null
+  productDepartmentModels?: ProductDepartmentModel | null
 }): any {
   return request({
     url: "/api/services/app/NrePricing/PostProductDepartmentSingle",

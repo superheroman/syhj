@@ -144,7 +144,7 @@ const submit = async () => {
   try {
     const { success } = await PostProductDepartment({
       auditFlowId,
-      productDepartmentModel: {
+      productDepartmentModels: {
         productId,
         laboratoryFeeModels:
           data.laboratoryFeeModels.map((item) => ({
