@@ -99,7 +99,7 @@
             v-for="(item, index) in data.humanMachineHoursDetailList"
             :key="`humanMachineHoursDetailList-${index}`"
           >
-            <el-table-column :label="index === 0 ? 'SOP' : `SOP + ${index + 1}`" class-name="columnColor4">
+            <el-table-column :label="item.year" class-name="columnColor4">
               <el-table-column
                 :prop="`humanMachineHoursDetailList[${index}]laborTime`"
                 label="标准人工工时"
@@ -217,8 +217,8 @@ const formatterArr = (key: string, childKey: any = "equipmentDetails") => {
   return Math.max.apply(
     null,
     data.tableData.map((item: any) => {
-      if (childKey) return item[key].equipmentDetails.length
-      else return item[key].length
+      if (childKey) return item[key]?.equipmentDetails.length || 0
+      else return item[key]?.length || 0
     })
   )
 }
@@ -226,20 +226,23 @@ const formatterArr = (key: string, childKey: any = "equipmentDetails") => {
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   if (res.success && res.result?.workingHourDetailList.length > 0) {
     data.tableData = res.result?.workingHourDetailList
-    console.log(data.tableData, "data.tableData")
-    data.retrospectPart = {
-      equipmentDetails: new Array(formatterArr("retrospectPart"))
-    }
-    data.toolingFixturePart = {
-      equipmentDetails: new Array(formatterArr("toolingFixturePart"))
-    }
-    data.equipmentPart = {
-      equipmentDetails: new Array(formatterArr("equipmentPart"))
-    }
-    data.humanMachineHoursDetailList = new Array(formatterArr("humanMachineHoursDetailList", null))
+    formatTableColumnData()
   }
 }
-
+const formatTableColumnData = () => {
+  console.log(data.tableData, "data.tableData")
+  data.retrospectPart = {
+    equipmentDetails: new Array(formatterArr("retrospectPart"))
+  }
+  console.log(data.retrospectPart, "data.retrospectPart")
+  data.toolingFixturePart = {
+    equipmentDetails: new Array(formatterArr("toolingFixturePart"))
+  }
+  data.equipmentPart = {
+    equipmentDetails: new Array(formatterArr("equipmentPart"))
+  }
+  data.humanMachineHoursDetailList = data.tableData[0]?.humanMachineHoursDetailList || []
+}
 const handleError = () => {
   ElMessage.error("上传失败")
 }
@@ -291,6 +294,7 @@ const init = async () => {
   const { result }: any = (await QueryWorkingHour(auditFlowId, productId)) || {}
   if (result.workingHourDetailList?.length) {
     data.tableData = result.workingHourDetailList
+    formatTableColumnData()
   }
 }
 
