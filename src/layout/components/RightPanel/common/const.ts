@@ -22,5 +22,6 @@ export const wahiteRotes: any[] = [
   "nrePricelist", // nre - 核价表nre
   "Dashboard", //核价看板
   "elecView",
-  "strucView"
+  "strucView",
+  "processImport" // 工序工时导入
 ]

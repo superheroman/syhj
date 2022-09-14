@@ -171,9 +171,8 @@ import {
 import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getDictionaryAndDetail } from "@/api/dictionary"
 import getQuery from "@/utils/getQuery"
-import useJump from "@/hook/useJump"
+import { ElMessage } from "element-plus"
 
-const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 /**
@@ -225,7 +224,7 @@ const submit = async () => {
       },
       auditFlowId
     })
-    if (success) jumpTodoCenter()
+    if (success) ElMessage.success("提交成功！")
     console.log(success, "RES")
   } catch (err) {
     console.log(err, "PostProjectManagement err")

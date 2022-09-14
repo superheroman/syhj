@@ -81,16 +81,10 @@ const initFetch = async () => {
 }
 
 const submit = async () => {
-  try {
-    const { success } = await SaveRateEntryInput({
-      rateEntryInfos: tableData.value
-    })
-    if (!success) throw Error()
-    ElMessage.success("提交成功")
-  } catch (err: any) {
-    console.log("[SaveRateEntryInput Error]", err)
-    ElMessage.error("提交失败")
-  }
+  const { success } = await SaveRateEntryInput({
+    rateEntryInfos: tableData.value
+  })
+  success && ElMessage.success("提交成功")
 }
 </script>
 <style scoped lang="scss"></style>

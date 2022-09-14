@@ -65,9 +65,7 @@ import { getQaqcDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
 import { PostQADepartment, GetReturnQcGauge } from "./common/request"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
-import useJump from "@/hook/useJump"
 
-const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 /**
@@ -95,23 +93,17 @@ const addQaqcDepartmentsData = () => {
 }
 
 const submit = async () => {
-  try {
-    const { success } = await PostQADepartment({
-      auditFlowId,
-      qcGaugeDtoModel: {
-        productId,
-        qaqcDepartments: data.qaqcDepartments.map((item: any) => ({
-          ...item,
-          allCost: (item.unitPrice || 0) * (item.count || 0)
-        }))
-      }
-    })
-    if (!success) throw Error()
-    jumpTodoCenter()
-    ElMessage.success("提交成功")
-  } catch (err) {
-    ElMessage.error("提交失败")
-  }
+  const { success } = await PostQADepartment({
+    auditFlowId,
+    qcGaugeDtoModel: {
+      productId,
+      qaqcDepartments: data.qaqcDepartments.map((item: any) => ({
+        ...item,
+        allCost: (item.unitPrice || 0) * (item.count || 0)
+      }))
+    }
+  })
+  success && ElMessage.success("提交成功")
 }
 const initFetch = async () => {
   const { result } = await GetReturnQcGauge(auditFlowId, productId)

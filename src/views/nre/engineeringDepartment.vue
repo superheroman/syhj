@@ -199,9 +199,8 @@ import { HandPieceCostModel, RestsCostModel, TravelExpenseModel } from "./data.t
 import { PostProjectManagement, GetReturnProjectManagement } from "./common/request"
 import { getHandPieceCostSummaries, getOtherCostSummaries } from "./common/projetManageSummaries"
 import getQuery from "@/utils/getQuery"
-import useJump from "@/hook/useJump"
+import { ElMessage } from "element-plus"
 
-const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId = 1 } = getQuery()
 /**
  * 数据部分
@@ -251,8 +250,7 @@ const submit = async () => {
       },
       auditFlowId
     })
-    console.log(success, "RES")
-    if (success) jumpTodoCenter()
+    if (success) ElMessage.success("提交成功！")
   } catch (err) {
     console.log(err, "[PostProjectManagement ERROR]")
   }

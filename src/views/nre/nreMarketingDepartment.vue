@@ -37,9 +37,6 @@ import { getMouldSummaries } from "./common/mouldSummaries"
 import { NreMarketingDepartmentModel } from "./data.type"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
-import useJump from "@/hook/useJump"
-
-const { jumpTodoCenter } = useJump()
 const { auditFlowId, right = 1 }: any = getQuery()
 
 const mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
@@ -57,19 +54,13 @@ const queryDoneData = async () => {
 }
 
 const submit = async () => {
-  try {
-    const { success } = await PostSalesDepartment(
-      mouldInventoryData.value?.map((item) => ({
-        ...item,
-        offerMoney: (item.pricingMoney || 0) * (item.offerCoefficient || 0)
-      })) || []
-    )
-    if (!success) throw Error()
-    jumpTodoCenter()
-    ElMessage.success("提交成功~")
-  } catch (err) {
-    ElMessage.success("提交失败~")
-  }
+  const { success } = await PostSalesDepartment(
+    mouldInventoryData.value?.map((item) => ({
+      ...item,
+      offerMoney: (item.pricingMoney || 0) * (item.offerCoefficient || 0)
+    })) || []
+  )
+  success && ElMessage.success("提交成功~")
 }
 
 onBeforeMount(() => {

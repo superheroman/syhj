@@ -185,13 +185,12 @@ import {
   SaveTangentHours,
   getTangentHoursList,
   SubmitWorkingHourAndSwitchLine,
-  getYears
+  getYears,
+  QueryWorkingHour
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
-import useJump from "@/hook/useJump"
 
-const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 const data = reactive<any>({
@@ -266,7 +265,7 @@ const downLoadTemplate = async () => {
 const handleSaveWorkingHour = async () => {
   try {
     let { success }: any = await SaveWorkingHour({
-      auditFlowId,
+      auditFlowId: Number(auditFlowId),
       productId,
       workingHourDetailList: data.tableData
     })
@@ -282,16 +281,23 @@ const handleSubmit = async (formEl: FormInstance | undefined) => {
     if (valid) {
       await SubmitWorkingHourAndSwitchLine(auditFlowId)
       ElMessage.success("提交成功！")
-      jumpTodoCenter()
     } else {
       ElMessage.error("请填写正确数据！")
     }
   })
 }
 
+const init = async () => {
+  const { result }: any = (await QueryWorkingHour(auditFlowId, productId)) || {}
+  if (result.workingHourDetailList?.length) {
+    data.tableData = result.workingHourDetailList
+  }
+}
+
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
+  init()
 })
 
 const getAllSop = async () => {
@@ -301,13 +307,7 @@ const getAllSop = async () => {
   if (!tangentHoursDetailList.length) {
     // 获取年份
     const { result = [] } = (await getYears(auditFlowId)) as any
-    data.tangentForm.tangent =
-      result?.map((item: any) => ({
-        year: item,
-        laborTime: null,
-        machineHours: null,
-        personnelNumber: null
-      })) || []
+    data.tangentForm.tangent = result || []
     data.isSaved = false
     return
   }

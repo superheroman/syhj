@@ -128,7 +128,7 @@ const options = [
 ]
 const save = async () => {
   let res: any = await PostManagement(formData)
-  if (res.success) {
+  if (res?.success) {
     ElMessage.success("提交成功")
   }
 }
