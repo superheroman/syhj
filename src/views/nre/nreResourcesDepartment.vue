@@ -74,7 +74,7 @@ const initFetch = async () => {
 const submit = async () => {
   const { success } = await PostResourcesManagement({
     auditFlowId,
-    resourcesManagementModel: {
+    resourcesManagementModels: {
       mouldInventory: data.resourceData.map((item: any) => ({
         ...item,
         cost: (item.unitPrice || 0) * (item.count || 0)
