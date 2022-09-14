@@ -35,7 +35,7 @@
         </el-table-column>
         <el-table-column label="数量" width="120">
           <template #default="{ row }">
-            <el-input-number v-model="row.quantity" :min="0" controls-position="right" />
+            <el-input-number v-model="row.count" :min="0" controls-position="right" />
           </template>
         </el-table-column>
         <el-table-column label="时间-摸底" width="180">
@@ -84,7 +84,7 @@
         </template>
       </el-table-column> -->
         <el-table-column label="总费用" width="150">
-          <template #default="{ row }"> ￥ {{ row.unitPrice * row.quantity }} </template>
+          <template #default="{ row }"> ￥ {{ row.unitPrice * row.count }} </template>
         </el-table-column>
         <!-- <el-table-column label="单位" width="180">
         <template #default="{ row }">
@@ -123,7 +123,7 @@ const deleteLaboratoryFeeModel = (i: number) => {
 }
 let { auditFlowId, productId } = getQuery()
 const addLaboratoryFeeModel = () => {
-  data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, quantity: 0 })
+  data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, count: 0 })
 }
 
 /**
@@ -149,7 +149,7 @@ const submit = async () => {
         laboratoryFeeModels:
           data.laboratoryFeeModels.map((item) => ({
             ...item,
-            allCost: (item.unitPrice || 0) * (item.quantity || 0)
+            allCost: (item.unitPrice || 0) * (item.count || 0)
           })) || []
       }
     })
