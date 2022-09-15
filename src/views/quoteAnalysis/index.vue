@@ -173,19 +173,19 @@
         <el-table-column label="项目" prop="projectName" width="150" />
         <el-table-column label="目标价（内部）" width="150">
           <template #default="scope">
-            <div>{{ scope.row.interiorTarget?.grossMargin.toFixed(2) }}</div>
+            <!-- <div>{{ scope.row.interiorTarget?.grossMargin.toFixed(2) }}</div> -->
             <div>{{ scope.row.interiorTarget?.grossMarginNumber.toFixed(2) }}</div>
           </template>
         </el-table-column>
         <el-table-column label="目标价（客户）" width="150">
           <template #default="scope">
-            <div>{{ scope.row.clientTarget?.grossMargin.toFixed(2) }}</div>
+            <!-- <div>{{ scope.row.clientTarget?.grossMargin.toFixed(2) }}</div> -->
             <div>{{ scope.row.clientTarget?.grossMarginNumber.toFixed(2) }}</div>
           </template>
         </el-table-column>
         <el-table-column label="本次报价">
           <template #default="scope">
-            <div>{{ scope.row.offer?.grossMargin.toFixed(2) }}</div>
+            <!-- <div>{{ scope.row.offer?.grossMargin.toFixed(2) }}</div> -->
             <div>{{ scope.row.offer?.grossMarginNumber.toFixed(2) }}</div>
           </template>
         </el-table-column>
@@ -289,7 +289,7 @@ let ProjectUnitPrice: any = {
   },
   xAxis: {
     type: "category",
-    data: ["目标价", "本次报价", "上一轮"]
+    data: ["目标价（内部）", "目标价（客户）", "本次报价", "上一轮"]
   },
   // yAxis: {
   //   type: "value"
@@ -318,7 +318,7 @@ let ProjectUnitPrice: any = {
   ],
   series: []
 }
-let RevenueGrossMargin = {
+let RevenueGrossMargin: any = {
   title: {
     text: "收入和毛利率对比"
   },
@@ -350,17 +350,17 @@ let RevenueGrossMargin = {
     }
   ],
   series: [
-    {
-      data: [120, 200, 150],
-      type: "bar",
-      name: "OV方案销售收入"
-    },
-    {
-      data: [0, 0.05, 0.1],
-      type: "line",
-      name: "OV方案毛利率",
-      yAxisIndex: 1
-    }
+    // {
+    //   data: [120, 200, 150],
+    //   type: "bar",
+    //   name: "OV方案销售收入"
+    // },
+    // {
+    //   data: [0, 0.05, 0.1],
+    //   type: "line",
+    //   name: "OV方案毛利率",
+    //   yAxisIndex: 1
+    // }
   ]
 }
 
@@ -403,7 +403,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPr
 const setData = () => {
   ProjectUnitPrice.series = data.productBoard.map((item: any) => {
     return {
-      name: item.productName,
+      name: item.productName + item.interiorTargetUnitPrice,
       type: "bar",
       stack: "total",
       label: {
@@ -412,16 +412,39 @@ const setData = () => {
       emphasis: {
         focus: "series"
       },
-      data: [item.clientTargetUnitPrice, item.offerUnitPrice || 100, item.oldOffer[0]?.unitPrice || 110]
+      data: [item.interiorTargetUnitPrice, item.clientTargetUnitPrice, item.offerUnitPrice].concat(
+        item.oldOffer.map((offer: any) => offer.unitPrice)
+      )
     }
   })
   ProjectUnitPrice.series.push({
     yAxisIndex: 1,
     name: "整体毛利率",
     type: "line",
-    data: [0.1, 0.2, 0.4]
+    data: [0.1, 0.2, 0.4] //需要替换
   })
   chart1.setOption(ProjectUnitPrice)
+  RevenueGrossMargin.series = data.projectBoard.map((item: any) => {
+    return {
+      name: item.projectName,
+      type: "bar",
+      stack: "total",
+      label: {
+        show: true
+      },
+      emphasis: {
+        focus: "series"
+      },
+      data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
+    }
+  })
+  RevenueGrossMargin.series.push({
+    yAxisIndex: 1,
+    name: "整体毛利率",
+    type: "line",
+    data: [0.1, 0.2, 0.4] //需要替换
+  })
+  chart2.setOption(RevenueGrossMargin)
 }
 const spreadSheetCalculate = async (row: any) => {
   let res: any = await getSpreadSheetCalculate(row.id, row.rossMargin)
