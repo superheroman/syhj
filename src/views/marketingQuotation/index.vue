@@ -73,6 +73,8 @@
         <el-table-column label="成本" prop="cost" />
         <el-table-column label="毛利率" prop="grossMargin" />
         <el-table-column label="样件价格" prop="price" />
+        <el-table-column label="佣金" prop="commission" />
+        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" />
       </el-table>
     </el-card>
     <el-card header="费用表：" m="2">

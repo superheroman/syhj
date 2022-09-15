@@ -1,20 +1,21 @@
 <template>
   <el-card m="2">
-    <el-row>
-      <div v-if="pageType === 'result'">
+    <el-tabs v-model="data.pageType" class="demo-tabs" @tab-change="handleChangePageType">
+      <el-tab-pane label="项目核价表" name="normal" />
+      <el-tab-pane label="生成的项目核价表" name="result" />
+    </el-tabs>
+    <el-row justify="space-between" v-if="data.pageType === 'result'">
+      <div>
         是否为全生命周期：
-        <el-select placeholder="请选择" v-model="data.isAll">
+        <el-select placeholder="请选择" v-model="data.isAll" @change="fetchPriceEvaluationTableResult">
           <el-option v-for="opt in options" :key="opt.label" :label="opt.label" :value="opt.value" />
         </el-select>
       </div>
-      <el-row justify="space-between" v-else>
-        <EZFilter :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
-        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
-          产品核价表下载
-        </el-button>
-      </el-row>
+      <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
+        产品核价表下载
+      </el-button>
     </el-row>
-
+    <EZFilter v-else :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
     <el-card class="card">
       <template #header>
         <div class="card-header">
@@ -117,7 +118,7 @@ import getQuery from "@/utils/getQuery"
 import EZFilter from "@/components/EZFilter/index.vue"
 import { getYears } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
-const { auditFlowId, productId, pageType } = getQuery()
+const { auditFlowId, productId } = getQuery()
 
 /**
  * 路由对象
@@ -138,7 +139,7 @@ const data = reactive({
   manufacturingCost: [],
   lossCost: [],
   otherCostItem: [],
-  isAll: 0,
+  isAll: false,
   date: "",
   inputCount: "",
   requiredCount: "",
@@ -155,34 +156,37 @@ const data = reactive({
       label: "投入量",
       key: "inputCount"
     }
-  ]
+  ],
+  pageType: "normal"
 })
 
 const options = [
   {
     label: "是",
-    value: 1
+    value: true
   },
   {
     label: "否",
-    value: 0
+    value: false
   }
 ]
 
 const fetchPriceEvaluationTableResult = async () => {
   const { result }: any = await getPriceEvaluationTableResult({
     auditFlowId,
-    productId,
-    isAll: !!data.isAll
+    modelCountId: productId,
+    isAll: String(!!data.isAll)
   })
   console.log(result)
 }
 
 const fetchPriceEvaluationTable = async (props?: any) => {
   const { inputCount, year } = props
+  data.inputCount = inputCount
+  data.year = year
   let res: any = await getPriceEvaluationTable({
     auditFlowId,
-    productId,
+    modelCountId: productId,
     inputCount,
     year
   })
@@ -220,9 +224,14 @@ onBeforeMount(() => {
 
 onMounted(async () => {
   fetchSopYear()
-  pageType === "result" && fetchPriceEvaluationTableResult()
+  // handleChangePageType(data.pageType)
 })
 
+const handleChangePageType = (pageType: any) => {
+  pageType === "result"
+    ? fetchPriceEvaluationTableResult()
+    : fetchPriceEvaluationTable({ inputCount: data.inputCount, year: data.year })
+}
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">
