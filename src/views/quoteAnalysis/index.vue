@@ -158,7 +158,7 @@
           </el-table-column>
         </el-table-column>
       </el-table>
-      <el-descriptions :column="3" title="" size="small" border>
+      <el-descriptions :column="3" title="" border>
         <el-descriptions-item label="目标价(内部)整套单价">{{
           calculatedValue("interiorTargetUnitPrice")
         }}</el-descriptions-item>
@@ -181,9 +181,7 @@
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
           Number(data.allClientGrossMargin)?.toFixed(2)
         }}</el-descriptions-item>
-        <!-- <el-descriptions-item label="目标价(客户)平均毛利率">{{
-          Number(data.average).toFixed(2)
-        }}</el-descriptions-item> -->
+        <el-descriptions-item label="本次报价整套毛利率">{{ calculatedValue("grossMargin") }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
 
