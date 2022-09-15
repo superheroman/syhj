@@ -83,6 +83,12 @@
               <span v-if="!row.isEdit">{{ row.rebateMoney }}</span>
             </template>
           </el-table-column>
+          <el-table-column label="备注">
+            <template #default="{ row }">
+              <el-input v-if="row.isEdit" v-model="row.remark" />
+              <span v-if="!row.isEdit">{{ row.remark }}</span>
+            </template>
+          </el-table-column>
           <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">

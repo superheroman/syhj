@@ -1,5 +1,6 @@
 <template>
   <el-card m="2">
+    <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表下载</el-button>
     <el-card class="margin-top" header="手板件费用">
       <el-table
         :data="data.handPieceCost"
@@ -88,17 +89,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onBeforeMount, onMounted, watchEffect } from "vue"
-import { GetPricingForm } from "./common/request"
+import { onBeforeMount, onMounted, watchEffect, reactive } from "vue"
+import { GetPricingForm, NreTableDownload } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import { pricingForm } from "./data.type"
 import getQuery from "@/utils/getQuery"
-import { formatDateTime } from "@/utils"
+import { formatDateTime, downloadFileExcel } from "@/utils"
 
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
-// import { ElMessage } from "element-plus"
+const { auditFlowId, productId, year }: any = getQuery()
 
-const data = ref<pricingForm>({
+const data = reactive<pricingForm>({
   handPieceCost: [],
   mouldInventory: [],
   qaqcDepartments: [],
@@ -114,14 +114,29 @@ const initFetch = async () => {
     const { success, result } = await GetPricingForm({ Id: auditFlowId, productId })
     if (!success) throw Error()
     console.log(result, "result")
-    data.value.handPieceCost = result.handPieceCost || []
-    data.value.mouldInventory = result.mouldInventory || []
-    data.value.qaqcDepartments = result.qaqcDepartments || []
-    data.value.laboratoryFeeModels = result.laboratoryFeeModels || []
-    data.value.travelExpense = result.travelExpense || []
-    data.value.restsCost = result.restsCost || []
+    data.handPieceCost = result.handPieceCost || []
+    data.mouldInventory = result.mouldInventory || []
+    data.qaqcDepartments = result.qaqcDepartments || []
+    data.laboratoryFeeModels = result.laboratoryFeeModels || []
+    data.travelExpense = result.travelExpense || []
+    data.restsCost = result.restsCost || []
   } catch (err) {
     console.log(err, "[ GetPricingForm err ]")
+  }
+}
+
+// NRE核价表下载
+const handleFethNreTableDownload = async () => {
+  try {
+    const res: any = await NreTableDownload({
+      Year: year,
+      AuditFlowId: auditFlowId,
+      ModelCountId: productId
+    })
+    downloadFileExcel(res, "NRE核价表")
+    console.log(res, "NreTableDownload")
+  } catch (err: any) {
+    console.log(err, "[ NRE核价表下载 失败 ]")
   }
 }
 

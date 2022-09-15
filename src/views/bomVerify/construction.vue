@@ -74,6 +74,7 @@
             </template>
           </el-table-column>
         </el-table-column>
+        <el-table-column prop="remark" label="备注" />
         <el-table-column prop="peopleName" label="确认人" />
       </el-table>
     </el-card>
