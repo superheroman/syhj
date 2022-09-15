@@ -65,7 +65,7 @@ import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
-import { SaveElectronicBom, DownloadFile } from "@/api/bom"
+import { SaveElectronicBom, DownloadFile, GetElectronicBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 
@@ -128,6 +128,8 @@ onMounted(async () => {
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId) || 1
   productId = Number(query.productId) || 1
+  let resElectronic: any = await GetElectronicBom({ auditFlowId, productId })
+  data.tableData = resElectronic.result
 })
 </script>
 <style lang="scss" scoped>

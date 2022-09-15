@@ -125,7 +125,7 @@
 import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
 import { ElMessage } from "element-plus"
-import { SaveStructionBom, SaveBOM, getBomTemplate, SaveProductDevelopmentInput } from "@/api/bom"
+import { SaveStructionBom, SaveBOM, getBomTemplate, SaveProductDevelopmentInput, GetStructionBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 
@@ -155,6 +155,8 @@ onMounted(async () => {
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId) || 0
   productId = Number(query.productId) || 0
+  let resStruction: any = await GetStructionBom({ auditFlowId, productId })
+  data.tableData = resStruction.result
 })
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)

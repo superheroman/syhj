@@ -25,7 +25,7 @@ const urlMap = {
   CostCheckNreFactor: { path: "/quoteAnalysis/index", query: {} }, //"成本信息表下载&填报NRE报价系数&产品报价看板界面"
   QuoteApproval: { path: "", query: {} }, //"总经理报价审批界面"
   QuoteFormCheckDownload: "", //"报价审核表查看&下载界面"
-  ArchiveEnd: { path: "", query: {} }, //"归档结束（异常终止）"
+  ArchiveEnd: { path: "/archive/index", query: {} }, //"归档结束（异常终止）"
   LossRateInput: { path: "/processImport/index", query: {} }, // "工程损耗率录入界面"
   RequirementInput: { path: "/demandApply/index", query: {} }, //"核价需求录入界面"
   PMInput: { path: "/partEntry/managerOperate", query: {} } //"项目经理录入界面"
