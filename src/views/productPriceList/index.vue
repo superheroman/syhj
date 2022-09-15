@@ -1,20 +1,21 @@
 <template>
   <el-card m="2">
-    <el-row>
-      <div v-if="pageType === 'result'">
+    <el-tabs v-model="data.pageType" class="demo-tabs">
+      <el-tab-pane label="项目核价表" name="normal" />
+      <el-tab-pane label="生成的项目核价表" name="result" />
+    </el-tabs>
+    <el-row justify="space-between" v-if="data.pageType === 'result'">
+      <div>
         是否为全生命周期：
         <el-select placeholder="请选择" v-model="data.isAll">
           <el-option v-for="opt in options" :key="opt.label" :label="opt.label" :value="opt.value" />
         </el-select>
       </div>
-      <el-row justify="space-between" v-else>
-        <EZFilter :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
-        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
-          产品核价表下载
-        </el-button>
-      </el-row>
+      <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
+        产品核价表下载
+      </el-button>
     </el-row>
-
+    <EZFilter v-else :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
     <el-card class="card">
       <template #header>
         <div class="card-header">
@@ -138,7 +139,7 @@ const data = reactive({
   manufacturingCost: [],
   lossCost: [],
   otherCostItem: [],
-  isAll: 0,
+  isAll: false,
   date: "",
   inputCount: "",
   requiredCount: "",
@@ -155,17 +156,18 @@ const data = reactive({
       label: "投入量",
       key: "inputCount"
     }
-  ]
+  ],
+  pageType: "normal"
 })
 
 const options = [
   {
     label: "是",
-    value: 1
+    value: true
   },
   {
     label: "否",
-    value: 0
+    value: false
   }
 ]
 
@@ -173,7 +175,7 @@ const fetchPriceEvaluationTableResult = async () => {
   const { result }: any = await getPriceEvaluationTableResult({
     auditFlowId,
     productId,
-    isAll: !!data.isAll
+    isAll: String(!!data.isAll)
   })
   console.log(result)
 }

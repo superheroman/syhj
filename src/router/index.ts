@@ -83,15 +83,15 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "项目核价表"
         }
-      },
-      {
-        path: "/demandApply/result",
-        component: () => import("@/views/demandApply/result.vue"),
-        name: "demandApplyResult",
-        meta: {
-          title: "营销部报价表"
-        }
       }
+      // {
+      //   path: "/demandApply/result",
+      //   component: () => import("@/views/demandApply/result.vue"),
+      //   name: "demandApplyResult",
+      //   meta: {
+      //     title: "营销部报价表"
+      //   }
+      // }
     ]
   },
   // {
