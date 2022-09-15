@@ -2,10 +2,10 @@
   <div class="margin-top">
     <el-card class="table-wrap" header="电子料单价录入界面">
       <el-table :data="electronicBomList" height="75vh">
-        <el-table-column prop="categoryName" label="物料大类" width="180" />
-        <el-table-column prop="typeName" label="物料种类" width="180" />
-        <el-table-column prop="sapItemNum" label="物料编号" width="180" />
-        <el-table-column prop="sapItemName" label="材料名称" width="180" />
+        <el-table-column prop="categoryName" label="物料大类" width="180" fixed="left" />
+        <el-table-column prop="typeName" label="物料种类" width="180" fixed="left" />
+        <el-table-column prop="sapItemNum" label="物料编号" width="180" fixed="left" />
+        <el-table-column prop="sapItemName" label="材料名称" width="180" fixed="left" />
         <el-table-column prop="materialsUseCount" label="项目物料的使用量">
           <el-table-column
             v-for="(item, index) in allColums?.materialsUseCountYears"
