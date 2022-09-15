@@ -158,13 +158,32 @@
           </el-table-column>
         </el-table-column>
       </el-table>
-      <el-descriptions title="" border>
+      <el-descriptions :column="3" title="" size="small" border>
+        <el-descriptions-item label="目标价(内部)整套单价">{{
+          calculatedValue("interiorTargetUnitPrice")
+        }}</el-descriptions-item>
+        <el-descriptions-item label="目标价(客户)整套单价">{{
+          calculatedValue("clientTargetUnitPrice")
+        }}</el-descriptions-item>
+        <el-descriptions-item label="本次报价整套单价">{{ calculatedValue("offerUnitPrice") }}</el-descriptions-item>
+        <el-descriptions-item label="目标价(内部)平均单价">{{
+          calculatedValue("interiorTargetUnitPrice", "average")
+        }}</el-descriptions-item>
+        <el-descriptions-item label="目标价(客户)平均单价">{{
+          calculatedValue("clientTargetUnitPrice", "average")
+        }}</el-descriptions-item>
+        <el-descriptions-item label="本次报价平均单价">{{
+          calculatedValue("offerUnitPrice", "average")
+        }}</el-descriptions-item>
         <el-descriptions-item label="目标价(内部)整套毛利率">{{
-          Number(data.allClientGrossMargin).toFixed(2)
+          Number(data.allInteriorGrossMargin)?.toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
-          Number(data.allInteriorGrossMargin).toFixed(2)
+          Number(data.allClientGrossMargin)?.toFixed(2)
         }}</el-descriptions-item>
+        <!-- <el-descriptions-item label="目标价(客户)平均毛利率">{{
+          Number(data.average).toFixed(2)
+        }}</el-descriptions-item> -->
       </el-descriptions>
     </el-card>
 
@@ -239,7 +258,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, onBeforeUnmount, ref } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect, onBeforeUnmount, ref } from "vue"
 import { useRouter } from "vue-router"
 import * as echarts from "echarts"
 import {
@@ -379,7 +398,7 @@ const initCharts = (id: string, chartOption: any) => {
 /**
  * 数据部分
  */
-const data = reactive({
+const data = reactive<any>({
   tableData: [],
   nre: [] as NreMarketingDepartmentModel[],
   unitPrice: [] as any[],
@@ -391,6 +410,7 @@ const data = reactive({
   auditFlowId: 1,
   dialogTable: []
 })
+
 const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPrice: number, key: string) => {
   // console.log(data.auditFlowId)
   let { result }: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
@@ -400,6 +420,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPr
   console.log(grossMargin, "毛利率计算")
   data.productBoard[index][key] = grossMargin
 }, 300)
+
 const setData = () => {
   ProjectUnitPrice.series = data.productBoard.map((item: any) => {
     return {
@@ -446,10 +467,12 @@ const setData = () => {
   })
   chart2.setOption(RevenueGrossMargin)
 }
+
 const spreadSheetCalculate = async (row: any) => {
   let res: any = await getSpreadSheetCalculate(row.id, row.rossMargin)
   console.log(res)
 }
+
 const postOffer = (isOffer: number) => {
   let res = postIsOffer({
     unitPrice: data.unitPrice,
@@ -466,6 +489,7 @@ const postOffer = (isOffer: number) => {
   })
   console.log(res)
 }
+
 const downLoad = async () => {
   let res: any = await getDownloadMessage(data.auditFlowId, "成本信息表")
   const blob = res
@@ -482,6 +506,7 @@ const downLoad = async () => {
     a.remove() //将a标签移除
   }
 }
+
 const toProductPriceList = () => {
   let query = getQuery()
   router.push({
@@ -489,6 +514,7 @@ const toProductPriceList = () => {
     query
   })
 }
+
 const toNREPriceList = () => {
   let query = getQuery()
   router.push({
@@ -496,10 +522,12 @@ const toNREPriceList = () => {
     query
   })
 }
+
 const openDialog = () => {
   getDialogData()
   dialogVisible.value = true
 }
+
 const getDialogData = async () => {
   const { result } = await GetYearDimensionalityComparison({
     id: data.auditFlowId
@@ -507,9 +535,19 @@ const getDialogData = async () => {
   console.log(result, "res")
   data.dialogTable = result
 }
+
+const calculatedValue = (key: string, type?: string) => {
+  if (data.productBoard.length === 0) return 0
+  if (data.productBoard.length === 1) return data.productBoard[0][key]
+  const totolValue = data.productBoard?.reduce((a: any, b: any) => a[key] + (b[key] || 0)) || 0
+  if (!type) return totolValue
+  return totolValue / data.productBoard.length
+}
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
+
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 
@@ -528,21 +566,17 @@ onMounted(async () => {
   data.allInteriorGrossMargin = productBoard.allInteriorGrossMargin
   data.allClientGrossMargin = productBoard.allClientGrossMargin
   data.projectBoard = projectBoard
-
   setData()
   console.log(result)
 })
+
 onBeforeUnmount(() => {
   console.log("destory")
   chart1.dispose()
   chart2.dispose()
 })
+
 watchEffect(() => {})
-// 使用toRefs解构
-// let { } = { ...toRefs(data) }
-defineExpose({
-  ...toRefs(data)
-})
 </script>
 <style scoped lang="scss">
 .card {

@@ -1,13 +1,13 @@
 <template>
   <el-card m="2">
-    <el-tabs v-model="data.pageType" class="demo-tabs">
+    <el-tabs v-model="data.pageType" class="demo-tabs" @tab-change="handleChangePageType">
       <el-tab-pane label="项目核价表" name="normal" />
       <el-tab-pane label="生成的项目核价表" name="result" />
     </el-tabs>
     <el-row justify="space-between" v-if="data.pageType === 'result'">
       <div>
         是否为全生命周期：
-        <el-select placeholder="请选择" v-model="data.isAll">
+        <el-select placeholder="请选择" v-model="data.isAll" @change="fetchPriceEvaluationTableResult">
           <el-option v-for="opt in options" :key="opt.label" :label="opt.label" :value="opt.value" />
         </el-select>
       </div>
@@ -118,7 +118,7 @@ import getQuery from "@/utils/getQuery"
 import EZFilter from "@/components/EZFilter/index.vue"
 import { getYears } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
-const { auditFlowId, productId, pageType } = getQuery()
+const { auditFlowId, productId } = getQuery()
 
 /**
  * 路由对象
@@ -174,7 +174,7 @@ const options = [
 const fetchPriceEvaluationTableResult = async () => {
   const { result }: any = await getPriceEvaluationTableResult({
     auditFlowId,
-    productId,
+    modelCountId: productId,
     isAll: String(!!data.isAll)
   })
   console.log(result)
@@ -182,9 +182,11 @@ const fetchPriceEvaluationTableResult = async () => {
 
 const fetchPriceEvaluationTable = async (props?: any) => {
   const { inputCount, year } = props
+  data.inputCount = inputCount
+  data.year = year
   let res: any = await getPriceEvaluationTable({
     auditFlowId,
-    productId,
+    modelCountId: productId,
     inputCount,
     year
   })
@@ -222,9 +224,14 @@ onBeforeMount(() => {
 
 onMounted(async () => {
   fetchSopYear()
-  pageType === "result" && fetchPriceEvaluationTableResult()
+  // handleChangePageType(data.pageType)
 })
 
+const handleChangePageType = (pageType: any) => {
+  pageType === "result"
+    ? fetchPriceEvaluationTableResult()
+    : fetchPriceEvaluationTable({ inputCount: data.inputCount, year: data.year })
+}
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">
