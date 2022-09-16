@@ -219,7 +219,7 @@ export function NreTableDownload(data: any) {
 export function PostExperimentItemsSingleDownloadExcel(data: any) {
   return request({
     url: "/api/services/app/NrePricing/PostExperimentItemsSingleDownloadExcel",
-    method: "get",
+    method: "post",
     data,
     responseType: "blob"
   })
@@ -229,7 +229,17 @@ export function PostExperimentItemsSingleDownloadExcel(data: any) {
 export function PostProductDepartmentSingleExcel(data: any) {
   return request({
     url: "/api/services/app/NrePricing/PostProductDepartmentSingleExcel",
-    method: "get",
+    method: "post",
+    data,
+    responseType: "blob"
+  })
+}
+
+//  Nre 品保部=>试验项目 导入数据(Excel 单个零件解析数据)
+export function PostExperimentItemsSingleExcel(data: any) {
+  return request({
+    url: "/api/services/app/NrePricing/PostExperimentItemsSingleExcel",
+    method: "post",
     data,
     responseType: "blob"
   })

@@ -4,7 +4,21 @@
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           试验项目（根据与客户协定项目）
-          <el-button type="primary" @click="addExperimentItemsData" v-havedone>新增</el-button>
+          <el-row>
+            <el-upload
+              v-model:file-list="fileList"
+              :show-file-list="false"
+              action="/api/services/app/NrePricing/PostProductDepartmentSingleExcel"
+              :on-success="handleSuccess"
+              :on-error="handleError"
+              :on-change="handleFileChange"
+              multiple
+            >
+              <el-button style="margin-top: 8px">NRE实验费模板上传</el-button>
+            </el-upload>
+            <el-button type="primary" @click="handleFethNreTableDownload" m="2">NRE实验费模板下载</el-button>
+            <el-button type="primary" @click="addExperimentItemsData" m="2" v-havedone>新增</el-button>
+          </el-row>
         </el-row>
       </template>
       <el-table
@@ -83,17 +97,21 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { QADepartmentTestModel } from "./data.type"
 import { getQaTestDepartmentsSummaries } from "./common/nreQCDepartmentSummaries"
-import { PostExperimentItems, GetReturnExperimentItems } from "./common/request"
+import { PostExperimentItems, GetReturnExperimentItems, PostExperimentItemsSingleDownloadExcel } from "./common/request"
 import getQuery from "@/utils/getQuery"
+import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage } from "element-plus"
+import { downloadFileExcel } from "@/utils"
+
 const { auditFlowId, productId }: any = getQuery()
 
 /**
  * 数据部分
  */
+const fileList = ref<UploadUserFile[]>([])
 const data = reactive<{
   experimentItems: QADepartmentTestModel[]
 }>({
@@ -138,6 +156,34 @@ const submit = async () => {
     console.log(err, "[PostExperimentItems err]")
     // ElMessage.error("提交失败")
   }
+}
+
+// NRE实验费模板下载
+const handleFethNreTableDownload = async () => {
+  try {
+    const res: any = await PostExperimentItemsSingleDownloadExcel({
+      FileName: ""
+    })
+    downloadFileExcel(res, "NRE实验费模板")
+    console.log(res, "NreTableDownload")
+  } catch (err: any) {
+    console.log(err, "[ NRE实验费模板下载 失败 ]")
+  }
+}
+
+// NRE实验费模板上传
+const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
+  console.log(res, "NRE实验费模板上传")
+  ElMessage.error("上传成功！")
+}
+
+const handleError = () => {
+  ElMessage.error("上传失败")
+}
+
+const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
+  console.log(uploadFiles)
+  console.log(fileList, "fileList")
 }
 
 const initFetch = async () => {
