@@ -61,8 +61,8 @@ export function getYears(auditFlowId: number) {
 /**查询工序工时 */
 export function QueryWorkingHour(auditFlowId: number, productId: number) {
   return request({
-    url: "/api/services/app/WorkingHours/QueryWorkingHour",
-    method: "post",
+    url: "/api/services/app/WorkingHours/GetWorkingHour",
+    method: "get",
     data: {
       auditFlowId,
       productId
