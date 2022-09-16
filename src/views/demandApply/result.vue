@@ -1,80 +1,98 @@
 <template>
-  <el-card class="demandApply-result-page" header="报价形式：">
+  <el-card class="marketingQuotation-page" header="报价审核" m="2">
     <el-descriptions :column="2" border>
-      <el-descriptions-item label="直接客户名称"> kooriookami </el-descriptions-item>
-      <el-descriptions-item label="客户性质"> kooriookami </el-descriptions-item>
-      <el-descriptions-item label="终端客户名称"> kooriookami </el-descriptions-item>
-      <el-descriptions-item label="终端客户性质"> kooriookami </el-descriptions-item>
-      <!-- <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">Telephone</div>
-        </template>
-        18100000000
+      <el-descriptions-item label="直接客户名称">
+        {{ data.marketingQuotationData.directCustomerName }}
       </el-descriptions-item>
-      <el-descriptions-item label="123"> kooriookami </el-descriptions-item> -->
+      <el-descriptions-item label="客户性质"> {{ data.marketingQuotationData.clientNature }} </el-descriptions-item>
+      <el-descriptions-item label="终端客户名称">
+        {{ data.marketingQuotationData.terminalCustomerName }}
+      </el-descriptions-item>
+      <el-descriptions-item label="终端客户性质">
+        {{ data.marketingQuotationData.terminalClientNature }}
+      </el-descriptions-item>
+      <el-descriptions-item label="开发计划">
+        {{ data.marketingQuotationData.developmentPlan }}
+      </el-descriptions-item>
+      <el-descriptions-item label="汇率"> {{ data.marketingQuotationData.exchangeRate }} </el-descriptions-item>
     </el-descriptions>
-    <el-card header="开发计划：" class="card-margin">
-      <el-descriptions :column="2" border>
-        <el-descriptions-item label="sop时间"> kooriookami </el-descriptions-item>
-        <el-descriptions-item label="项目生命周期"> kooriookami </el-descriptions-item>
-        <el-descriptions-item label="销售类型"> kooriookami </el-descriptions-item>
-        <el-descriptions-item label="贸易方式"> kooriookami </el-descriptions-item>
-        <el-descriptions-item label="付款方式"> kooriookami </el-descriptions-item>
-        <el-descriptions-item label="报价币种"> kooriookami </el-descriptions-item>
-        <el-descriptions-item label="汇率"> kooriookami </el-descriptions-item>
-      </el-descriptions>
-    </el-card>
-    <el-card header="sop5年内走量信息" class="card-margin">
-      <el-table :data="data.sopTableData" style="width: 100%" border>
+    <el-card header="sop5年内走量信息" m="2">
+      <el-table :data="data.marketingQuotationData.motionMessage" border>
         <el-table-column type="index" width="100" />
-        <el-table-column label="年份" prop="name" />
-        <el-table-column label="走量" prop="name" />
-        <el-table-column label="年降率" prop="name" />
-        <el-table-column label="年度返利要求" prop="name" />
-        <el-table-column label="一次性折让率" prop="name" />
-      </el-table>
-      <el-descriptions :column="1" border>
-        <el-descriptions-item label="项目名称"> kooriookami </el-descriptions-item>
-      </el-descriptions>
-    </el-card>
-    <!-- <h5>项目名称：1223</h5> -->
-    <!-- <h5>核心部件：</h5> -->
-    <!-- 核心部件先空着 -->
-    <el-card header="NRE费用：" class="card-margin">
-      <el-table :data="data.nreTableData" style="width: 100%" border>
-        <el-table-column type="index" width="100" />
-        <el-table-column label="费用类别" prop="name" />
-        <el-table-column label="样品阶段" prop="name" />
-        <el-table-column label="MP阶段100K" prop="name" />
-        <el-table-column label="" prop="name" />
-        <!-- <el-table-column label="一次性折让率" prop="name" /> -->
+        <el-table-column label="名称" prop="messageName" />
+        <el-table-column
+          v-for="(item, index) in data.motionMessageSop"
+          :key="item.year"
+          :label="item.year"
+          :prop="`sop${index}.value`"
+        />
       </el-table>
     </el-card>
-    <el-card header="内部核价信息：" class="card-margin">
-      <el-table :data="data.internalPricingData" style="width: 100%" border>
+    <el-card header="核心部件：" m="2">
+      <!-- <div>
+        产品名称：{{ data.marketingQuotationData. }}
+      </div> -->
+      <template v-for="item in data.marketingQuotationData.coreComponent" :key="item.messageName">
+        <el-card :header="item.componentName" class="m-2">
+          <el-table :data="item.productSubclass" border>
+            <!-- <el-table-column type="index" width="100" /> -->
+            <el-table-column label="核心部件" prop="coreComponent" />
+            <el-table-column label="型号" prop="model" />
+            <el-table-column label="类型" prop="type" />
+            <el-table-column label="备注" prop="remark" />
+          </el-table>
+        </el-card>
+      </template>
+    </el-card>
+    <el-card header="NRE费用：" m="2">
+      <template v-for="item in data.marketingQuotationData.nreCost" :key="item.messageName">
+        <el-card :header="item.nreCostModuleName" class="m-2">
+          <el-table :data="item.nreCostModels" border>
+            <el-table-column type="index" width="100" />
+            <el-table-column label="费用类别" prop="name" />
+            <el-table-column label="成本" prop="cost" />
+          </el-table>
+        </el-card>
+      </template>
+    </el-card>
+    <el-card header="内部核价信息：" m="2">
+      <template v-for="item in data.marketingQuotationData.pricingMessage" :key="item.messageName">
+        <el-card :header="item.pricingMessageName" class="m-2">
+          <el-table :data="item.pricingMessageModels" border>
+            <el-table-column label="序号" type="index" width="100" />
+            <el-table-column label="费用类别" prop="name" />
+            <el-table-column label="成本值" prop="costValue" />
+          </el-table>
+        </el-card>
+      </template>
+    </el-card>
+    <el-card header="报价策略：" m="2">
+      <el-table :data="data.marketingQuotationData.biddingStrategy" border>
         <el-table-column type="index" width="100" />
-        <el-table-column label="费用类别" prop="name" />
-        <el-table-column label="样品阶段" prop="name" />
-        <el-table-column label="MP阶段100K" prop="name" />
-        <el-table-column label="" prop="name" />
+        <el-table-column label="产品" prop="product" />
+        <el-table-column label="成本" prop="cost" />
+        <el-table-column label="毛利率" prop="grossMargin" />
+        <el-table-column label="样件价格" prop="price" />
+        <el-table-column label="佣金" prop="commission">
+          <template #default="scope">
+            <el-input-number
+              controls-position="right"
+              v-model="scope.row.commission"
+              placeholder="请输入佣金"
+              @change="(val) => changeCommission(val, scope.$index)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" />
       </el-table>
     </el-card>
-    <el-card header="报价策略：" class="card-margin">
-      <el-table :data="data.strategyData" style="width: 100%" border>
+    <el-card header="费用表：" m="2">
+      <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
-        <el-table-column label="走量" prop="name" />
-        <el-table-column label="成本" prop="name" />
-        <el-table-column label="毛利率" prop="name" />
-        <el-table-column label="样件价格" prop="name" />
-      </el-table>
-    </el-card>
-    <el-card class="card-margin">
-      <el-table :data="data.sopTableData" style="width: 100%" border>
-        <el-table-column type="费用" width="100" />
-        <el-table-column label="MP阶段100K" prop="name" />
-        <el-table-column label="系数" prop="name" />
-        <el-table-column label="报价策略" prop="name" />
-        <!-- <el-table-column label="样件价格" prop="name" /> -->
+        <el-table-column label="费用类别" prop="formName" />
+        <el-table-column label="核价金额" prop="offerMoney" />
+        <el-table-column label="报价系数" prop="offerCoefficient" />
+        <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
   </el-card>
@@ -82,29 +100,24 @@
 
 <script setup lang="ts">
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { getPriceEvaluationTable } from "./service"
-// import { useRoute, useRouter } from "vue-router"
+import { GetQuotationList } from "../marketingQuotation/service"
+import getQuery from "@/utils/getQuery"
+import { getYears } from "../pmDepartment/service"
+// import { ElMessageBox } from "element-plus"
 
-/**
- * 仓库
- */
-/**
- * 路由对象
- */
-// const route = useRoute()
-// /**
-//  * 路由实例
-//  */
-// const router = useRouter()
-//console.log('1-开始创建组件-setup')
+const { auditFlowId = 1 }: any = getQuery()
 /**
  * 数据部分
  */
-const data = reactive({
-  sopTableData: [],
-  nreTableData: [],
-  internalPricingData: [],
-  strategyData: []
+const data = reactive<any>({
+  projectName: "",
+  developmentPlan: "",
+  marketingQuotationData: {},
+  motionMessageSop: []
+})
+
+const columns = reactive({
+  sopData: []
 })
 
 onBeforeMount(() => {
@@ -114,11 +127,24 @@ onBeforeMount(() => {
 onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   initFetch()
+  fetchSopYear()
 })
 
 const initFetch = async () => {
-  const res = await getPriceEvaluationTable({})
-  console.log(res, "res")
+  const { result } = await GetQuotationList({ Id: auditFlowId })
+  data.marketingQuotationData = result
+  data.motionMessageSop = result.motionMessage[0].sop.map((item: any) => item)
+  console.log(result, "result")
+}
+
+// 计算含佣金的毛利率
+const changeCommission = (val: number, index: number) => {
+  console.log(val, index, "changeCommission")
+}
+
+const fetchSopYear = async () => {
+  const { result } = (await getYears(auditFlowId)) || {}
+  columns.sopData = result || []
 }
 
 watchEffect(() => {})
@@ -126,8 +152,5 @@ watchEffect(() => {})
 <style scoped lang="scss">
 .demandApply-result-page {
   margin: 10px;
-}
-.card-margin {
-  margin-top: 10px;
 }
 </style>

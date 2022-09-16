@@ -10,9 +10,6 @@
         </el-select>
         <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload"> 产品核价表 </el-button>
         <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表</el-button>
-        <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload('result')"
-          >查看生成的核价表</el-button
-        >
         <el-button type="primary" class="m-2" @click="data.createVisible = true"> 生成核价表 </el-button>
       </el-row>
       <el-row class="m-2">
@@ -370,11 +367,10 @@ const getQualityCost = async () => {
 }
 
 // 产品核价表下载
-const handleFetchPriceEvaluationTableDownload = async (pageType?: string) => {
+const handleFetchPriceEvaluationTableDownload = async () => {
   router.push({
     path: `/nupriceManagement/productPriceList`,
     query: {
-      pageType: pageType || "",
       auditFlowId,
       productId,
       year: data.year
