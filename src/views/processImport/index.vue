@@ -20,6 +20,8 @@
       </template>
       <el-card>
         <el-table :data="data.tableData" border height="700">
+          <el-table-column label="序号" prop="sequenceNumber" width="100" />
+          <el-table-column label="工序" prop="procedure" width="100" />
           <el-table-column label="设备部分" class-name="columnColor1">
             <template v-for="(item, index) in data.equipmentPart?.equipmentDetails" :key="`equipmentPart-${index}`">
               <el-table-column
