@@ -158,12 +158,12 @@
           </el-table-column>
         </el-table-column>
       </el-table>
-      <el-descriptions title="" border>
+      <el-descriptions title="" border :column="1">
         <el-descriptions-item label="目标价(内部)整套毛利率">{{
-          Number(data.allClientGrossMargin).toFixed(2)
+          Number(data.allInteriorGrossMargin).toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
-          Number(data.allInteriorGrossMargin).toFixed(2)
+          Number(data.allClientGrossMargin).toFixed(2)
         }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
