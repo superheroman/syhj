@@ -238,7 +238,6 @@ const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
 }
 const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
   console.log(uploadFiles)
-  console.log(file.value, "fileList")
   // fileList.value = [{...file. fileName: file.value.filename}]
 }
 
