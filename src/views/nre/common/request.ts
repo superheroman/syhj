@@ -214,3 +214,23 @@ export function NreTableDownload(data: any) {
     responseType: "blob"
   })
 }
+
+//  Nre 品保部=>试验项目 产品开发部-NRE 下载
+export function PostExperimentItemsSingleDownloadExcel(data: any) {
+  return request({
+    url: "/api/services/app/NrePricing/PostExperimentItemsSingleDownloadExcel",
+    method: "get",
+    data,
+    responseType: "blob"
+  })
+}
+
+//  Nre 产品部-电子工程师 导入数据
+export function PostProductDepartmentSingleExcel(data: any) {
+  return request({
+    url: "/api/services/app/NrePricing/PostProductDepartmentSingleExcel",
+    method: "get",
+    data,
+    responseType: "blob"
+  })
+}

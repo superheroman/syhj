@@ -24,7 +24,7 @@
           v-for="(item, index) in data.motionMessageSop"
           :key="item.year"
           :label="item.year"
-          :prop="`sop${index}.value`"
+          :prop="`sop[${index}].value`"
         />
       </el-table>
     </el-card>
@@ -79,7 +79,7 @@
               controls-position="right"
               v-model="scope.row.commission"
               placeholder="请输入佣金"
-              @change="(val) => changeCommission(val, scope.$index)"
+              @change="(val: any) => changeCommission(val, scope.$index)"
             />
           </template>
         </el-table-column>
