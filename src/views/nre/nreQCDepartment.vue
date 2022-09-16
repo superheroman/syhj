@@ -51,10 +51,10 @@
             <el-button @click="deleteQaqcDepartmentsData($index)" type="danger" v-havedone>删除</el-button>
           </template>
         </el-table-column>
-        <div style="float: right; margin: 20px 0">
-          <el-button type="primary" @click="submit" v-havedone>提交</el-button>
-        </div>
       </el-table>
+      <div style="float: right; margin: 20px 0">
+        <el-button type="primary" @click="submit" v-havedone>提交</el-button>
+      </div>
     </el-card>
   </div>
 </template>
