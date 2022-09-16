@@ -504,7 +504,7 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
     } else {
       res = await SetPriceBoardState(auditFlowId, isAgree, checkList.value)
     }
-    if (res.result.success) {
+    if (res.success) {
       jumpTodoCenter()
       ElMessage({
         type: "success",
