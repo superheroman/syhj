@@ -75,28 +75,25 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="float: right; margin: 20px 0">
-        <el-button @click="openDialog" type="primary">年份维度对比</el-button>
-      </div>
     </el-card>
     <el-card class="card">
-      <el-table :data="data.productBoard" style="width: 100%" border>
-        <el-table-column label="产品" prop="productName" />
-        <el-table-column label="单车产品数量" prop="productNumber" />
-        <el-table-column label="目标价（内部）">
-          <el-table-column label="单价" prop="interiorTargetUnitPrice">
+      <el-table :data="data.productBoard" border>
+        <el-table-column label="产品" prop="productName" width="150" />
+        <el-table-column label="单车产品数量" prop="productNumber" width="150" />
+        <el-table-column label="目标价（内部）" width="300">
+          <el-table-column label="单价" prop="interiorTargetUnitPrice" width="150">
             <template #default="{ row }">
               {{ row?.interiorTargetUnitPrice?.toFixed(2) }}
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="interiorTargetGrossMargin">
+          <el-table-column label="毛利率" prop="interiorTargetGrossMargin" width="150">
             <template #default="{ row }">
               {{ row.interiorTargetGrossMargin.toFixed(2) }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="目标价（客户）">
-          <el-table-column label="单价" prop="clientTargetUnitPrice">
+        <el-table-column label="目标价（客户）" width="300">
+          <el-table-column label="单价" prop="clientTargetUnitPrice" width="150">
             <template #default="scope">
               <el-input v-model="scope.row.clientTargetUnitPrice">
                 <template #append>
@@ -115,14 +112,14 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="clientTargetGrossMargin">
+          <el-table-column label="毛利率" prop="clientTargetGrossMargin" width="150">
             <template #default="{ row }">
               {{ row.clientTargetGrossMargin?.toFixed(2) || "-" }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="本次报价">
-          <el-table-column label="单价">
+        <el-table-column label="本次报价" width="300">
+          <el-table-column label="单价" width="150">
             <template #default="scope">
               <el-input v-model="scope.row.offerUnitPrice">
                 <template #append>
@@ -134,7 +131,7 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="grossMargin">
+          <el-table-column label="毛利率" prop="grossMargin" width="150">
             <template #default="{ row }">
               {{ row.grossMargin?.toFixed(2) || "-" }}
             </template>
@@ -144,18 +141,25 @@
           :label="'第' + (index + 1) + '轮'"
           v-for="(item, index) in data.productBoard.length > 0 ? data.productBoard[0].oldOffer : []"
           :key="index"
-          width="150"
+          width="300"
         >
-          <el-table-column label="单价">
+          <el-table-column label="单价" width="150">
             <template>
               <div>{{ item.unitPrice.toFixed(2) }}</div>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率">
+          <el-table-column label="毛利率" width="150">
             <template>
               <div>{{ item.grossMargin.toFixed(2) }}</div>
             </template>
           </el-table-column>
+        </el-table-column>
+        <el-table-column label="操作" width="200" fixed="right">
+          <template #default="{ row }">
+            <el-button @click="openDialog(row, interiorTargetUnitPrice, row.interiorTargetGrossMargin)" type="primary"
+              >年份维度对比</el-button
+            >
+          </template>
         </el-table-column>
       </el-table>
       <el-descriptions title="" border :column="1">
@@ -166,6 +170,9 @@
           Number(data.allClientGrossMargin).toFixed(2)
         }}</el-descriptions-item>
       </el-descriptions>
+      <!-- <div style="float: right; margin: 20px 0">
+        <el-button @click="openDialog" type="primary">年份维度对比</el-button>
+      </div> -->
     </el-card>
 
     <el-card class="card">
@@ -496,13 +503,15 @@ const toNREPriceList = () => {
     query
   })
 }
-const openDialog = () => {
-  getDialogData()
+const openDialog = (unitPrice: any, grossMargin: any) => {
+  getDialogData(unitPrice, grossMargin)
   dialogVisible.value = true
 }
-const getDialogData = async () => {
+const getDialogData = async (unitPrice: any, grossMargin: any) => {
   const { result } = await GetYearDimensionalityComparison({
-    id: data.auditFlowId
+    id: data.auditFlowId,
+    unitPrice,
+    grossMargin
   })
   console.log(result, "res")
   data.dialogTable = result

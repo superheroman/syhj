@@ -37,7 +37,7 @@ export function getSpreadSheetCalculate(id: number, grossMargin: number) {
   })
 }
 // 查看年份维度对比
-export function GetYearDimensionalityComparison(data: { id: number }): any {
+export function GetYearDimensionalityComparison(data: any): any {
   return request({
     url: "/api/services/app/AnalyseBoard/GetYearDimensionalityComparison",
     method: "get",

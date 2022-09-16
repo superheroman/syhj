@@ -23,8 +23,8 @@ const urlMap = {
   PriceBoardAudit: { path: "/dashboard", query: {} }, //核价看板
   PriceCheckDownload: { path: "/quoteAnalysis/index", query: {} }, //"版本的核价表查看&下载界面（产品+NRE）"
   CostCheckNreFactor: { path: "/quoteAnalysis/index", query: {} }, //"成本信息表下载&填报NRE报价系数&产品报价看板界面"
-  QuoteApproval: { path: "", query: {} }, //"总经理报价审批界面"
-  QuoteFormCheckDownload: "", //"报价审核表查看&下载界面"
+  QuoteApproval: { path: "/marketingQuotation/index", query: {} }, //"总经理报价审批界面"
+  QuoteFormCheckDownload: "/marketingQuotation/index", //"报价审核表查看&下载界面"
   ArchiveEnd: { path: "/archive/index", query: {} }, //"归档结束（异常终止）"
   LossRateInput: { path: "/processImport/index", query: {} }, // "工程损耗率录入界面"
   RequirementInput: { path: "/demandApply/index", query: {} }, //"核价需求录入界面"
