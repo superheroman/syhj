@@ -16,7 +16,7 @@ const appStore = useAppStore()
 const settingsStore = useSettingsStore()
 const userStore = useUserStore()
 
-let userStorage = window.sessionStorage.getItem("user")
+let userStorage = window.localStorage.getItem("user")
 let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const sidebar = computed(() => {
   return appStore.sidebar

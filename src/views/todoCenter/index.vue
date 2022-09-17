@@ -117,7 +117,7 @@ const form = reactive({
 let auditFlowIdInfoList = ref([])
 let auditFlowIdInfoListCheck = ref([])
 let isProductManager = ref(false)
-// let userStorage = window.sessionStorage.getItem("user")
+// let userStorage = window.localStorage.getItem("user")
 // let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 const saveNew = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
@@ -205,7 +205,7 @@ onMounted(async () => {
     })
   }
   try {
-    let userStorage = window.sessionStorage.getItem("user")
+    let userStorage = window.localStorage.getItem("user")
     let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
     let usetRoleNames = userInfo?.userRole?.items?.map((item: any) => item.name) || []
     if (usetRoleNames.includes("营销部-业务员")) {

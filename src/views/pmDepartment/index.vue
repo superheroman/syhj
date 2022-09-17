@@ -126,7 +126,8 @@ import {
   // getPcsByPriceAuditFlowId,
   getSor,
   getProductFreight,
-  getModelCountByAuditFlowId
+  getModelCountByAuditFlowId,
+  getProductionControl
 } from "./service"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
@@ -174,60 +175,68 @@ onMounted(async () => {
   let query = getQuery()
   data.auditFlowId = Number(query.auditFlowId) || 1
   data.productId = Number(query.productId) || 1
-  let { result } = (await getModelCountByAuditFlowId(data.auditFlowId)) as any
-  let warpArr = [] as any[] //二维数组
-  let years = [] as number[]
-  result.items.forEach((item: any) => {
-    item.modelCountYearListDto.forEach((yearItem: any, index: number) => {
-      if (!warpArr[index]) {
-        warpArr[index] = []
-      }
-      warpArr[index].push(yearItem.quantity)
-    })
-  })
-  result.items[0]?.modelCountYearListDto.forEach((yearItem: any) => {
-    years.push(yearItem.year)
-  })
-  let yearValue: any[] = [] //1000, 2000, 3000
-  console.log(warpArr, "warpArr")
-  // 1.手工录入[单PCS包装价格].[运费].[仓储费用]
-  // 2.[月需求量]按照 sop年的销售数量除以12，计算得出
-  // 3.[单pcs运输费=（运费+仓储费）/月需求量]根据公式计算得出
-  // 4.[总物流成本=包装价格+单CS运输费]根据公式计算得出
-  warpArr.forEach((arr, index) => {
-    yearValue[index] = arr.reduce((pre: number, cur: number) => {
-      return pre + cur
-    })
-  })
-  console.log(yearValue)
-  if (years?.length > 0) {
-    data.tableData = years.map((year: number, index: number) => {
-      return {
-        year,
-        perPackagingPrice: "",
-        freight: "",
-        storageExpenses: "",
-        monthEndDemand: (yearValue[index] / 12).toFixed(0), //月度需求量
-        perFreight: "",
-        perTotalLogisticsCost: ""
-      }
-    }) as any
-  }
-  console.log(data.tableData)
-  watch(
-    data.tableData,
-    (val) => {
-      val.forEach((row: any) => {
-        row.perFreight = (Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand
-
-        row.perTotalLogisticsCost = Number(row.perPackagingPrice) + Number(row.perFreight)
+  let oldRes: any = await getProductionControl(data.auditFlowId, data.productId)
+  console.log(oldRes)
+  if (oldRes.result.infoList.length > 0) {
+    data.tableData = oldRes.result.infoList
+    debugger
+  } else {
+    let { result } = (await getModelCountByAuditFlowId(data.auditFlowId)) as any
+    let warpArr = [] as any[] //二维数组
+    let years = [] as number[]
+    result.items.forEach((item: any) => {
+      item.modelCountYearListDto.forEach((yearItem: any, index: number) => {
+        if (!warpArr[index]) {
+          warpArr[index] = []
+        }
+        warpArr[index].push(yearItem.quantity)
       })
-    },
-    { deep: true }
-  )
+    })
+    result.items[0]?.modelCountYearListDto.forEach((yearItem: any) => {
+      years.push(yearItem.year)
+    })
+    let yearValue: any[] = [] //1000, 2000, 3000
+    console.log(warpArr, "warpArr")
+    // 1.手工录入[单PCS包装价格].[运费].[仓储费用]
+    // 2.[月需求量]按照 sop年的销售数量除以12，计算得出
+    // 3.[单pcs运输费=（运费+仓储费）/月需求量]根据公式计算得出
+    // 4.[总物流成本=包装价格+单CS运输费]根据公式计算得出
+    warpArr.forEach((arr, index) => {
+      yearValue[index] = arr.reduce((pre: number, cur: number) => {
+        return pre + cur
+      })
+    })
+    // console.log(yearValue)
+    if (years?.length > 0) {
+      data.tableData = years.map((year: number, index: number) => {
+        return {
+          year,
+          perPackagingPrice: "",
+          freight: "",
+          storageExpenses: "",
+          monthEndDemand: (yearValue[index] / 12).toFixed(0), //月度需求量
+          perFreight: "",
+          perTotalLogisticsCost: ""
+        }
+      }) as any
+    }
+    // console.log(data.tableData)
+    watch(
+      data.tableData,
+      (val) => {
+        val.forEach((row: any) => {
+          row.perFreight = (Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand
+
+          row.perTotalLogisticsCost = Number(row.perPackagingPrice) + Number(row.perFreight)
+        })
+      },
+      { deep: true }
+    )
+  }
   // 获取运费信息
   let res: any = await getProductFreight({ auditFlowId: data.auditFlowId, productId: data.productId })
   data.logisticsForm = res.result
+
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
 watchEffect(() => {})

@@ -58,3 +58,14 @@ export function getProductFreight(data: productParams) {
     data
   })
 }
+
+export function getProductionControl(auditFlowId: number, productId: number) {
+  return request({
+    url: "/api/services/app/ProductionControl/GetProductionControl",
+    method: "get",
+    data: {
+      auditFlowId,
+      productId
+    }
+  })
+}

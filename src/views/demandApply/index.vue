@@ -721,7 +721,7 @@ const getSummaries = (param: SummaryMethodProps) => {
   // console.log(sums, "sums", state.carAnnualTotal, state.sumArr)
   return sums
 }
-let userStorage = window.sessionStorage.getItem("user")
+let userStorage = window.localStorage.getItem("user")
 let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 let isEdit = false //是否查看
 
@@ -882,22 +882,22 @@ let productTableData: any = ref([
   {
     name: "",
     sensor: "",
-    sensorTypeSelect: 1,
+    sensorTypeSelect: "1",
     sensorPrice: 0,
     lens: "",
-    lensTypeSelect: 1,
+    lensTypeSelect: "1",
     lensPrice: 0,
     isp: "",
-    ispTypeSelect: 1,
+    ispTypeSelect: "1",
     ispPrice: 0,
     serialChip: "",
-    serialChipTypeSelect: 1,
+    serialChipTypeSelect: "1",
     serialChipPrice: 0,
     cable: "",
-    cableTypeSelect: 1,
+    cableTypeSelect: "1",
     cablePrice: 0,
     led: "",
-    ledTypeSelect: 1,
+    ledTypeSelect: "1",
     ledPrice: 0,
     manufactureProcess: "",
     installationPosition: "",
@@ -1219,6 +1219,10 @@ onMounted(async () => {
       moduleTableData.value = viewDataRes.result.modelCount
       requireTableData.value = viewDataRes.result.requirement
     }
+    // 查看之后还需要编辑 --
+    setTimeout(() => {
+      isEdit = false
+    }, 2000)
   }
 })
 defineExpose({

@@ -55,7 +55,7 @@ export const useUserStore = defineStore({
             setToken(res.result.accessToken)
             this.token = res.result.accessToken
             this.userInfo = res.result.user
-            window.sessionStorage.setItem("user", JSON.stringify(res.result.user))
+            window.localStorage.setItem("user", JSON.stringify(res.result.user))
             resolve(true)
           })
           .catch((error) => {
@@ -96,6 +96,7 @@ export const useUserStore = defineStore({
       this.token = ""
       this.roles = []
       resetRouter()
+      window.localStorage.clear()
       router.push({ path: "/login" })
     },
     /** 重置 token */
