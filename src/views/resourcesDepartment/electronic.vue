@@ -108,7 +108,9 @@
         <el-table-column prop="peopleName" label="确认人" />
         <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
-            <el-button link @click="handleSubmit(scope.row, 0)" type="danger" v-havedone>确认</el-button>
+            <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0)" type="danger" v-havedone
+              >确认</el-button
+            >
             <el-button
               v-if="scope.row.isEntering"
               link
