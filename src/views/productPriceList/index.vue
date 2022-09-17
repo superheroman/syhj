@@ -1,21 +1,23 @@
 <template>
-  <el-card m="2">
+  <el-card m="2" v-loading="loading">
     <el-tabs v-model="data.pageType" class="demo-tabs" @tab-change="handleChangePageType">
-      <el-tab-pane label="项目核价表" name="normal" />
-      <el-tab-pane label="生成的项目核价表" name="result" />
+      <el-tab-pane label="项目核价表" name="normal">
+        <EZFilter :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
+      </el-tab-pane>
+      <el-tab-pane label="生成的项目核价表" name="result">
+        <el-row justify="space-between">
+          <div>
+            是否为全生命周期：
+            <el-select placeholder="请选择" v-model="data.isAll" @change="fetchPriceEvaluationTableResult">
+              <el-option v-for="opt in options" :key="opt.label" :label="opt.label" :value="opt.value" />
+            </el-select>
+          </div>
+          <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
+            产品核价表下载
+          </el-button>
+        </el-row>
+      </el-tab-pane>
     </el-tabs>
-    <el-row justify="space-between" v-if="data.pageType === 'result'">
-      <div>
-        是否为全生命周期：
-        <el-select placeholder="请选择" v-model="data.isAll" @change="fetchPriceEvaluationTableResult">
-          <el-option v-for="opt in options" :key="opt.label" :label="opt.label" :value="opt.value" />
-        </el-select>
-      </div>
-      <el-button type="primary" class="m-2" @click="handleFetchPriceEvaluationTableDownload">
-        产品核价表下载
-      </el-button>
-    </el-row>
-    <EZFilter v-else :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
     <el-card class="card">
       <template #header>
         <div class="card-header">
@@ -45,39 +47,39 @@
     </el-card>
     <el-card class="card">
       <el-table :data="data.manufacturingCost" style="width: 100%" border>
-        <el-table-column label="成本项目" prop="" width="180" />
+        <!-- <el-table-column label="成本项目" prop="" width="180" /> -->
         <el-table-column label="直接制造成本" prop="">
           <!-- <el-table-column label="直接人工" prop="" />
           <el-table-column label="设备折旧" prop="" />
           <el-table-column label="换线成本" prop="" />
           <el-table-column label="制造费用" prop="" />
           <el-table-column label="小计" prop="" /> -->
-          <el-table-column label="直接人工" prop="directLabor" />
-          <el-table-column label="设备折旧" prop="equipmentDepreciation" />
-          <el-table-column label="换线成本" prop="lineChangeCost" />
-          <el-table-column label="制造费用" prop="manufacturingExpenses" />
-          <el-table-column label="小计" prop="subtotal" />
+          <el-table-column label="直接人工" prop="manufacturingCostDirect.directLabor" />
+          <el-table-column label="设备折旧" prop="manufacturingCostDirect.equipmentDepreciation" />
+          <el-table-column label="换线成本" prop="manufacturingCostDirect.lineChangeCost" />
+          <el-table-column label="制造费用" prop="manufacturingCostDirect.manufacturingExpenses" />
+          <el-table-column label="小计" prop="manufacturingCostDirect.subtotal" />
         </el-table-column>
         <el-table-column label="间接制造成本" prop="">
-          <el-table-column label="直接人工" prop="directLabor" />
-          <el-table-column label="设备折旧" prop="equipmentDepreciation" />
-          <el-table-column label="换线成本" prop="lineChangeCost" />
-          <el-table-column label="制造费用" prop="manufacturingExpenses" />
-          <el-table-column label="小计" prop="subtotal" />
+          <el-table-column label="直接人工" prop="manufacturingCostIndirect.directLabor" />
+          <el-table-column label="设备折旧" prop="manufacturingCostIndirect.equipmentDepreciation" />
+          <el-table-column label="换线成本" prop="manufacturingCostIndirect.lineChangeCost" />
+          <el-table-column label="制造费用" prop="manufacturingCostIndirect.manufacturingExpenses" />
+          <el-table-column label="小计" prop="manufacturingCostIndirect.subtotal" />
         </el-table-column>
-        <el-table-column label="合计" prop="" />
+        <el-table-column label="合计" prop="subtotal" />
       </el-table>
     </el-card>
     <el-card class="card">
       <el-table :data="data.lossCost" style="width: 100%" border>
         <el-table-column label="成本项目" prop="name" width="180" />
-        <el-table-column label="损耗率" prop="" width="180" />
-        <el-table-column label="电子料" prop="" width="180" />
-        <el-table-column label="结构料" prop="" width="180" />
+        <el-table-column label="损耗成本" prop="wastageCost" width="180" />
+        <el-table-column label="MOQ分摊成本" prop="moqShareCount" width="180" />
+        <!-- <el-table-column label="结构料" prop="" width="180" />
         <el-table-column label="胶水" prop="" width="180" />
         <el-table-column label="外协加工" prop="" width="180" />
         <el-table-column label="包装材料" prop="" width="180" />
-        <el-table-column label="合计" prop="" width="180" />
+        <el-table-column label="合计" prop="" width="180" /> -->
       </el-table>
     </el-card>
     <el-card class="card">
@@ -111,7 +113,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 // import { useRoute, useRouter } from "vue-router"
 import { getPriceEvaluationTable, getPriceEvaluationTableResult, PriceEvaluationTableDownload } from "./service"
 import getQuery from "@/utils/getQuery"
@@ -134,7 +136,9 @@ const { auditFlowId, productId } = getQuery()
  */
 const changeYears = (val: any) => (data.year = val)
 
-const data = reactive({
+const loading = ref(false)
+
+const data = reactive<any>({
   material: [],
   manufacturingCost: [],
   lossCost: [],
@@ -177,24 +181,31 @@ const fetchPriceEvaluationTableResult = async () => {
     modelCountId: productId,
     isAll: String(!!data.isAll)
   })
-  console.log(result)
+  let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
+  data.material = material || []
+  data.manufacturingCost = [manufacturingCost] || []
+  data.lossCost = lossCost || []
+  data.otherCostItem = [otherCostItem] || []
+  console.log(result, "fetchPriceEvaluationTableResult")
 }
 
 const fetchPriceEvaluationTable = async (props?: any) => {
   const { inputCount, year } = props
   data.inputCount = inputCount
   data.year = year
-  let res: any = await getPriceEvaluationTable({
-    auditFlowId,
-    modelCountId: productId,
-    inputCount,
-    year
-  })
-  let { material, manufacturingCost, lossCost, otherCostItem } = res.result
-  data.material = material
-  data.manufacturingCost = manufacturingCost
-  data.lossCost = lossCost
-  data.otherCostItem = otherCostItem
+  let { result }: any =
+    (await getPriceEvaluationTable({
+      auditFlowId,
+      modelCountId: productId,
+      inputCount,
+      year
+    })) || {}
+  let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
+  data.material = material || []
+  data.manufacturingCost = [manufacturingCost] || []
+  data.lossCost = lossCost || []
+  data.otherCostItem = [otherCostItem] || []
+  console.log(result, "fetchPriceEvaluationTableResult")
 }
 
 const fetchSopYear = async () => {
@@ -227,11 +238,21 @@ onMounted(async () => {
   // handleChangePageType(data.pageType)
 })
 
-const handleChangePageType = (pageType: any) => {
-  pageType === "result"
-    ? fetchPriceEvaluationTableResult()
-    : fetchPriceEvaluationTable({ inputCount: data.inputCount, year: data.year })
+const handleChangePageType = async (pageType: any) => {
+  try {
+    loading.value = true
+    if (pageType === "result") {
+      // data.material = []
+      // data.manufacturingCost = []
+      // data.lossCost = []
+      await fetchPriceEvaluationTableResult()
+    }
+    loading.value = false
+  } catch {
+    loading.value = false
+  }
 }
+
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">

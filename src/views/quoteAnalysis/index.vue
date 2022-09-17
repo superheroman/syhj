@@ -18,13 +18,19 @@
         <el-table-column label="费用名称" width="180" prop="formName" />
         <el-table-column prop="pricingMoney" label="核价金额" width="180" />
         <el-table-column label="报价系数" width="180">
-          <template #default="{ row }">
-            <el-input v-model="row.offerCoefficient" type="number" :min="0" />
+          <template #default="scope">
+            <el-input-number
+              v-model="scope.row.offerCoefficient"
+              controls-position="right"
+              type="number"
+              :min="0"
+              @blur="(val) => changeOfferMoney(scope.row, scope.$index, val)"
+            />
           </template>
         </el-table-column>
-        <el-table-column label="报价金额" width="180">
+        <el-table-column label="报价金额" width="180" prop="offerMoney">
           <template #default="{ row }">
-            {{ row.pricingMoney * row.offerCoefficient }}
+            {{ row.offerCoefficient * row.pricingMoney }}
           </template>
         </el-table-column>
         <el-table-column label="备注">
@@ -77,6 +83,9 @@
       </el-table>
     </el-card>
     <el-card class="card">
+      <el-row justify="end" m="2">
+        <el-button @click="openDialog" type="primary">年份维度对比</el-button>
+      </el-row>
       <el-table :data="data.productBoard" border>
         <el-table-column label="产品" prop="productName" width="150" />
         <el-table-column label="单车产品数量" prop="productNumber" width="150" />
@@ -154,13 +163,6 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="操作" width="200" fixed="right">
-          <template #default="{ row }">
-            <el-button @click="openDialog(row, interiorTargetUnitPrice, row.interiorTargetGrossMargin)" type="primary"
-              >年份维度对比</el-button
-            >
-          </template>
-        </el-table-column>
       </el-table>
       <el-descriptions title="" border :column="1">
         <el-descriptions-item label="目标价(内部)整套单价">{{
@@ -185,7 +187,9 @@
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
           Number(data.allInteriorGrossMargin).toFixed(2)
         }}</el-descriptions-item>
-        <el-descriptions-item label="本次报价整套毛利率">{{ calculatedValue("grossMargin") }}</el-descriptions-item>
+        <el-descriptions-item label="本次报价整套毛利率">{{
+          calculatedValue("grossMargin")?.toFixed(2)
+        }}</el-descriptions-item>
       </el-descriptions>
       <!-- <div style="float: right; margin: 20px 0">
         <el-button @click="openDialog" type="primary">年份维度对比</el-button>
@@ -221,9 +225,9 @@
           <template #default="scope">
             <el-input v-model="scope.row.oldOffer[index].grossMargin" />
             <el-input v-model="scope.row.oldOffer[index].unitPrice">
-              <template #append>
+              <!-- <template #append>
                 <el-button @click="spreadSheetCalculate(scope.row)">计算</el-button>
-              </template>
+              </template> -->
             </el-input>
           </template>
         </el-table-column>
@@ -234,7 +238,7 @@
     <div style="float: right">
       <el-button @click="toNREPriceList">在线预览NRE核价表</el-button>
       <el-button @click="toProductPriceList">在线预览核价表</el-button>
-      <el-button>点击生成待审批的报价表</el-button>
+      <el-button @click="toDemandApplyResult">点击生成待审批的报价表</el-button>
     </div>
     <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
       <div v-for="item in data.dialogTable" :key="item" class="common-card">
@@ -277,6 +281,7 @@ import {
 import { NreMarketingDepartmentModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import debounce from "lodash/debounce"
+import { ElLoading } from "element-plus"
 
 // let mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
 
@@ -287,12 +292,14 @@ import debounce from "lodash/debounce"
 /**
  * 路由实例
  */
+let query = getQuery()
 const router = useRouter()
 //console.log('1-开始创建组件-setup')
 const getTofixed = (row: any) => {
   return row.grossMargin?.toFixed(2)
 }
 let dialogVisible = ref(false)
+const fullscreenLoading = ref(false)
 let ProjectUnitPrice: any = {
   title: {
     text: "项目单价对比"
@@ -416,14 +423,18 @@ const data = reactive<any>({
   dialogTable: []
 })
 
+// 报价分析看板 单价计算
 const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPrice: number, key: string) => {
   // console.log(data.auditFlowId)
   let { result }: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
   // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 
   const { grossMargin } = result?.productBoardGrosses[0] || ""
-  console.log(grossMargin, "毛利率计算")
+
   data.productBoard[index][key] = grossMargin
+  const grossMarginValue = calculatedValue("grossMargin") // 本次报价整套毛利率
+  const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
+  spreadSheetCalculate(grossMarginValue, AllUnitPrice)
 }, 300)
 
 const setData = () => {
@@ -473,9 +484,13 @@ const setData = () => {
   chart2.setOption(RevenueGrossMargin)
 }
 
-const spreadSheetCalculate = async (row: any) => {
-  let res: any = await getSpreadSheetCalculate(row.id, row.rossMargin)
-  console.log(res)
+const spreadSheetCalculate = async (grossMarginValue: any, AllUnitPrice: any) => {
+  let { result }: any = await getSpreadSheetCalculate(data.auditFlowId, grossMarginValue, AllUnitPrice)
+  result.forEach((element: any, index: number) => {
+    data.projectBoard[index].offer = {
+      grossMarginNumber: element.value
+    }
+  })
 }
 
 const postOffer = (isOffer: number) => {
@@ -513,7 +528,6 @@ const downLoad = async () => {
 }
 
 const toProductPriceList = () => {
-  let query = getQuery()
   router.push({
     path: "/nupriceManagement/productPriceList",
     query
@@ -521,17 +535,26 @@ const toProductPriceList = () => {
 }
 
 const toNREPriceList = () => {
-  let query = getQuery()
   router.push({
     path: "/nre/nrePricelist",
     query
   })
 }
-const openDialog = (unitPrice: any, grossMargin: any) => {
-  getDialogData(unitPrice, grossMargin)
+const toDemandApplyResult = () => {
+  router.push({
+    path: "/demandApply/result",
+    query
+  })
+}
+
+const openDialog = () => {
+  getDialogData()
   dialogVisible.value = true
 }
-const getDialogData = async (unitPrice: any, grossMargin: any) => {
+
+const getDialogData = async () => {
+  const grossMargin = calculatedValue("grossMargin") // 本次报价整套毛利率
+  const unitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
   const { result } = await GetYearDimensionalityComparison({
     id: data.auditFlowId,
     unitPrice,
@@ -549,30 +572,53 @@ const calculatedValue = (key: string, type?: string) => {
   return totolValue / data.productBoard.length
 }
 
+// 初始化
+const init = async () => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: "Loading",
+    background: "rgba(0, 0, 0, 0.7)"
+  })
+  try {
+    chart1 = initCharts("unitpriceChart", ProjectUnitPrice)
+    chart2 = initCharts("revenueGrossMarginChart", RevenueGrossMargin)
+
+    data.auditFlowId = Number(query.auditFlowId)
+
+    let { result } = (await getStatementAnalysisBoard(data.auditFlowId)) as any
+    let { nre, unitPrice, pooledAnalysis, productBoard, projectBoard } = result
+    data.nre = nre
+    data.unitPrice = unitPrice
+    console.log(data.unitPrice, "data.unitPrice")
+    data.pooledAnalysis = pooledAnalysis
+    data.productBoard = productBoard.productBoard // 有疑问
+    data.allInteriorGrossMargin = productBoard.allInteriorGrossMargin
+    data.allClientGrossMargin = productBoard.allClientGrossMargin
+    data.projectBoard = projectBoard
+    setData()
+    console.log(result)
+    fullscreenLoading.value = false
+    loading.close()
+  } catch (err: any) {
+    console.log(err, "报价分析")
+    fullscreenLoading.value = false
+    loading.close()
+  }
+}
+
+// 改变报价金额
+const changeOfferMoney = (record: any, index: number) => {
+  console.log(record, "changeOfferMoney")
+  data.nre[index].offerMoney = record.offerCoefficient * record.pricingMoney
+}
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
-
-  chart1 = initCharts("unitpriceChart", ProjectUnitPrice)
-  chart2 = initCharts("revenueGrossMarginChart", RevenueGrossMargin)
-  let query = getQuery()
-  data.auditFlowId = Number(query.auditFlowId)
-
-  let { result } = (await getStatementAnalysisBoard(data.auditFlowId)) as any
-  let { nre, unitPrice, pooledAnalysis, productBoard, projectBoard } = result
-  data.nre = nre
-  data.unitPrice = unitPrice
-  console.log(data.unitPrice, "data.unitPrice")
-  data.pooledAnalysis = pooledAnalysis
-  data.productBoard = productBoard.productBoard // 有疑问
-  data.allInteriorGrossMargin = productBoard.allInteriorGrossMargin
-  data.allClientGrossMargin = productBoard.allClientGrossMargin
-  data.projectBoard = projectBoard
-  setData()
-  console.log(result)
+  init()
 })
 
 onBeforeUnmount(() => {
