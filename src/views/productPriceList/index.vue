@@ -29,8 +29,8 @@
         <el-table-column type="index" width="50" />
         <el-table-column label="sap" prop="sap" width="180" />
         <el-table-column label="材料名称" prop="materialName" width="180" />
-        <el-table-column label="装配数量" prop="" width="180" />
-        <el-table-column label="材料单价（原币）" prop="assemblyCount" width="180" />
+        <el-table-column label="装配数量" prop="assemblyCount" width="180" />
+        <el-table-column label="材料单价（原币）" prop="materialPrice" width="180" />
         <el-table-column label="币别" prop="currencyText" width="180" />
         <el-table-column label="汇率" prop="exchangeRate" width="180" />
         <el-table-column label="材料单价（人民币）" prop="materialPriceCyn" width="180" />
