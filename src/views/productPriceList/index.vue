@@ -71,10 +71,10 @@
       </el-table>
     </el-card>
     <el-card class="card">
-      <el-table :data="data.lossCost" style="width: 100%" border>
-        <el-table-column label="成本项目" prop="name" width="180" />
-        <el-table-column label="损耗成本" prop="wastageCost" width="180" />
-        <el-table-column label="MOQ分摊成本" prop="moqShareCount" width="180" />
+      <el-table :data="data.lossCost" border>
+        <el-table-column label="成本项目" prop="name" />
+        <el-table-column label="损耗成本" prop="wastageCost" />
+        <el-table-column label="MOQ分摊成本" prop="moqShareCount" />
         <!-- <el-table-column label="结构料" prop="" width="180" />
         <el-table-column label="胶水" prop="" width="180" />
         <el-table-column label="外协加工" prop="" width="180" />
