@@ -12,7 +12,7 @@
         {{ data.marketingQuotationData.terminalClientNature }}
       </el-descriptions-item>
       <el-descriptions-item label="开发计划">
-        {{ data.marketingQuotationData.developmentPlan }}
+        <el-input v-model="data.marketingQuotationData.developmentPlan" />
       </el-descriptions-item>
       <el-descriptions-item label="汇率"> {{ data.marketingQuotationData.exchangeRate }} </el-descriptions-item>
     </el-descriptions>
@@ -73,13 +73,14 @@
         <el-table-column label="成本" prop="cost" />
         <el-table-column label="毛利率" prop="grossMargin" />
         <el-table-column label="样件价格" prop="price" />
-        <el-table-column label="佣金" prop="commission">
+        <el-table-column label="佣金" prop="commission" width="180">
           <template #default="scope">
             <el-input-number
               controls-position="right"
               v-model="scope.row.commission"
               placeholder="请输入佣金"
-              @change="(val: any) => changeCommission(val, scope.$index)"
+              @change="(val: any) => changeCommission(scope.row, scope.$index)"
+              :min="0"
             />
           </template>
         </el-table-column>
@@ -95,6 +96,9 @@
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
+    <el-row justify="end" m="2">
+      <el-button @click="save" type="primary">保存</el-button>
+    </el-row>
   </el-card>
 </template>
 
@@ -103,6 +107,8 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetQuotationList } from "../marketingQuotation/service"
 import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
+import { PostAuditQuotationListSave } from "./service"
+import { ElMessage } from "element-plus"
 // import { ElMessageBox } from "element-plus"
 
 const { auditFlowId = 1 }: any = getQuery()
@@ -138,13 +144,23 @@ const initFetch = async () => {
 }
 
 // 计算含佣金的毛利率
-const changeCommission = (val: number, index: number) => {
-  console.log(val, index, "changeCommission")
+const changeCommission = (row: any, index: number) => {
+  console.log(row, index, "changeCommission")
+  data.marketingQuotationData.biddingStrategy[index].grossMarginCommission =
+    (row.price - row.commission - row.cost) / (row.cost + row.commission)
 }
 
 const fetchSopYear = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
   columns.sopData = result || []
+}
+
+const save = async () => {
+  const { success }: any =
+    (await PostAuditQuotationListSave({
+      ...data.marketingQuotationData
+    })) || {}
+  if (success) ElMessage.success("保存成功！")
 }
 
 watchEffect(() => {})

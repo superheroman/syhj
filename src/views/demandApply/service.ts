@@ -41,3 +41,12 @@ export function getPriceEvaluationStartData(auditFlowId: any) {
     }
   })
 }
+
+// 保存营销部报价表
+export function PostAuditQuotationListSave(data: any) {
+  return request({
+    url: "/api/services/app/AnalyseBoard/PostAuditQuotationListSave",
+    method: "get",
+    data
+  })
+}
