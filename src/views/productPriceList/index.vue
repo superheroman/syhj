@@ -71,10 +71,10 @@
       </el-table>
     </el-card>
     <el-card class="card">
-      <el-table :data="data.lossCost" style="width: 100%" border>
-        <el-table-column label="成本项目" prop="name" width="180" />
-        <el-table-column label="损耗成本" prop="wastageCost" width="180" />
-        <el-table-column label="MOQ分摊成本" prop="moqShareCount" width="180" />
+      <el-table :data="data.lossCost" border>
+        <el-table-column label="成本项目" prop="name" />
+        <el-table-column label="损耗成本" prop="wastageCost" />
+        <el-table-column label="MOQ分摊成本" prop="moqShareCount" />
         <!-- <el-table-column label="结构料" prop="" width="180" />
         <el-table-column label="胶水" prop="" width="180" />
         <el-table-column label="外协加工" prop="" width="180" />
@@ -83,7 +83,7 @@
       </el-table>
     </el-card>
     <el-card class="card">
-      <el-table :data="data.otherCostItem" style="width: 100%" border>
+      <el-table :data="data.otherCostItem" border>
         <el-table-column label="夹具" prop="fixture" width="180" />
         <el-table-column label="物流费" prop="logisticsFee" width="180" />
         <el-table-column label="质量成本" prop="" width="180">
@@ -105,9 +105,9 @@
     </el-card>
     <!-- <div>{{totalCost}}</div> -->
     <el-descriptions :column="3" border>
-      <el-descriptions-item label="日期"> {{ data.date }} </el-descriptions-item>
-      <el-descriptions-item label="投出量"> {{ data.inputCount }} </el-descriptions-item>
-      <el-descriptions-item label="需求量"> {{ data.requiredCount }} </el-descriptions-item>
+      <el-descriptions-item label="编制/日期："> {{ data.preparedDate }} </el-descriptions-item>
+      <el-descriptions-item label="审核/日期："> {{ data.auditDate }} </el-descriptions-item>
+      <el-descriptions-item label="批准/日期："> {{ data.approvalDate }} </el-descriptions-item>
     </el-descriptions>
   </el-card>
 </template>
@@ -120,6 +120,8 @@ import getQuery from "@/utils/getQuery"
 import EZFilter from "@/components/EZFilter/index.vue"
 import { getYears } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
+import { formatDateTime } from "@/utils/index"
+
 const { auditFlowId, productId } = getQuery()
 
 /**
@@ -161,7 +163,10 @@ const data = reactive<any>({
       key: "inputCount"
     }
   ],
-  pageType: "normal"
+  pageType: "normal",
+  preparedDate: "",
+  auditDate: "",
+  approvalDate: ""
 })
 
 const options = [
@@ -181,12 +186,19 @@ const fetchPriceEvaluationTableResult = async () => {
     modelCountId: productId,
     isAll: String(!!data.isAll)
   })
+  setData(result)
+  console.log(result, "fetchPriceEvaluationTableResult")
+}
+
+const setData = (result: any) => {
   let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
   data.material = material || []
   data.manufacturingCost = [manufacturingCost] || []
   data.lossCost = lossCost || []
   data.otherCostItem = [otherCostItem] || []
-  console.log(result, "fetchPriceEvaluationTableResult")
+  data.preparedDate = formatDateTime(result.preparedDate)
+  data.auditDate = formatDateTime(result.auditDate)
+  data.approvalDate = formatDateTime(result.approvalDate)
 }
 
 const fetchPriceEvaluationTable = async (props?: any) => {
@@ -200,11 +212,7 @@ const fetchPriceEvaluationTable = async (props?: any) => {
       inputCount,
       year
     })) || {}
-  let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
-  data.material = material || []
-  data.manufacturingCost = [manufacturingCost] || []
-  data.lossCost = lossCost || []
-  data.otherCostItem = [otherCostItem] || []
+  setData(result)
   console.log(result, "fetchPriceEvaluationTableResult")
 }
 

@@ -51,6 +51,7 @@
                   controls-position="right"
                   :min="0"
                   @blur="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
+                  @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
                 />
                 <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
               </template>
@@ -90,8 +91,16 @@
           <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">
-              <el-button link @click="handleSubmit(scope.row, 0)" type="danger">确认</el-button>
-              <el-button :disabled="scope.row.isSubmit" link @click="handleSubmit(scope.row, 1)" type="warning">
+              <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0)" type="danger"
+                >确认</el-button
+              >
+              <el-button
+                v-if="scope.row.isEntering"
+                :disabled="scope.row.isSubmit"
+                link
+                @click="handleSubmit(scope.row, 1)"
+                type="warning"
+              >
                 提交
               </el-button>
               <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
