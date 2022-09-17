@@ -17,14 +17,14 @@
       <el-descriptions-item label="汇率"> {{ data.marketingQuotationData.exchangeRate }} </el-descriptions-item>
     </el-descriptions>
     <el-card header="sop5年内走量信息" m="2">
-      <el-table :data="data.marketingQuotationData.motionMessage" border>
+      <el-table :data="data.marketingQuotationData?.motionMessage" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="名称" prop="messageName" />
         <el-table-column
-          v-for="(item, index) in data.motionMessageSop"
+          v-for="(item, index) in data?.motionMessageSop"
           :key="item.year"
           :label="item.year"
-          :prop="`sop${index}.value`"
+          :prop="`sop[${index}].value`"
         />
       </el-table>
     </el-card>
@@ -109,7 +109,9 @@ const { auditFlowId = 1 }: any = getQuery()
 const data = reactive<any>({
   projectName: "",
   developmentPlan: "",
-  marketingQuotationData: {},
+  marketingQuotationData: {
+    motionMessage: []
+  },
   motionMessageSop: []
 })
 

@@ -206,7 +206,7 @@ import useJump from "@/hook/useJump"
 import router from "@/router"
 
 const { jumpTodoCenter } = useJump()
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 let costChart: any = null
 let percentageCostChart: any = null
@@ -238,7 +238,7 @@ const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
 }
 const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
   console.log(uploadFiles)
-  console.log(fileList, "fileList")
+  // fileList.value = [{...file. fileName: file.value.filename}]
 }
 
 const initCharts = (id: string, chartOption: any) => {
@@ -255,6 +255,7 @@ const initCharts = (id: string, chartOption: any) => {
 onBeforeMount(() => {})
 
 onMounted(() => {
+  if (!(auditFlowId && productId)) return false
   init()
   getPriceEvaluationTableInputCount()
 })

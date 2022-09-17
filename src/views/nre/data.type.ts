@@ -275,7 +275,7 @@ export interface QADepartmentQCModel {
   /**
    * 单价
    */
-  unitPrice?: string
+  unitPrice?: number
   /**
    * 使用工站
    */

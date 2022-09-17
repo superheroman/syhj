@@ -214,3 +214,33 @@ export function NreTableDownload(data: any) {
     responseType: "blob"
   })
 }
+
+//  Nre 品保部=>试验项目 产品开发部-NRE 下载
+export function PostExperimentItemsSingleDownloadExcel(data: any) {
+  return request({
+    url: "/api/services/app/NrePricing/PostExperimentItemsSingleDownloadExcel",
+    method: "post",
+    data,
+    responseType: "blob"
+  })
+}
+
+//  Nre 产品部-电子工程师 导入数据
+export function PostProductDepartmentSingleExcel(data: any) {
+  return request({
+    url: "/api/services/app/NrePricing/PostProductDepartmentSingleExcel",
+    method: "post",
+    data,
+    responseType: "blob"
+  })
+}
+
+//  Nre 品保部=>试验项目 导入数据(Excel 单个零件解析数据)
+export function PostExperimentItemsSingleExcel(data: any) {
+  return request({
+    url: "/api/services/app/NrePricing/PostExperimentItemsSingleExcel",
+    method: "post",
+    data,
+    responseType: "blob"
+  })
+}

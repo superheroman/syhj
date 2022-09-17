@@ -49,6 +49,7 @@
                 v-if="scope.row.isEdit"
                 v-model="scope.row.inTheRate[index].value"
                 @blur="handleCalculation(scope.row, scope.$index)"
+                @keyup.enter="handleCalculation(scope.row, scope.$index)"
               >
                 <template #append> % </template>
               </el-input>
@@ -71,6 +72,7 @@
                 controls-position="right"
                 :min="0"
                 @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
+                @keyup.enter="handleCalculationIginalCurrency(scope.row, scope.$index)"
               />
               <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
             </template>

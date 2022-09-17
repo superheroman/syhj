@@ -26,13 +26,14 @@ export function postCalculateFullGrossMargin(row: any, auditFlowId: number, unit
   })
 }
 
-export function getSpreadSheetCalculate(id: number, grossMargin: number) {
+export function getSpreadSheetCalculate(id: number, GrossMargin: number, AllUnitPrice: number) {
   return request({
     url: "/api/services/app/AnalyseBoard/GetSpreadSheetCalculate",
     method: "get",
     data: {
       id,
-      grossMargin
+      GrossMargin,
+      AllUnitPrice
     }
   })
 }

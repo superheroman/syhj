@@ -1,10 +1,25 @@
 <template>
   <div style="padding: 0 10px">
-    <el-card class="margin-top">
+    <el-card class="card-warp">
       <template #header>
         <el-row style="width: 100%" justify="space-between" align="middle">
           实验费用
-          <el-button type="primary" @click="addLaboratoryFeeModel" v-havedone>新增</el-button>
+          <el-row>
+            <el-upload
+              v-model:file-list="fileList"
+              :show-file-list="false"
+              action="/api/services/app/NrePricing/PostProductDepartmentSingleExcel"
+              :on-success="handleSuccess"
+              :on-error="handleError"
+              :on-change="handleFileChange"
+              multiple
+              name="fileName"
+            >
+              <el-button class="uploadBtn">NRE实验费模板上传</el-button>
+            </el-upload>
+            <el-button type="primary" @click="handleFethNreTableDownload" m="2">NRE实验费模板下载</el-button>
+            <el-button type="primary" @click="addLaboratoryFeeModel" m="2" v-havedone>新增</el-button>
+          </el-row>
         </el-row>
       </template>
       <el-table
@@ -111,12 +126,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { PostProductDepartment, GetProductDepartment } from "./common/request"
+import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
+import { PostProductDepartment, GetProductDepartment, PostExperimentItemsSingleDownloadExcel } from "./common/request"
+import type { UploadProps, UploadUserFile } from "element-plus"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import { LaboratoryFeeModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
+import { downloadFileExcel } from "@/utils"
+
+const fileList = ref<UploadUserFile[]>([])
 
 const deleteLaboratoryFeeModel = (i: number) => {
   data.laboratoryFeeModels.splice(i, 1)
@@ -159,6 +178,35 @@ const submit = async () => {
     console.log(err, "[PostProductDepartment err]")
   }
 }
+
+// NRE实验费模板下载
+const handleFethNreTableDownload = async () => {
+  try {
+    const res: any = await PostExperimentItemsSingleDownloadExcel({
+      FileName: ""
+    })
+    downloadFileExcel(res, "NRE实验费模板")
+    console.log(res, "NreTableDownload")
+  } catch (err: any) {
+    console.log(err, "[ NRE实验费模板下载 失败 ]")
+  }
+}
+
+// NRE实验费模板上传
+const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
+  console.log(res, "NRE实验费模板上传")
+  ElMessage.error("上传成功！")
+}
+
+const handleError = () => {
+  ElMessage.error("上传失败")
+}
+
+const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
+  console.log(uploadFiles, "uploadFiles")
+  console.log(fileList, "fileList")
+}
+
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
@@ -169,7 +217,10 @@ onMounted(() => {
 watchEffect(() => {})
 </script>
 <style scoped lang="scss">
-.margin-top {
+.card-warp {
   margin-top: 20px;
+}
+.uploadBtn {
+  margin-top: 8px;
 }
 </style>
