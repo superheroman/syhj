@@ -8,11 +8,11 @@
             <el-upload
               v-model:file-list="fileList"
               :show-file-list="false"
-              action="/api/services/app/NrePricing/PostProductDepartmentSingleExcel"
+              action="/api/services/app/NrePricing/PostExperimentItemsSingleExcel"
               :on-success="handleSuccess"
               :on-error="handleError"
               :on-change="handleFileChange"
-              multiple
+              name="fileName"
             >
               <el-button style="margin-top: 8px">NRE实验费模板上传</el-button>
             </el-upload>
@@ -174,6 +174,7 @@ const handleFethNreTableDownload = async () => {
 // NRE实验费模板上传
 const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
   console.log(res, "NRE实验费模板上传")
+  data.experimentItems = res.result || []
   ElMessage.error("上传成功！")
 }
 

@@ -228,7 +228,7 @@ const formatterArr = (key: string, childKey: any = "equipmentDetails") => {
 }
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
-  if (res.success && res.result?.workingHourDetailList.length > 0) {
+  if (res.success && res.result?.workingHourDetailList?.length > 0) {
     data.tableData = res.result?.workingHourDetailList
     formatTableColumnData()
   }
