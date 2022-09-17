@@ -175,6 +175,10 @@ const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
   if (res.success) {
     data.logisticsForm.pictureId = res.result.fileId
+    ElMessage({
+      message: "上传成功",
+      type: "success"
+    })
   }
 }
 
