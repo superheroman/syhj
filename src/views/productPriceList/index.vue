@@ -206,7 +206,7 @@ const fetchSopYear = async () => {
 const handleFetchPriceEvaluationTableDownload = async () => {
   try {
     const res: any = await PriceEvaluationTableDownload({
-      Year: data.year,
+      // Year: data.year,
       AuditFlowId: auditFlowId,
       ModelCountId: productId
     })
