@@ -528,7 +528,6 @@ const downLoad = async () => {
 }
 
 const toProductPriceList = () => {
-  let query = getQuery()
   router.push({
     path: "/nupriceManagement/productPriceList",
     query
@@ -536,15 +535,12 @@ const toProductPriceList = () => {
 }
 
 const toNREPriceList = () => {
-  let query = getQuery()
   router.push({
     path: "/nre/nrePricelist",
     query
   })
 }
-
 const toDemandApplyResult = () => {
-  let query = getQuery()
   router.push({
     path: "/demandApply/result",
     query
