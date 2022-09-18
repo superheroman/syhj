@@ -52,12 +52,14 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   let { auditFlowId } = route.query
-  try {
-    const res: any = await getSorByAuditFlowId(auditFlowId)
-    text.value = res.result.customerSpecialRequest
-    sorFileName = res.result.sorFileName
-  } catch (err: any) {
-    console.log(err)
+  if (auditFlowId) {
+    try {
+      const res: any = await getSorByAuditFlowId(auditFlowId)
+      text.value = res.result.customerSpecialRequest
+      sorFileName = res.result.sorFileName
+    } catch (err: any) {
+      console.log(err)
+    }
   }
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })

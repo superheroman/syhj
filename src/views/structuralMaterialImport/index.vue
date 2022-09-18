@@ -129,8 +129,8 @@ import { SaveStructionBom, SaveBOM, getBomTemplate, SaveProductDevelopmentInput,
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 
-let auditFlowId = 0
-let productId = 0
+let auditFlowId: any = null
+let productId: any = null
 const data = reactive({
   tableData: [],
   setVisible: false,
@@ -155,8 +155,10 @@ onMounted(async () => {
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId) || 0
   productId = Number(query.productId) || 0
-  let resStruction: any = await GetStructionBom({ auditFlowId, productId })
-  data.tableData = resStruction.result
+  if (auditFlowId && productId) {
+    let resStruction: any = await GetStructionBom({ auditFlowId, productId })
+    data.tableData = resStruction.result
+  }
 })
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)

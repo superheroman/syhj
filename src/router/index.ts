@@ -232,6 +232,22 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
+
+  {
+    path: "/manufacturingCost",
+    redirect: "/manufacturingCost/index",
+    component: Layout,
+    children: [
+      {
+        path: "/manufacturingCost/index",
+        component: () => import("@/views/manufacturingCost/index.vue"),
+        name: "manufacturingCost",
+        meta: {
+          title: "制造成本录入"
+        }
+      }
+    ]
+  },
   {
     path: "/pmDepartment",
     redirect: "/pmDepartment/index",

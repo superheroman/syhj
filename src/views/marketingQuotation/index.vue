@@ -1,5 +1,9 @@
 <template>
   <el-card class="marketingQuotation-page" header="报价审核" m="2">
+    <div style="margin: 20px 0; float: right" v-if="data.isShowBtn">
+      <el-button type="primary" @click="jumpToAnalysis">点击查看报价分析看板</el-button>
+      <el-button type="primary" @click="jumpToLogistics">点击查看物流可返利金额</el-button>
+    </div>
     <el-descriptions :column="2" border>
       <el-descriptions-item label="直接客户名称">
         {{ data.marketingQuotationData.directCustomerName }}
@@ -101,7 +105,7 @@ import { getYears } from "../pmDepartment/service"
 import { ElMessageBox } from "element-plus"
 import useJump from "@/hook/useJump"
 
-const { jumpTodoCenter } = useJump()
+const { jumpTodoCenter, jumpPage } = useJump()
 const { auditFlowId = 1 }: any = getQuery()
 /**
  * 数据部分
@@ -112,7 +116,8 @@ const data = reactive<any>({
   marketingQuotationData: {
     motionMessage: []
   },
-  motionMessageSop: []
+  motionMessageSop: [],
+  isShowBtn: false
 })
 
 const columns = reactive({
@@ -120,6 +125,10 @@ const columns = reactive({
 })
 
 onBeforeMount(() => {
+  let userInfo = JSON.parse(window.localStorage.getItem("user"))
+  if (userInfo.userJobs === "总经理") {
+    data.isShowBtn = true
+  }
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
@@ -128,7 +137,16 @@ onMounted(() => {
   initFetch()
   fetchSopYear()
 })
-
+const jumpToAnalysis = () => {
+  jumpPage("/quoteAnalysis/index", {
+    auditFlowId
+  })
+}
+const jumpToLogistics = () => {
+  jumpPage("/pmDepartment/index", {
+    auditFlowId
+  })
+}
 const initFetch = async () => {
   const { result } = await GetQuotationList({ Id: auditFlowId })
   data.marketingQuotationData = result

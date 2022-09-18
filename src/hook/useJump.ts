@@ -9,7 +9,14 @@ export default function useJump() {
     })
   }
 
+  const jumpPage = (path: any, query: any) => {
+    router.push({
+      path,
+      query
+    })
+  }
   return {
-    jumpTodoCenter
+    jumpTodoCenter,
+    jumpPage
   }
 }

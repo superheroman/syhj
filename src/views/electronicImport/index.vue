@@ -69,8 +69,8 @@ import { SaveElectronicBom, DownloadFile, GetElectronicBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 
-let auditFlowId = 1
-let productId = 1
+let auditFlowId: any = null
+let productId: any = null
 const data = reactive({
   activeIndex: 0,
   productList: [],
@@ -80,9 +80,6 @@ const data = reactive({
     number: 0
   }
 })
-// const handleClick = (tab: TabsPaneContext, event: Event) => {
-//   console.log(tab, event)
-// }
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
@@ -126,10 +123,12 @@ const submit = async () => {
 }
 onMounted(async () => {
   let query = getQuery()
-  auditFlowId = Number(query.auditFlowId) || 1
-  productId = Number(query.productId) || 1
-  let resElectronic: any = await GetElectronicBom({ auditFlowId, productId })
-  data.tableData = resElectronic.result
+  auditFlowId = Number(query.auditFlowId) || null
+  productId = Number(query.productId) || null
+  if (auditFlowId && productId) {
+    let resElectronic: any = await GetElectronicBom({ auditFlowId, productId })
+    data.tableData = resElectronic.result
+  }
 })
 </script>
 <style lang="scss" scoped>

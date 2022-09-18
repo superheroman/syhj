@@ -281,7 +281,7 @@ import {
 import { NreMarketingDepartmentModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import debounce from "lodash/debounce"
-import { ElLoading } from "element-plus"
+import { ElLoading, ElMessageBox, ElMessage } from "element-plus"
 
 // let mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
 
@@ -458,28 +458,41 @@ const setData = () => {
     yAxisIndex: 1,
     name: "整体毛利率",
     type: "line",
-    data: [0.1, 0.2, 0.4] //需要替换
+    data: [
+      Number(data.allClientGrossMargin).toFixed(2),
+      Number(data.allInteriorGrossMargin).toFixed(2),
+      calculatedValue("grossMargin")?.toFixed(2)
+    ]
   })
   chart1.setOption(ProjectUnitPrice)
   RevenueGrossMargin.series = data.projectBoard.map((item: any) => {
-    return {
-      name: item.projectName,
-      type: "bar",
-      stack: "total",
-      label: {
-        show: true
-      },
-      emphasis: {
-        focus: "series"
-      },
-      data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
+    if (item.projectName === "平均单价" || item.projectName === "毛利率") {
+      return {
+        name: item.projectName,
+        type: "bar",
+        stack: "total",
+        label: {
+          show: true
+        },
+        emphasis: {
+          focus: "series"
+        },
+        data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
+      }
+    }
+  })
+  let value: any = []
+  data.projectBoard.forEach((item: any) => {
+    if (item.productName === "毛利率") {
+      value.push(item.clientTarget.grossMargin)
+      value.push(item.interiorTarget.grossMargin)
     }
   })
   RevenueGrossMargin.series.push({
     yAxisIndex: 1,
-    name: "整体毛利率",
+    name: "利率",
     type: "line",
-    data: [0.1, 0.2, 0.4] //需要替换
+    data: value //需要替换
   })
   chart2.setOption(RevenueGrossMargin)
 }
@@ -494,20 +507,28 @@ const spreadSheetCalculate = async (grossMarginValue: any, AllUnitPrice: any) =>
 }
 
 const postOffer = (isOffer: number) => {
-  let res = postIsOffer({
-    unitPrice: data.unitPrice,
-    pooledAnalysis: data.pooledAnalysis,
-    productBoard: {
-      allInteriorGrossMargin: data.allInteriorGrossMargin,
-      allClientGrossMargin: data.allClientGrossMargin,
-      productBoard: data.productBoard
-    },
-    projectBoard: data.projectBoard,
-    isOffer,
-    auditFlowId: data.auditFlowId,
-    nre: data.nre
+  ElMessageBox.confirm("确定执行该操作?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let res = await postIsOffer({
+      unitPrice: data.unitPrice,
+      pooledAnalysis: data.pooledAnalysis,
+      productBoard: {
+        allInteriorGrossMargin: data.allInteriorGrossMargin,
+        allClientGrossMargin: data.allClientGrossMargin,
+        productBoard: data.productBoard
+      },
+      projectBoard: data.projectBoard,
+      isOffer,
+      auditFlowId: data.auditFlowId,
+      nre: data.nre
+    })
+    if (res.success) {
+      ElMessage.success("操作成功")
+    }
   })
-  console.log(res)
 }
 
 const downLoad = async () => {
@@ -582,21 +603,18 @@ const init = async () => {
   try {
     chart1 = initCharts("unitpriceChart", ProjectUnitPrice)
     chart2 = initCharts("revenueGrossMarginChart", RevenueGrossMargin)
-
     data.auditFlowId = Number(query.auditFlowId)
-
     let { result } = (await getStatementAnalysisBoard(data.auditFlowId)) as any
     let { nre, unitPrice, pooledAnalysis, productBoard, projectBoard } = result
     data.nre = nre
     data.unitPrice = unitPrice
     console.log(data.unitPrice, "data.unitPrice")
     data.pooledAnalysis = pooledAnalysis
-    data.productBoard = productBoard.productBoard // 有疑问
+    data.productBoard = productBoard.productBoard
     data.allInteriorGrossMargin = productBoard.allInteriorGrossMargin
     data.allClientGrossMargin = productBoard.allClientGrossMargin
     data.projectBoard = projectBoard
     setData()
-    console.log(result)
     fullscreenLoading.value = false
     loading.close()
   } catch (err: any) {
