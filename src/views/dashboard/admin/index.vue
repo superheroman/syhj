@@ -494,16 +494,16 @@ const getGoTableChartData = async () => {
 
 // 同意该审核
 const setPriceBoardStateAgree = async (isAgree: boolean) => {
-  ElMessageBox.confirm("确定执行该操作?", "提示", {
+  ElMessageBox[!isAgree ? "prompt" : "confirm"]("确定执行该操作?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val) => {
     let res: any
     if (isAgree) {
-      res = await SetPriceBoardState(auditFlowId, isAgree)
+      res = await SetPriceBoardState(auditFlowId, isAgree, val)
     } else {
-      res = await SetPriceBoardState(auditFlowId, isAgree, checkList.value)
+      res = await SetPriceBoardState(auditFlowId, isAgree, val, checkList.value)
     }
     if (res.success) {
       jumpTodoCenter()

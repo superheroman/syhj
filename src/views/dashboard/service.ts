@@ -102,14 +102,20 @@ export function addPricingPanelTrProgrammeId(auditFlowId: number, fileManagement
   })
 }
 // 核价看板审核
-export function SetPriceBoardState(auditFlowId: number, isAgree: boolean, backProcessIdentifiers?: any[]) {
+export function SetPriceBoardState(
+  auditFlowId: number,
+  isAgree: boolean,
+  opinionDescription: string,
+  backProcessIdentifiers?: any[]
+) {
   return request({
     url: "/api/services/app/PriceBoardCheck/SetPriceBoardState",
     method: "post",
     data: {
       auditFlowId,
       isAgree,
-      backProcessIdentifiers
+      backProcessIdentifiers,
+      opinionDescription
     }
   })
 }

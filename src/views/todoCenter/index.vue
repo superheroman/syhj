@@ -73,7 +73,6 @@
 </template>
 
 <script setup lang="ts">
-// import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { getAllAuditFlowInfos, getAuditFlowNewVersionByProjectName } from "./service"
 import type { FormInstance, FormRules } from "element-plus"
@@ -113,7 +112,6 @@ const form = reactive({
   quoteVersion: "",
   remarks: ""
 })
-// let auditFlowIds = ref([])
 let auditFlowIdInfoList = ref([])
 let auditFlowIdInfoListCheck = ref([])
 let isProductManager = ref(false)
@@ -123,22 +121,14 @@ const saveNew = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   if (!form.quoteVersion && form.quoteProjectName) {
     let resVersion: any = await getAuditFlowNewVersionByProjectName(form.quoteProjectName)
-    form.quoteVersion = resVersion.result
-    console.log(resVersion)
+    form.quoteVersion = resVersion.result.newVersion
+    // 同一个项目多次报价 自动带出项目编号
+    if (resVersion.result.projectNumber) {
+      form.quoteProjectNumber = resVersion.result.projectNumber
+    }
   }
   await formEl.validate(async (valid, fields) => {
     if (valid) {
-      // let res: any = await savaNewAuditFlowInfo(form)
-      // if (res.success) {
-      //   router.push({
-      //     path: "/demandApply/index",
-      //     query: {
-      //       projectName: form.quoteProjectName,
-      //       projectCode: form.quoteProjectNumber,
-      //       quoteVersion: form.quoteVersion
-      //     }
-      //   })
-      // }
       router.push({
         path: "/demandApply/index",
         query: {
@@ -154,7 +144,6 @@ const saveNew = async (formEl: FormInstance | undefined) => {
 }
 
 const clickToPage = (row: any, scopeP: any) => {
-  // window.sessionStorage.setItem("auditFlowId", scopeP.row.auditFlowId)
   productStore.setProductList(scopeP.row.auditFlowId) // 只在这里执行获取零件列表
   let pathItem: any = urlMap[row.processIdentifier as keyof typeof urlMap]
   let query: any = Object.assign({ auditFlowId: scopeP.row.auditFlowId, right: row.right }, pathItem.query)
@@ -162,7 +151,6 @@ const clickToPage = (row: any, scopeP: any) => {
     query.productId = window.sessionStorage.getItem("productId")
   }
   router.push({
-    // path: `${urlMap[row.processIdentifier as keyof typeof urlMap]}`,
     path: `${pathItem.path}`,
     query
   })
