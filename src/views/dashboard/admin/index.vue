@@ -501,9 +501,9 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
   }).then(async (val) => {
     let res: any
     if (isAgree) {
-      res = await SetPriceBoardState(auditFlowId, isAgree, val)
+      res = await SetPriceBoardState(auditFlowId, isAgree, val?.value)
     } else {
-      res = await SetPriceBoardState(auditFlowId, isAgree, val, checkList.value)
+      res = await SetPriceBoardState(auditFlowId, isAgree, val?.value, checkList.value)
     }
     if (res.success) {
       jumpTodoCenter()
