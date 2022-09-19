@@ -172,7 +172,7 @@ const submit = async () => {
           })) || []
       }
     })
-    if (success) ElMessage.success("提交成功！")
+    if (success) ElMessage.success("提交成功")
     console.log(success, "[PostProductDepartment RES]")
   } catch (err) {
     console.log(err, "[PostProductDepartment err]")
@@ -197,7 +197,7 @@ const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
   const { result } = res
   data.laboratoryFeeModels = result || []
   console.log(res, "NRE实验费模板上传")
-  ElMessage.error("上传成功！")
+  ElMessage.success("上传成功！")
 }
 
 const handleError = () => {
