@@ -166,10 +166,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       {
         path: "/resourcesDepartment/moduleNumber",
         component: () => import("@/views/resourcesDepartment/moduleNumber.vue"),
-        name: "moduleNumber"
-        // meta: {
-        //   title: "结构BOM单价录入"
-        // }
+        name: "moduleNumber",
+        meta: {
+          title: "项目走量",
+          hidden: true
+        }
       }
     ]
   },
