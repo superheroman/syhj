@@ -172,6 +172,10 @@ const clickToPage = (row: any, scopeP: any) => {
  * 数据部分
  */
 onBeforeMount(() => {
+  // 移除缓存
+  if (window.sessionStorage.getItem("productId")) {
+    window.sessionStorage.removeItem("productId")
+  }
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {

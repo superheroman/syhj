@@ -920,22 +920,22 @@ const addProduct = () => {
   let newLineP = {
     name: "",
     sensor: "",
-    sensorTypeSelect: 1,
+    sensorTypeSelect: "1",
     sensorPrice: 0,
     lens: "",
-    lensTypeSelect: 1,
+    lensTypeSelect: "1",
     lensPrice: 0,
     isp: "",
-    ispTypeSelect: 1,
+    ispTypeSelect: "1",
     ispPrice: 0,
     serialChip: "",
-    serialChipTypeSelect: 1,
+    serialChipTypeSelect: "1",
     serialChipPrice: 0,
     cable: "",
-    cableTypeSelect: 1,
+    cableTypeSelect: "1",
     cablePrice: 0,
     led: "",
-    ledTypeSelect: 1,
+    ledTypeSelect: "1",
     ledPrice: 0,
     manufactureProcess: "",
     installationPosition: ""
@@ -1064,7 +1064,7 @@ const generateCustomTable = () => {
       let productName = item.name
       let main = "sensor"
       let type = item.sensor
-      let productType = productTypeMap[item.sensorTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
+      let productType = item.sensorTypeSelect === "2" ? "客户指定" : "客户供应"
       specifyTableData.value.push({
         price,
         productName,

@@ -159,7 +159,7 @@ onMounted(async () => {
   if (query.productId) {
     formData.productId = Number(query.productId)
   }
-  if (query.right) {
+  if (query.auditFlowId) {
     let res: any = await getManagement(query.auditFlowId)
     let keys = Object.keys(formData)
     keys.forEach((key) => {
