@@ -280,3 +280,10 @@ export function SetBomState(data: any) {
     data
   })
 }
+export function getProductDevelopmentInput(data: any) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/PostProductDevelopmentInput",
+    method: "post",
+    data
+  })
+}
