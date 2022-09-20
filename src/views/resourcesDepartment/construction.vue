@@ -112,23 +112,6 @@
         </el-table>
       </el-card>
     </div>
-    <el-dialog v-model="data.visiable" title="项目走量">
-      <el-table :data="data.moduleNumber" height="500">
-        <el-table-column prop="productName" label="产品" width="150" />
-        <el-table-column prop="productTypeName" label="产品小类" width="150" />
-        <!-- <el-table-column prop="marketShare" label="市场份额" width="150" />
-        <el-table-column prop="moduleCarryingRate" label="模组搭载率" width="150" />
-        <el-table-column prop="singleCarProductsQuantity" label="单车产品数量" width="150" /> -->
-        <el-table-column
-          v-for="(item, index) in data?.moduleNumberSop"
-          :key="`construction-moduleNumberSop${item}`"
-          :label="`${item?.year.toString()}`"
-          :prop="`modelCountYear[${index}].value`"
-          width="180"
-        />
-        <el-table-column prop="modelTotal" label="模组总量" width="150" />
-      </el-table>
-    </el-dialog>
   </div>
 </template>
 
@@ -141,6 +124,8 @@ import {
   ToriginalCurrencyStructural,
   GetProjectGoQuantity
 } from "./common/request"
+import { useRouter } from "vue-router"
+
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
@@ -149,6 +134,7 @@ import { ElMessage } from "element-plus"
 
 // 获取仓库的值
 const store = useUserStore()
+const router = useRouter()
 
 console.log(store.userInfo, "store")
 const { auditFlowId, productId }: any = getQuery()
@@ -158,7 +144,6 @@ const constructionBomList = ref<any>([])
 
 const data = reactive<any>({
   sop: [], // 表单子列
-  visiable: false,
   moduleNumber: [], // 项目走量
   moduleNumberSop: []
 })
@@ -192,7 +177,12 @@ const fetchInitData = async () => {
 }
 
 const queryModlueNumber = () => {
-  data.visiable = true
+  router.push({
+    path: "/resourcesDepartment/moduleNumber",
+    query: {
+      auditFlowId
+    }
+  })
 }
 
 // 获取项目走量的数据

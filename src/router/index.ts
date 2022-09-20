@@ -162,6 +162,14 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "结构BOM单价录入"
         }
+      },
+      {
+        path: "/resourcesDepartment/moduleNumber",
+        component: () => import("@/views/resourcesDepartment/moduleNumber.vue"),
+        name: "moduleNumber"
+        // meta: {
+        //   title: "结构BOM单价录入"
+        // }
       }
     ]
   },

@@ -47,7 +47,7 @@
     </el-card>
     <el-card class="card">
       <el-table :data="data.manufacturingCost" style="width: 100%" border>
-        <!-- <el-table-column label="成本项目" prop="" width="180" /> -->
+        <el-table-column label="成本项目" prop="costItem" width="180" />
         <el-table-column label="直接制造成本" prop="">
           <!-- <el-table-column label="直接人工" prop="" />
           <el-table-column label="设备折旧" prop="" />
@@ -63,7 +63,7 @@
         <el-table-column label="间接制造成本" prop="">
           <el-table-column label="直接人工" prop="manufacturingCostIndirect.directLabor" />
           <el-table-column label="设备折旧" prop="manufacturingCostIndirect.equipmentDepreciation" />
-          <el-table-column label="换线成本" prop="manufacturingCostIndirect.lineChangeCost" />
+          <!-- <el-table-column label="换线成本" prop="manufacturingCostIndirect.lineChangeCost" /> -->
           <el-table-column label="制造费用" prop="manufacturingCostIndirect.manufacturingExpenses" />
           <el-table-column label="小计" prop="manufacturingCostIndirect.subtotal" />
         </el-table-column>
@@ -193,7 +193,7 @@ const fetchPriceEvaluationTableResult = async () => {
 const setData = (result: any) => {
   let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
   data.material = material || []
-  data.manufacturingCost = [manufacturingCost] || []
+  data.manufacturingCost = manufacturingCost || []
   data.lossCost = lossCost || []
   data.otherCostItem = [otherCostItem] || []
   data.preparedDate = formatDateTime(result.preparedDate)
@@ -250,9 +250,9 @@ const handleChangePageType = async (pageType: any) => {
   try {
     loading.value = true
     if (pageType === "result") {
-      // data.material = []
-      // data.manufacturingCost = []
-      // data.lossCost = []
+      data.material = []
+      data.manufacturingCost = []
+      data.lossCost = []
       await fetchPriceEvaluationTableResult()
     }
     loading.value = false

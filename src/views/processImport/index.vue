@@ -11,10 +11,15 @@
               :on-error="handleError"
               :show-file-list="false"
               class="m-2"
+              :data="{ auditFlowId: data.auditFlowId }"
             >
               <el-button type="primary">工序工时上传</el-button>
             </el-upload>
             <el-button class="m-2" type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
+            <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
+            <el-button class="m-2" type="primary" @click="downLoad3DExploded">3D爆炸图下载</el-button>
+            <el-button class="m-2" type="primary" @click="toModuleNumber">项目走量查看</el-button>
+            <el-button class="m-2" type="primary" @click="toBomVerifyConstruction">结构bom单价审核</el-button>
           </el-row>
         </el-row>
       </template>
@@ -190,10 +195,12 @@ import {
   getTangentHoursList,
   SubmitWorkingHourAndSwitchLine,
   getYears,
-  QueryWorkingHour
+  QueryWorkingHour,
+  GetSorFileId
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
+import router from "@/router"
 
 const { auditFlowId, productId }: any = getQuery()
 
@@ -212,7 +219,8 @@ const data = reactive<any>({
     tangent: [] // 根线/切线工时
   },
   years: [],
-  isSaved: false
+  isSaved: false,
+  auditFlowId: null
 })
 
 const tangentFormRef = ref<FormInstance>()
@@ -228,11 +236,16 @@ const formatterArr = (key: string, childKey: any = "equipmentDetails") => {
 }
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
-  if (res.success && res.result?.workingHourDetailList?.length > 0) {
+  const { success, result } = res
+  if (success && result?.workingHourDetailList?.length > 0) {
     data.tableData = res.result?.workingHourDetailList
     formatTableColumnData()
+    ElMessage.success("上传成功！")
+  } else {
+    ElMessage.error(result.message || "上传失败~")
   }
 }
+
 const formatTableColumnData = () => {
   console.log(data.tableData, "data.tableData")
   data.retrospectPart = {
@@ -251,6 +264,7 @@ const handleError = () => {
   ElMessage.error("上传失败")
 }
 
+// 工序工时模板下载
 const downLoadTemplate = async () => {
   let res: any = await downloadWorkingHoursInfo()
   const blob = res
@@ -267,6 +281,66 @@ const downLoadTemplate = async () => {
     a.remove() //将a标签移除
   }
   // data.setVisible = false
+}
+
+// 3D爆炸图下载
+const downLoad3DExploded = async () => {
+  let res: any = await downloadWorkingHoursInfo()
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = "模板文件.xlsx"
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+  // data.setVisible = false
+}
+
+// SOR下载
+const downLoadSOR = async () => {
+  let res: any = await GetSorFileId(auditFlowId)
+  const blob = res
+  console.log(res, "downLoadSOR")
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = "SOR.zip"
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+  // data.setVisible = false
+}
+
+// 跳转查看项目走量
+const toModuleNumber = () => {
+  router.push({
+    path: "/resourcesDepartment/moduleNumber",
+    query: {
+      auditFlowId,
+      productId
+    }
+  })
+}
+
+const toBomVerifyConstruction = () => {
+  router.push({
+    path: "/bomVerify/construction",
+    query: {
+      auditFlowId,
+      productId
+    }
+  })
 }
 
 const handleSaveWorkingHour = async () => {
@@ -303,6 +377,7 @@ const init = async () => {
 }
 
 onMounted(async () => {
+  data.auditFlowId = auditFlowId
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   getAllSop()
   init()

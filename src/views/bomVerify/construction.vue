@@ -57,7 +57,7 @@
             width="180"
           >
             <template #default="{ row }">
-              {{ row.iginalCurrency[iginalCurrencyIndex]?.value?.toFixed(2) || 0 }}
+              {{ (row?.iginalCurrency && row?.iginalCurrency[iginalCurrencyIndex]?.value) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -70,7 +70,7 @@
             width="180"
           >
             <template #default="{ row }">
-              {{ row.standardMoney[index]?.value?.toFixed(2) || 0 }}
+              {{ (row.standardMoney && row.standardMoney[index]?.value) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
