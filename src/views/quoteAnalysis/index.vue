@@ -133,16 +133,18 @@
               <el-input v-model="scope.row.offerUnitPrice">
                 <template #append>
                   <el-button
-                    @click="calculateFullGrossMargin(scope.row, scope.$index, scope.row.offerUnitPrice, 'grossMargin')"
+                    @click="
+                      calculateFullGrossMargin(scope.row, scope.$index, scope.row.offerUnitPrice, 'offeGrossMargin')
+                    "
                     >计算</el-button
                   >
                 </template>
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="grossMargin" width="150">
+          <el-table-column label="毛利率" prop="offeGrossMargin" width="150">
             <template #default="{ row }">
-              {{ row.grossMargin?.toFixed(2) || "-" }}
+              {{ row.offeGrossMargin?.toFixed(2) || "-" }}
             </template>
           </el-table-column>
         </el-table-column>
