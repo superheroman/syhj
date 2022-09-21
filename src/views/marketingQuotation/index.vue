@@ -76,7 +76,7 @@
         <el-table-column label="产品" prop="product" />
         <el-table-column label="成本" prop="cost" />
         <el-table-column label="毛利率" prop="grossMargin" />
-        <el-table-column label="样件价格" prop="price" />
+        <el-table-column label="价格" prop="price" />
         <el-table-column label="佣金" prop="commission" />
         <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" />
       </el-table>
@@ -85,7 +85,7 @@
       <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="费用类别" prop="formName" />
-        <el-table-column label="核价金额" prop="offerMoney" />
+        <el-table-column label="核价金额" prop="pricingMoney" />
         <el-table-column label="报价系数" prop="offerCoefficient" />
         <el-table-column label="备注" prop="remark" />
       </el-table>

@@ -195,12 +195,12 @@ import {
   getTangentHoursList,
   SubmitWorkingHourAndSwitchLine,
   getYears,
-  QueryWorkingHour,
-  GetSorFileId
+  QueryWorkingHour
 } from "./service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
 import router from "@/router"
+import { getSorFile, getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 
 const { auditFlowId, productId }: any = getQuery()
 
@@ -220,7 +220,8 @@ const data = reactive<any>({
   },
   years: [],
   isSaved: false,
-  auditFlowId: null
+  auditFlowId: null,
+  fileName: ""
 })
 
 const tangentFormRef = ref<FormInstance>()
@@ -302,11 +303,16 @@ const downLoad3DExploded = async () => {
   // data.setVisible = false
 }
 
+const getSORFileName = async () => {
+  const res: any = await getSorByAuditFlowId(auditFlowId)
+  data.sorFileName = res.result.sorFileName
+}
+
 // SOR下载
 const downLoadSOR = async () => {
-  let res: any = await GetSorFileId(auditFlowId)
+  if (!data.sorFileName) return false
+  let res: any = await getSorFile(auditFlowId)
   const blob = res
-  console.log(res, "downLoadSOR")
   const reader = new FileReader()
   reader.readAsDataURL(blob)
   reader.onload = function () {
@@ -314,12 +320,11 @@ const downLoadSOR = async () => {
     let a = document.createElement("a")
     document.body.appendChild(a) //此处增加了将创建的添加到body当中
     a.href = url
-    a.download = "SOR.zip"
+    a.download = data.sorFileName
     a.target = "_blank"
     a.click()
     a.remove() //将a标签移除
   }
-  // data.setVisible = false
 }
 
 // 跳转查看项目走量
@@ -379,13 +384,14 @@ const init = async () => {
 onMounted(async () => {
   data.auditFlowId = auditFlowId
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
+  getSORFileName()
   getAllSop()
   init()
 })
 
 const getAllSop = async () => {
   const {
-    result: { tangentHoursDetailList = [] }
+    result: { tangentHoursDetailList = [], uph }
   }: any = await getTangentHoursList(auditFlowId, productId)
   if (!tangentHoursDetailList.length) {
     // 获取年份
@@ -395,6 +401,7 @@ const getAllSop = async () => {
     return
   }
   data.isSaved = true
+  data.uph = uph
   data.tangentForm.tangent = tangentHoursDetailList || []
 }
 

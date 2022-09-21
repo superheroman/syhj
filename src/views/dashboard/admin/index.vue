@@ -156,7 +156,7 @@
         <el-table-column prop="productName" label="产品名称" width="180" />
         <el-table-column prop="year" label="年份">
           <template #default="{ row }">
-            <el-select v-model="row.year" class="m-2" placeholder="请选择年份" @change="fetchAllData">
+            <el-select v-model="row.year" class="m-2" placeholder="请选择年份">
               <el-option v-for="item in data.yearsOptions" :key="item.id" :label="item.name" :value="item.id" />
             </el-select>
           </template>
@@ -255,14 +255,15 @@ const initCharts = (id: string, chartOption: any) => {
 onBeforeMount(() => {})
 
 onMounted(() => {
-  if (!(auditFlowId && productId)) return false
+  if (!auditFlowId) return false
   init()
   getPriceEvaluationTableInputCount()
 })
 
 const init = async () => {
-  await fetchOptionsData()
-  await initChart()
+  initChart()
+  fetchOptionsData()
+  if (!productId) return false
   await fetchAllData()
   await getGoTableChartData()
 }
@@ -286,6 +287,7 @@ const initChart = () => {
   }
 }
 
+// 获取核价表模组的InputCount（投入量）和年份
 const getPriceEvaluationTableInputCount = async () => {
   const {
     result: { items = [] }
@@ -552,7 +554,7 @@ const handleCreatePriceEvaluation = debounce(async () => {
 const handleSetPriceEvaluationTableInputCount = debounce(async () => {
   await SetPriceEvaluationTableInputCount({
     auditFlowId,
-    modelCountInputCount: data.priceEvaluationTableInputCount.map((item: any) => ({ ...item, modelCountId: productId }))
+    modelCountInputCount: data.priceEvaluationTableInputCount.map((item: any) => ({ ...item, modelCountId: item.id }))
   })
   ElMessage.success("设置成功！")
   getPriceEvaluationTableInputCount()
