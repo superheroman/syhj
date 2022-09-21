@@ -69,3 +69,14 @@ export function QueryWorkingHour(auditFlowId: number, productId: number) {
     }
   })
 }
+
+/**获取SOR文件 */
+export function GetSorFileId(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/ProductionControl/GetSorFileId",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}
