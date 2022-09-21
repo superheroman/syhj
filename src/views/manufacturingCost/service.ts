@@ -9,10 +9,18 @@ export function getAllYearsFrom(auditFlowId: any) {
   })
 }
 
-export function priceEvaluationSave(data: any) {
+export function manufacturingCostInput(data: any) {
   return request({
-    url: "/api/services/app/PriceEvaluation/Save",
+    url: "/api/services/app/PriceEvaluation/ManufacturingCostInput",
     method: "post",
+    data
+  })
+}
+
+export function getInputManufacturingCost(data: any) {
+  return request({
+    url: "/api/services/app/PriceEvaluation/GetInputManufacturingCost",
+    method: "get",
     data
   })
 }
