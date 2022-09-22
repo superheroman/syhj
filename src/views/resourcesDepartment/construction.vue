@@ -218,14 +218,14 @@ const fetchSopYear = async () => {
 // 根据原币计算
 const handleCalculationIginalCurrency = async (row: any, bomIndex: number, iginalCurrencyIndex: number) => {
   try {
-    row.loading = true
+    constructionBomList.value[bomIndex].loading = true
     const { success, result } = await ToriginalCurrencyStructural(row)
     if (!success && !result.length) throw Error()
     const res = { ...(result || {}), isEdit: true }
     constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex] = res
-    row.loading = false
+    constructionBomList.value[bomIndex].loading = false
   } catch (err) {
-    row.loading = false
+    constructionBomList.value[bomIndex].loading = false
     console.log(err, "[根据原币计算 计算失败]")
     ElMessage.error("计算失败~")
   }
