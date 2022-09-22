@@ -14,7 +14,7 @@
               <SearchDepartMentPerson v-model="formData.structureEngineerId" roleName="产品开发部-结构工程师" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="资源管理部-电子资源开发:">
               <SearchDepartMentPerson v-model="formData.resourceElecId" roleName="资源管理部-电子单价录入员" />
             </el-form-item>
@@ -23,7 +23,7 @@
             <el-form-item label="资源管理部-结构子资源开发:">
               <SearchDepartMentPerson v-model="formData.resourceStructId" roleName="资源管理部-结构单价录入员" />
             </el-form-item>
-          </el-col>
+          </el-col> -->
           <el-col :span="6">
             <el-form-item label="工程技术部-损耗率录入员:">
               <SearchDepartMentPerson v-model="formData.engineerLossRateId" roleName="工程技术部-损耗率录入员" />
@@ -106,8 +106,8 @@ let formData: any = reactive({
   productManageId: undefined,
   qualityBenchId: undefined,
   qualityToolId: undefined,
-  resourceElecId: undefined,
-  resourceStructId: undefined,
+  resourceElecId: 0,
+  resourceStructId: 0,
   structureEngineerId: undefined
 })
 

@@ -69,3 +69,13 @@ export function getProductionControl(auditFlowId: number, productId: number) {
     }
   })
 }
+
+export function getSorByAuditFlowId(auditFlowId: any) {
+  return request({
+    url: "/api/services/app/ProductDevelopmentInput/GetSorByAuditFlowId",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}

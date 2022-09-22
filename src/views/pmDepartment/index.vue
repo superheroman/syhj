@@ -124,13 +124,14 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect, watch } from "
 import {
   saveProductionControl,
   // getPcsByPriceAuditFlowId,
-  getSor,
+  getSorByAuditFlowId,
   getProductFreight,
   getModelCountByAuditFlowId,
   getProductionControl
 } from "./service"
 import { ElMessage } from "element-plus"
 import getQuery from "@/utils/getQuery"
+import { CommonDownloadFile } from "@/api/bom"
 
 // import { useRoute, useRouter } from "vue-router"
 /**
@@ -179,7 +180,6 @@ onMounted(async () => {
   console.log(oldRes)
   if (oldRes.result.infoList.length > 0) {
     data.tableData = oldRes.result.infoList
-    debugger
   } else {
     let { result } = (await getModelCountByAuditFlowId(data.auditFlowId)) as any
     let warpArr = [] as any[] //二维数组
@@ -242,7 +242,8 @@ onMounted(async () => {
 watchEffect(() => {})
 
 const getSorFile = async () => {
-  let res: any = await getSor(data.auditFlowId)
+  const { result }: any = (await getSorByAuditFlowId(data.auditFlowId)) || {}
+  let res: any = await CommonDownloadFile(result.sorFileId)
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
@@ -251,7 +252,7 @@ const getSorFile = async () => {
     let a = document.createElement("a")
     document.body.appendChild(a) //此处增加了将创建的添加到body当中
     a.href = url
-    a.download = "sor.xlsx"
+    a.download = result.sorFileName
     a.target = "_blank"
     a.click()
     a.remove() //将a标签移除

@@ -145,7 +145,7 @@
         <el-checkbox label="ElectronicPriceInput">资源部管理部-电子资源开发</el-checkbox>
       </el-checkbox-group>
       <div>
-        <span>拒绝理由：</span>
+        <div style="margin: 10px 0">拒绝理由：</div>
         <el-input type="textarea" v-model="opinionDescription" />
       </div>
       <template #footer>
@@ -510,7 +510,14 @@ const setPriceBoardStateAgree = async (isAgree: boolean) => {
     if (isAgree) {
       res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value)
     } else {
-      res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
+      if (opinionDescription.value) {
+        res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
+      } else {
+        ElMessage({
+          type: "warning",
+          message: "拒绝理由必填"
+        })
+      }
     }
     if (res.success) {
       jumpTodoCenter()
