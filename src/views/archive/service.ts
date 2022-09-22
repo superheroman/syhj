@@ -15,10 +15,11 @@ export function GetDownloadList(data: {
 }
 
 // 归档文件下载
-export function PostDownloadListSave(data: { auditFlow?: number[] | [] }): any {
+export function PostDownloadListSave(data: any): any {
   return request({
-    url: "/api/services/app/AnalyseBoard/PostDownloadListSave",
-    method: "post",
-    data
+    url: "/api/services/app/AnalyseBoard/GetPigeonholeDownload",
+    method: "get",
+    data,
+    responseType: "blob"
   })
 }

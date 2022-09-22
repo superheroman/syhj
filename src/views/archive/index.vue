@@ -1,9 +1,9 @@
 <template>
   <div>
-    <el-card header="归档" @selection-change="handleSelectionChange">
-      <el-table :data="data.tableData" height="75vh">
+    <el-card header="归档">
+      <el-table :data="data.tableData" height="75vh" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column label="序号" />
+        <el-table-column type="index" label="序号" />
         <el-table-column prop="fileName" label="归档文件名称" />
         <el-table-column prop="productName" label="零件名称" />
         <el-table-column prop="quoteProjectName" label="核报价项目名称" />
@@ -23,6 +23,7 @@ import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { GetDownloadList, PostDownloadListSave } from "./service"
 import { PigeonholeDownloadTableModel } from "./data.type"
 import { ElMessage } from "element-plus"
+import { downloadFileZip } from "@/utils"
 
 //console.log('1-开始创建组件-setup')
 const init = async () => {
@@ -63,9 +64,11 @@ const handleDownload = async () => {
   }
   try {
     fullscreenLoading.value = true
-    await PostDownloadListSave({ auditFlow: ids })
+    console.log(ids)
+    let res = await PostDownloadListSave({ DownloadListSaveIds: ids })
+    downloadFileZip(res, "归档")
     fullscreenLoading.value = false
-    ElMessage.success("下载成功")
+    // ElMessage.success("下载成功")
   } catch {
     fullscreenLoading.value = false
   }
