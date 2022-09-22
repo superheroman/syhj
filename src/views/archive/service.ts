@@ -18,7 +18,7 @@ export function GetDownloadList(data: {
 export function PostDownloadListSave(data: any): any {
   return request({
     url: "/api/services/app/AnalyseBoard/GetPigeonholeDownload",
-    method: "get",
+    method: "post",
     data,
     responseType: "blob"
   })
