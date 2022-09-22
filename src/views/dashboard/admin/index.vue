@@ -144,6 +144,10 @@
         <el-checkbox label="StructPriceInput">资源部管理部-结构资源开发（产品单价录入）</el-checkbox>
         <el-checkbox label="ElectronicPriceInput">资源部管理部-电子资源开发</el-checkbox>
       </el-checkbox-group>
+      <div>
+        <span>拒绝理由：</span>
+        <el-input type="textarea" v-model="opinionDescription" />
+      </div>
       <template #footer>
         <span>
           <el-button @click="dialogVisible = false" v-havedone>取消</el-button>
@@ -213,6 +217,7 @@ let percentageCostChart: any = null
 let selectCostChart: any = null
 let dialogVisible = ref(false)
 let checkList = ref([])
+let opinionDescription = ref("")
 const fileList = ref<UploadUserFile[]>([])
 const data = reactive<Record<string, any>>({
   year: "",
@@ -496,16 +501,16 @@ const getGoTableChartData = async () => {
 
 // 同意该审核
 const setPriceBoardStateAgree = async (isAgree: boolean) => {
-  ElMessageBox[!isAgree ? "prompt" : "confirm"]("确定执行该操作?", "提示", {
+  ElMessageBox["confirm"]("确定执行该操作?", "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async (val) => {
+  }).then(async () => {
     let res: any
     if (isAgree) {
-      res = await SetPriceBoardState(auditFlowId, isAgree, val?.value)
+      res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value)
     } else {
-      res = await SetPriceBoardState(auditFlowId, isAgree, val?.value, checkList.value)
+      res = await SetPriceBoardState(auditFlowId, isAgree, opinionDescription.value, checkList.value)
     }
     if (res.success) {
       jumpTodoCenter()
