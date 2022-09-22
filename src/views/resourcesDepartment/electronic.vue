@@ -1,6 +1,6 @@
 <template>
   <div class="margin-top">
-    <el-card class="table-wrap" header="电子料单价录入界面">
+    <el-card class="table-wrap" header="电子料单价录入界面" v-loading="tableLoading">
       <el-table :data="electronicBomList" height="75vh">
         <el-table-column prop="categoryName" label="物料大类" width="180" fixed="left" />
         <el-table-column prop="typeName" label="物料种类" width="180" fixed="left" />
@@ -150,9 +150,12 @@ import { getExchangeRate } from "./../demandApply/service"
 import getQuery from "@/utils/getQuery"
 
 const { auditFlowId = 1, productId }: any = getQuery()
-console.log(auditFlowId, "auditFlowId")
+
 // 获取仓库的值
 const store = useUserStore()
+
+const tableLoading = ref(false)
+
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])
 
@@ -174,6 +177,7 @@ const fetchOptionsData = async () => {
   })
   exchangeSelectOptions.value = exchangeSelect.result.items || []
 }
+
 onBeforeMount(() => {
   console.log(store.userInfo, "store")
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
@@ -226,25 +230,31 @@ const handleEdit = (row: any, isEdit: boolean) => {
 // 根据汇率计算
 const handleCalculation = async (row: any, index: number) => {
   try {
+    tableLoading.value = true
     const { success, result } = await PostElectronicMaterialCalculate(row)
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result || {}), isEdit: true }
     console.log(success, "handleSubmit")
+    tableLoading.value = false
   } catch (err) {
     console.log
     ElMessage.error("计算失败~")
+    tableLoading.value = false
   }
 }
 
 // 根据原币计算
 const handleCalculationIginalCurrency = async (row: any, index: number) => {
   try {
+    tableLoading.value = true
     const { success, result } = await PosToriginalCurrencyCalculate(row)
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result || {}), isEdit: true }
+    tableLoading.value = false
     console.log(success, "handleSubmit")
   } catch (err) {
-    console.log
+    console.log(err, "[根据原币计算 计算失败]")
+    tableLoading.value = false
     ElMessage.error("计算失败~")
   }
 }
@@ -254,11 +264,5 @@ watchEffect(() => {})
 <style lang="scss">
 .margin-top {
   margin: 20px;
-}
-.input-number {
-  >>> .el-input-number__increase,
-  .el-input-number__decrease {
-    display: none !important;
-  }
 }
 </style>

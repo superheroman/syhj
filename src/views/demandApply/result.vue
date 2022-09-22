@@ -158,6 +158,7 @@ const fetchSopYear = async () => {
 const save = async () => {
   const { success }: any =
     (await PostAuditQuotationListSave({
+      auditFlowId,
       ...data.marketingQuotationData
     })) || {}
   if (success) ElMessage.success("保存成功！")

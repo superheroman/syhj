@@ -4,7 +4,7 @@
       <el-button m="2" type="primary" @click="queryModlueNumber">查看项目走量</el-button>
     </el-row>
     <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
-      <el-card m="2" :header="item.superTypeName">
+      <el-card m="2" :header="item.superTypeName" v-loading="item.loading">
         <el-table :data="item.structureMaterial" height="500">
           <el-table-column type="index" label="序号" width="80" fixed="left" />
           <el-table-column prop="categoryName" label="物料大类" width="150" fixed="left" />
@@ -218,12 +218,15 @@ const fetchSopYear = async () => {
 // 根据原币计算
 const handleCalculationIginalCurrency = async (row: any, bomIndex: number, iginalCurrencyIndex: number) => {
   try {
+    constructionBomList.value[bomIndex].loading = true
     const { success, result } = await ToriginalCurrencyStructural(row)
     if (!success && !result.length) throw Error()
     const res = { ...(result || {}), isEdit: true }
     constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex] = res
+    constructionBomList.value[bomIndex].loading = false
   } catch (err) {
-    console.log
+    constructionBomList.value[bomIndex].loading = false
+    console.log(err, "[根据原币计算 计算失败]")
     ElMessage.error("计算失败~")
   }
 }

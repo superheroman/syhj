@@ -266,8 +266,8 @@ onMounted(() => {
 })
 
 const init = async () => {
-  initChart()
-  fetchOptionsData()
+  await initChart()
+  await fetchOptionsData()
   if (!productId) return false
   await fetchAllData()
   await getGoTableChartData()

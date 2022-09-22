@@ -200,7 +200,8 @@ import {
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
 import router from "@/router"
-import { getSorFile, getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
+import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
+import { CommonDownloadFile } from "@/api/bom"
 
 const { auditFlowId, productId }: any = getQuery()
 
@@ -304,14 +305,15 @@ const downLoad3DExploded = async () => {
 }
 
 const getSORFileName = async () => {
-  const res: any = await getSorByAuditFlowId(auditFlowId)
-  data.sorFileName = res.result.sorFileName
+  const { result }: any = await getSorByAuditFlowId(auditFlowId)
+  data.sorFileName = result.sorFileName
+  data.fileId = result.sorFileId
 }
 
 // SOR下载
 const downLoadSOR = async () => {
   if (!data.sorFileName) return false
-  let res: any = await getSorFile(auditFlowId)
+  let res: any = await CommonDownloadFile(data.fileId)
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)

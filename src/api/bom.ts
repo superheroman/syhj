@@ -226,10 +226,10 @@ export function DownloadFile(num: number) {
   })
 }
 
-export function CommonDownloadFile(fileId: number) {
+export function CommonDownloadFile(fileId: number | null) {
   return request({
     url: "/api/services/app/FileCommonService/DownloadFile",
-    method: "post",
+    method: "get",
     responseType: "blob",
     data: {
       fileId

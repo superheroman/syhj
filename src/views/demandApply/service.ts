@@ -46,7 +46,7 @@ export function getPriceEvaluationStartData(auditFlowId: any) {
 export function PostAuditQuotationListSave(data: any) {
   return request({
     url: "/api/services/app/AnalyseBoard/PostAuditQuotationListSave",
-    method: "get",
+    method: "post",
     data
   })
 }
