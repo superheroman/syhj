@@ -10,9 +10,10 @@
               :show-file-list="false"
               action="/api/services/app/NrePricing/PostExperimentItemsSingleExcel"
               :on-success="handleSuccess"
-              :on-error="handleError"
               :on-change="handleFileChange"
               name="fileName"
+              :on-progress="handleGetUploadProgress"
+              :on-error="handleUploadError"
             >
               <el-button style="margin-top: 8px">NRE实验费模板上传</el-button>
             </el-upload>
@@ -105,6 +106,7 @@ import getQuery from "@/utils/getQuery"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 const { auditFlowId, productId }: any = getQuery()
 
@@ -176,10 +178,6 @@ const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
   console.log(res, "NRE实验费模板上传")
   data.experimentItems = res.result || []
   ElMessage.success("上传成功！")
-}
-
-const handleError = () => {
-  ElMessage.error("上传失败")
 }
 
 const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {

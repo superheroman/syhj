@@ -604,8 +604,10 @@
                 v-model:file-list="fileList"
                 action="/api/services/app/FileCommonService/UploadFile"
                 :on-success="handleSuccess"
+                :on-error="handleUploadError"
                 :on-change="handleFileChange"
                 multiple
+                :on-progress="handleGetUploadProgress"
               >
                 <el-button>SOR文件上传</el-button>
               </el-upload>
@@ -642,6 +644,7 @@ import type { FormInstance, FormRules } from "element-plus"
 import { ElMessage } from "element-plus"
 // import { SearchPerson } from "@/components/SearchPerson"
 import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 import dayjs from "dayjs"
 const refForm = ref<FormInstance>()

@@ -8,6 +8,8 @@
             action="/api/services/app/StructionBom/LoadExcel"
             :on-success="handleSuccess"
             :show-file-list="false"
+            :on-progress="handleGetUploadProgress"
+            :on-error="handleUploadError"
           >
             <el-button type="primary">结构料上传</el-button>
           </el-upload>
@@ -135,10 +137,11 @@ import {
 } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 let auditFlowId: any = null
 let productId: any = null
-const data = reactive({
+const data = reactive<any>({
   tableData: [],
   setVisible: false,
   logisticsForm: {
