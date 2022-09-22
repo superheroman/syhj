@@ -17,7 +17,7 @@ export function GetDownloadList(data: {
 // 归档文件下载
 export function PostDownloadListSave(data: any): any {
   return request({
-    url: "/api/services/app/AnalyseBoard/GetPigeonholeDownload",
+    url: "/api/services/app/AnalyseBoard/PostPigeonholeDownload",
     method: "post",
     data,
     responseType: "blob"

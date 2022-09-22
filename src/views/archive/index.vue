@@ -65,7 +65,7 @@ const handleDownload = async () => {
   try {
     fullscreenLoading.value = true
     console.log(ids)
-    let res = await PostDownloadListSave({ DownloadListSaveIds: ids })
+    let res = await PostDownloadListSave(ids)
     downloadFileZip(res, "归档")
     fullscreenLoading.value = false
     // ElMessage.success("下载成功")
