@@ -6,12 +6,13 @@
           <span>工序工时导入</span>
           <el-row align="middle">
             <el-upload
+              class="m-2"
               action="/api/services/app/WorkingHours/UploadExcel"
               :on-success="handleSuccess"
-              :on-error="handleError"
               :show-file-list="false"
-              class="m-2"
               :data="{ auditFlowId: data.auditFlowId }"
+              :on-progress="handleGetUploadProgress"
+              :on-error="handleUploadError"
             >
               <el-button type="primary">工序工时上传</el-button>
             </el-upload>
@@ -202,6 +203,7 @@ import type { FormInstance } from "element-plus"
 import router from "@/router"
 import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 import { CommonDownloadFile } from "@/api/bom"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 const { auditFlowId, productId }: any = getQuery()
 
@@ -261,9 +263,6 @@ const formatTableColumnData = () => {
     equipmentDetails: new Array(formatterArr("equipmentPart"))
   }
   data.humanMachineHoursDetailList = data.tableData[0]?.humanMachineHoursDetailList || []
-}
-const handleError = () => {
-  ElMessage.error("上传失败")
 }
 
 // 工序工时模板下载

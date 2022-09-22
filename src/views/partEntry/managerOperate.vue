@@ -66,7 +66,13 @@
               <!-- <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
                 <el-button type="primary">文件上传</el-button>
               </el-upload> -->
-              <el-upload action="/api/services/app/FileCommonService/UploadFile" :on-success="handleSuccess" :limit="1">
+              <el-upload
+                action="/api/services/app/FileCommonService/UploadFile"
+                :on-progress="handleGetUploadProgress"
+                :on-error="handleUploadError"
+                :on-success="handleSuccess"
+                :limit="1"
+              >
                 <el-button type="primary" v-havedone>文件上传</el-button>
               </el-upload>
             </el-form-item>
@@ -89,11 +95,12 @@
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
-
 import { PostManagement, getManagement } from "@/api/partEntry"
 import type { UploadProps } from "element-plus"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+
 let formData: any = reactive({
   fileId: null,
   isFirst: true,

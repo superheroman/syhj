@@ -7,7 +7,9 @@
           <el-upload
             action="/api/services/app/ElectronicBom/UploadExcel"
             :on-success="handleSuccess"
+            :on-error="handleUploadError"
             :show-file-list="false"
+            :on-progress="handleGetUploadProgress"
           >
             <el-button type="primary">电子料上传</el-button>
           </el-upload>
@@ -68,6 +70,7 @@ import { ElMessage } from "element-plus"
 import { SaveElectronicBom, DownloadFile, GetElectronicBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 let auditFlowId: any = null
 let productId: any = null

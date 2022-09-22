@@ -7,6 +7,8 @@
             action="/api/services/app/UnitPriceLibrary/PostUInitPriceForm"
             :on-success="handleSuccess"
             :show-file-list="false"
+            :on-progress="handleGetUploadProgress"
+            :on-error="handleUploadError"
           >
             <el-button type="primary">单价库导入</el-button>
           </el-upload>
@@ -36,6 +38,8 @@ import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
 import unitCols from "./constant"
 import { getUInitPrice } from "./service"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+
 const data = reactive({
   tableData: [],
   setVisible: false,
