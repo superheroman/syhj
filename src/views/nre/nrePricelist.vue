@@ -59,7 +59,7 @@
         show-summary
       >
         <el-table-column type="index" width="50" />
-        <el-table-column prop="partName" label="事由" />
+        <el-table-column prop="reasonsName" label="事由" />
         <el-table-column prop="peopleCount" label="人数" />
         <el-table-column prop="costSky" label="费用/天" />
         <el-table-column prop="skyCount" label="天数" />
