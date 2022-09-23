@@ -68,7 +68,7 @@
           <span>汇总分析表</span>
         </div>
       </template>
-      <el-table :data="data.pooledAnalysis" style="width: 100%" border v-if="data.pooledAnalysis.length > 0">
+      <el-table :data="data.pooledAnalysis" border v-if="data.pooledAnalysis.length > 0">
         <el-table-column label="项目名称" prop="projectName" width="150" />
         <el-table-column
           :label="item.grossMargin + '%'"
@@ -76,8 +76,11 @@
           :key="index"
           width="150"
         >
-          <template #default="scope">
-            <span>{{ scope.row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }} </span>
+          <template #default="{ row }">
+            <span v-if="row.projectName !== '毛利率'"
+              >{{ row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }}
+            </span>
+            <span v-else>{{ `${row.grossMarginList[index]?.grossMarginNumber.toFixed(2) || 0} %` }} </span>
           </template>
         </el-table-column>
       </el-table>
@@ -87,22 +90,22 @@
         <el-button @click="openDialog" type="primary">年份维度对比</el-button>
       </el-row>
       <el-table :data="data.productBoard" border>
-        <el-table-column label="产品" prop="productName" width="150" />
-        <el-table-column label="单车产品数量" prop="productNumber" width="150" />
+        <el-table-column label="产品" prop="productName" />
+        <el-table-column label="单车产品数量" prop="productNumber" />
         <el-table-column label="目标价（内部）" width="300">
-          <el-table-column label="单价" prop="interiorTargetUnitPrice" width="150">
+          <el-table-column label="单价" prop="interiorTargetUnitPrice">
             <template #default="{ row }">
               {{ row?.interiorTargetUnitPrice?.toFixed(2) }}
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="interiorTargetGrossMargin" width="150">
+          <el-table-column label="毛利率" prop="interiorTargetGrossMargin">
             <template #default="{ row }">
-              {{ row.interiorTargetGrossMargin.toFixed(2) }}
+              {{ `${row.interiorTargetGrossMargin?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="目标价（客户）" width="300">
-          <el-table-column label="单价" prop="clientTargetUnitPrice" width="150">
+        <el-table-column label="目标价（客户）">
+          <el-table-column label="单价" prop="clientTargetUnitPrice">
             <template #default="scope">
               <el-input v-model="scope.row.clientTargetUnitPrice">
                 <template #append>
@@ -121,14 +124,14 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="clientTargetGrossMargin" width="150">
+          <el-table-column label="毛利率" prop="clientTargetGrossMargin">
             <template #default="{ row }">
-              {{ row.clientTargetGrossMargin?.toFixed(2) || "-" }}
+              {{ `${row.clientTargetGrossMargin?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="本次报价" width="300">
-          <el-table-column label="单价" width="150">
+        <el-table-column label="本次报价">
+          <el-table-column label="单价">
             <template #default="scope">
               <el-input v-model="scope.row.offerUnitPrice">
                 <template #append>
@@ -142,9 +145,9 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" prop="offeGrossMargin" width="150">
+          <el-table-column label="毛利率" prop="offeGrossMargin">
             <template #default="{ row }">
-              {{ row.offeGrossMargin?.toFixed(2) || "-" }}
+              {{ `${row.offeGrossMargin?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -154,43 +157,41 @@
           :key="index"
           width="300"
         >
-          <el-table-column label="单价" width="150">
+          <el-table-column label="单价">
             <template>
               <div>{{ item.unitPrice.toFixed(2) }}</div>
             </template>
           </el-table-column>
-          <el-table-column label="毛利率" width="150">
+          <el-table-column label="毛利率">
             <template>
-              <div>{{ item.grossMargin.toFixed(2) }}</div>
+              <div>{{ `${item.grossMargin.toFixed(2)} %` }}</div>
             </template>
           </el-table-column>
         </el-table-column>
       </el-table>
       <el-descriptions title="" border :column="1">
-        <el-descriptions-item label="目标价(内部)整套单价">{{
-          calculatedValue("interiorTargetUnitPrice")
-        }}</el-descriptions-item>
+        <el-descriptions-item label="目标价(内部)整套单价">{{ data.allInteriorUnitPrice }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套单价">{{
           calculatedValue("clientTargetUnitPrice")
         }}</el-descriptions-item>
         <el-descriptions-item label="本次报价整套单价">{{ calculatedValue("offerUnitPrice") }}</el-descriptions-item>
         <el-descriptions-item label="目标价(内部)平均单价">{{
-          calculatedValue("interiorTargetUnitPrice", "average")
+          calculatedValue("interiorTargetUnitPrice", "average").toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)平均单价">{{
-          calculatedValue("clientTargetUnitPrice", "average")
+          calculatedValue("clientTargetUnitPrice", "average").toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="本次报价平均单价">{{
-          calculatedValue("offerUnitPrice", "average")
+          calculatedValue("offerUnitPrice", "average").toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(内部)整套毛利率">{{
-          Number(data.allClientGrossMargin).toFixed(2)
+          `${Number(data.allClientGrossMargin).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
-          Number(data.allInteriorGrossMargin).toFixed(2)
+          `${Number(data.allInteriorGrossMargin).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="本次报价整套毛利率">{{
-          calculatedValue("grossMargin")?.toFixed(2)
+          `${calculatedValue("offeGrossMargin")?.toFixed(2) || 0} %`
         }}</el-descriptions-item>
       </el-descriptions>
       <!-- <div style="float: right; margin: 20px 0">
@@ -200,14 +201,14 @@
 
     <el-card class="card">
       <el-table :data="data.projectBoard" style="width: 100%" border>
-        <el-table-column label="项目" prop="projectName" width="150" />
-        <el-table-column label="目标价（内部）" width="150">
+        <el-table-column label="项目" prop="projectName" />
+        <el-table-column label="目标价（内部）">
           <template #default="scope">
             <!-- <div>{{ scope.row.interiorTarget?.grossMargin.toFixed(2) }}</div> -->
             <div>{{ scope.row.interiorTarget?.grossMarginNumber.toFixed(2) }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="目标价（客户）" width="150">
+        <el-table-column label="目标价（客户）">
           <template #default="scope">
             <!-- <div>{{ scope.row.clientTarget?.grossMargin.toFixed(2) }}</div> -->
             <div>{{ scope.row.clientTarget?.grossMarginNumber.toFixed(2) }}</div>
@@ -235,12 +236,16 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <div id="unitpriceChart" />
-    <div id="revenueGrossMarginChart" />
-    <div style="float: right">
-      <el-button @click="toNREPriceList">在线预览NRE核价表</el-button>
-      <el-button @click="toProductPriceList">在线预览核价表</el-button>
-      <el-button @click="toDemandApplyResult">点击生成待审批的报价表</el-button>
+    <el-card m="2">
+      <div id="unitpriceChart" />
+    </el-card>
+    <el-card m="2">
+      <div id="revenueGrossMarginChart" />
+    </el-card>
+    <div style="float: right; padding: 20px 0" m="2">
+      <el-button @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
+      <el-button @click="toProductPriceList" type="primary">在线预览核价表</el-button>
+      <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button>
     </div>
     <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
       <div v-for="item in data.dialogTable" :key="item" class="common-card">
@@ -434,7 +439,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPr
   const { grossMargin } = result?.productBoardGrosses[0] || ""
 
   data.productBoard[index][key] = grossMargin
-  const grossMarginValue = calculatedValue("grossMargin") // 本次报价整套毛利率
+  const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
   spreadSheetCalculate(grossMarginValue, AllUnitPrice)
 }, 300)
@@ -462,8 +467,8 @@ const setData = () => {
     type: "line",
     data: [
       Number(data.allClientGrossMargin).toFixed(2),
-      Number(data.allInteriorGrossMargin).toFixed(2),
-      calculatedValue("grossMargin")?.toFixed(2)
+      Number(data.allInteriorGrossMargin).toFixed(2)
+      // calculatedValue("offeGrossMargin")?.toFixed(2)
     ]
   })
   chart1.setOption(ProjectUnitPrice)
@@ -553,7 +558,10 @@ const downLoad = async () => {
 const toProductPriceList = () => {
   router.push({
     path: "/nupriceManagement/productPriceList",
-    query
+    query: {
+      ...query,
+      disabled: true
+    }
   })
 }
 
@@ -576,7 +584,7 @@ const openDialog = () => {
 }
 
 const getDialogData = async () => {
-  const grossMargin = calculatedValue("grossMargin") // 本次报价整套毛利率
+  const grossMargin = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   const unitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
   const { result } = await GetYearDimensionalityComparison({
     id: data.auditFlowId,
@@ -589,8 +597,11 @@ const getDialogData = async () => {
 
 const calculatedValue = (key: string, type?: string) => {
   if (data.productBoard.length === 0) return 0
-  if (data.productBoard.length === 1) return data.productBoard[0][key]
-  const totolValue = data.productBoard?.reduce((a: any, b: any) => a[key] + (b[key] || 0)) || 0
+  if (data.productBoard.length === 1) return data.productBoard[0][key] || 0
+  const counts = data.productBoard.map((item: any) => Number(item[key] || 0))
+  console.log(counts, key, "")
+  const totolValue = counts?.reduce((a: any, b: any) => a + b)
+  // console.log(data.productBoard[0][key], totolValue, key)
   if (!type) return totolValue
   return totolValue / data.productBoard.length
 }
@@ -614,6 +625,8 @@ const init = async () => {
     data.pooledAnalysis = pooledAnalysis
     data.productBoard = productBoard.productBoard
     data.allInteriorGrossMargin = productBoard.allInteriorGrossMargin
+    data.allInteriorUnitPrice = productBoard.allInteriorUnitPrice
+    data.allClientUnitPrice = productBoard.allClientUnitPrice
     data.allClientGrossMargin = productBoard.allClientGrossMargin
     data.projectBoard = projectBoard
     setData()

@@ -108,9 +108,6 @@
         </el-row>
       </el-card>
       <el-card style="margin-top: 10px">
-        <div>
-          产品投入量：<el-input placeholder="请输入产品投入量" v-model="data.productInputs" style="width: 200px" />
-        </div>
         <el-upload
           v-model:file-list="fileList"
           :show-file-list="false"
@@ -119,7 +116,7 @@
           :on-change="handleFileChange"
           style="float: right"
         >
-          <el-button>TR方案上传</el-button>
+          <el-button type="primary">TR方案上传</el-button>
         </el-upload>
         <!-- 产品总成本推移图 -->
         <div id="selectCostChart" />

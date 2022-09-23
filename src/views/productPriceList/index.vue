@@ -4,7 +4,7 @@
       <el-tab-pane label="项目核价表" name="normal">
         <EZFilter :filterNnum="data.filterNnum" :show-btn="true" :onSubmit="fetchPriceEvaluationTable" />
       </el-tab-pane>
-      <el-tab-pane label="生成的项目核价表" name="result">
+      <el-tab-pane label="生成的项目核价表" name="result" :disabled="data.disabled">
         <el-row justify="space-between">
           <div>
             是否为全生命周期：
@@ -122,7 +122,7 @@ import { getYears } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
 import { formatDateTime } from "@/utils/index"
 
-const { auditFlowId, productId } = getQuery()
+const { auditFlowId, productId, disabled } = getQuery()
 
 /**
  * 路由对象
@@ -166,7 +166,8 @@ const data = reactive<any>({
   pageType: "normal",
   preparedDate: "",
   auditDate: "",
-  approvalDate: ""
+  approvalDate: "",
+  disabled: false
 })
 
 const options = [
@@ -244,6 +245,7 @@ onBeforeMount(() => {
 onMounted(async () => {
   fetchSopYear()
   // handleChangePageType(data.pageType)
+  data.disabled = disabled
 })
 
 const handleChangePageType = async (pageType: any) => {
