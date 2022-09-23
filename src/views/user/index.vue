@@ -19,6 +19,8 @@
         :show-file-list="false"
         style="margin-left: 20px"
         name="excle"
+        :on-progress="handleGetUploadProgress"
+        :on-error="handleUploadError"
       >
         <el-button type="primary">用户导入</el-button>
       </el-upload>
@@ -36,7 +38,7 @@
             size="large"
             active-text="激活"
             inactive-text="关闭"
-            @change="(val) => activeChange(val, scope.row)"
+            @change="(val: any) => activeChange(val, scope.row)"
           />
         </template>
       </el-table-column>
@@ -149,6 +151,8 @@ import {
 } from "./service"
 import { getRootDepartment } from "@/api/departmentManage"
 import type { FormInstance } from "element-plus"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+
 const userForm = ref<FormInstance>()
 /**
  * 路由对象
