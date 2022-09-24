@@ -357,7 +357,8 @@ const toBomVerifyConstruction = () => {
     path: "/bomView/struc",
     query: {
       auditFlowId,
-      productId
+      productId,
+      right: 1
     }
   })
 }
