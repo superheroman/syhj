@@ -87,7 +87,7 @@
         <el-button class="margin-top" @click="handleCalculation" type="primary"> 计算 </el-button>
       </el-row> -->
     </el-card>
-    <el-row justify="end" style="margin-top: 20px">
+    <el-row justify="end" style="margin-top: 20px" v-if="data.auditFlowId && data.productId">
       <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
       <el-button type="danger" @click="handleSetBomState(false)" v-havedone>拒绝</el-button>
     </el-row>
@@ -113,6 +113,11 @@ const loading = ref(true)
 // 表单子列
 const allColums = reactive<any>({
   sop: []
+})
+
+const data = reactive({
+  auditFlowId,
+  productId
 })
 
 const exchangeSelectOptions = ref<any>([])

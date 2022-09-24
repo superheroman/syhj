@@ -20,7 +20,7 @@
             <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
             <el-button class="m-2" type="primary" @click="downLoad3DExploded">3D爆炸图下载</el-button>
             <el-button class="m-2" type="primary" @click="toModuleNumber">项目走量查看</el-button>
-            <el-button class="m-2" type="primary" @click="toBomVerifyConstruction">结构bom单价审核</el-button>
+            <el-button class="m-2" type="primary" @click="toBomVerifyConstruction">结构bom查看</el-button>
           </el-row>
         </el-row>
       </template>
@@ -204,6 +204,7 @@ import router from "@/router"
 import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 import { CommonDownloadFile } from "@/api/bom"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+import { GetPicture3DByAuditFlowId } from "./service"
 
 const { auditFlowId, productId }: any = getQuery()
 
@@ -224,7 +225,11 @@ const data = reactive<any>({
   years: [],
   isSaved: false,
   auditFlowId: null,
-  fileName: ""
+  fileName: "",
+  picture3D: {
+    fileName: "",
+    id: ""
+  }
 })
 
 const tangentFormRef = ref<FormInstance>()
@@ -286,7 +291,9 @@ const downLoadTemplate = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  let res: any = await downloadWorkingHoursInfo()
+  await getPicture3DByAuditFlowId()
+  if (!data.picture3D.id) return false
+  let res: any = await CommonDownloadFile(data.picture3D.id)
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
@@ -295,7 +302,7 @@ const downLoad3DExploded = async () => {
     let a = document.createElement("a")
     document.body.appendChild(a) //此处增加了将创建的添加到body当中
     a.href = url
-    a.download = "模板文件.xlsx"
+    a.download = data.picture3D.fileName
     a.target = "_blank"
     a.click()
     a.remove() //将a标签移除
@@ -307,6 +314,12 @@ const getSORFileName = async () => {
   const { result }: any = await getSorByAuditFlowId(auditFlowId)
   data.sorFileName = result.sorFileName
   data.fileId = result.sorFileId
+}
+
+const getPicture3DByAuditFlowId = async () => {
+  const { result }: any = await GetPicture3DByAuditFlowId(auditFlowId)
+  data.picture3D.fileName = result.sorFileName
+  data.picture3D.id = result.sorFileId
 }
 
 // SOR下载
@@ -341,7 +354,7 @@ const toModuleNumber = () => {
 
 const toBomVerifyConstruction = () => {
   router.push({
-    path: "/bomVerify/construction",
+    path: "/bomView/struc",
     query: {
       auditFlowId,
       productId

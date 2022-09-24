@@ -14,7 +14,7 @@
           <el-table-column prop="sapItemNum" label="物料编号" width="150" />
           <el-table-column prop="drawingNumName" label="图号名称" width="150" />
           <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
-          <el-table-column prop="sapItemName" label="材料" width="150" />
+          <el-table-column prop="materialName" label="材料" width="150" />
           <el-table-column prop="weightNumber" label="重量g" width="150" />
           <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
           <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
@@ -78,7 +78,7 @@
         <el-table-column prop="peopleName" label="确认人" />
       </el-table>
     </el-card>
-    <el-row justify="end" style="margin-top: 20px">
+    <el-row justify="end" style="margin-top: 20px" v-if="data.auditFlowId && data.productId">
       <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
       <el-button type="danger" @click="handleSetBomState(false)" v-havedone>拒绝</el-button>
     </el-row>
@@ -105,6 +105,11 @@ const loading = ref(false)
 // 表单子列
 const allColums = reactive<any>({
   sop: []
+})
+
+const data = reactive({
+  auditFlowId,
+  productId
 })
 
 const exchangeSelectOptions = ref<any>([])

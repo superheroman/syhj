@@ -70,10 +70,10 @@ export function QueryWorkingHour(auditFlowId: number, productId: number) {
   })
 }
 
-/**获取SOR文件 */
-export function GetSorFileId(auditFlowId: number) {
+/**获取3D爆炸图 */
+export function GetPicture3DByAuditFlowId(auditFlowId: number) {
   return request({
-    url: "/api/services/app/ProductionControl/GetSorFileId",
+    url: "/api/services/app/WorkingHours/GetPicture3DByAuditFlowId",
     method: "get",
     data: {
       auditFlowId
