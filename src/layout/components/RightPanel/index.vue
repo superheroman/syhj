@@ -2,7 +2,7 @@
 // import { Setting } from "@element-plus/icons-vue"
 import { ref, reactive, onMounted, watch } from "vue"
 import { useProductStore } from "@/store/modules/productList"
-import getQuery from "@/utils/getQuery"
+// import getQuery from "@/utils/getQuery"
 import { useRoute, useRouter } from "vue-router"
 import { wahiteRotes } from "./common/const"
 import IntroJs from "intro.js" // introjs库
@@ -41,7 +41,6 @@ watch(
 )
 
 onMounted(() => {
-  console.log(route, "route")
   // 判断当前页面路由是否在白名单内
   if (wahiteRotes.includes(route.name)) {
     showPanel.value = true
@@ -52,7 +51,7 @@ onMounted(() => {
 const init = async () => {
   // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
   try {
-    const { productId, auditFlowId } = getQuery() || {}
+    const { productId, auditFlowId } = route.query
     if (auditFlowId) {
       await productStore.setProductList(Number(auditFlowId))
     }
