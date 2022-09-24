@@ -7,7 +7,7 @@ export interface MouldSummaryMethodProps<T = MouldInventoryModel> {
   data: T[]
 }
 
-export const getMouldSummaries = (param: MouldSummaryMethodProps, name?: string) => {
+export const getMouldSummaries = (param: MouldSummaryMethodProps, name?: string, key?: string) => {
   const { columns, data } = param
   const sums: string[] = []
   columns.forEach((_, index) => {
@@ -15,7 +15,12 @@ export const getMouldSummaries = (param: MouldSummaryMethodProps, name?: string)
       sums[index] = `${name || "模具费"}合计`
       return
     }
-    const values = data.map((item) => Number((item.count || 0) * (item.unitPrice || 0)))
+    let values: any[] = []
+    if (key) {
+      values = data.map((item: any) => item[key])
+    } else {
+      values = data.map((item) => Number((item.count || 0) * (item.unitPrice || 0)))
+    }
     if (!values.every((value) => Number.isNaN(value)) && index === 2) {
       sums[index] = `¥ ${values.reduce((prev, curr) => {
         if (!Number.isNaN(curr)) {

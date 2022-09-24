@@ -55,7 +55,7 @@
         :data="data.travelExpense"
         style="width: 100%"
         border
-        :summary-method="(val) => getMouldSummaries(val, '差旅费用')"
+        :summary-method="(val) => getMouldSummaries(val, '差旅费用', 'cost')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -72,7 +72,7 @@
         :data="data.restsCost"
         style="width: 100%"
         border
-        :summary-method="(val) => getMouldSummaries(val, '其他费用')"
+        :summary-method="(val) => getMouldSummaries(val, '其他费用', 'cost')"
         show-summary
       >
         <el-table-column type="index" width="50" />
