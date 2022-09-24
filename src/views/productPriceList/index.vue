@@ -27,6 +27,8 @@
 
       <el-table :data="data.material" border>
         <el-table-column type="index" width="50" />
+        <el-table-column label="超级大种类" prop="superType" width="180" />
+        <el-table-column label="超级大类" prop="categoryName" width="180" />
         <el-table-column label="sap" prop="sap" width="180" />
         <el-table-column label="材料名称" prop="materialName" width="180" />
         <el-table-column label="装配数量" prop="assemblyCount" width="180" />
