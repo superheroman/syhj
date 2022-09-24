@@ -175,8 +175,8 @@
           </el-table>
           <el-row align="middle" justify="end" style="margin-top: 20px">
             <el-button type="primary" @click="handleSaveTangentHours(tangentFormRef)" v-havedone>保存</el-button>
-            <el-button type="primary" :disabled="!data.isSaved" @click="handleSubmit(tangentFormRef)" v-havedone
-              >提交</el-button
+            <el-button type="warning" :disabled="!data.isSaved" @click="handleSubmit(tangentFormRef)" v-havedone
+              >提交流程</el-button
             >
           </el-row>
         </el-form>

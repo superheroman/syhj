@@ -3,7 +3,7 @@ import { useUserStoreHook } from "@/store/modules/user"
 import { ElMessage } from "element-plus"
 import { get } from "lodash-es"
 import { getToken } from "@/utils/cookies"
-import { ElLoading } from "element-plus"
+// import { ElLoading } from "element-plus"
 
 /** 创建请求实例 */
 function createService() {
@@ -117,18 +117,18 @@ function createRequestFunction(service: AxiosInstance) {
       },
       timeout: 300000,
       // baseURL: import.meta.env.VITE_BASE_API,
-      data: {},
-      onDownloadProgress: function (progressEvent: any) {
-        // 对原生进度事件的处理
-        const loadingInstance = ElLoading.service({
-          fullscreen: true,
-          text: "加载中"
-        })
-        console.log(((progressEvent.loaded / progressEvent.total) * 100).toFixed(2) + "%")
-        if (((progressEvent.loaded / progressEvent.total) * 100).toFixed(2) === "100.00") {
-          loadingInstance.close()
-        }
-      }
+      data: {}
+      // onDownloadProgress: function (progressEvent: any) {
+      //   // 对原生进度事件的处理
+      //   const loadingInstance = ElLoading.service({
+      //     fullscreen: true,
+      //     text: "加载中"
+      //   })
+      //   console.log(((progressEvent.loaded / progressEvent.total) * 100).toFixed(2) + "%")
+      //   if (((progressEvent.loaded / progressEvent.total) * 100).toFixed(2) === "100.00") {
+      //     loadingInstance.close()
+      //   }
+      // }
       // onUploadProgress: function (progressEvent: any) {
       //   const loadingInstance = ElLoading.service({
       //     fullscreen: true,

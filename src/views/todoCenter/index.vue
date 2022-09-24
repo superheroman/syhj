@@ -182,18 +182,39 @@ onMounted(async () => {
   let res: any = await getAllAuditFlowInfos()
   // 待办2
   if (res.result) {
+    let notShowList: any = []
     auditFlowIdInfoList.value = _.cloneDeep(res.result)
-    auditFlowIdInfoList.value.forEach((item: any) => {
+    auditFlowIdInfoList.value.forEach((item: any, index: number) => {
       item.auditFlowRightDetailList = item.auditFlowRightDetailList.filter((i: any) => {
         return i.right === 2
       })
+      if (item.auditFlowRightDetailList.length === 0) {
+        notShowList.push(index)
+      }
+    })
+    notShowList.sort((a: number, b: number) => {
+      return b - a
+    })
+    notShowList.forEach((index: number) => {
+      auditFlowIdInfoList.value.splice(index, 1)
     })
     // 已办1
+
+    let notShowListhave: any = []
     auditFlowIdInfoListCheck.value = _.cloneDeep(res.result)
-    auditFlowIdInfoListCheck.value.forEach((item: any) => {
+    auditFlowIdInfoListCheck.value.forEach((item: any, index: number) => {
       item.auditFlowRightDetailList = item.auditFlowRightDetailList.filter((i: any) => {
         return i.right === 1
       })
+      if (item.auditFlowRightDetailList.length === 0) {
+        notShowListhave.push(index)
+      }
+    })
+    notShowListhave.sort((a: number, b: number) => {
+      return b - a
+    })
+    notShowListhave.forEach((index: number) => {
+      auditFlowIdInfoListCheck.value.splice(index, 1)
     })
   }
   try {

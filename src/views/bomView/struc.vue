@@ -70,7 +70,8 @@ const data = reactive({
 //   }
 // }
 const agree = async (bomCheckType: number, isAgree: boolean) => {
-  ElMessageBox[!isAgree ? "prompt" : "confirm"](`您确定要${isAgree ? "同意" : "拒绝"}嘛？`, "请审核", {
+  let text = isAgree ? "您确定要同意嘛？" : "请输入拒绝理由"
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](text, "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
