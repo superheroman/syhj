@@ -64,3 +64,11 @@ export function getDownloadMessage(id: number, fileName: string) {
     responseType: "blob"
   })
 }
+
+export function PostIsOfferSave(data: any): any {
+  return request({
+    url: "/api/services/app/AnalyseBoard/PostIsOfferSave",
+    method: "post",
+    data
+  })
+}

@@ -246,6 +246,7 @@
       <el-button @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
       <el-button @click="toProductPriceList" type="primary">在线预览核价表</el-button>
       <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button>
+      <el-button @click="save" type="primary">保存</el-button>
     </div>
     <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
       <div v-for="item in data.dialogTable" :key="item" class="common-card">
@@ -283,7 +284,8 @@ import {
   getSpreadSheetCalculate,
   postIsOffer,
   getDownloadMessage,
-  GetYearDimensionalityComparison
+  GetYearDimensionalityComparison,
+  PostIsOfferSave
 } from "./service"
 import { NreMarketingDepartmentModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
@@ -554,7 +556,35 @@ const downLoad = async () => {
     a.remove() //将a标签移除
   }
 }
-
+//保存
+const save = async () => {
+  ElMessageBox.confirm("确定执行该操作?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning"
+  }).then(async () => {
+    let res = await PostIsOfferSave({
+      unitPrice: data.unitPrice,
+      pooledAnalysis: data.pooledAnalysis,
+      productBoard: {
+        allInteriorGrossMargin: data.allInteriorGrossMargin,
+        allClientGrossMargin: data.allClientGrossMargin,
+        productBoard: data.productBoard
+      },
+      projectBoard: data.projectBoard,
+      // isOffer,不清楚是否需要这个字段
+      auditFlowId: data.auditFlowId,
+      nre: data.nre
+    })
+    if (res.success) {
+      router.push({
+        path: "/demandApply/result",
+        query
+      })
+      ElMessage.success("操作成功")
+    }
+  })
+}
 const toProductPriceList = () => {
   router.push({
     path: "/nupriceManagement/productPriceList",
