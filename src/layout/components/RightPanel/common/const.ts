@@ -23,6 +23,5 @@ export const wahiteRotes: any[] = [
   "Dashboard", //核价看板
   "elecView",
   "strucView",
-  "processImport", // 工序工时导入
-  "archive" // 归档
+  "processImport" // 工序工时导入
 ]
