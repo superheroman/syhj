@@ -115,6 +115,8 @@
           :on-success="handleSuccess"
           :on-change="handleFileChange"
           style="float: right"
+          :on-progress="handleGetUploadProgress"
+          :on-error="handleUploadError"
         >
           <el-button type="primary">TR方案上传</el-button>
         </el-upload>
@@ -205,6 +207,7 @@ import debounce from "lodash/debounce"
 import * as echarts from "echarts"
 import useJump from "@/hook/useJump"
 import router from "@/router"
+import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()

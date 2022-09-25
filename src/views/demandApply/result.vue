@@ -84,7 +84,11 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" />
+        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission">
+          <template #default="{ row }">
+            {{ row.grossMarginCommission?.toFixed(2) || 0 }}
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
     <el-card header="费用表：" m="2">
