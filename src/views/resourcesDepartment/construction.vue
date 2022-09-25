@@ -50,7 +50,6 @@
                   v-model="scope.row.iginalCurrency[iginalCurrencyIndex].value"
                   controls-position="right"
                   :min="0"
-                  @blur="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
                   @keyup.enter="handleCalculationIginalCurrency(scope.row, bomIndex, scope.$index)"
                 />
                 <span v-else>{{ scope.row?.iginalCurrency[iginalCurrencyIndex]?.value || 0 }}</span>
@@ -202,7 +201,13 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
     })
     if (!success) throw Error()
     ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
-    fetchInitData()
+    // fetchInitData()
+    record.isEdit = false
+    if (isSubmit) {
+      record.isEntering = true
+    } else {
+      record.isSubmit = true
+    }
     console.log(result, "handleSubmit")
   } catch (err) {
     console.log(err, "确认")

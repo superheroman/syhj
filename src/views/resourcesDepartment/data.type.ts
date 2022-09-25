@@ -105,6 +105,9 @@ export interface ConstructionModel {
   weightNumber?: null | string
   peopleId: number
   peopleName: string
+  isEntering?: boolean
+  isSubmit?: boolean
+  isEdit?: false
 }
 
 /**
@@ -186,6 +189,8 @@ export interface ElectronicDto {
    * 物料种类
    */
   typeName?: null | string
+  isEntering?: boolean
+  isSubmit?: boolean
 }
 
 /**
