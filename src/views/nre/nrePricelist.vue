@@ -24,7 +24,7 @@
         <el-table-column prop="modelName" label="模具名称" />
         <el-table-column prop="moldCavityCount" label="模穴数" />
         <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
+        <el-table-column prop="count" label="数量" />
         <el-table-column prop="cost" label="费用" />
         <el-table-column prop="remark" label="备注" />
       </el-table>
@@ -45,8 +45,8 @@
           </template>
         </el-table-column>
         <el-table-column prop="unitPrice" label="单价" />
-        <el-table-column prop="quantity" label="数量" />
-        <el-table-column prop="cost" label="费用" />
+        <el-table-column prop="count" label="数量" />
+        <el-table-column prop="allCost" label="费用" />
         <el-table-column prop="remark" label="备注" />
       </el-table>
     </el-card>
