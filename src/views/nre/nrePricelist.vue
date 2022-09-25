@@ -1,6 +1,6 @@
 <template>
   <el-card m="2">
-    <el-button type="primary" class="m-2" @click="handleFethNreTableDownload">NRE核价表下载</el-button>
+    <el-button type="primary" class="m-2" @click="handleFethNreTableDownload" v-if="!hideBtn">NRE核价表下载</el-button>
     <el-card class="margin-top" header="手板件费用">
       <el-table
         :data="data.handPieceCost"
@@ -96,7 +96,7 @@ import { pricingForm } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import { formatDateTime, downloadFileExcel } from "@/utils"
 
-const { auditFlowId, productId, year }: any = getQuery()
+const { auditFlowId, productId, year, hideBtn }: any = getQuery()
 
 const data = reactive<pricingForm>({
   handPieceCost: [],
