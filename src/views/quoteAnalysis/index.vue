@@ -366,6 +366,13 @@ let RevenueGrossMargin: any = {
     type: "category",
     data: ["目标价", "本次报价", "上一轮"]
   },
+  tooltip: {
+    trigger: "axis",
+    axisPointer: {
+      // Use axis to trigger tooltip
+      type: "shadow" // 'shadow' as default; can also be 'line' or 'shadow'
+    }
+  },
   legend: {},
   yAxis: [
     {
@@ -444,6 +451,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPr
   const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
   spreadSheetCalculate(grossMarginValue, AllUnitPrice)
+  setData()
 }, 300)
 
 const setData = () => {
@@ -475,7 +483,8 @@ const setData = () => {
   })
   chart1.setOption(ProjectUnitPrice)
   RevenueGrossMargin.series = data.projectBoard.map((item: any) => {
-    if (item.projectName === "平均单价" || item.projectName === "毛利率") {
+    // if (item.projectName === "销售收入" || item.projectName === "毛利率") {
+    if (item.projectName === "销售收入") {
       return {
         name: item.projectName,
         type: "bar",
@@ -492,14 +501,14 @@ const setData = () => {
   })
   let value: any = []
   data.projectBoard.forEach((item: any) => {
-    if (item.productName === "毛利率") {
+    if (item.projectName === "毛利率") {
       value.push(item.clientTarget.grossMargin)
       value.push(item.interiorTarget.grossMargin)
     }
   })
   RevenueGrossMargin.series.push({
     yAxisIndex: 1,
-    name: "利率",
+    name: "毛利率",
     type: "line",
     data: value //需要替换
   })

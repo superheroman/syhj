@@ -225,9 +225,9 @@ onMounted(async () => {
       data.tableData,
       (val) => {
         val.forEach((row: any) => {
-          row.perFreight = (Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand
+          row.perFreight = ((Number(row.freight) + Number(row.storageExpenses)) / row.monthEndDemand).toFixed(2)
 
-          row.perTotalLogisticsCost = Number(row.perPackagingPrice) + Number(row.perFreight)
+          row.perTotalLogisticsCost = (Number(row.perPackagingPrice) + Number(row.perFreight)).toFixed(2)
         })
       },
       { deep: true }
