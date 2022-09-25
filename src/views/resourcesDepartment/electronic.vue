@@ -48,7 +48,6 @@
               <el-input
                 v-if="scope.row.isEdit"
                 v-model="scope.row.inTheRate[index].value"
-                @blur="handleCalculation(scope.row, scope.$index)"
                 @keyup.enter="handleCalculation(scope.row, scope.$index)"
               >
                 <template #append> % </template>
@@ -71,7 +70,6 @@
                 v-model="scope.row.iginalCurrency[index].value"
                 controls-position="right"
                 :min="0"
-                @blur="handleCalculationIginalCurrency(scope.row, scope.$index)"
                 @keyup.enter="handleCalculationIginalCurrency(scope.row, scope.$index)"
               />
               <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
@@ -215,7 +213,12 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
     })
     if (!success) throw Error()
     ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
-    fetchInitData()
+    if (isSubmit) {
+      record.isEntering = true
+    } else {
+      record.isSubmit = true
+    }
+    // fetchInitData()
   } catch (err) {
     ElMessage.error("提交失败~")
     console.log(err, "确认")

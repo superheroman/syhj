@@ -24,10 +24,13 @@ import { GetDownloadList, PostDownloadListSave } from "./service"
 import { PigeonholeDownloadTableModel } from "./data.type"
 import { ElMessage } from "element-plus"
 import { downloadFileZip } from "@/utils"
+import getQuery from "@/utils/getQuery"
+
+const { auditFlowId = 1 }: any = getQuery()
 
 //console.log('1-开始创建组件-setup')
 const init = async () => {
-  const { result } = await GetDownloadList({})
+  const { result } = await GetDownloadList(auditFlowId)
   data.tableData = result || []
 }
 
