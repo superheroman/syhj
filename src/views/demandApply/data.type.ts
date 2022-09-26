@@ -5,10 +5,10 @@ export interface User {
   pcsYearList?: Array<Object>
 }
 
-export enum productTypeMap {
-  recommend = "1", // 我司推荐1
-  cspecify = "2", // 客户指定2
-  csupply = "3" // 客户供应3
+export const productTypeMap = {
+  recommend: "1", // 我司推荐1
+  cspecify: "2", // 客户指定2
+  csupply: "3" // 客户供应3
 }
 
 /**

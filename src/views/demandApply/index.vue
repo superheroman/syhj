@@ -686,7 +686,7 @@ const rules = reactive<FormRules>({
 })
 const getSummaries = (param: SummaryMethodProps) => {
   const { columns, data } = param
-  const sums: string[] | number[] = []
+  const sums: any[] = []
 
   let arr = new Array(data[0].pcsYearList.length).fill(0).map(() => {
     return [] as number[]
@@ -1081,7 +1081,7 @@ const generateCustomTable = () => {
       let productName = item.name
       let main = "lens"
       let type = item.lens
-      let productType = productTypeMap[item.lensTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
+      let productType = item.lensTypeSelect === "2" ? "客户指定" : "客户供应"
       specifyTableData.value.push({
         price,
         productName,
@@ -1095,7 +1095,7 @@ const generateCustomTable = () => {
       let productName = item.name
       let main = "isp"
       let type = item.isp
-      let productType = productTypeMap[item.ispTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
+      let productType = item.ispTypeSelect === "2" ? "客户指定" : "客户供应"
       specifyTableData.value.push({
         price,
         productName,
@@ -1109,7 +1109,7 @@ const generateCustomTable = () => {
       let productName = item.name
       let main = "serialChip"
       let type = item.serialChip
-      let productType = productTypeMap[item.serialChipTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
+      let productType = item.serialChipTypeSelect === "2" ? "客户指定" : "客户供应"
       specifyTableData.value.push({
         price,
         productName,
@@ -1123,7 +1123,7 @@ const generateCustomTable = () => {
       let productName = item.name
       let main = "led"
       let type = item.led
-      let productType = productTypeMap[item.ledTypeSelect] === "cspecify" ? "客户指定" : "客户供应"
+      let productType = item.ledTypeSelect === "2" ? "客户指定" : "客户供应"
       specifyTableData.value.push({
         price,
         productName,
@@ -1214,8 +1214,8 @@ onMounted(async () => {
     if (viewDataRes.result) {
       isEdit = true
       state.quoteForm = viewDataRes.result
-      const sopTime: number = viewDataRes.result.sopTime
-      state.quoteForm.sopTime = dayjs([sopTime]).format("YYYY")
+      const sopTime: any = [viewDataRes.result.sopTime]
+      state.quoteForm.sopTime = dayjs(sopTime).format("YYYY")
       pcsTableData.value = viewDataRes.result.pcs
       yearChange(viewDataRes.result.projectCycle)
       productTableData.value = viewDataRes.result.productInformation
