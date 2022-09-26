@@ -218,7 +218,7 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
     } else {
       record.isSubmit = true
     }
-    // fetchInitData()
+    fetchInitData()
   } catch (err) {
     ElMessage.error("提交失败~")
     console.log(err, "确认")

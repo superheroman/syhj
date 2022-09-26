@@ -201,7 +201,7 @@ const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
     })
     if (!success) throw Error()
     ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
-    // fetchInitData()
+    fetchInitData()
     record.isEdit = false
     if (isSubmit) {
       record.isEntering = true
