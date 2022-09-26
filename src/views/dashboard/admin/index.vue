@@ -85,8 +85,16 @@
         <!-- 质量成本  -->
         <el-table :data="data.qualityData" v-if="data.mode === '5'" border height="675">
           <el-table-column prop="productCategory" label="产品类别" />
-          <el-table-column prop="costProportion" label="成本比例" />
-          <el-table-column prop="qualityCost" label="质量成本（MAX）" />
+          <el-table-column prop="costProportion" label="成本比例">
+            <template #default="{ row }">
+              {{ `${row.costProportion * 100} %` }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="qualityCost" label="质量成本（MAX）">
+            <template>
+              {{ `${row.qualityCost.toFixed(2)}` }}
+            </template>
+          </el-table-column>
         </el-table>
       </el-card>
       <el-card>
