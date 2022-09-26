@@ -157,7 +157,7 @@ const data = reactive<any>({
     boxesPerPallet: "",
     quantityPerBox: "",
     remarks: "",
-    pictureId: ""
+    picture3DFileId: ""
   }
 })
 
@@ -190,7 +190,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
 const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
   if (res.success) {
-    data.logisticsForm.pictureId = res.result.fileId
+    data.logisticsForm.picture3DFileId = res.result.fileId
     ElMessage({
       message: "上传成功",
       type: "success"
