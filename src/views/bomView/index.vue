@@ -73,8 +73,8 @@ onBeforeMount(() => {
 })
 onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
-  let resStruction: any = await GetStructionBom()
-  let resElectronic: any = await GetElectronicBom()
+  let resStruction: any = await GetStructionBom({})
+  let resElectronic: any = await GetElectronicBom({})
   data.electronicData = resElectronic.result
   data.structuralData = resStruction.result
 })

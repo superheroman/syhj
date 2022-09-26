@@ -5,19 +5,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { useRoute, useRouter } from "vue-router"
-/**
- * 仓库
- */
-/**
- * 路由对象
- */
-const route = useRoute()
-/**
- * 路由实例
- */
-const router = useRouter()
+import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
+
 //console.log('1-开始创建组件-setup')
 /**
  * 数据部分

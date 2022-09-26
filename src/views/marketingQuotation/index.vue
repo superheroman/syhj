@@ -125,7 +125,7 @@ const columns = reactive({
 })
 
 onBeforeMount(() => {
-  let userInfo = JSON.parse(window.localStorage.getItem("user"))
+  let userInfo = JSON.parse(window.localStorage.getItem("user") || "")
   if (userInfo.userJobs === "总经理") {
     data.isShowBtn = true
   }
