@@ -710,14 +710,14 @@ const getSummaries = (param: SummaryMethodProps) => {
       sums[index] = "N/A"
     }
   })
-  state.sumArr = [] as number[]
+  // state.sumArr = [] as number[] //这个会有一个严重的BUG  - -
   sums.forEach((sum) => {
     if (typeof sum === "number") {
-      state.sumArr.push(sum)
+      sumArr.push(sum)
     }
   })
-  if (state.sumArr.length > 0) {
-    state.carAnnualTotal = state.sumArr.reduce((prev, curr) => {
+  if (sumArr.length > 0) {
+    state.carAnnualTotal = sumArr.reduce((prev, curr) => {
       return prev + curr
     })
   }
@@ -727,7 +727,7 @@ const getSummaries = (param: SummaryMethodProps) => {
 let userStorage = window.localStorage.getItem("user")
 let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 let isEdit = false //是否查看
-
+let sumArr: any[] = []
 const getRowSum = (row: any) => {
   if (Array.isArray(row.pcsYearList) && row.pcsYearList.length > 0) {
     return row.pcsYearList
@@ -1020,9 +1020,9 @@ watch(
       productTableData.value[index].product = item.product
       moduleTableData.value.forEach((row: any) => {
         row.modelCountYearList.forEach((item: any, index: any) => {
-          if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && state.sumArr[index]) {
+          if (row.marketShare && row.moduleCarryingRate && row.singleCarProductsQuantity && sumArr[index]) {
             item.quantity =
-              (row.marketShare * row.moduleCarryingRate * row.singleCarProductsQuantity * state.sumArr[index]) / 10000
+              (row.marketShare * row.moduleCarryingRate * row.singleCarProductsQuantity * sumArr[index]) / 10000
           }
         })
       })
