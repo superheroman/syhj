@@ -253,11 +253,14 @@ onMounted(async () => {
 const handleChangePageType = async (pageType: any) => {
   try {
     loading.value = true
+    data.material = []
+    data.manufacturingCost = []
+    data.lossCost = []
     if (pageType === "result") {
-      data.material = []
-      data.manufacturingCost = []
-      data.lossCost = []
       await fetchPriceEvaluationTableResult()
+    } else {
+      const { inputCount, year } = data
+      await fetchPriceEvaluationTable({ inputCount, year })
     }
     loading.value = false
   } catch {
