@@ -80,7 +80,7 @@
             <span v-if="row.projectName !== '毛利率'"
               >{{ row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }}
             </span>
-            <span v-else>{{ `${row.grossMarginList[index]?.grossMarginNumber.toFixed(2) || 0} %` }} </span>
+            <span v-else>{{ `${(row.grossMarginList[index]?.grossMarginNumber * 100).toFixed(2) || 0} %` }} </span>
           </template>
         </el-table-column>
       </el-table>
@@ -100,7 +100,7 @@
           </el-table-column>
           <el-table-column label="毛利率" prop="interiorTargetGrossMargin">
             <template #default="{ row }">
-              {{ `${row.interiorTargetGrossMargin?.toFixed(2)} %` }}
+              {{ `${(row.interiorTargetGrossMargin * 100)?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -126,7 +126,7 @@
           </el-table-column>
           <el-table-column label="毛利率" prop="clientTargetGrossMargin">
             <template #default="{ row }">
-              {{ `${row.clientTargetGrossMargin?.toFixed(2)} %` }}
+              {{ `${(row.clientTargetGrossMargin * 100)?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -147,7 +147,7 @@
           </el-table-column>
           <el-table-column label="毛利率" prop="offeGrossMargin">
             <template #default="{ row }">
-              {{ `${row.offeGrossMargin?.toFixed(2)} %` }}
+              {{ `${(row.offeGrossMargin * 100)?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -164,7 +164,7 @@
           </el-table-column>
           <el-table-column label="毛利率">
             <template>
-              <div>{{ `${item.grossMargin.toFixed(2)} %` }}</div>
+              <div>{{ `${(item.grossMargin * 100).toFixed(2)} %` }}</div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -185,13 +185,13 @@
           calculatedValue("offerUnitPrice", "average").toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(内部)整套毛利率">{{
-          `${Number(data.allClientGrossMargin).toFixed(2)} %`
+          `${Number(data.allClientGrossMargin * 100).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
-          `${Number(data.allInteriorGrossMargin).toFixed(2)} %`
+          `${Number(data.allInteriorGrossMargin * 100).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="本次报价整套毛利率">{{
-          `${calculatedValue("offeGrossMargin")?.toFixed(2) || 0} %`
+          `${(calculatedValue("offeGrossMargin") * 100)?.toFixed(2) || 0} %`
         }}</el-descriptions-item>
       </el-descriptions>
       <!-- <div style="float: right; margin: 20px 0">
@@ -222,7 +222,7 @@
         </el-table-column>
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
-          v-for="(item, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
+          v-for="(_, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
           :key="index"
         >
           <template #default="scope">
@@ -305,7 +305,7 @@ let query = getQuery()
 const router = useRouter()
 //console.log('1-开始创建组件-setup')
 const getTofixed = (row: any) => {
-  return row.grossMargin?.toFixed(2)
+  return `${(row.grossMargin * 100)?.toFixed(2)}`
 }
 let dialogVisible = ref(false)
 const fullscreenLoading = ref(false)
@@ -525,11 +525,12 @@ const spreadSheetCalculate = async (grossMarginValue: any, AllUnitPrice: any) =>
 }
 
 const postOffer = (isOffer: number) => {
-  ElMessageBox.confirm("确定执行该操作?", "提示", {
+  const title = isOffer ? "您确定要报价嘛！" : "您确定要取消报价吗？请填写原因！"
+  ElMessageBox[!isOffer ? "prompt" : "confirm"](title, "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val: any) => {
     let res = await postIsOffer({
       unitPrice: data.unitPrice,
       pooledAnalysis: data.pooledAnalysis,
@@ -541,7 +542,8 @@ const postOffer = (isOffer: number) => {
       projectBoard: data.projectBoard,
       isOffer,
       auditFlowId: data.auditFlowId,
-      nre: data.nre
+      nre: data.nre,
+      opinionDescription: !isOffer ? val?.value : ""
     })
     if (res.success) {
       ElMessage.success("操作成功")

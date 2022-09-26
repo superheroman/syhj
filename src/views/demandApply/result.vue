@@ -71,8 +71,12 @@
         <el-table-column type="index" width="100" />
         <el-table-column label="产品" prop="product" />
         <el-table-column label="成本" prop="cost" />
-        <el-table-column label="毛利率" prop="grossMargin" />
-        <el-table-column label="样件价格" prop="price" />
+        <el-table-column label="毛利率" prop="grossMargin">
+          <template #default="{ row }">
+            {{ `${(row.grossMargin * 100)?.toFixed(2) || 0} %` }}
+          </template>
+        </el-table-column>
+        <el-table-column label="价格" prop="price" />
         <el-table-column label="佣金" prop="commission" width="180">
           <template #default="scope">
             <el-input-number
@@ -86,7 +90,7 @@
         </el-table-column>
         <el-table-column label="含佣金的毛利率" prop="grossMarginCommission">
           <template #default="{ row }">
-            {{ row.grossMarginCommission?.toFixed(2) || 0 }}
+            {{ `${(row.grossMarginCommission * 100)?.toFixed(2) || 0} %` }}
           </template>
         </el-table-column>
       </el-table>

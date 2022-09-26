@@ -19,7 +19,7 @@
         <el-table-column label="毛利率">
           <template #default="scope">
             <div v-for="(item, index) in scope.row.grossMarginPrice" :key="index">
-              <span>序号{{ index + 1 }}:</span> <span>{{ item }} %</span>
+              <span>序号{{ index + 1 }}:</span> <span>{{ item * 100 }} %</span>
             </div>
           </template>
         </el-table-column>
