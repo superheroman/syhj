@@ -10,7 +10,7 @@
       <el-table-column type="selection" width="55" />
 
       <el-table-column type="expand">
-        <template #default="props">
+        <template>
           <el-form inline>
             <el-form-item label="2022" />
             <el-form-item label="机器工时">

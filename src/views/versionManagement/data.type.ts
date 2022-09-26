@@ -1,5 +1,5 @@
 export interface VersionManageRequest {
-  data: VersionItem[]
+  data: any[]
 }
 
 // 版本管理

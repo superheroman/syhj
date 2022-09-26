@@ -24,7 +24,7 @@
               controls-position="right"
               type="number"
               :min="0"
-              @blur="(val) => changeOfferMoney(scope.row, scope.$index, val)"
+              @blur="() => changeOfferMoney(scope.row, scope.$index)"
             />
           </template>
         </el-table-column>
