@@ -636,7 +636,7 @@ const getDialogData = async () => {
 
 const calculatedValue = (key: string, type?: string) => {
   if (data.productBoard.length === 0) return 0
-  if (data.productBoard.length === 1) return data.productBoard[0][key] || 0
+  if (data.productBoard.length === 1) return Number(data.productBoard[0][key]) || 0
   const counts = data.productBoard.map((item: any) => Number(item[key] || 0))
   console.log(counts, key, "")
   const totolValue = counts?.reduce((a: any, b: any) => a + b)
