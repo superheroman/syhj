@@ -130,18 +130,19 @@
     </el-card>
     <el-dialog v-model="dialogVisible" title="退回选择">
       <el-checkbox-group v-model="checkList">
-        <el-checkbox label="StructBomImport">产品部-结构工程师</el-checkbox>
-        <el-checkbox label="NreInputEmc">产品部-电子工程师（EMC）</el-checkbox>
-        <el-checkbox label="ElectronicBomImport">产品部-电子工程师（BOM）</el-checkbox>
+        <el-checkbox label="StructBomImport">产品开发部-结构BOM录入</el-checkbox>
+        <el-checkbox label="NreInputEmc">产品开发部-EMC实验费录入</el-checkbox>
+        <el-checkbox label="ElectronicBomImport">产品开发部-电子BOM录入</el-checkbox>
         <el-checkbox label="NreInputGage">品质保证部-检具费录入</el-checkbox>
         <el-checkbox label="NreInputTest">品质保证部-实验费录入</el-checkbox>
-        <el-checkbox label="NreInputOther">项目管理部-项目经理（NRE录入）</el-checkbox>
-        <el-checkbox label="LossRateInput">工程技术部-损耗率录入</el-checkbox>
+        <el-checkbox label="NreInputOther">项目管理部-NRE费用录入</el-checkbox>
+        <el-checkbox label="ElecLossRateInput">工程技术部-电子损耗率录入</el-checkbox>
+        <el-checkbox label="StructLossRateInput">工程技术部-结构损耗率录入</el-checkbox>
         <el-checkbox label="ManHourImport">工程技术部-工序工时录入</el-checkbox>
         <el-checkbox label="LogisticsCostInput">生产管理部-物流成本录入</el-checkbox>
-        <el-checkbox label="NreInputMould">资源部管理部-结构资源开发（模具单击录入）</el-checkbox>
-        <el-checkbox label="StructPriceInput">资源部管理部-结构资源开发（产品单价录入）</el-checkbox>
-        <el-checkbox label="ElectronicPriceInput">资源部管理部-电子资源开发</el-checkbox>
+        <el-checkbox label="NreInputMould">资源管理课-模具单价录入</el-checkbox>
+        <el-checkbox label="StructPriceInput">资源管理课-结构单价录入</el-checkbox>
+        <el-checkbox label="ElectronicPriceInput">资源管理课-电子单价录入</el-checkbox>
       </el-checkbox-group>
       <div>
         <div style="margin: 10px 0">拒绝理由：</div>
