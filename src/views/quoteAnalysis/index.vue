@@ -80,7 +80,7 @@
             <span v-if="row.projectName !== '毛利率'"
               >{{ row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }}
             </span>
-            <span v-else>{{ `${(row.grossMarginList[index]?.grossMarginNumber * 100).toFixed(2) || 0} %` }} </span>
+            <span v-else>{{ `${(row.grossMarginList[index]?.grossMarginNumber).toFixed(2) || 0} %` }} </span>
           </template>
         </el-table-column>
       </el-table>
@@ -100,7 +100,7 @@
           </el-table-column>
           <el-table-column label="毛利率" prop="interiorTargetGrossMargin">
             <template #default="{ row }">
-              {{ `${(row.interiorTargetGrossMargin * 100)?.toFixed(2)} %` }}
+              {{ `${row.interiorTargetGrossMargin?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -126,7 +126,7 @@
           </el-table-column>
           <el-table-column label="毛利率" prop="clientTargetGrossMargin">
             <template #default="{ row }">
-              {{ `${(row.clientTargetGrossMargin * 100)?.toFixed(2)} %` }}
+              {{ `${row.clientTargetGrossMargin?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -147,7 +147,7 @@
           </el-table-column>
           <el-table-column label="毛利率" prop="offeGrossMargin">
             <template #default="{ row }">
-              {{ `${(row.offeGrossMargin * 100)?.toFixed(2)} %` }}
+              {{ `${row.offeGrossMargin?.toFixed(2)} %` }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -164,7 +164,7 @@
           </el-table-column>
           <el-table-column label="毛利率">
             <template>
-              <div>{{ `${(item.grossMargin * 100).toFixed(2)} %` }}</div>
+              <div>{{ `${item.grossMargin.toFixed(2)} %` }}</div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -185,13 +185,14 @@
           calculatedValue("offerUnitPrice", "average").toFixed(2)
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(内部)整套毛利率">{{
-          `${Number(data.allClientGrossMargin * 100).toFixed(2)} %`
+          `${Number(data.allClientGrossMargin).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套毛利率">{{
-          `${Number(data.allInteriorGrossMargin * 100).toFixed(2)} %`
+          `${Number(data.allInteriorGrossMargin).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="本次报价整套毛利率">{{
-          `${(calculatedValue("offeGrossMargin") * 100)?.toFixed(2) || 0} %`
+          // `${(calculatedValue("offeGrossMargin") )?.toFixed(2) || 0} %`
+          `${data.allGrossMargin?.toFixed(2) || 0} %`
         }}</el-descriptions-item>
       </el-descriptions>
       <!-- <div style="float: right; margin: 20px 0">
@@ -305,7 +306,7 @@ let query = getQuery()
 const router = useRouter()
 //console.log('1-开始创建组件-setup')
 const getTofixed = (row: any) => {
-  return `${(row.grossMargin * 100)?.toFixed(2)}`
+  return `${row.grossMargin?.toFixed(2)}`
 }
 let dialogVisible = ref(false)
 const fullscreenLoading = ref(false)
@@ -436,18 +437,20 @@ const data = reactive<any>({
   allClientGrossMargin: "",
   projectBoard: [] as any[],
   auditFlowId: 1,
-  dialogTable: []
+  dialogTable: [],
+  allGrossMargin: 0
 })
 
 // 报价分析看板 单价计算
 const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPrice: number, key: string) => {
   // console.log(data.auditFlowId)
-  let { result }: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
+  let { result }: any = (await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)) || {}
   // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 
   const { grossMargin } = result?.productBoardGrosses[0] || ""
 
   data.productBoard[index][key] = grossMargin
+  data.allGrossMargin = result.allGrossMargin
   const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
   spreadSheetCalculate(grossMarginValue, AllUnitPrice)
@@ -543,7 +546,7 @@ const postOffer = (isOffer: number) => {
       isOffer,
       auditFlowId: data.auditFlowId,
       nre: data.nre,
-      opinionDescription: !isOffer ? val?.value : ""
+      NoOfferReason: !isOffer ? val?.value : ""
     })
     if (res.success) {
       ElMessage.success("操作成功")
@@ -638,7 +641,7 @@ const getDialogData = async () => {
 
 const calculatedValue = (key: string, type?: string) => {
   if (data.productBoard.length === 0) return 0
-  if (data.productBoard.length === 1) return data.productBoard[0][key] || 0
+  if (data.productBoard.length === 1) return Number(data.productBoard[0][key]) || 0
   const counts = data.productBoard.map((item: any) => Number(item[key] || 0))
   console.log(counts, key, "")
   const totolValue = counts?.reduce((a: any, b: any) => a + b)
