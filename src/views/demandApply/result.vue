@@ -101,6 +101,7 @@
         <el-table-column label="费用类别" prop="formName" />
         <el-table-column label="核价金额" prop="offerMoney" />
         <el-table-column label="报价系数" prop="offerCoefficient" />
+        <el-table-column label="报价金额" prop="offerMoney" />
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
