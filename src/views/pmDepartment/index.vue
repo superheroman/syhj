@@ -258,10 +258,10 @@ const getSorFile = async () => {
     a.remove() //将a标签移除
   }
 }
-const submit = () => {
+const submit = async () => {
   let { auditFlowId, productId } = data
   let infoList = data.tableData.map((item) => item)
-  let res: any = saveProductionControl({
+  let res: any = await saveProductionControl({
     auditFlowId,
     productId,
     infoList
