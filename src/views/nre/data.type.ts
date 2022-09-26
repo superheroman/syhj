@@ -551,6 +551,7 @@ export interface pricingForm {
    * (不含税美金) NRE 总费用
    */
   usdAllCost?: number
+  showBtn?: boolean
 }
 
 /**
