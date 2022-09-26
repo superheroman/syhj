@@ -245,8 +245,8 @@
     <div style="float: right; padding: 20px 0" m="2">
       <el-button @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
       <el-button @click="toProductPriceList" type="primary">在线预览核价表</el-button>
-      <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button>
-      <el-button @click="save" type="primary">保存</el-button>
+      <!-- <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button> -->
+      <el-button @click="save" type="primary">点击生成待审批的报价表</el-button>
     </div>
     <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
       <div v-for="item in data.dialogTable" :key="item" class="common-card">
@@ -612,12 +612,12 @@ const toNREPriceList = () => {
     query
   })
 }
-const toDemandApplyResult = () => {
-  router.push({
-    path: "/demandApply/result",
-    query
-  })
-}
+// const toDemandApplyResult = () => {
+//   router.push({
+//     path: "/demandApply/result",
+//     query
+//   })
+// }
 
 const openDialog = () => {
   getDialogData()
