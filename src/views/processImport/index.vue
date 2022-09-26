@@ -115,12 +115,12 @@
               />
               <el-table-column
                 :prop="`humanMachineHoursDetailList[${index}]machineHours`"
-                label="标准机器工时"
+                label="机器工时"
                 width="180"
               />
               <el-table-column
                 :prop="`humanMachineHoursDetailList[${index}]personnelNumber`"
-                label="人员数量"
+                label="人均跟线数量"
                 width="180"
               />
             </el-table-column>
@@ -152,21 +152,21 @@
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="标准机器工时" prop="machineHours" width="175">
+            <el-table-column label="机器工时" prop="machineHours" width="175">
               <template #default="{ row, $index }">
                 <el-form-item
                   :prop="`tangent.${$index}.machineHours`"
-                  :rules="[{ required: true, message: '请输入标准机器工时', trigger: 'change' }]"
+                  :rules="[{ required: true, message: '请输入机器工时', trigger: 'change' }]"
                 >
                   <el-input-number v-model="row.machineHours" :min="0" controls-position="right" />
                 </el-form-item>
               </template>
             </el-table-column>
-            <el-table-column label="人员数量" prop="personnelNumber" width="175">
+            <el-table-column label="人均跟线数量" prop="personnelNumber" width="175">
               <template #default="{ row, $index }">
                 <el-form-item
                   :prop="`tangent.${$index}.personnelNumber`"
-                  :rules="[{ required: true, message: '请输入人员数量', trigger: 'change' }]"
+                  :rules="[{ required: true, message: '请输入人均跟线数量', trigger: 'change' }]"
                 >
                   <el-input-number v-model="row.personnelNumber" :min="0" controls-position="right" />
                 </el-form-item>
