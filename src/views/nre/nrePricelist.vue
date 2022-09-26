@@ -6,7 +6,7 @@
         :data="data.handPieceCost"
         style="width: 100%"
         border
-        :summary-method="(val) => getMouldSummaries(val, '手板件费用')"
+        :summary-method="(val: any) => getMouldSummaries(val, '手板件费用')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -34,7 +34,7 @@
         :data="data.laboratoryFeeModels"
         style="width: 100%"
         border
-        :summary-method="(val) => getMouldSummaries(val, '实验费用')"
+        :summary-method="(val: any) => getMouldSummaries(val, '实验费用')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -55,7 +55,7 @@
         :data="data.travelExpense"
         style="width: 100%"
         border
-        :summary-method="(val) => getMouldSummaries(val, '差旅费用', 'cost')"
+        :summary-method="(val: any) => getMouldSummaries(val, '差旅费用', 'cost')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -72,7 +72,7 @@
         :data="data.restsCost"
         style="width: 100%"
         border
-        :summary-method="(val) => getMouldSummaries(val, '其他费用', 'cost')"
+        :summary-method="(val: any) => getMouldSummaries(val, '其他费用', 'cost')"
         show-summary
       >
         <el-table-column type="index" width="50" />

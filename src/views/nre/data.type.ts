@@ -359,15 +359,15 @@ export interface QADepartmentTestModel {
   /**
    * 时间-DV
    */
-  dataDV?: Date
+  dataDV?: string | undefined
   /**
    * 时间-PV
    */
-  dataPV?: Date
+  dataPV?: string | undefined
   /**
    * 时间-摸底
    */
-  dataThoroughly?: Date
+  dataThoroughly?: string | undefined
   /**
    * 是否指定第三方
    */
@@ -453,7 +453,7 @@ export interface MouldInventoryModel {
   /**
    * 模具名称
    */
-  modelName?: null
+  modelName?: string | undefined
   /**
    * 模次数
    */
@@ -645,7 +645,7 @@ export interface MouldInventoryModel {
   /**
    * 模具名称
    */
-  modelName?: null | string
+  modelName?: string | undefined
   /**
    * 模次数
    */
@@ -722,15 +722,12 @@ export interface QADepartmentTestModel {
   /**
    * 时间-DV
    */
-  dataDV?: Date
+  dataDV?: string
   /**
    * 时间-PV
    */
-  dataPV?: Date
-  /**
-   * 时间-摸底
-   */
-  dataThoroughly?: Date
+  dataPV?: string
+
   /**
    * 是否指定第三方 (是 true 否 false)
    */
@@ -789,7 +786,7 @@ export interface TravelExpenseModel {
   /**
    * 事由外键
    */
-  reasonsId?: null | string
+  reasonsId?: string
   /**
    * 备注
    */

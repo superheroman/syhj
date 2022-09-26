@@ -102,7 +102,6 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import EZFilter from "@/components/EZFilter/index.vue"
-import type { FormInstance } from "element-plus"
 import { InitReportFilterValue } from "./common/const"
 import {
   GetAllAuditFlowProjectNameAndVersion,
@@ -224,7 +223,7 @@ onMounted(() => {
   getAllAuditFlowProjectName()
 })
 
-const queryTable = (formValue: FormInstance | undefined) => {
+const queryTable = (formValue: any | undefined) => {
   getCostDetailVariance(formValue)
   if (formValue?.type === "bom") {
     getCostDetailVarianceMaterial(formValue)

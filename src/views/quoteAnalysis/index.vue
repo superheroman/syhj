@@ -24,7 +24,7 @@
               controls-position="right"
               type="number"
               :min="0"
-              @blur="(val) => changeOfferMoney(scope.row, scope.$index, val)"
+              @blur="() => changeOfferMoney(scope.row, scope.$index)"
             />
           </template>
         </el-table-column>
@@ -80,7 +80,7 @@
             <span v-if="row.projectName !== '毛利率'"
               >{{ row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }}
             </span>
-            <span v-else>{{ `${row.grossMarginList[index]?.grossMarginNumber.toFixed(2) || 0} %` }} </span>
+            <span v-else>{{ `${(row.grossMarginList[index]?.grossMarginNumber).toFixed(2) || 0} %` }} </span>
           </template>
         </el-table-column>
       </el-table>
@@ -191,7 +191,8 @@
           `${Number(data.allInteriorGrossMargin).toFixed(2)} %`
         }}</el-descriptions-item>
         <el-descriptions-item label="本次报价整套毛利率">{{
-          `${calculatedValue("offeGrossMargin")?.toFixed(2) || 0} %`
+          // `${(calculatedValue("offeGrossMargin") )?.toFixed(2) || 0} %`
+          `${data.allGrossMargin?.toFixed(2) || 0} %`
         }}</el-descriptions-item>
       </el-descriptions>
       <!-- <div style="float: right; margin: 20px 0">
@@ -222,7 +223,7 @@
         </el-table-column>
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
-          v-for="(item, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
+          v-for="(_, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
           :key="index"
         >
           <template #default="scope">
@@ -245,8 +246,8 @@
     <div style="float: right; padding: 20px 0" m="2">
       <el-button @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
       <el-button @click="toProductPriceList" type="primary">在线预览核价表</el-button>
-      <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button>
-      <el-button @click="save" type="primary">保存</el-button>
+      <!-- <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button> -->
+      <el-button @click="save" type="primary">点击生成待审批的报价表</el-button>
     </div>
     <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
       <div v-for="item in data.dialogTable" :key="item" class="common-card">
@@ -305,7 +306,7 @@ let query = getQuery()
 const router = useRouter()
 //console.log('1-开始创建组件-setup')
 const getTofixed = (row: any) => {
-  return row.grossMargin?.toFixed(2)
+  return `${row.grossMargin?.toFixed(2)}`
 }
 let dialogVisible = ref(false)
 const fullscreenLoading = ref(false)
@@ -436,18 +437,20 @@ const data = reactive<any>({
   allClientGrossMargin: "",
   projectBoard: [] as any[],
   auditFlowId: 1,
-  dialogTable: []
+  dialogTable: [],
+  allGrossMargin: 0
 })
 
 // 报价分析看板 单价计算
 const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPrice: number, key: string) => {
   // console.log(data.auditFlowId)
-  let { result }: any = await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)
+  let { result }: any = (await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)) || {}
   // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 
   const { grossMargin } = result?.productBoardGrosses[0] || ""
 
   data.productBoard[index][key] = grossMargin
+  data.allGrossMargin = result.allGrossMargin
   const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
   spreadSheetCalculate(grossMarginValue, AllUnitPrice)
@@ -525,11 +528,12 @@ const spreadSheetCalculate = async (grossMarginValue: any, AllUnitPrice: any) =>
 }
 
 const postOffer = (isOffer: number) => {
-  ElMessageBox.confirm("确定执行该操作?", "提示", {
+  const title = isOffer ? "您确定要报价嘛！" : "您确定要取消报价吗？请填写原因！"
+  ElMessageBox[!isOffer ? "prompt" : "confirm"](title, "提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val: any) => {
     let res = await postIsOffer({
       unitPrice: data.unitPrice,
       pooledAnalysis: data.pooledAnalysis,
@@ -541,7 +545,8 @@ const postOffer = (isOffer: number) => {
       projectBoard: data.projectBoard,
       isOffer,
       auditFlowId: data.auditFlowId,
-      nre: data.nre
+      nre: data.nre,
+      NoOfferReason: !isOffer ? val?.value : ""
     })
     if (res.success) {
       ElMessage.success("操作成功")
@@ -610,12 +615,12 @@ const toNREPriceList = () => {
     query
   })
 }
-const toDemandApplyResult = () => {
-  router.push({
-    path: "/demandApply/result",
-    query
-  })
-}
+// const toDemandApplyResult = () => {
+//   router.push({
+//     path: "/demandApply/result",
+//     query
+//   })
+// }
 
 const openDialog = () => {
   getDialogData()
