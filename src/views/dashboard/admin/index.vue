@@ -48,9 +48,9 @@
         </el-table>
         <!-- 损耗成本  -->
         <el-table v-if="data.mode === '2'" :data="data.lossData" height="675">
-          <el-table-column prop="name" label="成本项目" width="180" />
-          <el-table-column prop="wastageCost" label="损耗成本" width="180" />
-          <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="180" />
+          <el-table-column prop="name" label="成本项目" />
+          <el-table-column prop="wastageCost" label="损耗成本" />
+          <el-table-column prop="moqShareCount" label="MOQ分摊成本" />
         </el-table>
         <!-- 制造成本  -->
         <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
