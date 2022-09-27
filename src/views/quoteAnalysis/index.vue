@@ -460,7 +460,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPr
 const setData = () => {
   ProjectUnitPrice.series = data.productBoard.map((item: any) => {
     return {
-      name: item.productName + item.interiorTargetUnitPrice,
+      name: item.productName,
       type: "bar",
       stack: "total",
       label: {
