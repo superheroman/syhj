@@ -125,7 +125,7 @@ const data = reactive<any>({
 const columns = reactive({
   sopData: []
 })
-const formatter = (row, column, cellValue: any) => {
+const formatter = (cellValue: any) => {
   return Number(cellValue).toFixed(2)
 }
 onBeforeMount(() => {

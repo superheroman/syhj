@@ -91,8 +91,8 @@
             </template>
           </el-table-column>
           <el-table-column prop="qualityCost" label="质量成本（MAX）">
-            <template>
-              {{ `${row.qualityCost.toFixed(2)}` }}
+            <template #default="{ row }">
+              {{ `${row?.qualityCost.toFixed(2)}` }}
             </template>
           </el-table-column>
         </el-table>
