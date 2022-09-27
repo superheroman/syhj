@@ -612,7 +612,10 @@ const toProductPriceList = () => {
 const toNREPriceList = () => {
   router.push({
     path: "/nre/nrePricelist",
-    query
+    query: {
+      ...query,
+      hideBtn: 1
+    }
   })
 }
 // const toDemandApplyResult = () => {
