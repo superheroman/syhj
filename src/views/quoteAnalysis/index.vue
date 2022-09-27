@@ -247,9 +247,9 @@
       <!-- <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button> -->
       <el-button @click="save" type="primary">点击生成待审批的报价表</el-button>
     </div>
-    <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
-      <div v-for="item in data.dialogTable" :key="item" class="common-card">
-        <el-card class="table-wrap" :header="item.project">
+    <el-dialog v-model="dialogVisible" title="年份维度对比">
+      <div class="table-wrap">
+        <el-card :header="item.project" v-for="item in data.dialogTable" m="2" :key="item">
           <el-table :data="[item]" style="width: 100%">
             <template v-for="(yearItem, i) in item.yearList" :key="yearItem">
               <el-table-column :prop="`yearList.${i}.value`" :label="yearItem.year">
@@ -698,5 +698,10 @@ watchEffect(() => {})
 }
 #revenueGrossMarginChart {
   height: 400px;
+}
+.table-wrap {
+  height: 600px;
+  overflow: hidden;
+  overflow-y: auto;
 }
 </style>
