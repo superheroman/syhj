@@ -105,7 +105,7 @@ import { ElMessageBox } from "element-plus"
 import useJump from "@/hook/useJump"
 
 const { jumpTodoCenter } = useJump()
-const { auditFlowId = 1, productId }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])

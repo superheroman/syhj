@@ -48,9 +48,9 @@
         </el-table>
         <!-- 损耗成本  -->
         <el-table v-if="data.mode === '2'" :data="data.lossData" height="675">
-          <el-table-column prop="name" label="成本项目" width="180" />
-          <el-table-column prop="wastageCost" label="损耗成本" width="180" />
-          <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="180" />
+          <el-table-column prop="name" label="成本项目" />
+          <el-table-column prop="wastageCost" label="损耗成本" />
+          <el-table-column prop="moqShareCount" label="MOQ分摊成本" />
         </el-table>
         <!-- 制造成本  -->
         <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
@@ -85,8 +85,16 @@
         <!-- 质量成本  -->
         <el-table :data="data.qualityData" v-if="data.mode === '5'" border height="675">
           <el-table-column prop="productCategory" label="产品类别" />
-          <el-table-column prop="costProportion" label="成本比例" />
-          <el-table-column prop="qualityCost" label="质量成本（MAX）" />
+          <el-table-column prop="costProportion" label="成本比例">
+            <template #default="{ row }">
+              {{ `${row.costProportion * 100} %` }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="qualityCost" label="质量成本（MAX）">
+            <template #default="{ row }">
+              {{ `${row?.qualityCost.toFixed(2)}` }}
+            </template>
+          </el-table-column>
         </el-table>
       </el-card>
       <el-card>
@@ -108,7 +116,7 @@
       <el-card style="margin-top: 10px">
         <el-upload
           v-model:file-list="fileList"
-          :show-file-list="false"
+          show-file-list
           action="/api/services/app/FileCommonService/UploadFile"
           :on-success="handleSuccess"
           :on-change="handleFileChange"
