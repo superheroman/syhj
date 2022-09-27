@@ -14,6 +14,8 @@ import "element-plus/theme-chalk/dark/css-vars.css"
 import "@/styles/index.scss"
 
 const app = createApp(App)
+
+app.config.globalProperties.$baseUrl = "http://139.196.216.165:44311"
 /** element-plus 组件完整引入 */
 app.use(ElementPlus)
 /** 加载全局 svg */

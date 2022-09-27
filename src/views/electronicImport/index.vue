@@ -5,7 +5,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            action="/api/services/app/ElectronicBom/UploadExcel"
+            :action="$baseUrl + '/api/services/app/ElectronicBom/UploadExcel'"
             :on-success="handleSuccess"
             :on-error="handleUploadError"
             :show-file-list="false"
