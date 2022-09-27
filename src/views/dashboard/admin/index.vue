@@ -392,8 +392,7 @@ const handleFethNreTableDownload = async () => {
     query: {
       year: data.year,
       auditFlowId,
-      productId,
-      hideBtn: 1
+      productId
     }
   })
 }
