@@ -291,9 +291,9 @@ const downLoadTemplate = async () => {
 
 // 3D爆炸图下载
 const downLoad3DExploded = async () => {
-  await getPicture3DByAuditFlowId()
-  if (!data.picture3D.id) return false
-  let res: any = await CommonDownloadFile(data.picture3D.id)
+  let downRes: any = await getPicture3DByAuditFlowId()
+  if (!downRes.result.threeDFileId) return false
+  let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
   const blob = res
   const reader = new FileReader()
   reader.readAsDataURL(blob)
@@ -302,7 +302,7 @@ const downLoad3DExploded = async () => {
     let a = document.createElement("a")
     document.body.appendChild(a) //此处增加了将创建的添加到body当中
     a.href = url
-    a.download = data.picture3D.fileName
+    a.download = downRes.result.threeDFileName
     a.target = "_blank"
     a.click()
     a.remove() //将a标签移除

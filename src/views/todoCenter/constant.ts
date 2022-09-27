@@ -28,6 +28,7 @@ const urlMap = {
   ArchiveEnd: { path: "/archive/index", query: {} }, //"归档结束（异常终止）"
   LossRateInput: { path: "/processImport/index", query: {} }, // "工程损耗率录入界面"
   RequirementInput: { path: "/demandApply/index", query: {} }, //"核价需求录入界面"
-  PMInput: { path: "/partEntry/managerOperate", query: {} } //"项目经理录入界面"
+  PMInput: { path: "/partEntry/managerOperate", query: {} }, //"项目经理录入界面"
+  ProductionCostInput: { path: "/manufacturingCost/index", query: {} } //"制造成本录入"
 }
 export default urlMap
