@@ -1,16 +1,13 @@
 import { request } from "@/utils/service"
 
 // 归档文件列表
-export function GetDownloadList(data: {
-  /**
-   * 流程Id
-   */
-  auditFlowId?: number
-}): any {
+export function GetDownloadList(auditFlowId?: number): any {
   return request({
     url: "/api/services/app/AnalyseBoard/GetDownloadList",
     method: "get",
-    data
+    data: {
+      auditFlowId
+    }
   })
 }
 
