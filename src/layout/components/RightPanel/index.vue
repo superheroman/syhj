@@ -25,7 +25,7 @@ const route = useRoute()
 const router = useRouter()
 const productStore = useProductStore()
 const state = reactive({
-  productId: 0,
+  productId: null as any,
   auditFlowId: ""
 })
 
@@ -51,6 +51,7 @@ onMounted(() => {
 const init = async () => {
   // 未执行todocenter里的跳转时打开会造成state.auditFlowId为undefined
   try {
+    state.productId = null
     const { productId, auditFlowId } = route.query
     if (auditFlowId) {
       await productStore.setProductList(Number(auditFlowId))

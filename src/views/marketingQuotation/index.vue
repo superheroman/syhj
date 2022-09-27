@@ -2,7 +2,8 @@
   <el-card class="marketingQuotation-page" header="报价审核" m="2">
     <div style="margin: 20px 0; float: right" v-if="data.isShowBtn">
       <el-button type="primary" @click="jumpToAnalysis">点击查看报价分析看板</el-button>
-      <el-button type="primary" @click="jumpToLogistics">点击查看物流可返利金额</el-button>
+      <el-button type="primary" @click="jumpToElec">点击查看电子料返利金额</el-button>
+      <el-button type="primary" @click="jumpToStru">点击查看结构料返利金额</el-button>
     </div>
     <el-descriptions :column="2" border>
       <el-descriptions-item label="直接客户名称">
@@ -54,7 +55,7 @@
           <el-table :data="item.nreCostModels" border>
             <el-table-column type="index" width="100" />
             <el-table-column label="费用类别" prop="name" />
-            <el-table-column label="成本" prop="cost" />
+            <el-table-column label="成本" prop="cost" :formatter="formatter" />
           </el-table>
         </el-card>
       </template>
@@ -65,7 +66,7 @@
           <el-table :data="item.pricingMessageModels" border>
             <el-table-column label="序号" type="index" width="100" />
             <el-table-column label="费用类别" prop="name" />
-            <el-table-column label="成本值" prop="costValue" />
+            <el-table-column label="成本值" prop="costValue" :formatter="formatter" />
           </el-table>
         </el-card>
       </template>
@@ -74,19 +75,20 @@
       <el-table :data="data.marketingQuotationData.biddingStrategy" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="产品" prop="product" />
-        <el-table-column label="成本" prop="cost" />
-        <el-table-column label="毛利率" prop="grossMargin" />
-        <el-table-column label="价格" prop="price" />
-        <el-table-column label="佣金" prop="commission" />
-        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" />
+        <el-table-column label="成本" prop="cost" :formatter="formatter" />
+        <el-table-column label="毛利率" prop="grossMargin" :formatter="formatter" />
+        <el-table-column label="价格" prop="price" :formatter="formatter" />
+        <el-table-column label="佣金" prop="commission" :formatter="formatter" />
+        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" :formatter="formatter" />
       </el-table>
     </el-card>
     <el-card header="费用表：" m="2">
       <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="费用类别" prop="formName" />
-        <el-table-column label="核价金额" prop="pricingMoney" />
-        <el-table-column label="报价系数" prop="offerCoefficient" />
+        <el-table-column label="核价金额" prop="pricingMoney" :formatter="formatter" />
+        <el-table-column label="报价系数" prop="offerCoefficient" :formatter="formatter" />
+        <el-table-column label="报价金额" prop="offerMoney" :formatter="formatter" />
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
@@ -123,7 +125,9 @@ const data = reactive<any>({
 const columns = reactive({
   sopData: []
 })
-
+const formatter = (row, column, cellValue: any) => {
+  return Number(cellValue).toFixed(2)
+}
 onBeforeMount(() => {
   let userInfo = JSON.parse(window.localStorage.getItem("user") || "")
   if (userInfo.userJobs === "总经理") {
@@ -142,9 +146,16 @@ const jumpToAnalysis = () => {
     auditFlowId
   })
 }
-const jumpToLogistics = () => {
-  jumpPage("/pmDepartment/index", {
-    auditFlowId
+const jumpToElec = () => {
+  jumpPage("/bomVerify/electronic", {
+    auditFlowId,
+    right: 1
+  })
+}
+const jumpToStru = () => {
+  jumpPage("/bomVerify/construction", {
+    auditFlowId,
+    right: 1
   })
 }
 const initFetch = async () => {

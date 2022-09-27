@@ -1,6 +1,6 @@
 export const wahiteRotes: any[] = [
   // "demandApply", // 营销部录入
-  "managerOperate", // 经理部录入
+  // "managerOperate", // 经理部录入
   // "trAudit", // tr 主方案
   "ProductPriceList", // 项目核价表
   // "quoteAnalysis", // 报价分析看板
@@ -23,5 +23,6 @@ export const wahiteRotes: any[] = [
   "Dashboard", //核价看板
   "elecView",
   "strucView",
-  "processImport" // 工序工时导入
+  "processImport", // 工序工时导入
+  "manufacturingCost" //制造成本录入
 ]

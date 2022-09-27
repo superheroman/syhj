@@ -172,19 +172,21 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 onMounted(async () => {
-  let getResData: any = await getInputManufacturingCost({ auditFlowId, modelCountId })
-  if (getResData.result) {
-    data.smt = getResData.result.smt
-    data.cob = getResData.result.cob
-  } else {
-    let { result } = (await getAllYearsFrom(auditFlowId)) as any
-    data.years = result
-    data.years.forEach((year) => {
-      data.smt.push({ year })
-      data.cob.push({ year })
-    })
-    data.smt.push({ year: 0 })
-    data.cob.push({ year: 0 })
+  if (auditFlowId && modelCountId) {
+    let getResData: any = await getInputManufacturingCost({ auditFlowId, modelCountId })
+    if (getResData.result) {
+      data.smt = getResData.result.smt
+      data.cob = getResData.result.cob
+    } else {
+      let { result } = (await getAllYearsFrom(auditFlowId)) as any
+      data.years = result
+      data.years.forEach((year) => {
+        data.smt.push({ year })
+        data.cob.push({ year })
+      })
+      data.smt.push({ year: 0 })
+      data.cob.push({ year: 0 })
+    }
   }
 })
 
