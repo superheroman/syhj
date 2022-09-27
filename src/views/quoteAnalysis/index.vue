@@ -244,8 +244,6 @@
       <div id="revenueGrossMarginChart" />
     </el-card>
     <div style="float: right; padding: 20px 0" m="2">
-      <el-button @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
-      <el-button @click="toProductPriceList" type="primary">在线预览核价表</el-button>
       <!-- <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button> -->
       <el-button @click="save" type="primary">点击生成待审批的报价表</el-button>
     </div>
@@ -599,25 +597,7 @@ const save = async () => {
     }
   })
 }
-const toProductPriceList = () => {
-  router.push({
-    path: "/nupriceManagement/productPriceList",
-    query: {
-      ...query,
-      disabled: true
-    }
-  })
-}
 
-const toNREPriceList = () => {
-  router.push({
-    path: "/nre/nrePricelist",
-    query: {
-      ...query,
-      hideBtn: 1
-    }
-  })
-}
 // const toDemandApplyResult = () => {
 //   router.push({
 //     path: "/demandApply/result",
