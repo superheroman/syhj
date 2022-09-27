@@ -710,18 +710,25 @@ const getSummaries = (param: SummaryMethodProps) => {
       sums[index] = "N/A"
     }
   })
-  state.sumArr = [] as number[]
-  sums.forEach((sum) => {
-    if (typeof sum === "number") {
-      state.sumArr.push(sum)
-    }
-  })
-  if (state.sumArr.length > 0) {
-    state.carAnnualTotal = state.sumArr.reduce((prev, curr) => {
+  // state.sumArr = [] as number[]
+  // sums.forEach((sum) => {
+  //   if (typeof sum === "number") {
+  //     state.sumArr.push(sum)
+  //   }
+  // })
+  // if (state.sumArr.length > 0) {
+  //   state.carAnnualTotal = state.sumArr.reduce((prev, curr) => {
+  //     return prev + curr
+  //   })
+  // }
+  // console.log(sums, "sums", state.carAnnualTotal, state.sumArr)
+  const tempArr: any = sums.filter((sum) => typeof sum === "number")
+  if (tempArr.length > 0) {
+    state.sumArr = [...tempArr]
+    state.carAnnualTotal = tempArr.reduce((prev: any, curr: any) => {
       return prev + curr
     })
   }
-  // console.log(sums, "sums", state.carAnnualTotal, state.sumArr)
   return sums
 }
 let userStorage = window.localStorage.getItem("user")
