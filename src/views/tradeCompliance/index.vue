@@ -11,12 +11,12 @@
     <el-card header="产品组成物料" class="card-margin">
       <el-table :data="data.productMaterialInfos" style="width: 100%" height="500" border>
         <el-table-column type="index" label="序号" width="100" />
-        <el-table-column label="物料编码" prop="name" />
-        <el-table-column label="物料名称" prop="name" />
-        <el-table-column label="数量" prop="name" />
-        <el-table-column label="单价" prop="name" />
-        <el-table-column label="金额" prop="name" />
-        <el-table-column label="金额" prop="物料管制状态分类" />
+        <el-table-column label="物料编码" prop="materialCode" />
+        <el-table-column label="物料名称" prop="materialName" />
+        <el-table-column label="数量" prop="count" />
+        <el-table-column label="单价" prop="unitPrice" />
+        <el-table-column label="金额" prop="amount" />
+        <el-table-column label="物料管制状态分类" prop="controlStateType" />
       </el-table>
       <el-descriptions :column="1" border>
         <el-descriptions-item label="ECCN成分价值占比">
