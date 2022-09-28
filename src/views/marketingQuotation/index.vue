@@ -4,7 +4,7 @@
       <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
       <el-button class="m-2" type="primary" @click="downLoad3DExploded">3D爆炸图下载</el-button>
       <el-button class="m-2" type="primary" @click="downTrFile">TR-主方案下载</el-button>
-      <el-button class="m-2" type="primary" @click="jumpToAnalysis">点击查看报价分析看板</el-button>
+      <el-button type="primary" @click="jumpToAnalysis">点击查看报价分析看板</el-button>
       <el-button class="m-2" type="primary" @click="jumpToElec">点击查看电子料返利金额</el-button>
       <el-button class="m-2" type="primary" @click="jumpToStru">点击查看结构料返利金额</el-button>
       <el-button class="m-2" @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
@@ -141,7 +141,8 @@ const data = reactive<any>({
 const columns = reactive({
   sopData: []
 })
-const formatter = (cellValue: any) => {
+const formatter = (_record: any, _row: any, cellValue: any) => {
+  console.log(cellValue, "cellValue")
   return Number(cellValue).toFixed(2)
 }
 onBeforeMount(() => {
