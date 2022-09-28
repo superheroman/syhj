@@ -158,13 +158,13 @@
           width="300"
         >
           <el-table-column label="单价">
-            <template>
-              <div>{{ item.unitPrice.toFixed(2) }}</div>
+            <template #default="{ row }">
+              <div>{{ row.oldOffer[index].unitPrice.toFixed(2) }}</div>
             </template>
           </el-table-column>
           <el-table-column label="毛利率">
-            <template>
-              <div>{{ `${item.grossMargin.toFixed(2)} %` }}</div>
+            <template #default="{ row }">
+              <div>{{ `${row.oldOffer[index].grossMargin.toFixed(2)} %` }}</div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -227,12 +227,9 @@
           :key="index"
         >
           <template #default="scope">
-            <el-input v-model="scope.row.oldOffer[index].grossMargin" />
-            <el-input v-model="scope.row.oldOffer[index].unitPrice">
-              <!-- <template #append>
-                <el-button @click="spreadSheetCalculate(scope.row)">计算</el-button>
-              </template> -->
-            </el-input>
+            <div>
+              {{ scope.row.oldOffer[index].grossMarginNumber }}
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -328,7 +325,7 @@ let ProjectUnitPrice: any = {
   },
   xAxis: {
     type: "category",
-    data: ["目标价（内部）", "目标价（客户）", "本次报价", "上一轮"]
+    data: ["目标价（内部）", "目标价（客户）", "本次报价"]
   },
   // yAxis: {
   //   type: "value"
@@ -363,7 +360,7 @@ let RevenueGrossMargin: any = {
   },
   xAxis: {
     type: "category",
-    data: ["目标价", "本次报价", "上一轮"]
+    data: ["目标价(内部)", "目标价(客户)", "本次报价"]
   },
   tooltip: {
     trigger: "axis",
@@ -485,6 +482,7 @@ const setData = () => {
   chart1.setOption(ProjectUnitPrice)
   RevenueGrossMargin.series = data.projectBoard.map((item: any) => {
     // if (item.projectName === "销售收入" || item.projectName === "毛利率") {
+
     if (item.projectName === "销售收入") {
       return {
         name: item.projectName,
