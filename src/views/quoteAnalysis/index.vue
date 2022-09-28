@@ -158,13 +158,13 @@
           width="300"
         >
           <el-table-column label="单价">
-            <template>
-              <div>{{ item.unitPrice.toFixed(2) }}</div>
+            <template #default="{ row }">
+              <div>{{ row.oldOffer[index].unitPrice.toFixed(2) }}</div>
             </template>
           </el-table-column>
           <el-table-column label="毛利率">
-            <template>
-              <div>{{ `${item.grossMargin.toFixed(2)} %` }}</div>
+            <template #default="{ row }">
+              <div>{{ `${row.oldOffer[index].grossMargin.toFixed(2)} %` }}</div>
             </template>
           </el-table-column>
         </el-table-column>
@@ -227,12 +227,9 @@
           :key="index"
         >
           <template #default="scope">
-            <el-input v-model="scope.row.oldOffer[index].grossMargin" />
-            <el-input v-model="scope.row.oldOffer[index].unitPrice">
-              <!-- <template #append>
-                <el-button @click="spreadSheetCalculate(scope.row)">计算</el-button>
-              </template> -->
-            </el-input>
+            <div>
+              {{ scope.row.oldOffer[index].grossMarginNumber }}
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -244,14 +241,12 @@
       <div id="revenueGrossMarginChart" />
     </el-card>
     <div style="float: right; padding: 20px 0" m="2">
-      <el-button @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
-      <el-button @click="toProductPriceList" type="primary">在线预览核价表</el-button>
       <!-- <el-button @click="toDemandApplyResult" type="primary">点击生成待审批的报价表</el-button> -->
       <el-button @click="save" type="primary">点击生成待审批的报价表</el-button>
     </div>
-    <el-dialog v-model="dialogVisible" title="年份维度对比" width="50%" style="height: 300px">
-      <div v-for="item in data.dialogTable" :key="item" class="common-card">
-        <el-card class="table-wrap" :header="item.project">
+    <el-dialog v-model="dialogVisible" title="年份维度对比">
+      <div class="table-wrap">
+        <el-card :header="item.project" v-for="item in data.dialogTable" m="2" :key="item">
           <el-table :data="[item]" style="width: 100%">
             <template v-for="(yearItem, i) in item.yearList" :key="yearItem">
               <el-table-column :prop="`yearList.${i}.value`" :label="yearItem.year">
@@ -330,7 +325,7 @@ let ProjectUnitPrice: any = {
   },
   xAxis: {
     type: "category",
-    data: ["目标价（内部）", "目标价（客户）", "本次报价", "上一轮"]
+    data: ["目标价（内部）", "目标价（客户）", "本次报价"]
   },
   // yAxis: {
   //   type: "value"
@@ -365,7 +360,7 @@ let RevenueGrossMargin: any = {
   },
   xAxis: {
     type: "category",
-    data: ["目标价", "本次报价", "上一轮"]
+    data: ["目标价(内部)", "目标价(客户)", "本次报价"]
   },
   tooltip: {
     trigger: "axis",
@@ -487,6 +482,7 @@ const setData = () => {
   chart1.setOption(ProjectUnitPrice)
   RevenueGrossMargin.series = data.projectBoard.map((item: any) => {
     // if (item.projectName === "销售收入" || item.projectName === "毛利率") {
+
     if (item.projectName === "销售收入") {
       return {
         name: item.projectName,
@@ -599,25 +595,7 @@ const save = async () => {
     }
   })
 }
-const toProductPriceList = () => {
-  router.push({
-    path: "/nupriceManagement/productPriceList",
-    query: {
-      ...query,
-      disabled: true
-    }
-  })
-}
 
-const toNREPriceList = () => {
-  router.push({
-    path: "/nre/nrePricelist",
-    query: {
-      ...query,
-      hideBtn: 1
-    }
-  })
-}
 // const toDemandApplyResult = () => {
 //   router.push({
 //     path: "/demandApply/result",
@@ -718,5 +696,10 @@ watchEffect(() => {})
 }
 #revenueGrossMarginChart {
   height: 400px;
+}
+.table-wrap {
+  height: 600px;
+  overflow: hidden;
+  overflow-y: auto;
 }
 </style>

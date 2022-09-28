@@ -75,7 +75,11 @@
     <el-card class="card">
       <el-table :data="data.lossCost" border>
         <el-table-column label="成本项目" prop="name" />
-        <el-table-column label="损耗成本" prop="wastageCost" />
+        <el-table-column label="损耗成本" prop="wastageCost">
+          <template #default="{ row }">
+            {{ row.wastageCost?.toFixed(2) }}
+          </template>
+        </el-table-column>
         <el-table-column label="MOQ分摊成本" prop="moqShareCount" />
         <!-- <el-table-column label="结构料" prop="" width="180" />
         <el-table-column label="胶水" prop="" width="180" />
@@ -90,7 +94,11 @@
         <el-table-column label="物流费" prop="logisticsFee" width="180" />
         <el-table-column label="质量成本" prop="" width="180">
           <el-table-column label="产品类别" prop="productCategory" width="180" />
-          <el-table-column label="成本比例" prop="costProportion" width="180" />
+          <el-table-column label="成本比例" prop="costProportion" width="180">
+            <template #default="{ row }">
+              {{ `${(row.costProportion * 100)?.toFixed(2)} %` }}
+            </template>
+          </el-table-column>
           <el-table-column label="质量成本" prop="qualityCost" width="180" />
         </el-table-column>
         <el-table-column label="财务成本" prop="financialCost" width="180">

@@ -1,9 +1,14 @@
 <template>
   <el-card class="marketingQuotation-page" header="报价审核" m="2">
     <div style="margin: 20px 0; float: right" v-if="data.isShowBtn">
+      <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
+      <el-button class="m-2" type="primary" @click="downLoad3DExploded">3D爆炸图下载</el-button>
+      <el-button class="m-2" type="primary" @click="downTrFile">TR-主方案下载</el-button>
       <el-button type="primary" @click="jumpToAnalysis">点击查看报价分析看板</el-button>
-      <el-button type="primary" @click="jumpToElec">点击查看电子料返利金额</el-button>
-      <el-button type="primary" @click="jumpToStru">点击查看结构料返利金额</el-button>
+      <el-button class="m-2" type="primary" @click="jumpToElec">点击查看电子料返利金额</el-button>
+      <el-button class="m-2" type="primary" @click="jumpToStru">点击查看结构料返利金额</el-button>
+      <el-button class="m-2" @click="toNREPriceList" type="primary">在线预览NRE核价表</el-button>
+      <el-button class="m-2" @click="toProductPriceList" type="primary">在线预览核价表</el-button>
     </div>
     <el-descriptions :column="2" border>
       <el-descriptions-item label="直接客户名称">
@@ -106,8 +111,15 @@ import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
 import { ElMessageBox } from "element-plus"
 import useJump from "@/hook/useJump"
+import { useRouter } from "vue-router"
+import { CommonDownloadFile } from "@/api/bom"
+import { GetPicture3DByAuditFlowId } from "../processImport/service"
+import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
+import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
 
-const { jumpTodoCenter, jumpPage } = useJump()
+const router = useRouter()
+const query = useJump()
+const { jumpTodoCenter, jumpPage } = query
 const { auditFlowId = 1 }: any = getQuery()
 /**
  * 数据部分
@@ -119,13 +131,18 @@ const data = reactive<any>({
     motionMessage: []
   },
   motionMessageSop: [],
-  isShowBtn: false
+  isShowBtn: false,
+  sor: {
+    sorFileName: "",
+    fileId: null
+  }
 })
 
 const columns = reactive({
   sopData: []
 })
-const formatter = (row, column, cellValue: any) => {
+const formatter = (_record: any, _row: any, cellValue: any) => {
+  console.log(cellValue, "cellValue")
   return Number(cellValue).toFixed(2)
 }
 onBeforeMount(() => {
@@ -184,6 +201,93 @@ const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
       opinionDescription: !isAgree ? val?.value : ""
     })
     if (success) jumpTodoCenter()
+  })
+}
+const toProductPriceList = () => {
+  router.push({
+    path: "/nupriceManagement/productPriceList",
+    query: {
+      ...query,
+      disabled: 1
+    }
+  })
+}
+
+// SOR下载
+const downLoadSOR = async () => {
+  const { result }: any = (await getSorByAuditFlowId(auditFlowId)) || {}
+  if (!result.sorFileName) return false
+  let res: any = await CommonDownloadFile(result.sorFileId)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = result.sorFileName
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+}
+
+// TR主方案下载
+const downTrFile = async () => {
+  let res: any = await getAuditFlowVersion(Number(auditFlowId))
+  const trFileId = res.result.solutionFileIdentifier
+  const solutionFileName = res.result.solutionFileName
+  if (trFileId) {
+    try {
+      let res: any = await downloadFile(trFileId)
+      const blob = res
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = function () {
+        let url = URL.createObjectURL(new Blob([blob]))
+        let a = document.createElement("a")
+        document.body.appendChild(a) //此处增加了将创建的添加到body当中
+        a.href = url
+        a.download = solutionFileName
+        a.target = "_blank"
+        a.click()
+        a.remove() //将a标签移除
+      }
+    } catch (err) {
+      console.log(err, "downLoadError")
+    }
+  }
+}
+
+// 3D爆炸图下载
+const downLoad3DExploded = async () => {
+  let downRes: any = await GetPicture3DByAuditFlowId(auditFlowId)
+  if (!downRes.result.threeDFileId) return false
+  let res: any = await CommonDownloadFile(downRes.result.threeDFileId)
+  const blob = res
+  const reader = new FileReader()
+  reader.readAsDataURL(blob)
+  reader.onload = function () {
+    let url = URL.createObjectURL(new Blob([blob]))
+    let a = document.createElement("a")
+    document.body.appendChild(a) //此处增加了将创建的添加到body当中
+    a.href = url
+    a.download = downRes.result.threeDFileName
+    a.target = "_blank"
+    a.click()
+    a.remove() //将a标签移除
+  }
+  // data.setVisible = false
+}
+
+const toNREPriceList = () => {
+  router.push({
+    path: "/nre/nrePricelist",
+    query: {
+      ...query,
+      hideBtn: 1
+    }
   })
 }
 

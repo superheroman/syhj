@@ -8,7 +8,7 @@
             <el-upload
               v-model:file-list="fileList"
               :show-file-list="false"
-              action="/api/services/app/NrePricing/PostProductDepartmentSingleExcel"
+              :action="$baseUrl + '/api/services/app/NrePricing/PostProductDepartmentSingleExcel'"
               :on-success="handleSuccess"
               :on-change="handleFileChange"
               name="fileName"

@@ -7,7 +7,8 @@ export const percentageCostChartData = {
     left: "center"
   },
   tooltip: {
-    trigger: "item"
+    trigger: "item",
+    formatter: "{a} <br/>{b} : {c} ({d}%)"
   },
   legend: {
     orient: "vertical",
@@ -17,7 +18,8 @@ export const percentageCostChartData = {
   label: {
     alignTo: "edge",
     formatter: (item: any) => {
-      return `${item.seriesName}: ${bigNumberTransform(item.value || 0)}`
+      console.log(item, "itemitem")
+      return `${item.name}: ${bigNumberTransform(item.value || 0)}`
     },
     minMargin: 5,
     edgeDistance: 10,

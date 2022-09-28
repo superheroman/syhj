@@ -97,7 +97,7 @@ import useJump from "@/hook/useJump"
 
 const { jumpTodoCenter } = useJump()
 
-const { auditFlowId = 1, productId = 1 }: any = getQuery()
+const { auditFlowId, productId }: any = getQuery()
 
 // 结构料 - table数据
 const constructionBomList = ref<ConstructionDto[]>([])

@@ -50,6 +50,69 @@
         <el-table-column prop="remark" label="备注" />
       </el-table>
     </el-card>
+    <el-card class="margin-top" header="工装费用">
+      <el-table
+        :data="data.toolingCost"
+        style="width: 100%"
+        border
+        :summary-method="(val: any) => getMouldSummaries(val, '工装费用', 'cost')"
+        show-summary
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="workName" label="工装名称" />
+        <el-table-column prop="unitPriceOfTooling" label="工装数量" />
+        <el-table-column prop="cost" label="费用" />
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </el-card>
+    <el-card class="margin-top" header="治具费用">
+      <el-table
+        :data="data.fixtureCost"
+        style="width: 100%"
+        border
+        :summary-method="(val: any) => getMouldSummaries(val, '治具费用', 'cost')"
+        show-summary
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="toolingName" label="治具名称" />
+        <el-table-column prop="unitPrice" label="治具单价" />
+        <el-table-column prop="number" label="治具数量" />
+        <el-table-column prop="cost" label="费用" />
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </el-card>
+    <el-card class="margin-top" header="生产设备费用">
+      <el-table
+        :data="data.productionEquipmentCost"
+        style="width: 100%"
+        border
+        :summary-method="(val: any) => getMouldSummaries(val, '生产设备费用', 'cost')"
+        show-summary
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="equipmentName" label="生产设备名" />
+        <el-table-column prop="unitPrice" label="单价" />
+        <el-table-column prop="number" label="数量" />
+        <el-table-column prop="cost" label="费用" />
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </el-card>
+    <el-card class="margin-top" header="测试软件费用">
+      <el-table
+        :data="data.softwareTestingCost"
+        style="width: 100%"
+        border
+        :summary-method="(val: any) => getMouldSummaries(val, '测试软件费用', 'cost')"
+        show-summary
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="softwareProject" label="软件项目" />
+        <el-table-column prop="cost" label="费用" />
+        <el-table-column prop="costH" label="费用/H" />
+        <el-table-column prop="hour" label="小时" />
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </el-card>
     <el-card class="margin-top" header="差旅费用">
       <el-table
         :data="data.travelExpense"
@@ -92,19 +155,22 @@
 import { onBeforeMount, onMounted, watchEffect, reactive } from "vue"
 import { GetPricingForm, NreTableDownload } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
-import { pricingForm } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import { formatDateTime, downloadFileExcel } from "@/utils"
 
 const { auditFlowId, productId, year, hideBtn }: any = getQuery()
 
-const data = reactive<pricingForm>({
+const data = reactive<any>({
   handPieceCost: [],
   mouldInventory: [],
   qaqcDepartments: [],
   laboratoryFeeModels: [],
   travelExpense: [],
   restsCost: [],
+  toolingCost: [],
+  fixtureCost: [],
+  productionEquipmentCost: [],
+  softwareTestingCost: [],
   rmbAllCost: 0,
   usdAllCost: 0
 })
@@ -120,6 +186,10 @@ const initFetch = async () => {
     data.laboratoryFeeModels = result.laboratoryFeeModels || []
     data.travelExpense = result.travelExpense || []
     data.restsCost = result.restsCost || []
+    data.toolingCost = result.toolingCost
+    data.fixtureCost = result.fixtureCost
+    data.productionEquipmentCost = result.productionEquipmentCost
+    data.softwareTestingCost = result.softwareTestingCost
   } catch (err) {
     console.log(err, "[ GetPricingForm err ]")
   }
