@@ -22,8 +22,8 @@ const state = reactive({
   codeUrl: "",
   /** 登录表单 */
   loginForm: {
-    userNameOrEmailAddress: "601218",
-    password: "123456"
+    userNameOrEmailAddress: "",
+    password: ""
   } as ILoginForm,
   /** 登录表单校验规则 */
   loginRules: {
