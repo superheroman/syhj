@@ -205,24 +205,18 @@ const fetchInitData = async () => {
 
 // 提交电子料单价行数据
 const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
-  try {
-    const { success } = await PostElectronicMaterialEntering({
-      isSubmit,
-      electronicDtoList: [record],
-      auditFlowId
-    })
-    if (!success) throw Error()
-    ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
-    if (isSubmit) {
-      record.isEntering = true
-    } else {
-      record.isSubmit = true
-    }
-    fetchInitData()
-  } catch (err) {
-    ElMessage.error("提交失败~")
-    console.log(err, "确认")
-  }
+  await PostElectronicMaterialEntering({
+    isSubmit,
+    electronicDtoList: [record],
+    auditFlowId
+  })
+  ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
+  // if (isSubmit) {
+  //   record.isEntering = true
+  // } else {
+  //   record.isSubmit = true
+  // }
+  fetchInitData()
 }
 
 // 修改

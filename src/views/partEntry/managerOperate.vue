@@ -69,6 +69,7 @@
                 :on-error="handleUploadError"
                 :on-success="handleSuccess"
                 :limit="1"
+                show-file-list
               >
                 <el-button type="primary" v-havedone>文件上传</el-button>
               </el-upload>

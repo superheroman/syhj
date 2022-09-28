@@ -9,7 +9,7 @@
               class="m-2"
               :action="$baseUrl + '/api/services/app/WorkingHours/UploadExcel'"
               :on-success="handleSuccess"
-              :show-file-list="false"
+              show-file-list
               :data="{ auditFlowId: data.auditFlowId }"
               :on-progress="handleGetUploadProgress"
               :on-error="handleUploadError"
