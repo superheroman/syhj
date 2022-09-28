@@ -114,7 +114,7 @@
                       calculateFullGrossMargin(
                         scope.row,
                         scope.$index,
-                        scope.row.clientTargetUnitPrice,
+                        'clientTargetUnitPrice',
                         'clientTargetGrossMargin'
                       )
                     "
@@ -136,9 +136,7 @@
               <el-input v-model="scope.row.offerUnitPrice">
                 <template #append>
                   <el-button
-                    @click="
-                      calculateFullGrossMargin(scope.row, scope.$index, scope.row.offerUnitPrice, 'offeGrossMargin')
-                    "
+                    @click="calculateFullGrossMargin(scope.row, scope.$index, 'offerUnitPrice', 'offeGrossMargin')"
                     >计算</el-button
                   >
                 </template>
@@ -440,18 +438,29 @@ const data = reactive<any>({
 })
 
 // 报价分析看板 单价计算
-const calculateFullGrossMargin = debounce(async (row: any, index: number, unitPrice: number, key: string) => {
+const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: string, key2: string) => {
   // console.log(data.auditFlowId)
-  let { result }: any = (await postCalculateFullGrossMargin(row, data.auditFlowId, unitPrice)) || {}
+  const productBoards = data.productBoard.map((item: any) => {
+    return {
+      modelCountId: item.modelCountId,
+      unitPrice: item[key1]
+    }
+  })
+  let { result }: any = (await postCalculateFullGrossMargin(productBoards, data.auditFlowId)) || {}
   // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 
   const { grossMargin } = result?.productBoardGrosses[0] || ""
 
-  data.productBoard[index][key] = grossMargin
-  data.allGrossMargin = result.allGrossMargin
-  const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
-  const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
-  spreadSheetCalculate(grossMarginValue, AllUnitPrice)
+  data.productBoard[index][key2] = grossMargin
+
+  if (key2 === "offeGrossMargin") {
+    data.allGrossMargin = result.allGrossMargin
+    const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
+    const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
+    spreadSheetCalculate(grossMarginValue, AllUnitPrice)
+  } else {
+    data.allInteriorGrossMargin = result.allGrossMargin
+  }
   setData()
 }, 300)
 

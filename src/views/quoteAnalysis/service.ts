@@ -10,18 +10,13 @@ export function getStatementAnalysisBoard(id: number) {
   })
 }
 
-export function postCalculateFullGrossMargin(row: any, auditFlowId: number, unitPrice: number) {
+export function postCalculateFullGrossMargin(productBoards: any, auditFlowId: number) {
   return request({
     url: "/api/services/app/AnalyseBoard/PostCalculateFullGrossMargin",
     method: "post",
     data: {
       auditFlowId,
-      productBoards: [
-        {
-          modelCountId: row.modelCountId,
-          unitPrice: Number(unitPrice)
-        }
-      ]
+      productBoards
     }
   })
 }
