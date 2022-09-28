@@ -1,5 +1,5 @@
 <template>
-  <el-card class="" header="报价审核">
+  <el-card class="" header="产品识别分析表">
     <el-descriptions :column="2" border>
       <el-descriptions-item label="产品名称"> {{ data.tradeComplianceCheck.productName }} </el-descriptions-item>
       <el-descriptions-item label="最终出口地国家"> {{ data.tradeComplianceCheck.country }} </el-descriptions-item>
@@ -20,13 +20,13 @@
       </el-table>
       <el-descriptions :column="1" border>
         <el-descriptions-item label="ECCN成分价值占比">
-          {{ data.tradeComplianceCheck.eccnPricePercent }}
+          {{ (Number(data.tradeComplianceCheck.eccnPricePercent) * 100).toFixed(2) + "%" }}
         </el-descriptions-item>
         <el-descriptions-item label="待定成分价值占比">
-          {{ data.tradeComplianceCheck.pendingPricePercent }}
+          {{ (Number(data.tradeComplianceCheck.pendingPricePercent) * 100).toFixed(2) + "%" }}
         </el-descriptions-item>
         <el-descriptions-item label="合计价值占比">
-          {{ data.tradeComplianceCheck.amountPricePercent }}
+          {{ (Number(data.tradeComplianceCheck.amountPricePercent) * 100).toFixed(2) + "%" }}
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
