@@ -8,7 +8,7 @@
             action="/api/services/app/ElectronicBom/UploadExcel"
             :on-success="handleSuccess"
             :on-error="handleUploadError"
-            :show-file-list="false"
+            show-file-list
             :on-progress="handleGetUploadProgress"
           >
             <el-button type="primary">电子料上传</el-button>

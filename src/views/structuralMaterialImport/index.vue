@@ -7,7 +7,7 @@
           <el-upload
             action="/api/services/app/StructionBom/LoadExcel"
             :on-success="handleSuccess"
-            :show-file-list="false"
+            show-file-list
             :on-progress="handleGetUploadProgress"
             :on-error="handleUploadError"
           >
@@ -21,7 +21,7 @@
           <el-upload
             action="/api/services/app/FileCommonService/UploadFile"
             :on-success="handleSuccess3D"
-            :show-file-list="false"
+            show-file-list
           >
             <el-button type="primary">附件上传：3D爆炸图</el-button>
           </el-upload>

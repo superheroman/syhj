@@ -16,7 +16,7 @@
       <el-upload
         action="/api/services/app/User/ExcelImport"
         :on-success="handleSuccess"
-        :show-file-list="false"
+        show-file-list
         style="margin-left: 20px"
         name="excle"
         :on-progress="handleGetUploadProgress"

@@ -6,7 +6,7 @@
           <el-upload
             action="/api/services/app/UnitPriceLibrary/PostUInitPriceForm"
             :on-success="handleSuccess"
-            :show-file-list="false"
+            show-file-list
             :on-progress="handleGetUploadProgress"
             :on-error="handleUploadError"
           >

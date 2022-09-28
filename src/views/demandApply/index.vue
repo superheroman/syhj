@@ -608,6 +608,7 @@
                 :on-change="handleFileChange"
                 multiple
                 :on-progress="handleGetUploadProgress"
+                show-file-list
               >
                 <el-button>SOR文件上传</el-button>
               </el-upload>

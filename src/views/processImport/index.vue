@@ -9,7 +9,7 @@
               class="m-2"
               action="/api/services/app/WorkingHours/UploadExcel"
               :on-success="handleSuccess"
-              :show-file-list="false"
+              show-file-list
               :data="{ auditFlowId: data.auditFlowId }"
               :on-progress="handleGetUploadProgress"
               :on-error="handleUploadError"
@@ -314,12 +314,6 @@ const getSORFileName = async () => {
   const { result }: any = await getSorByAuditFlowId(auditFlowId)
   data.sorFileName = result.sorFileName
   data.fileId = result.sorFileId
-}
-
-const getPicture3DByAuditFlowId = async () => {
-  const { result }: any = await GetPicture3DByAuditFlowId(auditFlowId)
-  data.picture3D.fileName = result.sorFileName
-  data.picture3D.id = result.sorFileId
 }
 
 // SOR下载
