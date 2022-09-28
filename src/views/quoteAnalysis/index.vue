@@ -446,9 +446,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: 
   let { result }: any = (await postCalculateFullGrossMargin(productBoards, data.auditFlowId)) || {}
   // row.oldOffer[index].grossMargin = res.result.productBoardGrosses[0].offeGrossMargin
 
-  const { grossMargin } = result?.productBoardGrosses[0] || ""
-
-  data.productBoard[index][key2] = grossMargin
+  data.productBoard[index][key2] = result?.productBoardGrosses[index].grossMargin
 
   if (key2 === "offeGrossMargin") {
     data.allGrossMargin = result.allGrossMargin
