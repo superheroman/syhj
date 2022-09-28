@@ -73,7 +73,7 @@
         <el-table-column label="成本" prop="cost" />
         <el-table-column label="毛利率" prop="grossMargin">
           <template #default="{ row }">
-            {{ `${(row.grossMargin * 100)?.toFixed(2) || 0} %` }}
+            {{ `${row.grossMargin?.toFixed(2) || 0} %` }}
           </template>
         </el-table-column>
         <el-table-column label="价格" prop="price" />
@@ -90,7 +90,7 @@
         </el-table-column>
         <el-table-column label="含佣金的毛利率" prop="grossMarginCommission">
           <template #default="{ row }">
-            {{ `${(row.grossMarginCommission * 100)?.toFixed(2) || 0} %` }}
+            {{ `${row.grossMarginCommission?.toFixed(2) || 0} %` }}
           </template>
         </el-table-column>
       </el-table>
