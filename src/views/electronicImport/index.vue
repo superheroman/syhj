@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
-import { ElMessage } from "element-plus"
+import { ElLoading, ElMessage } from "element-plus"
 // import type { TabsPaneContext } from "element-plus"
 import { SaveElectronicBom, DownloadFile, GetElectronicBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
@@ -117,12 +117,22 @@ const downLoadTemplate = async () => {
   data.setVisible = false
 }
 const submit = async () => {
-  let { success }: any = await SaveElectronicBom({
-    auditFlowId,
-    productId,
-    electronicBomDtos: data.tableData
+  const loading = ElLoading.service({
+    lock: true,
+    text: "加载中",
+    background: "rgba(0, 0, 0, 0.7)"
   })
-  success && ElMessage.success("提交成功！")
+  try {
+    let { success }: any = await SaveElectronicBom({
+      auditFlowId,
+      productId,
+      electronicBomDtos: data.tableData
+    })
+    loading.close()
+    success && ElMessage.success("提交成功！")
+  } catch (error) {
+    loading.close()
+  }
 }
 onMounted(async () => {
   let query = getQuery()

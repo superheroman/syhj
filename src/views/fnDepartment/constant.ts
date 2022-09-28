@@ -89,6 +89,10 @@ const unitCols = [
     key: "vendorOffer"
   },
   {
+    name: "供应商优先级",
+    key: "priority"
+  },
+  {
     name: "有效开始日期",
     key: "effectiveDate"
   },

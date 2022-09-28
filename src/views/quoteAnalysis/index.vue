@@ -489,11 +489,10 @@ const setData = () => {
     ]
   })
   chart1.setOption(ProjectUnitPrice)
-  RevenueGrossMargin.series = data.projectBoard.map((item: any) => {
-    // if (item.projectName === "销售收入" || item.projectName === "毛利率") {
-
+  let RevenueGrossMarginSeries = [] as any[]
+  data.projectBoard.forEach((item: any) => {
     if (item.projectName === "销售收入") {
-      return {
+      let RevenueGrossMarginData = {
         name: item.projectName,
         type: "bar",
         stack: "total",
@@ -505,21 +504,26 @@ const setData = () => {
         },
         data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
       }
+      if (item.offer?.grossMarginNumber) {
+        RevenueGrossMarginData.data.push(item.offer.grossMarginNumber)
+      }
+      RevenueGrossMarginSeries.push(RevenueGrossMarginData)
     }
-  })
-  let value: any = []
-  data.projectBoard.forEach((item: any) => {
     if (item.projectName === "毛利率") {
-      value.push(item.clientTarget.grossMargin)
-      value.push(item.interiorTarget.grossMargin)
+      let RevenueGrossMarginDataY = {
+        yAxisIndex: 1,
+        name: "毛利率",
+        type: "line",
+        data: [item.clientTarget.grossMargin, item.interiorTarget.grossMargin]
+      }
+      if (item.offer?.grossMarginNumber) {
+        //这里计算只有grossMarginNumber
+        RevenueGrossMarginDataY.data.push(item.offer.grossMarginNumber)
+      }
+      RevenueGrossMarginSeries.push(RevenueGrossMarginDataY)
     }
   })
-  RevenueGrossMargin.series.push({
-    yAxisIndex: 1,
-    name: "毛利率",
-    type: "line",
-    data: value //需要替换
-  })
+  RevenueGrossMargin.series = RevenueGrossMarginSeries
   chart2.setOption(RevenueGrossMargin)
 }
 

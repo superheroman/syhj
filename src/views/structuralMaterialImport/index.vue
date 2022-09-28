@@ -126,7 +126,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from "vue"
 import type { UploadProps } from "element-plus"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElLoading } from "element-plus"
 import {
   SaveStructionBom,
   SaveBOM,
@@ -215,14 +215,27 @@ const downLoadTemplate = async () => {
   }
 }
 const submit = async () => {
-  let params: SaveBOM = Object.assign({ auditFlowId, productId, structureBomDtos: data.tableData }, data.logisticsForm)
-  let res: any = await SaveStructionBom(params)
-  let resO: any = await SaveProductDevelopmentInput(params)
-  if (res.success && resO.success) {
-    ElMessage({
-      message: "保存成功",
-      type: "success"
-    })
+  const loading = ElLoading.service({
+    lock: true,
+    text: "加载中",
+    background: "rgba(0, 0, 0, 0.7)"
+  })
+  try {
+    let params: SaveBOM = Object.assign(
+      { auditFlowId, productId, structureBomDtos: data.tableData },
+      data.logisticsForm
+    )
+    let res: any = await SaveStructionBom(params)
+    let resO: any = await SaveProductDevelopmentInput(params)
+    loading.close()
+    if (res.success && resO.success) {
+      ElMessage({
+        message: "保存成功",
+        type: "success"
+      })
+    }
+  } catch (error) {
+    loading.close()
   }
 }
 </script>
