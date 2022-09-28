@@ -7,7 +7,7 @@
           <el-row align="middle">
             <el-upload
               class="m-2"
-              action="/api/services/app/WorkingHours/UploadExcel"
+              :action="$baseUrl + '/api/services/app/WorkingHours/UploadExcel'"
               :on-success="handleSuccess"
               show-file-list
               :data="{ auditFlowId: data.auditFlowId }"

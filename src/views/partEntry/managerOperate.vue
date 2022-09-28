@@ -63,11 +63,8 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="TR-主方案:">
-              <!-- <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" multiple :limit="1">
-                <el-button type="primary">文件上传</el-button>
-              </el-upload> -->
               <el-upload
-                action="/api/services/app/FileCommonService/UploadFile"
+                :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
                 :on-progress="handleGetUploadProgress"
                 :on-error="handleUploadError"
                 :on-success="handleSuccess"

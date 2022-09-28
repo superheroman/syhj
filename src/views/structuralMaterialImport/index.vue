@@ -5,7 +5,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            action="/api/services/app/StructionBom/LoadExcel"
+            :action="$baseUrl + '/api/services/app/StructionBom/LoadExcel'"
             :on-success="handleSuccess"
             show-file-list
             :on-progress="handleGetUploadProgress"
@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-upload
-            action="/api/services/app/FileCommonService/UploadFile"
+            :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
             :on-success="handleSuccess3D"
             show-file-list
           >
@@ -36,6 +36,7 @@
       <el-table-column prop="isInvolveItem" label="是否涉及" width="180" />
       <el-table-column prop="drawingNumName" label="图号名称" width="180" />
       <el-table-column prop="sapItemNum" label="物料编号" width="180" />
+      <el-table-column prop="assemblyQuantity" label="装配数量" width="180" />
       <el-table-column prop="overallDimensionSize" label="外形尺寸mm" width="180" />
       <el-table-column prop="materialName" label="材料名称" width="180" />
       <el-table-column prop="weightNumber" label="重量" width="180" />
@@ -43,7 +44,6 @@
       <el-table-column prop="isNewMouldProduct" label="是否新开模" width="180" />
       <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="180" />
       <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="180" />
-      <el-table-column prop="assemblyQuantity" label="装配数量" width="180" />
       <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="200" />
     </el-table>
 

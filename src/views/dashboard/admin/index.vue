@@ -116,8 +116,8 @@
       <el-card style="margin-top: 10px">
         <el-upload
           v-model:file-list="fileList"
-          show-file-list
-          action="/api/services/app/FileCommonService/UploadFile"
+          :show-file-list="false"
+          :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
           :on-success="handleSuccess"
           :on-change="handleFileChange"
           style="float: right"
