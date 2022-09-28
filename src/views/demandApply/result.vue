@@ -99,7 +99,7 @@
       <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="费用类别" prop="formName" />
-        <el-table-column label="核价金额" prop="offerMoney" />
+        <el-table-column label="核价金额" prop="pricingMoney" />
         <el-table-column label="报价系数" prop="offerCoefficient" />
         <el-table-column label="报价金额" prop="offerMoney" />
         <el-table-column label="备注" prop="remark" />
