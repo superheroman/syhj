@@ -193,26 +193,19 @@ const fetchModuleNumberData = async () => {
 
 // 确认结构料单价行数据
 const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
-  try {
-    const { success, result } = await PostStructuralMemberEntering({
-      isSubmit,
-      structuralMaterialEntering: [{ ...record, productId }],
-      auditFlowId
-    })
-    if (!success) throw Error()
-    ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
-    fetchInitData()
-    record.isEdit = false
-    if (isSubmit) {
-      record.isEntering = true
-    } else {
-      record.isSubmit = true
-    }
-    console.log(result, "handleSubmit")
-  } catch (err) {
-    console.log(err, "确认")
-    ElMessage.error("请求失败")
-  }
+  await PostStructuralMemberEntering({
+    isSubmit,
+    structuralMaterialEntering: [{ ...record, productId }],
+    auditFlowId
+  })
+  ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
+  fetchInitData()
+  record.isEdit = false
+  // if (isSubmit) {
+  //   record.isEntering = true
+  // } else {
+  //   record.isSubmit = true
+  // }
 }
 
 const fetchSopYear = async () => {
