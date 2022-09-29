@@ -40,8 +40,8 @@
       <!-- <el-descriptions-item label="审核/日期"> {{ data.tradeComplianceCheck.deletionTime }} </el-descriptions-item> -->
     </el-descriptions>
     <div style="float: right; margin: 20px 0">
-      <el-button @click="agree(false)" v-havedone>拒绝</el-button>
-      <el-button type="primary" @click="agree(true)" v-havedone>同意</el-button>
+      <el-button @click="agree(false)" v-havedone>退回</el-button>
+      <el-button type="primary" @click="agree(true)" v-havedone>归档</el-button>
     </div>
   </el-card>
 </template>

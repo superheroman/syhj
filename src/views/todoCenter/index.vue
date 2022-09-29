@@ -20,7 +20,7 @@
     <el-card class="card">
       <el-tabs v-model="activeName" type="card">
         <el-tab-pane label="待办" name="upcoming">
-          <el-table :data="auditFlowIdInfoList" default-expand-all>
+          <el-table :data="auditFlowIdInfoList">
             <el-table-column type="expand">
               <template #default="scopeP">
                 <el-table :data="scopeP.row.auditFlowRightDetailList">
@@ -44,7 +44,7 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="已办/查看" name="check">
-          <el-table :data="auditFlowIdInfoListCheck" default-expand-all>
+          <el-table :data="auditFlowIdInfoListCheck">
             <el-table-column type="expand">
               <template #default="scopeP">
                 <el-table :data="scopeP.row.auditFlowRightDetailList">
