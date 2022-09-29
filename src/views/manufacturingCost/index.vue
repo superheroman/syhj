@@ -3,131 +3,135 @@
     <!-- <div style="float: right; margin: 20px 10px">
       <el-button @click="addsmt" type="primary">新增</el-button>
     </div> -->
-    <el-table :data="data.smt" border style="margin: 20px 0" height="500">
-      <el-table-column prop="year" label="年份" width="180">
-        <template #default="{ row }">
-          <div v-if="row.year">{{ row.year }}</div>
-          <div v-else>全生命周期</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="直接制造成本" width="180">
-        <el-table-column label="直接人工" width="180">
+    <el-card header="SMT" m="2">
+      <el-table :data="data.smt" border style="margin: 20px 0" height="500">
+        <el-table-column prop="year" label="年份" width="180">
           <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.directLabor1" placeholder="" />
+            <div v-if="row.year">{{ row.year }}</div>
+            <div v-else>全生命周期</div>
           </template>
         </el-table-column>
-        <el-table-column label="设备折旧" width="180">
+        <el-table-column label="直接制造成本" width="180">
+          <el-table-column label="直接人工" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.directLabor1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="设备折旧" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="换线成本" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.lineChangeCost1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="制造费用" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="小计" width="180" prop="cost">
+            <template #default="{ row }">
+              <div>{{ row.subtotal1 }}</div>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="间接制造成本" width="180">
+          <el-table-column label="直接人工" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.directLabor2" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="设备折旧" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation2" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="制造费用" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses2" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="小计" width="180" prop="cost">
+            <template #default="{ row }">
+              <div>{{ row.subtotal2 }}</div>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="合计" width="180" prop="cost" fixed="right">
           <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation1" placeholder="" />
+            <div>{{ row.subtotal }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="换线成本" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.lineChangeCost1" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="制造费用" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses1" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="小计" width="180" prop="cost">
-          <template #default="{ row }">
-            <div>{{ row.subtotal1 }}</div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="间接制造成本" width="180">
-        <el-table-column label="直接人工" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.directLabor2" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="设备折旧" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation2" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="制造费用" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses2" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="小计" width="180" prop="cost">
-          <template #default="{ row }">
-            <div>{{ row.subtotal2 }}</div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="合计" width="180" prop="cost" fixed="right">
-        <template #default="{ row }">
-          <div>{{ row.subtotal }}</div>
-        </template>
-      </el-table-column>
-    </el-table>
+      </el-table>
+    </el-card>
 
-    <el-table :data="data.cob" border style="margin: 20px 0" height="500">
-      <el-table-column prop="year" label="年份" width="180">
-        <template #default="{ row }">
-          <div v-if="row.year">{{ row.year }}</div>
-          <div v-else>全生命周期</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="直接制造成本" width="180">
-        <el-table-column label="直接人工" width="180">
+    <el-card header="COB" m="2">
+      <el-table :data="data.cob" border style="margin: 20px 0" height="500">
+        <el-table-column prop="year" label="年份" width="180">
           <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.directLabor1" placeholder="" />
+            <div v-if="row.year">{{ row.year }}</div>
+            <div v-else>全生命周期</div>
           </template>
         </el-table-column>
-        <el-table-column label="设备折旧" width="180">
+        <el-table-column label="直接制造成本" width="180">
+          <el-table-column label="直接人工" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.directLabor1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="设备折旧" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="换线成本" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.lineChangeCost1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="制造费用" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses1" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="小计" width="180" prop="cost">
+            <template #default="{ row }">
+              <div>{{ row.subtotal1 }}</div>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="间接制造成本" width="180">
+          <el-table-column label="直接人工" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.directLabor2" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="设备折旧" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation2" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="制造费用" width="180">
+            <template #default="{ row }">
+              <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses2" placeholder="" />
+            </template>
+          </el-table-column>
+          <el-table-column label="小计" width="180" prop="cost">
+            <template #default="{ row }">
+              <div>{{ row.subtotal2 }}</div>
+            </template>
+          </el-table-column>
+        </el-table-column>
+        <el-table-column label="合计" width="180" prop="cost" fixed="right">
           <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation1" placeholder="" />
+            <div>{{ row.subtotal }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="换线成本" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.lineChangeCost1" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="制造费用" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses1" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="小计" width="180" prop="cost">
-          <template #default="{ row }">
-            <div>{{ row.subtotal1 }}</div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="间接制造成本" width="180">
-        <el-table-column label="直接人工" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.directLabor2" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="设备折旧" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.equipmentDepreciation2" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="制造费用" width="180">
-          <template #default="{ row }">
-            <el-input-number controls-position="right" :min="0" v-model="row.manufacturingExpenses2" placeholder="" />
-          </template>
-        </el-table-column>
-        <el-table-column label="小计" width="180" prop="cost">
-          <template #default="{ row }">
-            <div>{{ row.subtotal2 }}</div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="合计" width="180" prop="cost" fixed="right">
-        <template #default="{ row }">
-          <div>{{ row.subtotal }}</div>
-        </template>
-      </el-table-column>
-    </el-table>
+      </el-table>
+    </el-card>
     <div style="float: right; margin: 20px 10px">
       <el-button @click="submit" type="primary" v-havedone>提交</el-button>
     </div>

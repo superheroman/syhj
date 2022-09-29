@@ -7,7 +7,12 @@ export interface MouldSummaryMethodProps<T = MouldInventoryModel> {
   data: T[]
 }
 
-export const getMouldSummaries = (param: MouldSummaryMethodProps, name?: string, key?: string) => {
+export const getMouldSummaries = (
+  param: MouldSummaryMethodProps,
+  name?: string,
+  key?: string | null,
+  key2?: string
+) => {
   const { columns, data } = param
   const sums: string[] = []
   columns.forEach((_, index) => {
@@ -18,6 +23,8 @@ export const getMouldSummaries = (param: MouldSummaryMethodProps, name?: string,
     let values: any[] = []
     if (key) {
       values = data.map((item: any) => item[key])
+    } else if (key2) {
+      values = data.map((item: any) => Number((item[key2] || 0) * (item.unitPrice || 0)))
     } else {
       values = data.map((item) => Number((item.count || 0) * (item.unitPrice || 0)))
     }
