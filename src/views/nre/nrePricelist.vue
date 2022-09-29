@@ -4,9 +4,8 @@
     <el-card class="margin-top" header="手板件费用">
       <el-table
         :data="data.handPieceCost"
-        style="width: 100%"
         border
-        :summary-method="(val: any) => getMouldSummaries(val, '手板件费用')"
+        :summary-method="(val: any) => getMouldSummaries(val, '手板件费用', null, 'quantity')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -19,7 +18,12 @@
       </el-table>
     </el-card>
     <el-card class="margin-top" header="模具费用">
-      <el-table :data="data.mouldInventory" style="width: 100%" border :summary-method="getMouldSummaries" show-summary>
+      <el-table
+        :data="data.mouldInventory"
+        border
+        :summary-method="(val: any) => getMouldSummaries(val, '模具费用')"
+        show-summary
+      >
         <el-table-column type="index" width="50" />
         <el-table-column prop="modelName" label="模具名称" />
         <el-table-column prop="moldCavityCount" label="模穴数" />
