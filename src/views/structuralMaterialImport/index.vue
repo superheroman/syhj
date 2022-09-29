@@ -177,14 +177,12 @@ onMounted(async () => {
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
   if (res.success) {
-    if (res.result.isSuccess === false) {
-      ElMessage({
-        message: res.result.message,
-        type: "error"
-      })
-    } else {
-      data.tableData = res.result.structureBomDtos
-    }
+    data.tableData = res.result.structureBomDtos
+  } else {
+    ElMessage({
+      message: res.result.message,
+      type: "error"
+    })
   }
 }
 const handleSuccess3D: UploadProps["onSuccess"] = (res: any) => {

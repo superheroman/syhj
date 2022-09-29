@@ -326,7 +326,7 @@ const activeChange = (val: boolean, row: User) => {
 }
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
-  if (res.result.isSuccess) {
+  if (res.success) {
     ElMessage({
       message: res.result.message,
       type: "success"
@@ -334,7 +334,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
     getList()
   } else {
     ElMessage({
-      message: res.result.message,
+      message: res.error.message,
       type: "error"
     })
   }

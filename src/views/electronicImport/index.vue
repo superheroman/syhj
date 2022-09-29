@@ -88,15 +88,12 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
   if (res.success) {
     // data.tableDataList[data.activeIndex] = res.result
-
-    if (res.result.isSuccess === false) {
-      ElMessage({
-        message: res.result.message,
-        type: "error"
-      })
-    } else {
-      data.tableData = res.result.electronicBomDtos
-    }
+    data.tableData = res.result.electronicBomDtos
+  } else {
+    ElMessage({
+      message: res.error.message,
+      type: "error"
+    })
   }
 }
 const downLoadTemplate = async () => {
