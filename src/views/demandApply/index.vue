@@ -60,7 +60,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="项目版本号:">
-              <el-input v-model="state.quoteVersion" />
+              <el-input v-model="state.quoteForm.quoteVersion" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -787,9 +787,9 @@ const state = reactive({
     projectManager: undefined,
     sorFile: [] as any,
     reason: "",
+    quoteVersion: "",
     auditFlowId: 1 //默认先给一个5
   },
-  quoteVersion: "",
   yearCols: [] as Number[],
   carAnnualTotal: 0, //列年度总量，把sum取出
   sumArr: [] as number[],
@@ -1063,7 +1063,7 @@ const generateTitle = () => {
   let nowDate = dayjs(quoteForm.draftDate ? quoteForm.draftDate : new Date()).format("YYYY-MM-DD")
   let userDepartment = quoteForm.draftingDepartment
   let title = `${nowDate + userDepartment}关于${
-    quoteForm.customerName + quoteForm.projectName + "第" + state.quoteVersion + "版"
+    quoteForm.customerName + quoteForm.projectName + "第" + state.quoteForm.quoteVersion + "版"
   }的核价报价申请`
   state.quoteForm.title = title
 }
@@ -1164,7 +1164,7 @@ onMounted(async () => {
   let query = getQuery()
   state.quoteForm.projectName = query.projectName ? query.projectName + "" : ""
   state.quoteForm.projectCode = query.projectCode ? query.projectCode + "" : ""
-  state.quoteVersion = query.quoteVersion ? query.quoteVersion + "" : ""
+  state.quoteForm.quoteVersion = query.quoteVersion ? query.quoteVersion + "" : ""
   state.quoteForm.drafter = userInfo.name
   state.quoteForm.drafterNumber = userInfo.userNumber || "未成功获取"
   state.quoteForm.draftingCompany = userInfo.userCompany?.name || "未成功获取"
@@ -1229,6 +1229,12 @@ onMounted(async () => {
       productTableData.value = viewDataRes.result.productInformation
       moduleTableData.value = viewDataRes.result.modelCount
       requireTableData.value = viewDataRes.result.requirement
+      fileList.value = viewDataRes.result.files.map((item: any) => {
+        return {
+          name: item.fileName,
+          url: item.fileId
+        }
+      })
     }
     // 查看之后还需要编辑 --
     setTimeout(() => {
