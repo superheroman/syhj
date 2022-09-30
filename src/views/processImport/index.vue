@@ -251,7 +251,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
     formatTableColumnData()
     ElMessage.success("上传成功！")
   } else {
-    ElMessage.error(result.message || "上传失败~")
+    ElMessage.error(res.error.message || "上传失败~")
   }
 }
 
