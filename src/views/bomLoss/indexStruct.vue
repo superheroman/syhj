@@ -125,8 +125,16 @@ onMounted(async () => {
     let resStruct: any = await getStructLossRateType({ auditFlowId, productId })
     data.bomLossStructData = resStruct.result
     data.bomLossStructData.forEach((item: any) => {
-      item.lossRateYearList = []
-      item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
+      // 不知后端返回的是空数组还是null
+      if (!item.lossRateYearList || item.lossRateYearList.length === 0) {
+        item.lossRateYearList = []
+        item.lossRateYearList = data.years.map((year) => ({ year, rate: "" }))
+      } else {
+        // 初始值可能会是退回，这时需要显示后端返回的值
+        item.lossRateYearList.forEach((it: any) => {
+          it.rate = Number(it.rate) * 100
+        })
+      }
     })
   }
 })
