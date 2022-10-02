@@ -49,6 +49,7 @@
                 v-if="scope.row.isEdit"
                 v-model="scope.row.inTheRate[index].value"
                 @keyup.enter="handleCalculation(scope.row, scope.$index)"
+                type="number"
               >
                 <template #append> % </template>
               </el-input>
