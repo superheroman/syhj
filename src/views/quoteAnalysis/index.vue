@@ -275,7 +275,7 @@ import * as echarts from "echarts"
 import {
   getStatementAnalysisBoard,
   postCalculateFullGrossMargin,
-  getSpreadSheetCalculate,
+  postSpreadSheetCalculate,
   postIsOffer,
   getDownloadMessage,
   GetYearDimensionalityComparison,
@@ -450,9 +450,9 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: 
 
   if (key2 === "offeGrossMargin") {
     data.allGrossMargin = result.allGrossMargin
-    const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
-    const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
-    spreadSheetCalculate(grossMarginValue, AllUnitPrice)
+    // const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
+    // const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
+    spreadSheetCalculate(productBoards)
   } else {
     data.allInteriorGrossMargin = result.allGrossMargin
   }
@@ -525,8 +525,8 @@ const setData = () => {
   chart2.setOption(RevenueGrossMargin)
 }
 
-const spreadSheetCalculate = async (grossMarginValue: any, AllUnitPrice: any) => {
-  let { result }: any = await getSpreadSheetCalculate(data.auditFlowId, grossMarginValue, AllUnitPrice)
+const spreadSheetCalculate = async (productBoards: any) => {
+  let { result }: any = await postSpreadSheetCalculate(productBoards, data.auditFlowId)
   result.forEach((element: any, index: number) => {
     data.projectBoard[index].offer = {
       grossMarginNumber: element.value
