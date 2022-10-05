@@ -47,8 +47,10 @@
         <el-table-column label="备注" prop="remarks" width="180" />
       </el-table>
       <el-descriptions title="" border :column="2">
-        <el-descriptions-item label="材料成本合计">{{ data.allPrice?.toFixed(2) }}</el-descriptions-item>
-        <el-descriptions-item label="电子料大类成本合计">{{ data.allTotalMoneyCyn || "-" }}</el-descriptions-item>
+        <el-descriptions-item label="材料成本合计">{{ data.allPrice?.toFixed(2) || "-" }}</el-descriptions-item>
+        <el-descriptions-item label="电子料大类成本合计">{{
+          data.allTotalMoneyCyn?.toFixed(2) || "-"
+        }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
     <el-card class="card">
@@ -233,6 +235,7 @@ const setData = (result: any) => {
   data.material = material || []
   const priceTotal = data.material.map((item: { materialCost: any }) => item.materialCost || 0)
   data.allPrice = priceTotal.reduce((a: any, b: any) => a + b)
+  data.allTotalMoneyCyn = result.totalMoneyCynCount
   data.manufacturingCost = manufacturingCost || []
   data.lossCost = lossCost || []
   data.otherCostItem = [otherCostItem] || []
