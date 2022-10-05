@@ -32,20 +32,24 @@
         <el-table-column label="sap" prop="sap" width="180" />
         <el-table-column label="材料名称" prop="materialName" width="180" />
         <el-table-column label="装配数量" prop="assemblyCount" width="180" />
-        <el-table-column label="材料单价（原币）" prop="materialPrice" width="180" />
+        <el-table-column label="材料单价（原币）" prop="materialPrice" width="180" :formatter="toFixedTwo" />
         <el-table-column label="币别" prop="currencyText" width="180" />
         <el-table-column label="汇率" prop="exchangeRate" width="180" />
-        <el-table-column label="材料单价（人民币）" prop="materialPriceCyn" width="180" />
-        <el-table-column label="合计金额（人民币）" prop="totalMoneyCyn" width="180" />
-        <el-table-column label="损耗" prop="loss" width="180" />
-        <el-table-column label="材料成本（含损耗）" prop="materialCost" width="180" />
+        <el-table-column label="材料单价（人民币）" prop="materialPriceCyn" width="180" :formatter="toFixedTwo" />
+        <el-table-column label="合计金额（人民币）" prop="totalMoneyCyn" width="180" :formatter="toFixedTwo" />
+        <el-table-column label="损耗" prop="loss" width="180" :formatter="toFixedTwo" />
+        <el-table-column label="材料成本（含损耗）" prop="materialCost" width="180" :formatter="toFixedTwo" />
         <el-table-column label="投入量" prop="inputCount" width="180" />
         <el-table-column label="采购量" prop="purchaseCount" width="180" />
-        <el-table-column label="MOQ分摊成本" prop="moqShareCount" width="180" />
+        <el-table-column label="MOQ分摊成本" prop="moqShareCount" width="180" :formatter="toFixedTwo" />
         <el-table-column label="MOQ" prop="moq" width="180" />
         <el-table-column label="可用库存" prop="availableInventory" width="180" />
         <el-table-column label="备注" prop="remarks" width="180" />
       </el-table>
+      <el-descriptions title="" border :column="2">
+        <el-descriptions-item label="材料成本合计">{{ data.allPrice?.toFixed(2) }}</el-descriptions-item>
+        <el-descriptions-item label="电子料大类成本合计">{{ data.allTotalMoneyCyn || "-" }}</el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <el-card class="card">
       <el-table :data="data.manufacturingCost" style="width: 100%" border>
@@ -56,30 +60,48 @@
           <el-table-column label="换线成本" prop="" />
           <el-table-column label="制造费用" prop="" />
           <el-table-column label="小计" prop="" /> -->
-          <el-table-column label="直接人工" prop="manufacturingCostDirect.directLabor" />
-          <el-table-column label="设备折旧" prop="manufacturingCostDirect.equipmentDepreciation" />
-          <el-table-column label="换线成本" prop="manufacturingCostDirect.lineChangeCost" />
-          <el-table-column label="制造费用" prop="manufacturingCostDirect.manufacturingExpenses" />
-          <el-table-column label="小计" prop="manufacturingCostDirect.subtotal" />
+          <el-table-column label="直接人工" prop="manufacturingCostDirect.directLabor" :formatter="toFixedTwo" />
+          <el-table-column
+            label="设备折旧"
+            prop="manufacturingCostDirect.equipmentDepreciation"
+            :formatter="toFixedTwo"
+          />
+          <el-table-column label="换线成本" prop="manufacturingCostDirect.lineChangeCost" :formatter="toFixedTwo" />
+          <el-table-column
+            label="制造费用"
+            prop="manufacturingCostDirect.manufacturingExpenses"
+            :formatter="toFixedTwo"
+          />
+          <el-table-column label="小计" prop="manufacturingCostDirect.subtotal" :formatter="toFixedTwo" />
         </el-table-column>
         <el-table-column label="间接制造成本" prop="">
-          <el-table-column label="直接人工" prop="manufacturingCostIndirect.directLabor" />
-          <el-table-column label="设备折旧" prop="manufacturingCostIndirect.equipmentDepreciation" />
+          <el-table-column label="直接人工" prop="manufacturingCostIndirect.directLabor" :formatter="toFixedTwo" />
+          <el-table-column
+            label="设备折旧"
+            prop="manufacturingCostIndirect.equipmentDepreciation"
+            :formatter="toFixedTwo"
+          />
           <!-- <el-table-column label="换线成本" prop="manufacturingCostIndirect.lineChangeCost" /> -->
-          <el-table-column label="制造费用" prop="manufacturingCostIndirect.manufacturingExpenses" />
-          <el-table-column label="小计" prop="manufacturingCostIndirect.subtotal" />
+          <el-table-column
+            label="制造费用"
+            prop="manufacturingCostIndirect.manufacturingExpenses"
+            :formatter="toFixedTwo"
+          />
+          <el-table-column label="小计" prop="manufacturingCostIndirect.subtotal" :formatter="toFixedTwo" />
         </el-table-column>
-        <el-table-column label="合计" prop="subtotal" />
+        <el-table-column label="合计" prop="subtotal" :formatter="toFixedTwo" />
       </el-table>
     </el-card>
-    <el-card class="card">
-      <el-table :data="data.lossCost" border>
+    <el-card class="card" header="损耗成本">
+      <el-table
+        :data="data.lossCost"
+        :summary-method="(val: any) => getSummaries(val, '损耗成本', 'wastageCost')"
+        show-summary
+        border
+      >
+        <el-table-column type="index" width="50" />
         <el-table-column label="成本项目" prop="name" />
-        <el-table-column label="损耗成本" prop="wastageCost">
-          <template #default="{ row }">
-            {{ row.wastageCost?.toFixed(2) }}
-          </template>
-        </el-table-column>
+        <el-table-column label="损耗成本" prop="wastageCost" :formatter="toFixedTwo" />
         <el-table-column label="MOQ分摊成本" prop="moqShareCount" />
         <!-- <el-table-column label="结构料" prop="" width="180" />
         <el-table-column label="胶水" prop="" width="180" />
@@ -91,7 +113,7 @@
     <el-card class="card">
       <el-table :data="data.otherCostItem" border>
         <el-table-column label="夹具" prop="fixture" width="180" />
-        <el-table-column label="物流费" prop="logisticsFee" width="180" />
+        <el-table-column label="物流费" prop="logisticsFee" width="180" :formatter="toFixedTwo" />
         <el-table-column label="质量成本" prop="" width="180">
           <el-table-column label="产品类别" prop="productCategory" width="180" />
           <el-table-column label="成本比例" prop="costProportion" width="180">
@@ -99,7 +121,7 @@
               {{ `${row.costProportion?.toFixed(2)} %` }}
             </template>
           </el-table-column>
-          <el-table-column label="质量成本" prop="qualityCost" width="180" />
+          <el-table-column label="质量成本" prop="qualityCost" width="180" :formatter="toFixedTwo" />
         </el-table-column>
         <el-table-column label="财务成本" prop="financialCost" width="180">
           <!-- <el-table-column label="账期" prop="accountingPeriod" width="180" />
@@ -107,10 +129,14 @@
           <el-table-column label="财务成本" prop="financialCost" width="180" /> -->
         </el-table-column>
         <el-table-column label="账期" prop="accountingPeriod" width="180" />
-        <el-table-column label="资金成本率" prop="capitalCostRate" width="180" />
-        <el-table-column label="财务成本" prop="financialCost" width="180" />
-        <el-table-column label="税务成本" prop="taxCost" width="180" />
-        <el-table-column label="合计" prop="total" width="180" />
+        <el-table-column label="资金成本率" prop="capitalCostRate" width="180">
+          <template #default="{ row }">
+            {{ `${row.capitalCostRate?.toFixed(2)} %` }}
+          </template>
+        </el-table-column>
+        <el-table-column label="财务成本" prop="financialCost" width="180" :formatter="toFixedTwo" />
+        <el-table-column label="税务成本" prop="taxCost" width="180" :formatter="toFixedTwo" />
+        <el-table-column label="合计" prop="total" width="180" :formatter="toFixedTwo" />
       </el-table>
     </el-card>
     <!-- <div>{{totalCost}}</div> -->
@@ -131,6 +157,7 @@ import EZFilter from "@/components/EZFilter/index.vue"
 import { getYears } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
 import { formatDateTime } from "@/utils/index"
+import { getSummaries } from "../dashboard/admin/common/getSummaries"
 
 const { auditFlowId, productId, disabled } = getQuery()
 
@@ -204,6 +231,8 @@ const fetchPriceEvaluationTableResult = async () => {
 const setData = (result: any) => {
   let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
   data.material = material || []
+  const priceTotal = data.material.map((item: { materialCost: any }) => item.materialCost || 0)
+  data.allPrice = priceTotal.reduce((a: any, b: any) => a + b)
   data.manufacturingCost = manufacturingCost || []
   data.lossCost = lossCost || []
   data.otherCostItem = [otherCostItem] || []
@@ -213,18 +242,24 @@ const setData = (result: any) => {
 }
 
 const fetchPriceEvaluationTable = async (props?: any) => {
-  const { inputCount, year } = props
-  data.inputCount = inputCount
-  data.year = year
-  let { result }: any =
-    (await getPriceEvaluationTable({
-      auditFlowId,
-      modelCountId: productId,
-      inputCount,
-      year
-    })) || {}
-  setData(result)
-  console.log(result, "fetchPriceEvaluationTableResult")
+  try {
+    loading.value = true
+    const { inputCount, year } = props
+    data.inputCount = inputCount
+    data.year = year
+    let { result }: any =
+      (await getPriceEvaluationTable({
+        auditFlowId,
+        modelCountId: productId,
+        inputCount,
+        year
+      })) || {}
+    setData(result)
+    loading.value = false
+    console.log(result, "fetchPriceEvaluationTableResult")
+  } catch {
+    loading.value = false
+  }
 }
 
 const fetchSopYear = async () => {
@@ -257,6 +292,11 @@ onMounted(async () => {
   // handleChangePageType(data.pageType)
   data.disabled = disabled
 })
+
+const toFixedTwo = (_recoed: any, _row: any, val: any) => {
+  if (typeof val === "number" && val > 0) return val.toFixed(2)
+  return ""
+}
 
 const handleChangePageType = async (pageType: any) => {
   try {

@@ -26,28 +26,42 @@
     <el-card class="m-2">
       <el-card header="成本明细表">
         <!-- Bom成本  -->
-        <el-table v-if="data.mode === '1'" :data="data.bomData" border height="675">
-          <el-table-column prop="superType" label="超级大种类" width="180" />
-          <el-table-column prop="materialName" label="材料名称" width="180" />
-          <el-table-column prop="typeName" label="物料种类" width="180" />
-          <el-table-column prop="categoryName" label="物料大类" width="150" />
-          <el-table-column prop="assemblyCount" label="装配数量" />
-          <el-table-column prop="materialPrice" label="材料单价（原币）" width="180" :formatter="toFixedThree" />
-          <el-table-column prop="currencyText" label="币别" width="150" />
-          <el-table-column prop="exchangeRate" label="汇率" width="150" :formatter="toFixedThree" />
-          <el-table-column prop="materialPriceCyn" label="材料单价（人民币）" width="180" :formatter="toFixedThree" />
-          <el-table-column prop="totalMoneyCyn" label="合计金额（人民币）" width="180" :formatter="toFixedThree" />
-          <el-table-column prop="loss" label="损耗" width="150" :formatter="toFixedThree" />
-          <el-table-column prop="materialCost" label="材料成本（含损耗）" width="180" :formatter="toFixedThree" />
-          <el-table-column prop="inputCount" label="投入量" width="150" />
-          <el-table-column prop="purchaseCount" label="采购量" width="150" />
-          <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="150" :formatter="toFixedThree" />
-          <el-table-column prop="moq" label="MOQ" />
-          <el-table-column prop="availableInventory" label="可用库存" width="150" />
-          <el-table-column prop="remarks" label="备注" />
-        </el-table>
+        <div v-if="data.mode === '1'">
+          <el-table :data="data.bomData" border height="675">
+            <el-table-column prop="superType" label="超级大种类" width="180" />
+            <el-table-column prop="materialName" label="材料名称" width="180" />
+            <el-table-column prop="typeName" label="物料种类" width="180" />
+            <el-table-column prop="categoryName" label="物料大类" width="150" />
+            <el-table-column prop="assemblyCount" label="装配数量" />
+            <el-table-column prop="materialPrice" label="材料单价（原币）" width="180" :formatter="toFixedThree" />
+            <el-table-column prop="currencyText" label="币别" width="150" />
+            <el-table-column prop="exchangeRate" label="汇率" width="150" :formatter="toFixedThree" />
+            <el-table-column prop="materialPriceCyn" label="材料单价（人民币）" width="180" :formatter="toFixedThree" />
+            <el-table-column prop="totalMoneyCyn" label="合计金额（人民币）" width="180" :formatter="toFixedThree" />
+            <el-table-column prop="loss" label="损耗" width="150" :formatter="toFixedThree" />
+            <el-table-column prop="materialCost" label="材料成本（含损耗）" width="180" :formatter="toFixedThree" />
+            <el-table-column prop="inputCount" label="投入量" width="150" />
+            <el-table-column prop="purchaseCount" label="采购量" width="150" />
+            <el-table-column prop="moqShareCount" label="MOQ分摊成本" width="150" :formatter="toFixedThree" />
+            <el-table-column prop="moq" label="MOQ" />
+            <el-table-column prop="availableInventory" label="可用库存" width="150" />
+            <el-table-column prop="remarks" label="备注" />
+          </el-table>
+          <el-descriptions title="" border :column="2">
+            <el-descriptions-item label="材料成本合计">{{ data.allPrice.toFixed(2) }}</el-descriptions-item>
+            <el-descriptions-item label="电子料大类成本合计">{{ data.allTotalMoneyCyn }}</el-descriptions-item>
+          </el-descriptions>
+        </div>
+
         <!-- 损耗成本  -->
-        <el-table v-if="data.mode === '2'" :data="data.lossData" height="675">
+        <el-table
+          v-if="data.mode === '2'"
+          :data="data.lossData"
+          height="675"
+          :summary-method="(val: any) => getSummaries(val, '损耗成本', 'wastageCost')"
+          show-summary
+        >
+          <el-table-column type="index" width="50" />
           <el-table-column prop="name" label="成本项目" />
           <el-table-column prop="wastageCost" label="损耗成本" :formatter="toFixedTwo" />
           <el-table-column prop="moqShareCount" label="MOQ分摊成本" :formatter="toFixedTwo" />
@@ -106,6 +120,7 @@
               :formatter="toFixedTwo"
             />
           </el-table-column>
+          <el-table-column label="合计" prop="subtotal" :formatter="toFixedTwo" />
         </el-table>
         <!-- 物流成本  -->
         <el-table :data="data.logisticsData" border v-if="data.mode === '4'" height="675">
@@ -250,6 +265,7 @@ import * as echarts from "echarts"
 import useJump from "@/hook/useJump"
 import router from "@/router"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+import { getSummaries } from "./common/getSummaries"
 
 const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
@@ -390,6 +406,8 @@ const getBomCost = async () => {
       ModelCountId: productId
     })
     data.bomData = result || []
+    const priceTotal = result.map((item: { materialCost: any }) => item.materialCost || 0)
+    data.allPrice = priceTotal.reduce((a: any, b: any) => a + b)
     console.log(result, "获取 bom成本（含损耗）汇总表")
   } catch (err: any) {
     console.log(err, "[ 获取 bom成本（含损耗）汇总表数据失败 ]")

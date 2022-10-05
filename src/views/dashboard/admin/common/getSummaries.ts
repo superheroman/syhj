@@ -1,33 +1,24 @@
-import { MouldInventoryModel } from "../data.type"
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults"
 
-// 手板件费用合计
-export interface MouldSummaryMethodProps<T = MouldInventoryModel> {
+// 损耗成本合计
+export interface SummaryMethodProps<T = any> {
   columns: TableColumnCtx<T>[]
   data: T[]
 }
 
-export const getMouldSummaries = (
-  param: MouldSummaryMethodProps,
-  name?: string,
-  key?: string | null,
-  key2?: string
-) => {
+export const getSummaries = (param: SummaryMethodProps, name?: string, key?: string | null) => {
   const { columns, data } = param
-  console.log(data, "getMouldSummaries")
   const sums: string[] = []
+
   columns.forEach((_, index) => {
     if (index === 1) {
-      sums[index] = `${name || "模具费"}合计`
+      sums[index] = `${name || "损耗成本"}合计`
       return
     }
     let values: any[] = []
     if (key) {
-      values = data.map((item: any) => item[key])
-    } else if (key2) {
-      values = data.map((item: any) => Number((item[key2] || 0) * (item.unitPrice || 0)))
-    } else {
-      values = data.map((item) => Number((item.count || 0) * (item.unitPrice || 0)))
+      values = data.map((item: any) => item[key] || 0)
+      console.log(values, "getSummaries111")
     }
     if (!values.every((value) => Number.isNaN(value)) && index === 2) {
       sums[index] = `¥ ${values.reduce((prev, curr) => {
