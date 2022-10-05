@@ -57,7 +57,7 @@
             width="180"
           >
             <template #default="{ row }">
-              {{ (row?.iginalCurrency && row?.iginalCurrency[iginalCurrencyIndex]?.value) || 0 }}
+              {{ (row?.iginalCurrency && row?.iginalCurrency[iginalCurrencyIndex]?.value).toFixed(3) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -70,7 +70,7 @@
             width="180"
           >
             <template #default="{ row }">
-              {{ (row.standardMoney && row.standardMoney[index]?.value) || 0 }}
+              {{ (row.standardMoney && row.standardMoney[index]?.value).toFixed(3) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -125,6 +125,10 @@ onMounted(() => {
   fetchConstructionInitData()
 })
 
+const toFixedThree = (_recoed: any, _row: any, val: any) => {
+  if (typeof val === "number" && val > 0) return val.toFixed(3)
+  return val
+}
 const fetchOptionsData = async () => {
   const exchangeSelect: any = await getExchangeRate({
     maxResultCount: 100,

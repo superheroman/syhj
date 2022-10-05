@@ -10,7 +10,7 @@
         <el-table-column type="index" width="50" />
         <el-table-column prop="superType" label="种类" width="180" />
         <el-table-column prop="categoryName" label="物料大类" width="180" />
-        <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year">
+        <el-table-column :label="year + ''" v-for="(year, index) in data.years" :key="year" width="180">
           <template #default="{ row }">
             <el-input v-model="row.lossRateYearList[index].rate" type="number">
               <template #append>%</template>

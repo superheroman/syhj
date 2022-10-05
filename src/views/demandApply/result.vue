@@ -25,6 +25,7 @@
           :key="item.year"
           :label="item.year"
           :prop="`sop[${index}].value`"
+          :formatter="formatThousandths"
         />
       </el-table>
     </el-card>
@@ -50,7 +51,7 @@
           <el-table :data="item.nreCostModels" border>
             <el-table-column type="index" width="100" />
             <el-table-column label="费用类别" prop="name" />
-            <el-table-column label="成本" prop="cost" />
+            <el-table-column label="成本" prop="cost" :formatter="formatThousandths" />
           </el-table>
         </el-card>
       </template>
@@ -61,7 +62,7 @@
           <el-table :data="item.pricingMessageModels" border>
             <el-table-column label="序号" type="index" width="100" />
             <el-table-column label="费用类别" prop="name" />
-            <el-table-column label="成本值" prop="costValue" />
+            <el-table-column label="成本值" prop="costValue" :formatter="formatThousandths" />
           </el-table>
         </el-card>
       </template>
@@ -99,9 +100,9 @@
       <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="费用类别" prop="formName" />
-        <el-table-column label="核价金额" prop="pricingMoney" />
-        <el-table-column label="报价系数" prop="offerCoefficient" />
-        <el-table-column label="报价金额" prop="offerMoney" />
+        <el-table-column label="核价金额" prop="pricingMoney" :formatter="formatThousandths" />
+        <el-table-column label="报价系数" prop="offerCoefficient" :formatter="formatThousandths" />
+        <el-table-column label="报价金额" prop="offerMoney" :formatter="formatThousandths" />
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
@@ -144,7 +145,9 @@ onMounted(() => {
   initFetch()
   fetchSopYear()
 })
-
+const formatThousandths = (_record: any, _row: any, cellValue: any) => {
+  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
+}
 const initFetch = async () => {
   const { result } = await GetQuotationList({ Id: auditFlowId })
   data.marketingQuotationData = result

@@ -156,15 +156,15 @@
               <el-input v-model="row.carModel" />
             </template>
           </el-table-column>
-          <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="100">
+          <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="150">
             <template #default="{ row }">
               <!-- {{ row.pcsYearList[index] }} -->
               <el-input v-model="row.pcsYearList[index].quantity" @change="pcsYearQuantitySum(row)" />
             </template>
           </el-table-column>
-          <el-table-column prop="rowSum" label="合计">
+          <el-table-column prop="rowSum" label="合计" width="150">
             <template #default="{ row }">
-              {{ getRowSum(row) }}
+              {{ formatThousandths(null, null, getRowSum(row)) }}
             </template>
           </el-table-column>
           <el-table-column label="操作" fixed="right">
@@ -227,10 +227,10 @@
               <el-input v-model="row.modelCountYearList[index].quantity" @input="modelCountYearListQuantitySum(row)" />
             </template>
           </el-table-column>
-          <el-table-column label="模组总量" prop="modelTotal" width="180">
-            <template #default="{ row }">
+          <el-table-column label="模组总量" prop="modelTotal" width="180" :formatter="formatThousandths">
+            <!-- <template #default="{ row }">
               <el-input v-model="row.modelTotal" />
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="操作" fixed="right">
             <template #default="{ $index }">
@@ -704,9 +704,13 @@ const getSummaries = (param: SummaryMethodProps) => {
     }
     if (index >= 2) {
       let i = index - 2
-      sums[index] = arr[i]?.reduce((prev, curr) => {
-        return prev + curr
-      })
+      sums[index] = formatThousandths(
+        null,
+        null,
+        arr[i]?.reduce((prev, curr) => {
+          return prev + curr
+        })
+      )
     } else {
       sums[index] = "N/A"
     }
@@ -825,7 +829,13 @@ const pcsYearQuantitySum = (row: Pcs) => {
   })
   row.rowSum = rowSum
 }
-
+const formatThousandths = (_record: any, _row: any, cellValue: any) => {
+  if (cellValue) {
+    return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
+  } else {
+    return 0
+  }
+}
 const modelCountYearListQuantitySum = (row: modelCount) => {
   console.log("暂时功能先去掉", row)
   // let sum = 0

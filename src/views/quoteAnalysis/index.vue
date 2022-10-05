@@ -16,7 +16,7 @@
       <el-table :data="data.nre" style="width: 100%" border show-summary>
         <el-table-column type="index" width="50" />
         <el-table-column label="费用名称" width="180" prop="formName" />
-        <el-table-column prop="pricingMoney" label="核价金额" width="180" />
+        <el-table-column prop="pricingMoney" label="核价金额" width="180" :formatter="formatThousandths" />
         <el-table-column label="报价系数" width="180">
           <template #default="scope">
             <el-input-number
@@ -30,7 +30,7 @@
         </el-table-column>
         <el-table-column label="报价金额" width="180" prop="offerMoney">
           <template #default="{ row }">
-            {{ row.offerCoefficient * row.pricingMoney }}
+            {{ formatThousandths(null, null, row.offerCoefficient * row.pricingMoney) }}
           </template>
         </el-table-column>
         <el-table-column label="备注">
@@ -49,16 +49,18 @@
       <!-- 表头可固定，可变化数据 -->
       <el-table :data="data.unitPrice" style="width: 100%" border v-if="data.unitPrice.length > 0">
         <el-table-column label="产品" prop="productName" width="150" />
-        <el-table-column label="单车产品数量" prop="productNumber" width="150" />
+        <el-table-column label="单车产品数量" prop="productNumber" width="150" :formatter="formatThousandths" />
         <el-table-column
           :label="item.grossMargin + '%'"
           v-for="(item, index) in data.unitPrice[0].grossMarginList"
           :key="index"
           width="150"
+          :prop="`grossMarginList[${index}].grossMarginNumber`"
+          :formatter="formatThousandths"
         >
-          <template #default="scope">
+          <!-- <template #default="scope">
             <span>{{ scope.row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }} </span>
-          </template>
+          </template> -->
         </el-table-column>
       </el-table>
     </el-card>
@@ -78,7 +80,7 @@
         >
           <template #default="{ row }">
             <span v-if="row.projectName !== '毛利率'"
-              >{{ row.grossMarginList[index]?.grossMarginNumber.toFixed(2) }}
+              >{{ formatThousandths(null, null, row.grossMarginList[index]?.grossMarginNumber) }}
             </span>
             <span v-else>{{ `${(row.grossMarginList[index]?.grossMarginNumber).toFixed(2) || 0} %` }} </span>
           </template>
@@ -93,10 +95,10 @@
         <el-table-column label="产品" prop="productName" />
         <el-table-column label="单车产品数量" prop="productNumber" />
         <el-table-column label="目标价（内部）" width="300">
-          <el-table-column label="单价" prop="interiorTargetUnitPrice">
-            <template #default="{ row }">
+          <el-table-column label="单价" prop="interiorTargetUnitPrice" :formatter="formatThousandths">
+            <!-- <template #default="{ row }">
               {{ row?.interiorTargetUnitPrice?.toFixed(2) }}
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="毛利率" prop="interiorTargetGrossMargin">
             <template #default="{ row }">
@@ -155,10 +157,10 @@
           :key="index"
           width="300"
         >
-          <el-table-column label="单价">
-            <template #default="{ row }">
+          <el-table-column label="单价" :prop="`oldOffer[${index}].unitPrice`" :formatter="formatThousandths">
+            <!-- <template #default="{ row }">
               <div>{{ row.oldOffer[index].unitPrice.toFixed(2) }}</div>
-            </template>
+            </template> -->
           </el-table-column>
           <el-table-column label="毛利率">
             <template #default="{ row }">
@@ -201,34 +203,37 @@
     <el-card class="card">
       <el-table :data="data.projectBoard" style="width: 100%" border>
         <el-table-column label="项目" prop="projectName" />
-        <el-table-column label="目标价（内部）">
-          <template #default="scope">
-            <!-- <div>{{ scope.row.interiorTarget?.grossMargin.toFixed(2) }}</div> -->
+        <el-table-column
+          label="目标价（内部）"
+          :formatter="formatThousandths"
+          :prop="`interiorTarget.grossMarginNumber`"
+        >
+          <!-- <template #default="scope">
             <div>{{ scope.row.interiorTarget?.grossMarginNumber.toFixed(2) }}</div>
-          </template>
+          </template> -->
         </el-table-column>
-        <el-table-column label="目标价（客户）">
-          <template #default="scope">
-            <!-- <div>{{ scope.row.clientTarget?.grossMargin.toFixed(2) }}</div> -->
+        <el-table-column label="目标价（客户）" :formatter="formatThousandths" :prop="`clientTarget.grossMarginNumber`">
+          <!-- <template #default="scope">
             <div>{{ scope.row.clientTarget?.grossMarginNumber.toFixed(2) }}</div>
-          </template>
+          </template> -->
         </el-table-column>
-        <el-table-column label="本次报价">
-          <template #default="scope">
-            <!-- <div>{{ scope.row.offer?.grossMargin.toFixed(2) }}</div> -->
+        <el-table-column label="本次报价" :formatter="formatThousandths" :prop="`offer.grossMarginNumber`">
+          <!-- <template #default="scope">
             <div>{{ scope.row.offer?.grossMarginNumber.toFixed(2) }}</div>
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
           v-for="(_, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
           :key="index"
+          :formatter="formatThousandths"
+          :prop="`oldOffer[${index}].grossMarginNumber`"
         >
-          <template #default="scope">
+          <!-- <template #default="scope">
             <div>
               {{ scope.row.oldOffer[index].grossMarginNumber }}
             </div>
-          </template>
+          </template> -->
         </el-table-column>
       </el-table>
     </el-card>
@@ -247,14 +252,19 @@
         <el-card :header="item.project" v-for="item in data.dialogTable" m="2" :key="item">
           <el-table :data="[item]" style="width: 100%">
             <template v-for="(yearItem, i) in item.yearList" :key="yearItem">
-              <el-table-column :prop="`yearList.${i}.value`" :label="yearItem.year">
-                <template #default="{ row }">
+              <el-table-column
+                :prop="`yearList.${i}.value`"
+                :label="yearItem.year"
+                width="150"
+                :formatter="formatThousandths"
+              >
+                <!-- <template #default="{ row }">
                   {{ row.yearList[i].value.toFixed(2) }}
-                </template>
+                </template> -->
               </el-table-column>
             </template>
-            <el-table-column prop="grossMargin" label="毛利率" :formatter="getTofixed" />
-            <el-table-column prop="totak" label="总和" />
+            <el-table-column prop="grossMargin" label="毛利率" :formatter="getTofixed" width="150" />
+            <el-table-column prop="totak" label="总和" width="150" :formatter="formatThousandths" />
           </el-table>
         </el-card>
       </div>
@@ -434,6 +444,13 @@ const data = reactive<any>({
   allGrossMargin: 0
 })
 
+const formatThousandths = (_record: any, _row: any, cellValue: any) => {
+  if (cellValue) {
+    return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
+  } else {
+    return 0
+  }
+}
 // 报价分析看板 单价计算
 const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: string, key2: string) => {
   // console.log(data.auditFlowId)

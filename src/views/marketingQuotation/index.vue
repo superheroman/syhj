@@ -35,6 +35,7 @@
           :key="item.year"
           :label="item.year"
           :prop="`sop[${index}].value`"
+          :formatter="formatThousandths"
         />
       </el-table>
     </el-card>
@@ -60,7 +61,7 @@
           <el-table :data="item.nreCostModels" border>
             <el-table-column type="index" width="100" />
             <el-table-column label="费用类别" prop="name" />
-            <el-table-column label="成本" prop="cost" :formatter="formatter" />
+            <el-table-column label="成本" prop="cost" :formatter="formatThousandths" />
           </el-table>
         </el-card>
       </template>
@@ -71,7 +72,7 @@
           <el-table :data="item.pricingMessageModels" border>
             <el-table-column label="序号" type="index" width="100" />
             <el-table-column label="费用类别" prop="name" />
-            <el-table-column label="成本值" prop="costValue" :formatter="formatter" />
+            <el-table-column label="成本值" prop="costValue" :formatter="formatThousandths" />
           </el-table>
         </el-card>
       </template>
@@ -80,10 +81,10 @@
       <el-table :data="data.marketingQuotationData.biddingStrategy" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="产品" prop="product" />
-        <el-table-column label="成本" prop="cost" :formatter="formatter" />
+        <el-table-column label="成本" prop="cost" :formatter="formatThousandths" />
         <el-table-column label="毛利率" prop="grossMargin" :formatter="formatter" />
-        <el-table-column label="价格" prop="price" :formatter="formatter" />
-        <el-table-column label="佣金" prop="commission" :formatter="formatter" />
+        <el-table-column label="价格" prop="price" :formatter="formatThousandths" />
+        <el-table-column label="佣金" prop="commission" :formatter="formatThousandths" />
         <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" :formatter="formatter" />
       </el-table>
     </el-card>
@@ -91,9 +92,9 @@
       <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="费用类别" prop="formName" />
-        <el-table-column label="核价金额" prop="pricingMoney" :formatter="formatter" />
+        <el-table-column label="核价金额" prop="pricingMoney" :formatter="formatThousandths" />
         <el-table-column label="报价系数" prop="offerCoefficient" :formatter="formatter" />
-        <el-table-column label="报价金额" prop="offerMoney" :formatter="formatter" />
+        <el-table-column label="报价金额" prop="offerMoney" :formatter="formatThousandths" />
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
@@ -116,6 +117,7 @@ import { CommonDownloadFile } from "@/api/bom"
 import { GetPicture3DByAuditFlowId } from "../processImport/service"
 import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
+import { debug } from "console"
 
 const router = useRouter()
 const query = useJump()
@@ -144,6 +146,10 @@ const columns = reactive({
 const formatter = (_record: any, _row: any, cellValue: any) => {
   console.log(cellValue, "cellValue")
   return Number(cellValue).toFixed(2)
+}
+
+const formatThousandths = (_record: any, _row: any, cellValue: any) => {
+  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 onBeforeMount(() => {
   let userInfo = JSON.parse(window.localStorage.getItem("user") || "")
