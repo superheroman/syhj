@@ -25,7 +25,7 @@
         </div>
       </template>
 
-      <el-table :data="data.material" border>
+      <el-table :data="data.material" border height="500">
         <el-table-column type="index" width="50" />
         <el-table-column label="超级大种类" prop="superType" width="180" />
         <el-table-column label="超级大类" prop="categoryName" width="180" />

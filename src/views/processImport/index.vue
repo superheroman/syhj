@@ -6,7 +6,6 @@
           <span>工序工时导入</span>
           <el-row align="middle">
             <el-upload
-              class="m-2"
               :action="$baseUrl + '/api/services/app/WorkingHours/UploadExcel'"
               :on-success="handleSuccess"
               show-file-list
@@ -14,7 +13,7 @@
               :on-progress="handleGetUploadProgress"
               :on-error="handleUploadError"
             >
-              <el-button type="primary">工序工时上传</el-button>
+              <el-button type="primary" style="margin: 10px 10px 0 0">工序工时上传</el-button>
             </el-upload>
             <el-button class="m-2" type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
             <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
