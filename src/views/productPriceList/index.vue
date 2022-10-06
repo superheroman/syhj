@@ -47,10 +47,8 @@
         <el-table-column label="备注" prop="remarks" width="180" />
       </el-table>
       <el-descriptions title="" border :column="2">
-        <el-descriptions-item label="材料成本合计">{{ data.allPrice?.toFixed(2) || "-" }}</el-descriptions-item>
-        <el-descriptions-item label="电子料大类成本合计">{{
-          data.allTotalMoneyCyn?.toFixed(2) || "-"
-        }}</el-descriptions-item>
+        <el-descriptions-item label="材料成本合计">{{ data.allPrice }}</el-descriptions-item>
+        <el-descriptions-item label="电子料大类成本合计">{{ data.allTotalMoneyCyn }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
     <el-card class="card">
@@ -95,12 +93,7 @@
       </el-table>
     </el-card>
     <el-card class="card" header="损耗成本">
-      <el-table
-        :data="data.lossCost"
-        :summary-method="(val: any) => getSummaries(val, '损耗成本', 'wastageCost')"
-        show-summary
-        border
-      >
+      <el-table :data="data.lossCost" border>
         <el-table-column type="index" width="50" />
         <el-table-column label="成本项目" prop="name" />
         <el-table-column label="损耗成本" prop="wastageCost" :formatter="toFixedTwo" />
@@ -111,6 +104,10 @@
         <el-table-column label="包装材料" prop="" width="180" />
         <el-table-column label="合计" prop="" width="180" /> -->
       </el-table>
+      <el-descriptions :column="3" border>
+        <el-descriptions-item label="损耗成本合计"> {{ data.lossCount }} </el-descriptions-item>
+        <el-descriptions-item label="MOQ分摊成本合计"> {{ data.moqShareCountCount }} </el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <el-card class="card">
       <el-table :data="data.otherCostItem" border>
@@ -233,9 +230,10 @@ const fetchPriceEvaluationTableResult = async () => {
 const setData = (result: any) => {
   let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
   data.material = material || []
-  const priceTotal = data.material.map((item: { materialCost: any }) => item.materialCost || 0)
-  data.allPrice = priceTotal.reduce((a: any, b: any) => a + b)
-  data.allTotalMoneyCyn = result.totalMoneyCynCount
+  data.allPrice = result.lossRateCount?.toFixed(2) || 0
+  data.lossCount = result.lossCount?.toFixed(2) || 0
+  data.allTotalMoneyCyn = result.totalMoneyCynCount?.toFixed(2) || 0
+  data.moqShareCountCount = result.moqShareCountCount?.toFixed(2) || 0
   data.manufacturingCost = manufacturingCost || []
   data.lossCost = lossCost || []
   data.otherCostItem = [otherCostItem] || []
