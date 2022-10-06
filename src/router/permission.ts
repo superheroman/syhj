@@ -73,7 +73,17 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   const roles = userStore.roles
   permissionStore.setRoutes(roles)
   // 结合setting里的切换一起使用
-  next()
+  const userStorage = window.localStorage.getItem("user")
+  if (to.path === "/login") {
+    next()
+  } else {
+    if (userStorage) {
+      next()
+    } else {
+      next({ path: "/login" })
+    }
+  }
+
   // const notInclude = ["/todoCenter/index", "/login"]
   // const productId = window.sessionStorage.getItem("productId")
   // if (!to.query.productId || to.query.productId !== productId) {
