@@ -4,11 +4,12 @@ import { request } from "@/utils/service"
 export function GetVersionInfos(data: {
   ProjectName: string
   Version: number
-  AuditFlowId: number
+  auditFlowId: number
   DraftStartTime: string
   DraftEndTime: string
   FinishedStartTime: string
   FinishedEndTime: string
+  Number: number
 }): any {
   return request({
     url: "/api/services/app/VersionManagment/GetVersionInfos",

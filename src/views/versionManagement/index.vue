@@ -90,7 +90,7 @@ const data = reactive<any>({
     },
     {
       label: "流程单号",
-      key: "AuditFlowId"
+      key: "auditFlowId"
     },
     {
       label: "单据编号",
@@ -115,18 +115,19 @@ const data = reactive<any>({
 })
 
 const queryTable = async (formValue: any) => {
-  const { DraftDate, ProjectName, Version, AuditFlowId, FinishedDate } = formValue
+  const { DraftDate, ProjectName, Version = 0, auditFlowId, FinishedDate } = formValue
   const { result } = await GetVersionInfos({
     ProjectName: ProjectName,
     Version,
-    AuditFlowId,
+    auditFlowId,
     DraftStartTime: DraftDate[0] || "",
     DraftEndTime: DraftDate[1] || "",
     FinishedStartTime: FinishedDate[0] || "",
     FinishedEndTime: FinishedDate[1] || "",
     Number: formValue.Number
   })
-  data.versionManageData = result || []
+
+  data.versionManageData = result?.versionManageList || []
   console.log(result, "queryTable")
 }
 
