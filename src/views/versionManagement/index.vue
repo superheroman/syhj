@@ -59,11 +59,10 @@ const router = useRouter()
 const getAllAuditFlowProjectName = async () => {
   const { result } = await GetAllAuditFlowProjectNameAndVersion()
   data.verisonfilterNnum[0].options = result.map((item: any) => {
-    let obj: any = {}
-    obj[item.projectName] = item.versions.map((vNo: any) => ({ label: vNo, value: vNo }))
-    data.versionsEnum = obj
+    data.versionsEnum[item.projectName] = item.versions.map((vNo: any) => ({ label: vNo, value: vNo }))
     return { label: item.projectName, value: item.projectName }
   })
+  console.log(data.versionsEnum, result, "data.versionsEnum")
 }
 
 // 获取项目名称对应版本号
@@ -94,6 +93,10 @@ const data = reactive<any>({
       key: "AuditFlowId"
     },
     {
+      label: "单据编号",
+      key: "Number"
+    },
+    {
       label: "拟稿时间",
       key: "DraftDate",
       role: "timePicker"
@@ -120,7 +123,8 @@ const queryTable = async (formValue: any) => {
     DraftStartTime: DraftDate[0] || "",
     DraftEndTime: DraftDate[1] || "",
     FinishedStartTime: FinishedDate[0] || "",
-    FinishedEndTime: FinishedDate[1] || ""
+    FinishedEndTime: FinishedDate[1] || "",
+    Number: formValue.Number
   })
   data.versionManageData = result || []
   console.log(result, "queryTable")
