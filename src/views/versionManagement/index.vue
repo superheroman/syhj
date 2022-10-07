@@ -10,8 +10,13 @@
       <el-table :data="data.versionManageData" style="width: 100%">
         <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
           <template #default="{ row }">
-            <el-button type="primary" link @click="pathToOperationRecord(row.versionBasicInfo?.auditFlowId)">
-              {{ row.versionBasicInfo.projectName }}
+            <el-button type="primary" link>
+              <a
+                target="_blank"
+                :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
+              >
+                {{ row.versionBasicInfo.projectName }}
+              </a>
             </el-button>
           </template>
         </el-table-column>
@@ -59,11 +64,10 @@ const router = useRouter()
 const getAllAuditFlowProjectName = async () => {
   const { result } = await GetAllAuditFlowProjectNameAndVersion()
   data.verisonfilterNnum[0].options = result.map((item: any) => {
-    let obj: any = {}
-    obj[item.projectName] = item.versions.map((vNo: any) => ({ label: vNo, value: vNo }))
-    data.versionsEnum = obj
+    data.versionsEnum[item.projectName] = item.versions.map((vNo: any) => ({ label: vNo, value: vNo }))
     return { label: item.projectName, value: item.projectName }
   })
+  console.log(data.versionsEnum, result, "data.versionsEnum")
 }
 
 // 获取项目名称对应版本号
@@ -91,7 +95,11 @@ const data = reactive<any>({
     },
     {
       label: "流程单号",
-      key: "AuditFlowId"
+      key: "auditFlowId"
+    },
+    {
+      label: "单据编号",
+      key: "Number"
     },
     {
       label: "拟稿时间",
@@ -112,17 +120,19 @@ const data = reactive<any>({
 })
 
 const queryTable = async (formValue: any) => {
-  const { DraftDate, ProjectName, Version, AuditFlowId, FinishedDate } = formValue
+  const { DraftDate, ProjectName, Version = 0, auditFlowId, FinishedDate } = formValue
   const { result } = await GetVersionInfos({
     ProjectName: ProjectName,
     Version,
-    AuditFlowId,
+    auditFlowId,
     DraftStartTime: DraftDate[0] || "",
     DraftEndTime: DraftDate[1] || "",
     FinishedStartTime: FinishedDate[0] || "",
-    FinishedEndTime: FinishedDate[1] || ""
+    FinishedEndTime: FinishedDate[1] || "",
+    Number: formValue.Number
   })
-  data.versionManageData = result || []
+
+  data.versionManageData = result?.versionManageList || []
   console.log(result, "queryTable")
 }
 
@@ -134,7 +144,7 @@ const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable,
 }
 
 const pathToOperationRecord = (AuditFlowId: number) => {
-  router.push(`/versionManagement/operationRecord?AuditFlowId=${AuditFlowId}`).catch((err) => {
+  router.push().catch((err) => {
     console.warn(err)
   })
 }
