@@ -652,10 +652,11 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       {
         path: "/versionManagement/operationRecord",
         component: () => import("@/views/versionManagement/operationRecord.vue"),
-        name: "operationRecord"
-        // meta: {
-        //   title: "时效性管理",
-        // }
+        name: "operationRecord",
+        meta: {
+          title: "时效性管理",
+          hidden: true
+        }
       },
       {
         path: "/versionManagement/reportQuery",
