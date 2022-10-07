@@ -10,8 +10,13 @@
       <el-table :data="data.versionManageData" style="width: 100%">
         <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
           <template #default="{ row }">
-            <el-button type="primary" link @click="pathToOperationRecord(row.versionBasicInfo?.auditFlowId)">
-              {{ row.versionBasicInfo.projectName }}
+            <el-button type="primary" link>
+              <a
+                target="_blank"
+                :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
+              >
+                {{ row.versionBasicInfo.projectName }}
+              </a>
             </el-button>
           </template>
         </el-table-column>
@@ -139,7 +144,7 @@ const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable,
 }
 
 const pathToOperationRecord = (AuditFlowId: number) => {
-  router.push(`/versionManagement/operationRecord?AuditFlowId=${AuditFlowId}`).catch((err) => {
+  router.push().catch((err) => {
     console.warn(err)
   })
 }
