@@ -6,7 +6,7 @@
           <span>工序工时导入</span>
           <el-row align="middle">
             <el-upload
-              :action="$baseUrl + '/api/services/app/WorkingHours/UploadExcel'"
+              :action="$baseUrl + 'api/services/app/WorkingHours/UploadExcel'"
               :on-success="handleSuccess"
               show-file-list
               :data="{ auditFlowId: data.auditFlowId }"

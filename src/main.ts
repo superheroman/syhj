@@ -15,7 +15,7 @@ import "@/styles/index.scss"
 
 const app = createApp(App)
 
-app.config.globalProperties.$baseUrl = "http://139.196.216.165:44311"
+app.config.globalProperties.$baseUrl = import.meta.env.VITE_BASE_API
 /** element-plus 组件完整引入 */
 app.use(ElementPlus)
 /** 加载全局 svg */

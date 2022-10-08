@@ -5,7 +5,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            :action="$baseUrl + '/api/services/app/StructionBom/LoadExcel'"
+            :action="$baseUrl + 'api/services/app/StructionBom/LoadExcel'"
             :on-success="handleSuccess"
             show-file-list
             :on-progress="handleGetUploadProgress"
@@ -19,7 +19,7 @@
         </el-form-item>
         <el-form-item label="">
           <el-upload
-            :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
+            :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
             :on-success="handleSuccess3D"
             show-file-list
           >

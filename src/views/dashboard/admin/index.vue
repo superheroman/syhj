@@ -169,7 +169,7 @@
         <el-upload
           v-model:file-list="fileList"
           show-file-list
-          :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
+          :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
           :on-success="handleSuccess"
           :on-change="handleFileChange"
           style="float: right"

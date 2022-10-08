@@ -602,7 +602,7 @@
             <el-form-item>
               <el-upload
                 v-model:file-list="fileList"
-                :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
+                :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
                 :on-success="handleSuccess"
                 :on-error="handleUploadError"
                 :on-change="handleFileChange"

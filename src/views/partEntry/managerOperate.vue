@@ -64,7 +64,7 @@
           <el-col :span="6">
             <el-form-item label="TR-主方案:">
               <el-upload
-                :action="$baseUrl + '/api/services/app/FileCommonService/UploadFile'"
+                :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
                 :on-progress="handleGetUploadProgress"
                 :on-error="handleUploadError"
                 :on-success="handleSuccess"

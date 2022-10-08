@@ -4,7 +4,7 @@
       <el-form :inline="true">
         <el-form-item label="">
           <el-upload
-            :action="$baseUrl + '/api/services/app/UnitPriceLibrary/PostUInitPriceForm'"
+            :action="$baseUrl + 'api/services/app/UnitPriceLibrary/PostUInitPriceForm'"
             :on-success="handleSuccess"
             show-file-list
             :on-progress="handleGetUploadProgress"
