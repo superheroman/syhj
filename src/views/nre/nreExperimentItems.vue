@@ -48,30 +48,30 @@
             <el-input v-model="row.unitPrice" />
           </template>
         </el-table-column>
-        <el-table-column label="数量" width="180">
+        <!-- <el-table-column label="数量" width="180">
           <template #default="{ row }">
             <el-input-number v-model="row.count" controls-position="right" :min="0" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="总费用" width="180">
           <template #default="{ row }">
             <!-- <el-input-number v-model="row.allCost" type="number" :min="0" controls-position="right" :min="0" /> -->
-            {{ row.unitPrice * row.count }}
+            {{ row.unitPrice * (row.dataThoroughly + row.dataDV + row.dataPV) }}
           </template>
         </el-table-column>
-        <el-table-column label="时间-摸底" width="250">
+        <el-table-column label="时间-摸底" width="180">
           <template #default="{ row }">
-            <el-date-picker v-model="row.dataThoroughly" type="date" size="small" />
+            <el-input-number :min="0" controls-position="right" v-model="row.dataThoroughly" />
           </template>
         </el-table-column>
-        <el-table-column label="时间-DV" width="250">
+        <el-table-column label="时间-DV" width="180">
           <template #default="{ row }">
-            <el-date-picker v-model="row.dataDV" type="date" size="small" />
+            <el-input-number :min="0" controls-position="right" v-model="row.dataDV" />
           </template>
         </el-table-column>
-        <el-table-column label="时间-PV" width="250">
+        <el-table-column label="时间-PV" width="180">
           <template #default="{ row }">
-            <el-date-picker v-model="row.dataPV" type="date" size="small" />
+            <el-input-number :min="0" controls-position="right" v-model="row.dataPV" />
           </template>
         </el-table-column>
         <el-table-column label="单位" width="180">
@@ -145,9 +145,9 @@ const submit = async () => {
       auditFlowId,
       experimentItems: {
         productId,
-        qaTestDepartments: data.experimentItems.map((item) => ({
+        qaTestDepartments: data.experimentItems.map((item: any) => ({
           ...item,
-          allCost: (item.unitPrice || 0) * (item.count || 0)
+          allCost: (item.unitPrice || 0) * (item.dataThoroughly + item.dataDV + item.dataPV)
         }))
       }
     })

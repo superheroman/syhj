@@ -43,29 +43,29 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column label="单价" width="120">
+        <el-table-column label="单价" width="175">
           <template #default="{ row }">
             <el-input-number v-model="row.unitPrice" :min="0" controls-position="right" />
           </template>
         </el-table-column>
-        <el-table-column label="数量" width="120">
+        <!-- <el-table-column label="数量" width="120">
           <template #default="{ row }">
             <el-input-number v-model="row.count" :min="0" controls-position="right" />
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="时间-摸底" width="180">
           <template #default="{ row }">
-            <el-date-picker v-model="row.dataThoroughly" type="date" />
+            <el-input-number :min="0" controls-position="right" v-model="row.dataThoroughly" />
           </template>
         </el-table-column>
         <el-table-column label="时间-DV" width="180">
           <template #default="{ row }">
-            <el-date-picker v-model="row.dataDV" type="date" />
+            <el-input-number :min="0" controls-position="right" v-model="row.dataDV" />
           </template>
         </el-table-column>
         <el-table-column label="时间-PV" width="180">
           <template #default="{ row }">
-            <el-date-picker v-model="row.dataPV" type="date" />
+            <el-input-number :min="0" controls-position="right" v-model="row.dataPV" />
           </template>
         </el-table-column>
         <el-table-column label="单位" width="180">
@@ -99,7 +99,9 @@
         </template>
       </el-table-column> -->
         <el-table-column label="总费用" width="150">
-          <template #default="{ row }"> ￥ {{ row.unitPrice * row.count }} </template>
+          <template #default="{ row }">
+            ￥ {{ row.unitPrice * (row.dataThoroughly + row.dataDV + row.dataPV) }}
+          </template>
         </el-table-column>
         <!-- <el-table-column label="单位" width="180">
         <template #default="{ row }">
@@ -167,9 +169,9 @@ const submit = async () => {
       productDepartmentModels: {
         productId,
         laboratoryFeeModels:
-          data.laboratoryFeeModels.map((item) => ({
+          data.laboratoryFeeModels.map((item: any) => ({
             ...item,
-            allCost: (item.unitPrice || 0) * (item.count || 0)
+            allCost: (item.unitPrice || 0) * (item.dataThoroughly + item.dataDV + item.dataPV)
           })) || []
       }
     })
