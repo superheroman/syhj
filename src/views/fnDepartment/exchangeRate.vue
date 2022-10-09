@@ -128,6 +128,9 @@ const data = reactive({
   total: 0
 })
 const addYearItem = () => {
+  nowDateYear =
+    Number(data.editForm.exchangeRateValue[data.editForm.exchangeRateValue.length - 1]?.year) ||
+    new Date().getFullYear()
   nowDateYear++
   data.editForm.exchangeRateValue.push({
     year: nowDateYear,

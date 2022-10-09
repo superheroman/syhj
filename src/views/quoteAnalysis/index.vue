@@ -343,8 +343,6 @@ let ProjectUnitPrice: any = {
       type: "value",
       name: "单价",
       min: 0,
-      max: 1000,
-      interval: 200,
       axisLabel: {
         formatter: "{value} 元"
       }
@@ -353,8 +351,6 @@ let ProjectUnitPrice: any = {
       type: "value",
       name: "毛利率",
       min: 0,
-      max: 0.5,
-      interval: 0.02,
       axisLabel: {
         formatter: "{value}"
       }
@@ -383,8 +379,6 @@ let RevenueGrossMargin: any = {
       type: "value",
       name: "收入",
       min: 0,
-      max: 1000,
-      interval: 200,
       axisLabel: {
         formatter: "{value} 元"
       }
@@ -393,8 +387,6 @@ let RevenueGrossMargin: any = {
       type: "value",
       name: "毛利率",
       min: 0,
-      max: 0.5,
-      interval: 0.02,
       axisLabel: {
         formatter: "{value}"
       }
