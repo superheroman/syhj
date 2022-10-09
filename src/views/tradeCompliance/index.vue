@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetTradeComplianceCheckFromDateBase, IsTradeComplianceCheck } from "./service"
-import { ProductMaterialInfo, TradeComplianceCheck } from "./data.type"
+import { TradeComplianceCheck } from "./data.type"
 import { ElMessage, ElMessageBox } from "element-plus"
 
 import getQuery from "@/utils/getQuery"
@@ -60,7 +60,7 @@ const { auditFlowId = 1, productId = 1 }: any = getQuery()
  * 数据部分
  */
 const data = reactive<{
-  productMaterialInfos: ProductMaterialInfo | []
+  productMaterialInfos: any[]
   tradeComplianceCheck: TradeComplianceCheck
 }>({
   productMaterialInfos: [],
