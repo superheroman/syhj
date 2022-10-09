@@ -14,7 +14,7 @@ defineProps({
         <img src="@/assets/layout/logo.png" class="sidebar-logo" />
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img src="@/assets/layout/logo-text-1.png" class="sidebar-logo-text" />
+        <img src="@/assets/layout/logotext.jpg" class="sidebar-logo-text" />
       </router-link>
     </transition>
   </div>
@@ -46,8 +46,9 @@ defineProps({
     height: 100%;
     width: 100%;
     & .sidebar-logo-text {
-      height: 100%;
+      height: 50px;
       vertical-align: middle;
+      width: 220px;
     }
     & .sidebar-title {
       display: inline-block;
