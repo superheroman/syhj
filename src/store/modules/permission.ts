@@ -46,12 +46,13 @@ export const usePermissionStore = defineStore({
   },
   actions: {
     setRoutes(roles: string[]) {
-      let accessedRoutes
-      if (roles.includes("admin")) {
-        accessedRoutes = asyncRoutes
-      } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
-      }
+      // let accessedRoutes
+      // if (roles.includes("admin")) {
+      //   accessedRoutes = asyncRoutes
+      // } else {
+      //   accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      // }
+      const accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       this.routes = constantRoutes.concat(accessedRoutes)
       this.dynamicRoutes = accessedRoutes
     }

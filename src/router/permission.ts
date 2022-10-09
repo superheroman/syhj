@@ -68,38 +68,38 @@ NProgress.configure({ showSpinner: false })
 //     }
 //   }
 // })
+
+let flag = 0
 router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized, next: any) => {
   NProgress.start()
-  const roles = userStore.roles
-  permissionStore.setRoutes(roles)
+  // 后端role的设计有点另类，这里单独前端区分一个财务角色出来
   // 结合setting里的切换一起使用
-  const userStorage = window.localStorage.getItem("user")
+  const userStorage = window.localStorage.getItem("user") || "{}"
+  const userInfo = JSON.parse(userStorage)
+  let roles = []
+  if (userInfo?.userDepartment?.name === "财务部") {
+    roles = ["finance"]
+  } else {
+    roles = userStore.roles
+  }
+  permissionStore.setRoutes(roles)
+  permissionStore.dynamicRoutes.forEach((route: any) => {
+    router.addRoute(route)
+  })
   if (to.path === "/login") {
     next()
   } else {
     if (userStorage) {
-      next()
+      if (flag === 0) {
+        flag++
+        next({ ...to, replace: true })
+      } else {
+        next()
+      }
     } else {
       next({ path: "/login" })
     }
   }
-
-  // const notInclude = ["/todoCenter/index", "/login"]
-  // const productId = window.sessionStorage.getItem("productId")
-  // if (!to.query.productId || to.query.productId !== productId) {
-  //   if (productId) {
-  //     to.query.productId = productId
-  //     debugger
-  //     next({
-  //       path: to.path,
-  //       query: to.query
-  //     })
-  //   } else {
-  //     next()
-  //   }
-  // } else {
-  //   next()
-  // }
 })
 router.afterEach(() => {
   NProgress.done()

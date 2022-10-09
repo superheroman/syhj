@@ -48,7 +48,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/demandApply/index",
     component: Layout,
     meta: {
-      title: "核价管理"
+      title: "核价管理",
+      hidden: true
     },
     children: [
       {
@@ -94,25 +95,13 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-  // {
-  //   path: "/trAudit",
-  //   redirect: "/trAudit/index",
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: "/trAudit/index",
-  //       component: () => import("@/views/trAudit/index.vue"),
-  //       name: "trAudit",
-  //       meta: {
-  //         title: "Tr主方案"
-  //       }
-  //     }
-  //   ]
-  // },
   {
     path: "/electronicImport",
     redirect: "/electronicImport/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/electronicImport/index",
@@ -128,6 +117,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/structuralMaterialImport",
     redirect: "/structuralMaterialImport/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/structuralMaterialImport/index",
@@ -144,7 +136,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/resourcesDepartment/index",
     component: Layout,
     meta: {
-      title: "BOM单价录入"
+      title: "BOM单价录入",
+      hidden: true
     },
     children: [
       {
@@ -179,7 +172,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomVerify/construction",
     component: Layout,
     meta: {
-      title: "BOM单价审核"
+      title: "BOM单价审核",
+      hidden: true
     },
     children: [
       {
@@ -205,7 +199,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomLoss/indexElec",
     component: Layout,
     meta: {
-      title: "BOM损耗率表单"
+      title: "BOM损耗率表单",
+      hidden: true
     },
     children: [
       {
@@ -230,6 +225,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/processImport",
     redirect: "/processImport/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/processImport/index",
@@ -241,11 +239,13 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
   {
     path: "/manufacturingCost",
     redirect: "/manufacturingCost/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/manufacturingCost/index",
@@ -261,6 +261,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/pmDepartment",
     redirect: "/pmDepartment/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/pmDepartment/index",
@@ -277,7 +280,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/nre/nreProjectManageMent",
     component: Layout,
     meta: {
-      title: "NRE"
+      title: "NRE",
+      hidden: true
     },
     children: [
       {
@@ -358,6 +362,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/dashboard",
     redirect: "/dashboard/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/dashboard/index",
@@ -373,6 +380,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/tradeCompliance",
     redirect: "/tradeCompliance/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/tradeCompliance/index",
@@ -388,6 +398,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/quoteAnalysis",
     redirect: "/quoteAnalysis/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/quoteAnalysis/index",
@@ -411,6 +424,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/marketingQuotation",
     redirect: "/marketingQuotation/index",
     component: Layout,
+    meta: {
+      hidden: true
+    },
     children: [
       {
         path: "/marketingQuotation/index",
@@ -462,13 +478,43 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
+  {
+    path: "/role",
+    redirect: "/role/index",
+    component: Layout,
+    children: [
+      {
+        path: "/role/index",
+        component: () => import("@/views/role/index.vue"),
+        name: "role",
+        meta: {
+          title: "角色管理"
+        }
+      }
+    ]
+  },
+  {
+    path: "/user",
+    redirect: "/user/index",
+    component: Layout,
+    children: [
+      {
+        path: "/user/index",
+        component: () => import("@/views/user/index.vue"),
+        name: "user",
+        meta: {
+          title: "用户管理"
+        }
+      }
+    ]
+  },
   {
     path: "/bomView",
     redirect: "/bomView/index",
     component: Layout,
     meta: {
-      title: "BOM查看"
+      title: "BOM查看",
+      hidden: true
     },
     children: [
       {
@@ -498,17 +544,163 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     ]
   },
 
+  {
+    path: "/summaryTable",
+    redirect: "/summaryTable/index",
+    component: Layout,
+    meta: {
+      hidden: true
+    },
+    children: [
+      {
+        path: "/summaryTable/index",
+        component: () => import("@/views/summaryTable/index.vue"),
+        name: "summaryTable",
+        meta: {
+          title: "汇总表"
+        }
+      }
+    ]
+  },
+  {
+    path: "/versionManagement",
+    redirect: "/versionManagement/index",
+    component: Layout,
+    meta: {
+      title: "版本管理",
+      hidden: true
+    },
+    children: [
+      {
+        path: "/versionManagement/index",
+        component: () => import("@/views/versionManagement/index.vue"),
+        name: "versionManagement",
+        meta: {
+          title: "版本管理"
+        }
+      },
+      {
+        path: "/versionManagement/operationRecord",
+        component: () => import("@/views/versionManagement/operationRecord.vue"),
+        name: "operationRecord",
+        meta: {
+          title: "时效性管理",
+          hidden: true
+        }
+      },
+      {
+        path: "/versionManagement/reportQuery",
+        component: () => import("@/views/versionManagement/reportQuery.vue"),
+        name: "reportQuery",
+        meta: {
+          title: "报表查询"
+        }
+      }
+    ]
+  },
+  {
+    path: "/archive",
+    redirect: "/archive/index",
+    component: Layout,
+    meta: {
+      hidden: true
+    },
+    children: [
+      {
+        path: "/archive/index",
+        component: () => import("@/views/archive/index.vue"),
+        name: "archive",
+        meta: {
+          title: "归档"
+        }
+      }
+    ]
+  }
+]
+
+/**
+ * 动态路由
+ * 用来放置有权限（roles 属性）的路由
+ * 必须带有 name 属性
+ */
+export const asyncRoutes: Array<RouteRecordRaw> = [
   // {
-  //   path: "/processManagement",
-  //   redirect: "/processManagement/index",
+  //   path: "/departmentManage",
+  //   redirect: "/departmentManage/index",
   //   component: Layout,
+  //   meta: {
+  //     roles: ["finance"]
+  //   },
   //   children: [
   //     {
-  //       path: "/processManagement/index",
-  //       component: () => import("@/views/processManagement/index.vue"),
-  //       name: "processManagement",
+  //       path: "/departmentManage/index",
+  //       component: () => import("@/views/departmentManage/index.vue"),
+  //       name: "departmentManage",
   //       meta: {
-  //         title: "工序工时库管理"
+  //         title: "部门管理"
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/role",
+  //   redirect: "/role/index",
+  //   component: Layout,
+  //   meta: {
+  //     roles: ["finance"]
+  //   },
+  //   children: [
+  //     {
+  //       path: "/role/index",
+  //       component: () => import("@/views/role/index.vue"),
+  //       name: "role",
+  //       meta: {
+  //         title: "角色管理"
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/user",
+  //   redirect: "/user/index",
+  //   component: Layout,
+  //   meta: {
+  //     roles: ["finance"]
+  //   },
+  //   children: [
+  //     {
+  //       path: "/user/index",
+  //       component: () => import("@/views/user/index.vue"),
+  //       name: "user",
+  //       meta: {
+  //         title: "用户管理"
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: "/dictionary",
+  //   redirect: "/dictionary/index",
+  //   component: Layout,
+  //   meta: {
+  //     roles: ["finance"]
+  //   },
+  //   children: [
+  //     {
+  //       path: "/dictionary/index",
+  //       component: () => import("@/views/dictionary/index.vue"),
+  //       name: "dictionary",
+  //       meta: {
+  //         title: "字典管理"
+  //       }
+  //     },
+  //     {
+  //       path: "/dictionary/detailList",
+  //       component: () => import("@/views/dictionary/detailList.vue"),
+  //       name: "detailList",
+  //       meta: {
+  //         title: "字典管理明细表",
+  //         hidden: true
   //       }
   //     }
   //   ]
@@ -518,8 +710,10 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/fnDepartment/index",
     component: Layout,
     meta: {
-      title: "财务参数管理"
+      title: "财务参数管理",
+      roles: ["finance"]
     },
+    name: "fnDepartment",
     children: [
       {
         path: "/fnDepartment/qualityCost",
@@ -571,157 +765,37 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   },
-
-  {
-    path: "/role",
-    redirect: "/role/index",
-    component: Layout,
-    children: [
-      {
-        path: "/role/index",
-        component: () => import("@/views/role/index.vue"),
-        name: "role",
-        meta: {
-          title: "角色管理"
-        }
-      }
-    ]
-  },
-  {
-    path: "/user",
-    redirect: "/user/index",
-    component: Layout,
-    children: [
-      {
-        path: "/user/index",
-        component: () => import("@/views/user/index.vue"),
-        name: "user",
-        meta: {
-          title: "用户管理"
-        }
-      }
-    ]
-  },
-  {
-    path: "/summaryTable",
-    redirect: "/summaryTable/index",
-    component: Layout,
-    children: [
-      {
-        path: "/summaryTable/index",
-        component: () => import("@/views/summaryTable/index.vue"),
-        name: "summaryTable",
-        meta: {
-          title: "汇总表"
-        }
-      }
-    ]
-  },
-
   // {
-  //   path: "/link",
+  //   path: "/permission",
   //   component: Layout,
+  //   redirect: "/permission/page",
+  //   name: "Permission",
+  //   meta: {
+  //     title: "权限管理",
+  //     icon: "lock",
+  //     roles: ["admin", "editor"], // 可以在根路由中设置角色
+  //     alwaysShow: true // 将始终显示根菜单
+  //   },
   //   children: [
   //     {
-  //       path: "https://www.baidu.com",
-  //       component: () => {},
-  //       name: "Link",
+  //       path: "page",
+  //       component: () => import("@/views/permission/page.vue"),
+  //       name: "PagePermission",
   //       meta: {
-  //         title: "外链",
-  //         icon: "link"
+  //         title: "页面权限",
+  //         roles: ["admin"] // 或者在子导航中设置角色
+  //       }
+  //     },
+  //     {
+  //       path: "directive",
+  //       component: () => import("@/views/permission/directive.vue"),
+  //       name: "DirectivePermission",
+  //       meta: {
+  //         title: "指令权限" // 如果未设置角色，则表示：该页面不需要权限，但会继承根路由的角色
   //       }
   //     }
   //   ]
-  // }
-  {
-    path: "/versionManagement",
-    redirect: "/versionManagement/index",
-    component: Layout,
-    meta: {
-      title: "版本管理"
-    },
-    children: [
-      {
-        path: "/versionManagement/index",
-        component: () => import("@/views/versionManagement/index.vue"),
-        name: "versionManagement",
-        meta: {
-          title: "版本管理"
-        }
-      },
-      {
-        path: "/versionManagement/operationRecord",
-        component: () => import("@/views/versionManagement/operationRecord.vue"),
-        name: "operationRecord",
-        meta: {
-          title: "时效性管理",
-          hidden: true
-        }
-      },
-      {
-        path: "/versionManagement/reportQuery",
-        component: () => import("@/views/versionManagement/reportQuery.vue"),
-        name: "reportQuery",
-        meta: {
-          title: "报表查询"
-        }
-      }
-    ]
-  },
-  {
-    path: "/archive",
-    redirect: "/archive/index",
-    component: Layout,
-    children: [
-      {
-        path: "/archive/index",
-        component: () => import("@/views/archive/index.vue"),
-        name: "archive",
-        meta: {
-          title: "归档"
-        }
-      }
-    ]
-  }
-]
-
-/**
- * 动态路由
- * 用来放置有权限（roles 属性）的路由
- * 必须带有 name 属性
- */
-export const asyncRoutes: Array<RouteRecordRaw> = [
-  {
-    path: "/permission",
-    component: Layout,
-    redirect: "/permission/page",
-    name: "Permission",
-    meta: {
-      title: "权限管理",
-      icon: "lock",
-      roles: ["admin", "editor"], // 可以在根路由中设置角色
-      alwaysShow: true // 将始终显示根菜单
-    },
-    children: [
-      {
-        path: "page",
-        component: () => import("@/views/permission/page.vue"),
-        name: "PagePermission",
-        meta: {
-          title: "页面权限",
-          roles: ["admin"] // 或者在子导航中设置角色
-        }
-      },
-      {
-        path: "directive",
-        component: () => import("@/views/permission/directive.vue"),
-        name: "DirectivePermission",
-        meta: {
-          title: "指令权限" // 如果未设置角色，则表示：该页面不需要权限，但会继承根路由的角色
-        }
-      }
-    ]
-  },
+  // },
   {
     path: "/:pathMatch(.*)*", // 必须将 'ErrorPage' 路由放在最后, Must put the 'ErrorPage' route at the end
     component: Layout,
