@@ -100,7 +100,7 @@
       </el-table-column> -->
         <el-table-column label="总费用" width="150">
           <template #default="{ row }">
-            ￥ {{ row.unitPrice * (row.dataThoroughly + row.dataDV + row.dataPV) }}
+            ￥ {{ (row.unitPrice || 0) * ((row.dataThoroughly || 0) + (row.dataDV || 0) + (row.dataPV || 0)) }}
           </template>
         </el-table-column>
         <!-- <el-table-column label="单位" width="180">
@@ -132,7 +132,6 @@ import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { PostProductDepartment, GetProductDepartment, PostExperimentItemsSingleDownloadExcel } from "./common/request"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
-import { LaboratoryFeeModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
@@ -145,14 +144,14 @@ const deleteLaboratoryFeeModel = (i: number) => {
 }
 let { auditFlowId, productId } = getQuery()
 const addLaboratoryFeeModel = () => {
-  data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, count: 0 })
+  data.laboratoryFeeModels.push({ unitPrice: 0, allCost: 0, dataThoroughly: 0, dataDV: 0, dataPV: 0 })
 }
 
 /**
  * 数据部分
  */
 const data = reactive<{
-  laboratoryFeeModels: LaboratoryFeeModel[]
+  laboratoryFeeModels: any[]
 }>({
   laboratoryFeeModels: []
 })
