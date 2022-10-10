@@ -688,7 +688,7 @@ const rules = reactive<FormRules>({
 const getSummaries = (param: SummaryMethodProps) => {
   const { columns, data } = param
   const sums: any[] = []
-
+  const sumsCopy: any[] = []
   let arr = new Array(data[0].pcsYearList.length).fill(0).map(() => {
     return [] as number[]
   })
@@ -711,6 +711,9 @@ const getSummaries = (param: SummaryMethodProps) => {
           return prev + curr
         })
       )
+      sumsCopy[index] = arr[i]?.reduce((prev, curr) => {
+        return prev + curr
+      })
     } else {
       sums[index] = "N/A"
     }
@@ -727,7 +730,7 @@ const getSummaries = (param: SummaryMethodProps) => {
   //   })
   // }
   // console.log(sums, "sums", state.carAnnualTotal, state.sumArr)
-  const tempArr: any = sums.filter((sum) => typeof sum === "number")
+  const tempArr: any = sumsCopy.filter((sum) => typeof sum === "number")
   if (tempArr.length > 0) {
     state.sumArr = [...tempArr]
     state.carAnnualTotal = tempArr.reduce((prev: any, curr: any) => {
@@ -831,9 +834,9 @@ const pcsYearQuantitySum = (row: Pcs) => {
 }
 const formatThousandths = (_record: any, _row: any, cellValue: any) => {
   if (cellValue) {
-    return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
+    return (Number(cellValue).toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
   } else {
-    return 0
+    return ""
   }
 }
 const modelCountYearListQuantitySum = (row: modelCount) => {
@@ -976,10 +979,10 @@ const addProduct = () => {
   })
   moduleTableData.value.push(moduleTableDataNew)
   // 每次执行添加都对模组上的产品名称进行复制
-  productTableData.value.forEach((item: any, index: any) => {
-    item.name = moduleTableData[index].product
-    item.product = moduleTableData[index].product
-  })
+  // productTableData.value.forEach((item: any, index: any) => {
+  //   item.name = moduleTableData.value[index].product
+  //   item.product = moduleTableData.value[index].product
+  // })
 }
 
 const yearChange = (val: number | undefined) => {
