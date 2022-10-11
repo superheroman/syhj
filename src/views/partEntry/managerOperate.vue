@@ -119,6 +119,7 @@ let formData: any = reactive({
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   if (res.success) {
     formData.fileId = res.result.fileId
+    ElMessage.success("上传成功")
   }
 }
 const options = [

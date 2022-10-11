@@ -183,6 +183,7 @@ const handleDelete = (index: number, row: GrossMarginItem) => {
         type: "success",
         message: "删除成功"
       })
+      getList()
     }
   })
 }
