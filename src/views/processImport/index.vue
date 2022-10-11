@@ -18,6 +18,7 @@
             <el-button class="m-2" type="primary" @click="downLoadTemplate">工序工时模版下载</el-button>
             <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
             <el-button class="m-2" type="primary" @click="downLoad3DExploded">3D爆炸图下载</el-button>
+            <el-button class="m-2" type="primary" @click="downTrFile">TR-主方案下载</el-button>
             <el-button class="m-2" type="primary" @click="toModuleNumber">项目走量查看</el-button>
             <el-button class="m-2" type="primary" @click="toBomVerifyConstruction">结构bom查看</el-button>
           </el-row>
@@ -197,6 +198,7 @@ import {
   getYears,
   QueryWorkingHour
 } from "./service"
+import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
 import getQuery from "@/utils/getQuery"
 import type { FormInstance } from "element-plus"
 import router from "@/router"
@@ -307,6 +309,33 @@ const downLoad3DExploded = async () => {
     a.remove() //将a标签移除
   }
   // data.setVisible = false
+}
+
+// TR主方案下载
+const downTrFile = async () => {
+  let res: any = (await getAuditFlowVersion(Number(auditFlowId))) || {}
+  const trFileId = res.result?.solutionFileIdentifier
+  const solutionFileName = res.result?.solutionFileName
+  if (trFileId) {
+    try {
+      let res: any = await downloadFile(trFileId)
+      const blob = res
+      const reader = new FileReader()
+      reader.readAsDataURL(blob)
+      reader.onload = function () {
+        let url = URL.createObjectURL(new Blob([blob]))
+        let a = document.createElement("a")
+        document.body.appendChild(a) //此处增加了将创建的添加到body当中
+        a.href = url
+        a.download = solutionFileName
+        a.target = "_blank"
+        a.click()
+        a.remove() //将a标签移除
+      }
+    } catch (err) {
+      console.log(err, "downLoadError")
+    }
+  }
 }
 
 const getSORFileName = async () => {
