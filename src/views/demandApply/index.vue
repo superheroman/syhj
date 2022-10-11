@@ -430,7 +430,7 @@
               </el-input>
             </template>
           </el-table-column>
-          <el-table-column label="LED" width="400">
+          <el-table-column label="其它" width="400">
             <template #default="{ row }">
               <el-input v-model="row.led" placeholder="品牌/型号">
                 <template #prepend>
