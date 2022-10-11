@@ -1065,6 +1065,12 @@ const deletePcs = (i: number) => {
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
+  if (res.success) {
+    ElMessage({
+      message: "上传成功",
+      type: "success"
+    })
+  }
 }
 const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
   console.log(uploadFiles)
