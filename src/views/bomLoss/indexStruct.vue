@@ -34,7 +34,7 @@ import {
   getYears,
   getStructLossRateType
 } from "./service"
-import { ElMessage } from "element-plus"
+import { ElMessage, ElMessageBox } from "element-plus"
 import { LossRateYearDto } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import _ from "lodash"
@@ -70,12 +70,16 @@ let auditFlowId = 1
 let productId = 1
 const submit = async () => {
   let bomLossData = [] as any[]
-  // bomLossData.concat(data.bomLossStructData)
+  let isComfirm = false
+
   bomLossData = _.cloneDeep(data.bomLossStructData)
   let lossRateDtoList = bomLossData.map((item: any) => {
     return {
       ...item,
       lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
+        if (Number(i.rate) >= 10) {
+          isComfirm = true
+        }
         return {
           year: i.year,
           rate: (Number(i.rate) / 100).toFixed(4)
@@ -83,13 +87,29 @@ const submit = async () => {
       })
     }
   })
-  let res: any = await saveLossRateInfo(lossRateDtoList)
-  if (res.success) {
-    // jumpTodoCenter()
-    ElMessage({
-      type: "success",
-      message: "提交成功"
+
+  if (isComfirm) {
+    ElMessageBox.confirm("损耗录有超过10%的值,是否提交?", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning"
+    }).then(async () => {
+      let res: any = await saveLossRateInfo(lossRateDtoList)
+      if (res.success) {
+        ElMessage({
+          type: "success",
+          message: "提交成功"
+        })
+      }
     })
+  } else {
+    let res: any = await saveLossRateInfo(lossRateDtoList)
+    if (res.success) {
+      ElMessage({
+        type: "success",
+        message: "提交成功"
+      })
+    }
   }
 }
 // const years = (index: number) => {

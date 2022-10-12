@@ -178,7 +178,7 @@ const handleDelete = (index: number, row: GrossMarginItem) => {
     type: "warning"
   }).then(async () => {
     let res: any = await deleteGrossMargin(row.id)
-    if (res.code === "200") {
+    if (res.success) {
       ElMessage({
         type: "success",
         message: "删除成功"

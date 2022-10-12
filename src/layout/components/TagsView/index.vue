@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, getCurrentInstance, nextTick, onBeforeMount, reactive, watch } from "vue"
+import { computed, getCurrentInstance, nextTick, onBeforeMount, reactive, watch, onUnmounted } from "vue"
 import { RouteRecordRaw, useRoute, useRouter } from "vue-router"
 import { useTagsViewStore, ITagView } from "@/store/modules/tags-view"
 import { usePermissionStore } from "@/store/modules/permission"
@@ -177,6 +177,9 @@ watch(
 onBeforeMount(() => {
   initTags()
   addTags()
+})
+onUnmounted(() => {
+  tagsViewStore.delAllVisitedViews()
 })
 </script>
 

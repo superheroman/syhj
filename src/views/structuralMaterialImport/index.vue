@@ -180,7 +180,7 @@ const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
     data.tableData = res.result.structureBomDtos
   } else {
     ElMessage({
-      message: res.result.message,
+      message: res.error.message,
       type: "error"
     })
   }
