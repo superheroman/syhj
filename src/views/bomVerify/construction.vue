@@ -75,6 +75,11 @@
         <el-table-column prop="remark" label="备注" />
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="本位币汇总：">
+          {{ item.allStandardMoney?.toFixed(2) || 0 }}
+        </el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <el-row justify="end" style="margin-top: 20px" v-if="data.auditFlowId && data.productId">
       <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
@@ -85,7 +90,6 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { ConstructionDto } from "../resourcesDepartment/data.type"
 import { GetBOMStructuralSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
@@ -98,7 +102,7 @@ const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 // 结构料 - table数据
-const constructionBomList = ref<ConstructionDto[]>([])
+const constructionBomList = ref<any[]>([])
 const loading = ref(false)
 // 表单子列
 const allColums = reactive<any>({
@@ -135,13 +139,26 @@ const fetchOptionsData = async () => {
   exchangeSelectOptions.value = exchangeSelect.result.items || []
 }
 
+// 计算总值
+const reduceArr = (arr: any[]) => {
+  return arr.reduce((a, b) => a + b)
+}
+
 // 获取结构料初始化数据
 const fetchConstructionInitData = async () => {
   try {
     loading.value = true
     const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
     console.log(result, "获取初始化数据")
-    constructionBomList.value = result
+    constructionBomList.value = result.map((item: any) => {
+      const standardMoneyTotal = item.structureMaterial.map((item: any) =>
+        reduceArr(item.standardMoney.map((y: any) => y.value))
+      )
+      return {
+        ...item,
+        allStandardMoney: reduceArr(standardMoneyTotal)
+      }
+    })
     loading.value = false
   } catch {
     loading.value = false

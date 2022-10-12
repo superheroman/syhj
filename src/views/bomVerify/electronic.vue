@@ -83,6 +83,11 @@
         <el-table-column prop="remark" label="备注" />
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="本位币汇总：">
+          {{ data.allStandardMoney.toFixed(2) }}
+        </el-descriptions-item>
+      </el-descriptions>
       <!-- <el-row justify="end">
         <el-button class="margin-top" @click="handleCalculation" type="primary"> 计算 </el-button>
       </el-row> -->
@@ -117,7 +122,8 @@ const allColums = reactive<any>({
 
 const data = reactive({
   auditFlowId,
-  productId
+  productId,
+  allStandardMoney: 0
 })
 
 const exchangeSelectOptions = ref<any>([])
@@ -146,6 +152,11 @@ const fetchOptionsData = async () => {
   }
 }
 
+// 计算总值
+const reduceArr = (arr: any[]) => {
+  return arr.reduce((a, b) => a + b)
+}
+
 // 获取电子料初始化数据
 const fetchElectronicInitData = async () => {
   const { result } = await GetBOMElectronicSingle(auditFlowId, productId)
@@ -159,6 +170,8 @@ const fetchElectronicInitData = async () => {
   allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
   allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
   allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
+  const standardMoneyTotal = result.map((item: any) => reduceArr(item.standardMoney.map((y: any) => y.value)))
+  data.allStandardMoney = reduceArr(standardMoneyTotal)
 }
 
 const fetchSopYear = async () => {

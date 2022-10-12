@@ -165,6 +165,7 @@ import { GetPricingForm, NreTableDownload } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import getQuery from "@/utils/getQuery"
 import { formatDateTime, downloadFileExcel } from "@/utils"
+import { ElMessage } from "element-plus"
 
 const { auditFlowId, productId, year, hideBtn }: any = getQuery()
 
@@ -212,6 +213,7 @@ const handleFethNreTableDownload = async () => {
       ModelCountId: productId
     })
     downloadFileExcel(res, "NRE核价表")
+    ElMessage.success("下载成功！")
     console.log(res, "NreTableDownload")
   } catch (err: any) {
     console.log(err, "[ NRE核价表下载 失败 ]")
