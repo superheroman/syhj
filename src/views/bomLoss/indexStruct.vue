@@ -71,12 +71,15 @@ let productId = 1
 const submit = async () => {
   let bomLossData = [] as any[]
   let isComfirm = false
-
+  let cantSubmit = false
   bomLossData = _.cloneDeep(data.bomLossStructData)
   let lossRateDtoList = bomLossData.map((item: any) => {
     return {
       ...item,
       lossRateYearList: item.lossRateYearList.map((i: LossRateYearDto) => {
+        if (i.rate === "") {
+          cantSubmit = true
+        }
         if (Number(i.rate) >= 10) {
           isComfirm = true
         }
@@ -87,7 +90,13 @@ const submit = async () => {
       })
     }
   })
-
+  if (cantSubmit) {
+    ElMessage({
+      type: "error",
+      message: "存在空值，无法提交"
+    })
+    return
+  }
   if (isComfirm) {
     ElMessageBox.confirm("损耗录有超过10%的值,是否提交?", "提示", {
       confirmButtonText: "确定",

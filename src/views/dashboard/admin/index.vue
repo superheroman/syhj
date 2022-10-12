@@ -48,9 +48,11 @@
             <el-table-column prop="remarks" label="备注" />
           </el-table>
           <el-descriptions title="" border :column="2">
-            <el-descriptions-item label="材料成本合计">{{ data.allPrice?.toFixed(2) || "-" }}</el-descriptions-item>
-            <el-descriptions-item label="电子料大类成本合计">{{
+            <el-descriptions-item label="材料成本合计">{{
               data.allTotalMoneyCyn?.toFixed(2) || "-"
+            }}</el-descriptions-item>
+            <el-descriptions-item label="电子料大类成本合计">{{
+              data.allPrice?.toFixed(2) || "-"
             }}</el-descriptions-item>
           </el-descriptions>
         </div>
