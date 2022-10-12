@@ -130,7 +130,7 @@
         <el-table-column label="账期" prop="accountingPeriod" width="180" />
         <el-table-column label="资金成本率" prop="capitalCostRate" width="180">
           <template #default="{ row }">
-            {{ `${row.capitalCostRate?.toFixed(2)} %` }}
+            {{ `${(row.capitalCostRate || 0).toFixed(2)} %` }}
           </template>
         </el-table-column>
         <el-table-column label="财务成本" prop="financialCost" width="180" :formatter="toFixedTwo" />
