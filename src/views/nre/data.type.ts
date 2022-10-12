@@ -163,7 +163,7 @@ export interface LaboratoryFeeModel {
   /**
    * 时间
    */
-  time?: Date
+  time?: number
   /**
    * 单价
    */
@@ -221,15 +221,15 @@ export interface QADepartmentTestModel {
   /**
    * 时间-DV
    */
-  dataDV?: string
+  dataDV?: number
   /**
    * 时间-PV
    */
-  dataPV?: string
+  dataPV?: number
   /**
    * 时间-摸底
    */
-  dataThoroughly?: string
+  dataThoroughly?: number
   /**
    * 是否指定第三方
    */
@@ -319,7 +319,7 @@ export interface LaboratoryFeeModel {
   /**
    * 时间
    */
-  time?: Date
+  time?: number
   /**
    * 单价
    */
@@ -509,7 +509,7 @@ export interface pricingForm {
   /**
    * 编制日期
    */
-  compileDate?: Date
+  compilenumber?: number
   handPieceCost?: HandPieceCostModel[]
   /**
    * 实验费 模型
@@ -599,15 +599,15 @@ export interface LaboratoryFeeModel {
   /**
    * 时间-DV
    */
-  dataDV?: Date
+  dataDV?: number
   /**
    * 时间-PV
    */
-  dataPV?: Date
+  dataPV?: number
   /**
    * 时间-摸底
    */
-  dataThoroughly?: Date
+  dataThoroughly?: number
   /**
    * 是否指定第三方 (是 true   否 false)
    */

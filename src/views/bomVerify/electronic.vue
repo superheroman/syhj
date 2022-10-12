@@ -2,10 +2,10 @@
   <el-card class="wrap m-2">
     <el-card class="table-wrap" header="电子料单价">
       <el-table :data="electronicBomList" style="width: 100%" v-loading="loading" height="75vh">
-        <el-table-column prop="categoryName" label="物料大类" width="150" />
-        <el-table-column prop="typeName" label="物料种类" width="150" />
-        <el-table-column prop="sapItemNum" label="物料编号" width="150" />
-        <el-table-column prop="sapItemName" label="材料名称" width="150" />
+        <el-table-column prop="categoryName" label="物料大类" fixed="left" width="150" />
+        <el-table-column prop="typeName" label="物料种类" fixed="left" width="150" />
+        <el-table-column prop="sapItemNum" label="物料编号" fixed="left" width="150" />
+        <el-table-column prop="sapItemName" label="材料名称" fixed="left" width="150" />
         <el-table-column prop="materialsUseCount" label="项目物料的使用量">
           <el-table-column
             v-for="(item, index) in allColums?.materialsUseCountYears"
@@ -81,7 +81,7 @@
         </el-table-column>
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150" />
         <el-table-column prop="remark" label="备注" />
-        <el-table-column prop="peopleName" label="确认人" />
+        <el-table-column prop="peopleName" fixed="right" />
       </el-table>
       <!-- <el-row justify="end">
         <el-button class="margin-top" @click="handleCalculation" type="primary"> 计算 </el-button>

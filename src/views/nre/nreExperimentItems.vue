@@ -53,12 +53,7 @@
             <el-input-number v-model="row.count" controls-position="right" :min="0" />
           </template>
         </el-table-column> -->
-        <el-table-column label="总费用" width="180">
-          <template #default="{ row }">
-            <!-- <el-input-number v-model="row.allCost" type="number" :min="0" controls-position="right" :min="0" /> -->
-            {{ row.unitPrice * (row.dataThoroughly + row.dataDV + row.dataPV) }}
-          </template>
-        </el-table-column>
+
         <el-table-column label="时间-摸底" width="180">
           <template #default="{ row }">
             <el-input-number :min="0" controls-position="right" v-model="row.dataThoroughly" />
@@ -77,6 +72,12 @@
         <el-table-column label="单位" width="180">
           <template #default="{ row }">
             <el-input v-model="row.unit" />
+          </template>
+        </el-table-column>
+        <el-table-column label="总费用" width="180">
+          <template #default="{ row }">
+            <!-- <el-input-number v-model="row.allCost" type="number" :min="0" controls-position="right" :min="0" /> -->
+            {{ row.unitPrice * (row.dataThoroughly + row.dataDV + row.dataPV) }}
           </template>
         </el-table-column>
         <el-table-column label="备注" width="180">
@@ -128,9 +129,9 @@ const addExperimentItemsData = () => {
   data.experimentItems.push({
     allCost: 0,
     count: 0,
-    dataDV: "",
-    dataPV: "",
-    dataThoroughly: "",
+    dataDV: 0,
+    dataPV: 0,
+    dataThoroughly: 0,
     isThirdParty: false,
     projectName: "",
     remark: "",

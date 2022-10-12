@@ -110,7 +110,7 @@ export const selectCostChartData = {
         show: true,
         position: "top",
         formatter: (item: any) => {
-          return Math.floor(item.value || 0).toLocaleString("en-US")
+          return item.value
         }
       },
       smooth: true

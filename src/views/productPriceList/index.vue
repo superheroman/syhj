@@ -156,7 +156,6 @@ import EZFilter from "@/components/EZFilter/index.vue"
 import { getYears } from "../pmDepartment/service"
 import { downloadFileZip } from "@/utils/index"
 import { formatDateTime } from "@/utils/index"
-import { getSummaries } from "../dashboard/admin/common/getSummaries"
 
 const { auditFlowId, productId, disabled } = getQuery()
 
