@@ -127,7 +127,7 @@
         </el-descriptions-item>
         <el-descriptions-item label="汇率"> {{ props.marketingQuotationData?.exchangeRate }} </el-descriptions-item>
       </el-descriptions>
-      <el-card header="sop5年内走量信息" m="2">
+      <el-card header="走量信息" m="2">
         <el-table :data="props.marketingQuotationData?.motionMessage" border>
           <el-table-column type="index" width="100" />
           <el-table-column label="名称" prop="messageName" />

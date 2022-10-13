@@ -13,7 +13,7 @@
           <span>NRE</span>
         </div>
       </template>
-      <el-table :data="data.nre" style="width: 100%" border show-summary>
+      <el-table :data="data.nre" style="width: 100%" border>
         <el-table-column type="index" width="50" />
         <el-table-column label="费用名称" width="180" prop="formName" />
         <el-table-column prop="pricingMoney" label="核价金额" width="180" :formatter="formatThousandths" />
@@ -39,6 +39,14 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-descriptions title="" border :column="2">
+        <el-descriptions-item label="核价金额合计">
+          {{ calculationNre("pricingMoney") }}
+        </el-descriptions-item>
+        <el-descriptions-item label="报价金额合计">
+          {{ calculationNre("offerMoney") }}
+        </el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <el-card class="card">
       <template #header>
@@ -170,7 +178,9 @@
         </el-table-column>
       </el-table>
       <el-descriptions title="" border :column="1">
-        <el-descriptions-item label="目标价(内部)整套单价">{{ data.allInteriorUnitPrice }}</el-descriptions-item>
+        <el-descriptions-item label="目标价(内部)整套单价">{{
+          calculatedValue("interiorTargetUnitPrice")
+        }}</el-descriptions-item>
         <el-descriptions-item label="目标价(客户)整套单价">{{
           calculatedValue("clientTargetUnitPrice")
         }}</el-descriptions-item>
@@ -203,16 +213,28 @@
     <el-card class="card">
       <el-table :data="data.projectBoard" style="width: 100%" border>
         <el-table-column label="项目" prop="projectName" />
-        <el-table-column
-          label="目标价（内部）"
-          :formatter="formatThousandths"
-          :prop="`interiorTarget.grossMarginNumber`"
-        />
-        <el-table-column
-          label="目标价（客户）"
-          :formatter="formatThousandths"
-          :prop="`clientTarget.grossMarginNumber`"
-        />
+        <el-table-column label="目标价（内部）" :formatter="formatThousandths" prop="interiorTarget.grossMarginNumber">
+          <template #default="{ row }">
+            <span>
+              {{
+                row.projectName !== "毛利率"
+                  ? row.interiorTarget.grossMarginNumber
+                  : `${row.interiorTarget.grossMarginNumber} %`
+              }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="目标价（客户）" :formatter="formatThousandths">
+          <template #default="{ row }">
+            <span>
+              {{
+                row.projectName !== "毛利率"
+                  ? row.clientTarget.grossMarginNumber
+                  : `${row.clientTarget.grossMarginNumber} %`
+              }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column label="本次报价" :formatter="formatThousandths" :prop="`offer.grossMarginNumber`" />
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
@@ -245,7 +267,7 @@
                 :formatter="formatThousandths"
               />
             </template>
-            <el-table-column prop="grossMargin" label="毛利率" :formatter="getTofixed" width="150" />
+            <!-- <el-table-column prop="grossMargin" label="毛利率" :formatter="getTofixed" width="150" /> -->
             <el-table-column prop="totak" label="总和" width="150" :formatter="formatThousandths" />
           </el-table>
         </el-card>
@@ -290,9 +312,7 @@ import { ElLoading, ElMessageBox, ElMessage } from "element-plus"
 let query = getQuery()
 const router = useRouter()
 //console.log('1-开始创建组件-setup')
-const getTofixed = (row: any) => {
-  return `${row.grossMargin?.toFixed(2)}`
-}
+
 let dialogVisible = ref(false)
 const fullscreenLoading = ref(false)
 let ProjectUnitPrice: any = {
@@ -425,6 +445,15 @@ const formatThousandths = (_record: any, _row: any, cellValue: any) => {
     return 0
   }
 }
+
+// nre 合计
+const calculationNre = (key: string) => {
+  const count = data.nre.map((item: any) => item[key]) || []
+  if (!count.length) return 0
+  const total = count.reduce((a: number, b: number) => a + b)
+  return formatThousandths(null, null, total)
+}
+
 // 报价分析看板 单价计算
 const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: string, key2: string) => {
   // console.log(data.auditFlowId)
@@ -445,7 +474,7 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: 
     // const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
     spreadSheetCalculate(productBoards)
   } else {
-    data.allInteriorGrossMargin = result.allGrossMargin
+    data.allClientGrossMargin = result.allGrossMargin
   }
   setData()
 }, 300)
@@ -630,7 +659,7 @@ const getDialogData = async () => {
 const calculatedValue = (key: string, type?: string) => {
   if (data.productBoard.length === 0) return 0
   if (data.productBoard.length === 1) return Number(data.productBoard[0][key]) || 0
-  const counts = data.productBoard.map((item: any) => Number(item[key] || 0))
+  const counts = data.productBoard.map((item: any) => Number(item[key] * item.productNumber || 0))
   console.log(counts, key, "")
   const totolValue = counts?.reduce((a: any, b: any) => a + b)
   // console.log(data.productBoard[0][key], totolValue, key)

@@ -26,7 +26,7 @@
       </el-descriptions-item>
       <el-descriptions-item label="汇率"> {{ data.marketingQuotationData.exchangeRate }} </el-descriptions-item>
     </el-descriptions>
-    <el-card header="sop5年内走量信息" m="2">
+    <el-card header="走量信息" m="2">
       <el-table :data="data.marketingQuotationData?.motionMessage" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="名称" prop="messageName" />
@@ -117,7 +117,6 @@ import { CommonDownloadFile } from "@/api/bom"
 import { GetPicture3DByAuditFlowId } from "../processImport/service"
 import { getSorByAuditFlowId } from "@/components/CustomerSpecificity/service"
 import { downloadFile, getAuditFlowVersion } from "../trAudit/service"
-import { debug } from "console"
 
 const router = useRouter()
 const query = useJump()
