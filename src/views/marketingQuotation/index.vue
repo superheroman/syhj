@@ -82,10 +82,10 @@
         <el-table-column type="index" width="100" />
         <el-table-column label="产品" prop="product" />
         <el-table-column label="成本" prop="cost" :formatter="formatThousandths" />
-        <el-table-column label="毛利率" prop="grossMargin" :formatter="formatter" />
+        <el-table-column label="毛利率" prop="grossMargin" :formatter="formatterP" />
         <el-table-column label="价格" prop="price" :formatter="formatThousandths" />
         <el-table-column label="佣金" prop="commission" :formatter="formatThousandths" />
-        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" :formatter="formatter" />
+        <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" :formatter="formatterP" />
       </el-table>
     </el-card>
     <el-card header="费用表：" m="2">
@@ -143,10 +143,11 @@ const columns = reactive({
   sopData: []
 })
 const formatter = (_record: any, _row: any, cellValue: any) => {
-  console.log(cellValue, "cellValue")
   return Number(cellValue).toFixed(2)
 }
-
+const formatterP = (_record: any, _row: any, cellValue: any) => {
+  return Number(cellValue).toFixed(2) + "%"
+}
 const formatThousandths = (_record: any, _row: any, cellValue: any) => {
   return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
@@ -212,7 +213,7 @@ const toProductPriceList = () => {
   router.push({
     path: "/nupriceManagement/productPriceList",
     query: {
-      ...query,
+      auditFlowId,
       disabled: 1
     }
   })
@@ -290,7 +291,7 @@ const toNREPriceList = () => {
   router.push({
     path: "/nre/nrePricelist",
     query: {
-      ...query,
+      auditFlowId,
       hideBtn: 1
     }
   })

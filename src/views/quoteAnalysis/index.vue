@@ -51,7 +51,7 @@
     <el-card class="card">
       <template #header>
         <div class="card-header">
-          <span>单价表</span>
+          <span>单价表(SOP年)</span>
         </div>
       </template>
       <!-- 表头可固定，可变化数据 -->
@@ -75,7 +75,7 @@
     <el-card class="card">
       <template #header>
         <div class="card-header">
-          <span>汇总分析表</span>
+          <span>项目全生命周期汇总分析表</span>
         </div>
       </template>
       <el-table :data="data.pooledAnalysis" border v-if="data.pooledAnalysis.length > 0">
@@ -235,14 +235,34 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="本次报价" :formatter="formatThousandths" :prop="`offer.grossMarginNumber`" />
+        <el-table-column label="本次报价" :formatter="formatThousandths" :prop="`offer.grossMarginNumber`">
+          <template #default="{ row }">
+            <span>
+              {{
+                row.projectName !== "毛利率"
+                  ? Number(row.offer?.grossMarginNumber || 0).toFixed(2)
+                  : `${Number(row.offer?.grossMarginNumber || 0).toFixed(2)} %`
+              }}
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
           v-for="(_, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
           :key="index"
           :formatter="formatThousandths"
           :prop="`oldOffer[${index}].grossMarginNumber`"
-        />
+        >
+          <template #default="{ row }">
+            <span>
+              {{
+                row.projectName !== "毛利率"
+                  ? row.oldOffer[index].grossMarginNumber
+                  : `${row.oldOffer[index].grossMarginNumber} %`
+              }}
+            </span>
+          </template>
+        </el-table-column>
       </el-table>
     </el-card>
     <el-card m="2">
@@ -320,7 +340,7 @@ let ProjectUnitPrice: any = {
     text: "项目单价对比"
   },
   tooltip: {
-    trigger: "axis",
+    trigger: "item",
     axisPointer: {
       // Use axis to trigger tooltip
       type: "shadow" // 'shadow' as default; can also be 'line' or 'shadow'
@@ -354,7 +374,7 @@ let ProjectUnitPrice: any = {
       name: "毛利率",
       min: 0,
       axisLabel: {
-        formatter: "{value}"
+        formatter: "{value}%"
       }
     }
   ],
@@ -369,7 +389,7 @@ let RevenueGrossMargin: any = {
     data: ["目标价(内部)", "目标价(客户)", "本次报价"]
   },
   tooltip: {
-    trigger: "axis",
+    trigger: "item",
     axisPointer: {
       // Use axis to trigger tooltip
       type: "shadow" // 'shadow' as default; can also be 'line' or 'shadow'
@@ -390,7 +410,7 @@ let RevenueGrossMargin: any = {
       name: "毛利率",
       min: 0,
       axisLabel: {
-        formatter: "{value}"
+        formatter: "{value}%"
       }
     }
   ],
@@ -505,10 +525,13 @@ const setData = () => {
     yAxisIndex: 1,
     name: "整体毛利率",
     type: "line",
+    tooltip: {
+      formatter: "{a}{b}{c}%"
+    },
     data: [
       Number(data.allClientGrossMargin).toFixed(2),
-      Number(data.allInteriorGrossMargin).toFixed(2)
-      // calculatedValue("offeGrossMargin")?.toFixed(2)
+      Number(data.allInteriorGrossMargin).toFixed(2),
+      data.allGrossMargin?.toFixed(2) || 0
     ]
   })
   chart1.setOption(ProjectUnitPrice)
@@ -537,7 +560,10 @@ const setData = () => {
         yAxisIndex: 1,
         name: "毛利率",
         type: "line",
-        data: [item.clientTarget.grossMargin, item.interiorTarget.grossMargin]
+        tooltip: {
+          formatter: "{a}{b}{c}%"
+        },
+        data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
       }
       if (item.offer?.grossMarginNumber) {
         //这里计算只有grossMarginNumber

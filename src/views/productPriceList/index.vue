@@ -118,7 +118,7 @@
           <el-table-column label="产品类别" prop="productCategory" width="180" />
           <el-table-column label="成本比例" prop="costProportion" width="180">
             <template #default="{ row }">
-              {{ `${row.costProportion?.toFixed(2)} %` }}
+              {{ `${(row.costProportion * 100).toFixed(2)} %` }}
             </template>
           </el-table-column>
           <el-table-column label="质量成本" prop="qualityCost" width="180" :formatter="toFixedTwo" />

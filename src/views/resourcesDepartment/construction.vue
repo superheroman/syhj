@@ -65,7 +65,7 @@
               width="180"
             >
               <template #default="{ row }">
-                {{ row.standardMoney[index]?.value?.toFixed(2) || 0 }}
+                {{ row.standardMoney[index]?.value?.toFixed(5) || 0 }}
               </template>
             </el-table-column>
           </el-table-column>
