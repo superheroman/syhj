@@ -210,25 +210,20 @@ const addTravelCostData = () => {
 }
 
 const submit = async () => {
-  try {
-    const { success } = await PostProjectManagement({
-      projectManagement: {
-        ...data,
-        handPieceCost: data.handPieceCost.map((item: HandPieceCostModel) => {
-          return {
-            ...item,
-            cost: (item.unitPrice || 0) * (item.quantity || 0)
-          }
-        }),
-        productId
-      },
-      auditFlowId
-    })
-    if (success) ElMessage.success("提交成功！")
-    console.log(success, "RES")
-  } catch (err) {
-    console.log(err, "PostProjectManagement err")
-  }
+  const { success } = await PostProjectManagement({
+    projectManagement: {
+      ...data,
+      handPieceCost: data.handPieceCost?.map((item: HandPieceCostModel) => {
+        return {
+          ...item,
+          cost: (item.unitPrice || 0) * (item.quantity || 0)
+        }
+      }),
+      productId
+    },
+    auditFlowId
+  })
+  if (success) ElMessage.success("提交成功！")
 }
 
 const initFetch = async () => {

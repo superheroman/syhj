@@ -7,31 +7,29 @@
       class="table-wrap"
     >
       <el-table :data="item.structureMaterial" style="width: 100%" height="75vh" v-loading="loading">
-        <el-table-column label="bom" align="center">
-          <el-table-column type="index" label="序号" width="70" />
-          <el-table-column prop="categoryName" label="物料大类" width="150" />
-          <el-table-column prop="typeName" label="物料种类" width="150" />
-          <el-table-column prop="sapItemNum" label="物料编号" width="150" />
-          <el-table-column prop="drawingNumName" label="图号名称" width="150" />
-          <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
-          <el-table-column prop="materialName" label="材料" width="150" />
-          <el-table-column prop="weightNumber" label="重量g" width="150" />
-          <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
-          <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
-          <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
-          <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
-          <el-table-column prop="currency" label="币种" width="150">
-            <template #default="scope">
-              <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
-                <el-option
-                  v-for="item in exchangeSelectOptions"
-                  :key="item.id"
-                  :label="item.exchangeRateKind"
-                  :value="item.id"
-                />
-              </el-select>
-            </template>
-          </el-table-column>
+        <el-table-column type="index" label="序号" width="70" fixed />
+        <el-table-column prop="categoryName" label="物料大类" fixed width="150" />
+        <el-table-column prop="typeName" label="物料种类" fixed width="150" />
+        <el-table-column prop="sapItemNum" label="物料编号" fixed width="150" />
+        <el-table-column prop="drawingNumName" label="图号名称" width="150" />
+        <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
+        <el-table-column prop="materialName" label="材料" width="150" />
+        <el-table-column prop="weightNumber" label="重量g" width="150" />
+        <el-table-column prop="moldingProcess" label="成型工艺" width="150" />
+        <el-table-column prop="secondaryProcessingMethod" label="二次加工方法" width="150" />
+        <el-table-column prop="surfaceTreatmentMethod" label="表面处理" width="150" />
+        <el-table-column prop="dimensionalAccuracyRemark" label="关键尺寸精度及重要要求" width="150" />
+        <el-table-column prop="currency" label="币种" width="150">
+          <template #default="scope">
+            <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
+              <el-option
+                v-for="item in exchangeSelectOptions"
+                :key="item.id"
+                :label="item.exchangeRateKind"
+                :value="item.id"
+              />
+            </el-select>
+          </template>
         </el-table-column>
         <!-- <el-table-column prop="materialsSystemPrice" label="系统单价" width="150">
             <template #default="scope">
@@ -75,8 +73,13 @@
           </el-table-column>
         </el-table-column>
         <el-table-column prop="remark" label="备注" />
-        <el-table-column prop="peopleName" label="确认人" />
+        <el-table-column prop="peopleName" fixed="right" />
       </el-table>
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="本位币汇总：">
+          {{ item.allStandardMoney?.toFixed(2) || 0 }}
+        </el-descriptions-item>
+      </el-descriptions>
     </el-card>
     <el-row justify="end" style="margin-top: 20px" v-if="data.auditFlowId && data.productId">
       <el-button type="primary" @click="handleSetBomState(true)" v-havedone>同意</el-button>
@@ -87,7 +90,6 @@
 
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
-import { ConstructionDto } from "../resourcesDepartment/data.type"
 import { GetBOMStructuralSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
 import { getYears } from "../pmDepartment/service"
@@ -100,7 +102,7 @@ const { jumpTodoCenter } = useJump()
 const { auditFlowId, productId }: any = getQuery()
 
 // 结构料 - table数据
-const constructionBomList = ref<ConstructionDto[]>([])
+const constructionBomList = ref<any[]>([])
 const loading = ref(false)
 // 表单子列
 const allColums = reactive<any>({
@@ -125,10 +127,10 @@ onMounted(() => {
   fetchConstructionInitData()
 })
 
-const toFixedThree = (_recoed: any, _row: any, val: any) => {
-  if (typeof val === "number" && val > 0) return val.toFixed(3)
-  return val
-}
+// const toFixedThree = (_recoed: any, _row: any, val: any) => {
+//   if (typeof val === "number" && val > 0) return val.toFixed(3)
+//   return val
+// }
 const fetchOptionsData = async () => {
   const exchangeSelect: any = await getExchangeRate({
     maxResultCount: 100,
@@ -137,13 +139,26 @@ const fetchOptionsData = async () => {
   exchangeSelectOptions.value = exchangeSelect.result.items || []
 }
 
+// 计算总值
+const reduceArr = (arr: any[]) => {
+  return arr.reduce((a, b) => a + b)
+}
+
 // 获取结构料初始化数据
 const fetchConstructionInitData = async () => {
   try {
     loading.value = true
     const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
     console.log(result, "获取初始化数据")
-    constructionBomList.value = result
+    constructionBomList.value = result.map((item: any) => {
+      const standardMoneyTotal = item.structureMaterial.map((item: any) =>
+        reduceArr(item.standardMoney.map((y: any) => y.value))
+      )
+      return {
+        ...item,
+        allStandardMoney: reduceArr(standardMoneyTotal)
+      }
+    })
     loading.value = false
   } catch {
     loading.value = false

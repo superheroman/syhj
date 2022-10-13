@@ -16,7 +16,7 @@
       </el-descriptions-item>
       <el-descriptions-item label="汇率"> {{ data.marketingQuotationData.exchangeRate }} </el-descriptions-item>
     </el-descriptions>
-    <el-card header="sop5年内走量信息" m="2">
+    <el-card header="走量信息" m="2">
       <el-table :data="data.marketingQuotationData.motionMessage" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="名称" prop="messageName" />
@@ -158,8 +158,7 @@ const initFetch = async () => {
 // 计算含佣金的毛利率
 const changeCommission = (row: any, index: number) => {
   console.log(row, index, "changeCommission")
-  data.marketingQuotationData.biddingStrategy[index].grossMarginCommission =
-    (row.price - row.commission - row.cost) / (row.cost + row.commission)
+  data.marketingQuotationData.biddingStrategy[index].grossMarginCommission = (row.commission + row.cost) / row.price
 }
 
 const fetchSopYear = async () => {

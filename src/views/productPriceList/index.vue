@@ -46,9 +46,10 @@
         <el-table-column label="可用库存" prop="availableInventory" width="180" />
         <el-table-column label="备注" prop="remarks" width="180" />
       </el-table>
-      <el-descriptions title="" border :column="2">
+      <el-descriptions title="" border :column="3">
         <el-descriptions-item label="材料成本合计">{{ data.allTotalMoneyCyn }}</el-descriptions-item>
         <el-descriptions-item label="电子料大类成本合计">{{ data.allPrice }}</el-descriptions-item>
+        <el-descriptions-item label="项目总成本">{{ data.totalCost }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
     <el-card class="card">
@@ -130,7 +131,7 @@
         <el-table-column label="账期" prop="accountingPeriod" width="180" />
         <el-table-column label="资金成本率" prop="capitalCostRate" width="180">
           <template #default="{ row }">
-            {{ `${row.capitalCostRate?.toFixed(2)} %` }}
+            {{ `${(row.capitalCostRate || 0).toFixed(2)} %` }}
           </template>
         </el-table-column>
         <el-table-column label="财务成本" prop="financialCost" width="180" :formatter="toFixedTwo" />
@@ -138,7 +139,6 @@
         <el-table-column label="合计" prop="total" width="180" :formatter="toFixedTwo" />
       </el-table>
     </el-card>
-    <!-- <div>{{totalCost}}</div> -->
     <el-descriptions :column="3" border>
       <el-descriptions-item label="编制/日期："> {{ data.preparedDate }} </el-descriptions-item>
       <el-descriptions-item label="审核/日期："> {{ data.auditDate }} </el-descriptions-item>
@@ -230,6 +230,7 @@ const setData = (result: any) => {
   let { material, manufacturingCost, lossCost, otherCostItem } = result || {}
   data.material = material || []
   data.allPrice = result.lossRateCount?.toFixed(2) || 0
+  data.totalCost = result.totalCost?.toFixed(2) || 0
   data.lossCount = result.lossCount?.toFixed(2) || 0
   data.allTotalMoneyCyn = result.totalMoneyCynCount?.toFixed(2) || 0
   data.moqShareCountCount = result.moqShareCountCount?.toFixed(2) || 0

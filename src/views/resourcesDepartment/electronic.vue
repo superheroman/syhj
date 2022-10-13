@@ -127,6 +127,11 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-descriptions :column="2" border>
+        <el-descriptions-item label="本位币汇总：">
+          {{ allStandardMoney.toFixed(2) }}
+        </el-descriptions-item>
+      </el-descriptions>
       <!-- <el-row justify="end">
         <el-button class="margin-top" @click="handleCalculation" type="primary"> 计算 </el-button>
       </el-row> -->
@@ -135,7 +140,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { useUserStore } from "@/store/modules/user"
 import { ElectronicDto } from "./data.type"
 import { ElMessage } from "element-plus"
@@ -157,6 +162,18 @@ const tableLoading = ref(false)
 
 // 电子料 - table数据
 const electronicBomList = ref<ElectronicDto[]>([])
+
+// 计算总值
+const reduceArr = (arr: any[]) => {
+  if (!arr?.length) return 0
+  return arr.reduce((a, b) => a + b)
+}
+
+const allStandardMoney = computed(() => {
+  const standardMoneyTotal =
+    electronicBomList.value?.map((item: any) => reduceArr(item.standardMoney.map((y: any) => y.value))) || []
+  return reduceArr(standardMoneyTotal)
+})
 
 // 表单子列数据
 const allColums = reactive<any>({

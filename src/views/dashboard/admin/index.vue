@@ -109,7 +109,12 @@
               width="150"
               :formatter="toFixedTwo"
             />
-            <el-table-column prop="manufacturingCostIndirect.equipmentDepreciation" label="设备折旧" width="150" />
+            <el-table-column
+              prop="manufacturingCostIndirect.equipmentDepreciation"
+              label="设备折旧"
+              width="150"
+              :formatter="toFixedTwo"
+            />
             <!-- <el-table-column prop="manufacturingCostIndirect.typeName" label="换线成本" width="180" /> -->
             <el-table-column
               prop="manufacturingCostIndirect.manufacturingExpenses"

@@ -109,6 +109,11 @@
             </template>
           </el-table-column>
         </el-table>
+        <el-descriptions :column="2" border>
+          <el-descriptions-item label="本位币汇总：">
+            {{ calculationAllStandardMoney(item.structureMaterial) }}
+          </el-descriptions-item>
+        </el-descriptions>
       </el-card>
     </div>
   </div>
@@ -173,6 +178,19 @@ const fetchOptionsData = async () => {
 const fetchInitData = async () => {
   const { result } = (await GetStructural({ auditFlowId, productId })) || {}
   constructionBomList.value = result || []
+}
+
+// 计算总值
+const reduceArr = (arr: any[]) => {
+  return arr.reduce((a, b) => a + b)
+}
+
+const calculationAllStandardMoney = (structureMaterial: any) => {
+  const standardMoneyTotal = structureMaterial.map((item: any) =>
+    reduceArr(item.standardMoney.map((y: any) => y.value))
+  )
+  console.log(standardMoneyTotal, "calculationAllStandardMoney")
+  return Number(reduceArr(standardMoneyTotal)).toFixed(2)
 }
 
 const queryModlueNumber = () => {

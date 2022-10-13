@@ -38,7 +38,7 @@
         :data="data.laboratoryFeeModels"
         style="width: 100%"
         border
-        :summary-method="(val: any) => getMouldSummaries(val, '实验费用')"
+        :summary-method="(val: any) => getMouldSummaries(val, '实验费用', 'allCost')"
         show-summary
       >
         <el-table-column type="index" width="50" />
@@ -67,7 +67,8 @@
       >
         <el-table-column type="index" width="50" />
         <el-table-column prop="workName" label="工装名称" />
-        <el-table-column prop="unitPriceOfTooling" label="工装数量" />
+        <el-table-column prop="toolingCount" label="工装数量" />
+        <el-table-column prop="unitPriceOfTooling" label="工装单价" />
         <el-table-column prop="cost" label="费用" />
         <el-table-column prop="remark" label="备注" />
       </el-table>
@@ -164,6 +165,7 @@ import { GetPricingForm, NreTableDownload } from "./common/request"
 import { getMouldSummaries } from "./common/mouldSummaries"
 import getQuery from "@/utils/getQuery"
 import { formatDateTime, downloadFileExcel } from "@/utils"
+import { ElMessage } from "element-plus"
 
 const { auditFlowId, productId, year, hideBtn }: any = getQuery()
 
@@ -211,6 +213,7 @@ const handleFethNreTableDownload = async () => {
       ModelCountId: productId
     })
     downloadFileExcel(res, "NRE核价表")
+    ElMessage.success("下载成功！")
     console.log(res, "NreTableDownload")
   } catch (err: any) {
     console.log(err, "[ NRE核价表下载 失败 ]")
