@@ -49,7 +49,6 @@
       <el-descriptions title="" border :column="3">
         <el-descriptions-item label="材料成本合计">{{ data.allTotalMoneyCyn }}</el-descriptions-item>
         <el-descriptions-item label="电子料大类成本合计">{{ data.allPrice }}</el-descriptions-item>
-        <el-descriptions-item label="项目总成本">{{ data.totalCost }}</el-descriptions-item>
       </el-descriptions>
     </el-card>
     <el-card class="card">
@@ -139,10 +138,11 @@
         <el-table-column label="合计" prop="total" width="180" :formatter="toFixedTwo" />
       </el-table>
     </el-card>
-    <el-descriptions :column="3" border>
+    <el-descriptions :column="2" border>
       <el-descriptions-item label="编制/日期："> {{ data.preparedDate }} </el-descriptions-item>
       <el-descriptions-item label="审核/日期："> {{ data.auditDate }} </el-descriptions-item>
       <el-descriptions-item label="批准/日期："> {{ data.approvalDate }} </el-descriptions-item>
+      <el-descriptions-item label="项目总成本">{{ data.totalCost }}</el-descriptions-item>
     </el-descriptions>
   </el-card>
 </template>
