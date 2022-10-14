@@ -890,7 +890,7 @@ let moduleTableData: any = ref([
   {
     partNumber: "",
     product: "",
-    productType: 0,
+    productType: null,
     marketShare: 0,
     moduleCarryingRate: 0,
     singleCarProductsQuantity: 0,
@@ -968,7 +968,7 @@ const addProduct = () => {
   let moduleTableDataNew = Object.assign(_.cloneDeep(moduleTableData.value[0]), {
     partNumber: "",
     product: "",
-    productType: 0,
+    productType: null,
     marketShare: 0,
     moduleCarryingRate: 0,
     singleCarProductsQuantity: 0,
