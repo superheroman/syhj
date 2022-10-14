@@ -110,7 +110,7 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetQuotationList, PostAuditQuotationList } from "./service"
 import getQuery from "@/utils/getQuery"
 import { getYears } from "../pmDepartment/service"
-import { ElMessageBox } from "element-plus"
+import { ElMessageBox, ElMessage } from "element-plus"
 import useJump from "@/hook/useJump"
 import { useRouter } from "vue-router"
 import { CommonDownloadFile } from "@/api/bom"
@@ -200,6 +200,10 @@ const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
     cancelButtonText: "取消",
     type: "warning"
   }).then(async (val) => {
+    if (!isAgree && !val?.value) {
+      ElMessage.warning("拒绝理由必填")
+      return
+    }
     const { success } = await PostAuditQuotationList({
       ...data.marketingQuotationData,
       isPass: isAgree,
