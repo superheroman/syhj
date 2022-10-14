@@ -414,9 +414,9 @@ const getBomCost = async () => {
       AuditFlowId: auditFlowId,
       ModelCountId: productId
     })
-    const { material, totalMoneyCynCount } = result
+    const { material = [], totalMoneyCynCount } = result
     data.bomData = material || []
-    const priceTotal = material.map((item: { materialCost: any }) => item.materialCost || 0)
+    const priceTotal = material?.map((item: { materialCost: any }) => item.materialCost || 0)
     data.allPrice = priceTotal.reduce((a: any, b: any) => a + b)
     data.allTotalMoneyCyn = totalMoneyCynCount
     console.log(result, "获取 bom成本（含损耗）汇总表")
