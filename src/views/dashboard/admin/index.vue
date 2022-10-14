@@ -73,7 +73,7 @@
         <!-- 制造成本  -->
         <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
           <!-- <el-table-column prop="sapItemNum" label="项目" width="180" /> -->
-          <el-table-column prop="gradientKy" label="梯度K/Y" width="180" />
+          <el-table-column prop="costItem" label="成本项目" width="180" />
           <!-- <el-table-column prop="typeName" label="年份" width="180" /> -->
           <el-table-column prop="manufacturingCostDirect" label="直接制造成本" :formatter="toFixedTwo">
             <el-table-column
@@ -414,10 +414,11 @@ const getBomCost = async () => {
       AuditFlowId: auditFlowId,
       ModelCountId: productId
     })
-    data.bomData = result || []
-    const priceTotal = result.map((item: { materialCost: any }) => item.materialCost || 0)
+    const { material = [], totalMoneyCynCount } = result
+    data.bomData = material || []
+    const priceTotal = material?.map((item: { materialCost: any }) => item.materialCost || 0)
     data.allPrice = priceTotal.reduce((a: any, b: any) => a + b)
-    data.allTotalMoneyCyn = result.totalMoneyCynCount
+    data.allTotalMoneyCyn = totalMoneyCynCount
     console.log(result, "获取 bom成本（含损耗）汇总表")
   } catch (err: any) {
     console.log(err, "[ 获取 bom成本（含损耗）汇总表数据失败 ]")

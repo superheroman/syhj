@@ -58,7 +58,7 @@ export function GetPricingPanelProfit(data: GetLossCostProps) {
 // 获取 bom成本（含损耗）汇总表
 export function GetBomCost(data: GetLossCostProps) {
   return request({
-    url: "/api/services/app/PriceEvaluation/GetBomCost",
+    url: "/api/services/app/PriceEvaluation/GetBomCostDto",
     method: "get",
     data
   })
