@@ -48,8 +48,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/demandApply/index",
     component: Layout,
     meta: {
-      title: "核价管理",
-      hidden: true
+      title: "核价管理"
+      // hidden: true
     },
     children: [
       {
@@ -99,9 +99,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/electronicImport",
     redirect: "/electronicImport/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/electronicImport/index",
@@ -117,9 +117,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/structuralMaterialImport",
     redirect: "/structuralMaterialImport/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/structuralMaterialImport/index",
@@ -137,7 +137,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: "BOM单价录入",
-      hidden: true
+      hidden: false
     },
     children: [
       {
@@ -173,7 +173,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     component: Layout,
     meta: {
       title: "BOM单价审核",
-      hidden: true
+      hidden: false
     },
     children: [
       {
@@ -199,8 +199,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomLoss/indexElec",
     component: Layout,
     meta: {
-      title: "BOM损耗率表单",
-      hidden: true
+      title: "BOM损耗率表单"
+      // hidden: true
     },
     children: [
       {
@@ -225,9 +225,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/processImport",
     redirect: "/processImport/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/processImport/index",
@@ -243,9 +243,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/manufacturingCost",
     redirect: "/manufacturingCost/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/manufacturingCost/index",
@@ -261,9 +261,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/pmDepartment",
     redirect: "/pmDepartment/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/pmDepartment/index",
@@ -280,8 +280,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/nre/nreProjectManageMent",
     component: Layout,
     meta: {
-      title: "NRE",
-      hidden: true
+      title: "NRE"
+      // hidden: true
     },
     children: [
       {
@@ -362,9 +362,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/dashboard",
     redirect: "/dashboard/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/dashboard/index",
@@ -380,9 +380,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/tradeCompliance",
     redirect: "/tradeCompliance/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/tradeCompliance/index",
@@ -398,9 +398,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/quoteAnalysis",
     redirect: "/quoteAnalysis/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/quoteAnalysis/index",
@@ -424,9 +424,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/marketingQuotation",
     redirect: "/marketingQuotation/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/marketingQuotation/index",
@@ -513,8 +513,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/bomView/index",
     component: Layout,
     meta: {
-      title: "BOM查看",
-      hidden: true
+      title: "BOM查看"
+      // hidden: true
     },
     children: [
       {
@@ -548,9 +548,9 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     path: "/summaryTable",
     redirect: "/summaryTable/index",
     component: Layout,
-    meta: {
-      hidden: true
-    },
+    // meta: {
+    //   hidden: true
+    // },
     children: [
       {
         path: "/summaryTable/index",
@@ -567,8 +567,8 @@ export const constantRoutes: Array<RouteRecordRaw> = [
     redirect: "/versionManagement/index",
     component: Layout,
     meta: {
-      title: "版本管理",
-      hidden: true
+      title: "版本管理"
+      // hidden: true
     },
     children: [
       {
@@ -616,6 +616,66 @@ export const constantRoutes: Array<RouteRecordRaw> = [
       }
     ]
   }
+  // {
+  //   path: "/fnDepartment",
+  //   redirect: "/fnDepartment/index",
+  //   component: Layout,
+  //   meta: {
+  //     title: "财务参数管理",
+  //     roles: ["finance"]
+  //   },
+  //   name: "fnDepartment",
+  //   children: [
+  //     {
+  //       path: "/fnDepartment/qualityCost",
+  //       component: () => import("@/views/fnDepartment/qualityCost.vue"),
+  //       name: "qualityCost",
+  //       meta: {
+  //         title: "质量成本比例录入"
+  //       }
+  //     },
+  //     {
+  //       path: "/fnDepartment/exchangeRate",
+  //       component: () => import("@/views/fnDepartment/exchangeRate.vue"),
+  //       name: "exchangeRate",
+  //       meta: {
+  //         title: "汇率"
+  //       }
+  //     },
+  //     {
+  //       path: "/fnDepartment/grossProfitMargin",
+  //       component: () => import("@/views/fnDepartment/grossProfitMargin.vue"),
+  //       name: "grossProfitMargin",
+  //       meta: {
+  //         title: "毛利率"
+  //       }
+  //     },
+  //     {
+  //       path: "/fnDepartment/unitPriceImport",
+  //       component: () => import("@/views/fnDepartment/unitPriceImport.vue"),
+  //       name: "unitPriceImport",
+  //       meta: {
+  //         title: "单价库导入"
+  //       }
+  //     },
+  //     {
+  //       path: "/fnDepartment/fulllifeCycle",
+  //       component: () => import("@/views/fnDepartment/fulllifeCycle.vue"),
+  //       name: "fulllifeCycle",
+  //       meta: {
+  //         title: "制造成本计算参数维护"
+  //       }
+  //     },
+  //     {
+  //       path: "/fnDepartment/rateEntry",
+  //       component: () => import("@/views/fnDepartment/rateEntry.vue"),
+  //       name: "rateEntry",
+  //       meta: {
+  //         title: "作业价格"
+  //       }
+  //     }
+  //   ]
+  // }
 ]
 
 /**
