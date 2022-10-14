@@ -208,7 +208,7 @@ const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
       ...data.marketingQuotationData,
       isPass: isAgree,
       auditFlowId,
-      opinionDescription: !isAgree ? val?.value : ""
+      backReason: !isAgree ? val?.value : ""
     })
     if (success) jumpTodoCenter()
   })
