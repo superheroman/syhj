@@ -73,7 +73,7 @@
         <!-- 制造成本  -->
         <el-table v-if="data.mode === '3'" :data="data.manufactureData" border height="675">
           <!-- <el-table-column prop="sapItemNum" label="项目" width="180" /> -->
-          <el-table-column prop="gradientKy" label="梯度K/Y" width="180" />
+          <el-table-column prop="costItem" label="成本项目" width="180" />
           <!-- <el-table-column prop="typeName" label="年份" width="180" /> -->
           <el-table-column prop="manufacturingCostDirect" label="直接制造成本" :formatter="toFixedTwo">
             <el-table-column
