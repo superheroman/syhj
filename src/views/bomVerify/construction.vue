@@ -76,8 +76,12 @@
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>
       <el-descriptions :column="2" border>
-        <el-descriptions-item label="本位币汇总：">
-          {{ item.allStandardMoney?.toFixed(2) || 0 }}
+        <el-descriptions-item
+          v-for="standardMoneyItem in allColums.sop"
+          :key="standardMoneyItem"
+          :label="`${standardMoneyItem} 本位币汇总`"
+        >
+          {{ calculationAllStandardMoney(item.structureMaterial)[standardMoneyItem] || 0 }}
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
@@ -150,19 +154,27 @@ const fetchConstructionInitData = async () => {
     loading.value = true
     const { result } = await GetBOMStructuralSingle(auditFlowId, productId)
     console.log(result, "获取初始化数据")
-    constructionBomList.value = result.map((item: any) => {
-      const standardMoneyTotal = item.structureMaterial.map((item: any) =>
-        reduceArr(item.standardMoney.map((y: any) => y.value))
-      )
-      return {
-        ...item,
-        allStandardMoney: reduceArr(standardMoneyTotal)
-      }
-    })
+    constructionBomList.value = result
     loading.value = false
   } catch {
     loading.value = false
   }
+}
+
+const calculationAllStandardMoney = (structureMaterial: any) => {
+  let obj: any = {}
+  const standardMoney = structureMaterial?.map((item: any) => item.standardMoney) || []
+  const flatArr = standardMoney.flat(Infinity)
+  allColums?.sop.forEach((item: any) => {
+    const arr: any = []
+    flatArr.forEach((y: any) => {
+      if (y.year === item) {
+        arr.push(y.value || 0)
+      }
+    })
+    obj[item] = reduceArr(arr).toFixed(5)
+  })
+  return obj
 }
 
 const handleSetBomState = (isAgree: boolean) => {

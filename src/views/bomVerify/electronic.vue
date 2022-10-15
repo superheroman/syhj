@@ -75,7 +75,7 @@
             width="150"
           >
             <template #default="{ row }">
-              {{ row.standardMoney[index]?.value.toFixed(3) || 0 }}
+              {{ row.standardMoney[index]?.value.toFixed(5) || 0 }}
             </template>
           </el-table-column>
         </el-table-column>
@@ -84,8 +84,8 @@
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>
       <el-descriptions :column="2" border>
-        <el-descriptions-item label="本位币汇总：">
-          {{ data.allStandardMoney.toFixed(2) }}
+        <el-descriptions-item v-for="item in allColums?.standardMoneyYears" :key="item" :label="`${item} 本位币汇总`">
+          {{ allStandardMoney[item].toFixed(5) || 0 }}
         </el-descriptions-item>
       </el-descriptions>
       <!-- <el-row justify="end">
@@ -100,7 +100,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed } from "vue"
 import { ElectronicDto } from "../resourcesDepartment/data.type"
 import { GetBOMElectronicSingle, SetBomState } from "./service"
 import { getExchangeRate } from "./../demandApply/service"
@@ -157,6 +157,22 @@ const reduceArr = (arr: any[]) => {
   return arr.reduce((a, b) => a + b)
 }
 
+const allStandardMoney = computed(() => {
+  let obj: any = {}
+  const standardMoney = electronicBomList.value?.map((item: any) => item.standardMoney) || []
+  const flatArr = standardMoney.flat(Infinity)
+  allColums?.standardMoneyYears.forEach((item: any) => {
+    const arr: any = []
+    flatArr.forEach((y: any) => {
+      if (y.year === item) {
+        arr.push(y.value || 0)
+      }
+    })
+    obj[item] = reduceArr(arr)
+  })
+  return obj
+})
+
 // 获取电子料初始化数据
 const fetchElectronicInitData = async () => {
   const { result } = await GetBOMElectronicSingle(auditFlowId, productId)
@@ -170,8 +186,6 @@ const fetchElectronicInitData = async () => {
   allColums.inTheRateYears = inTheRate?.map((item) => item.year) || []
   allColums.iginalCurrencyYears = iginalCurrency?.map((item) => item.year) || []
   allColums.standardMoneyYears = standardMoney?.map((item) => item.year) || []
-  const standardMoneyTotal = result.map((item: any) => reduceArr(item.standardMoney.map((y: any) => y.value)))
-  data.allStandardMoney = reduceArr(standardMoneyTotal)
 }
 
 const fetchSopYear = async () => {

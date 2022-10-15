@@ -132,8 +132,8 @@
         </el-table-column>
       </el-table>
       <el-descriptions :column="2" border>
-        <el-descriptions-item label="本位币汇总：">
-          {{ allStandardMoney.toFixed(2) }}
+        <el-descriptions-item v-for="item in allColums?.standardMoneyYears" :key="item" :label="`${item} 本位币汇总`">
+          {{ allStandardMoney[item].toFixed(5) || 0 }}
         </el-descriptions-item>
       </el-descriptions>
       <!-- <el-row justify="end">
@@ -174,9 +174,19 @@ const reduceArr = (arr: any[]) => {
 }
 
 const allStandardMoney = computed(() => {
-  const standardMoneyTotal =
-    electronicBomList.value?.map((item: any) => reduceArr(item.standardMoney.map((y: any) => y.value))) || []
-  return reduceArr(standardMoneyTotal)
+  let obj: any = {}
+  const standardMoney = electronicBomList.value?.map((item: any) => item.standardMoney) || []
+  const flatArr = standardMoney.flat(Infinity)
+  allColums?.standardMoneyYears.forEach((item: any) => {
+    const arr: any = []
+    flatArr.forEach((y: any) => {
+      if (y.year === item) {
+        arr.push(y.value || 0)
+      }
+    })
+    obj[item] = reduceArr(arr)
+  })
+  return obj
 })
 
 // 表单子列数据

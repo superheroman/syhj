@@ -110,8 +110,12 @@
           </el-table-column>
         </el-table>
         <el-descriptions :column="2" border>
-          <el-descriptions-item label="本位币汇总：">
-            {{ calculationAllStandardMoney(item.structureMaterial) }}
+          <el-descriptions-item
+            v-for="standardMoneyItem in data.sop"
+            :key="standardMoneyItem"
+            :label="`${standardMoneyItem} 本位币汇总`"
+          >
+            {{ calculationAllStandardMoney(item.structureMaterial)[standardMoneyItem] || 0 }}
           </el-descriptions-item>
         </el-descriptions>
       </el-card>
@@ -186,11 +190,19 @@ const reduceArr = (arr: any[]) => {
 }
 
 const calculationAllStandardMoney = (structureMaterial: any) => {
-  const standardMoneyTotal = structureMaterial.map((item: any) =>
-    reduceArr(item.standardMoney.map((y: any) => y.value))
-  )
-  console.log(standardMoneyTotal, "calculationAllStandardMoney")
-  return Number(reduceArr(standardMoneyTotal)).toFixed(2)
+  let obj: any = {}
+  const standardMoney = structureMaterial?.map((item: any) => item.standardMoney) || []
+  const flatArr = standardMoney.flat(Infinity)
+  data?.sop.forEach((item: any) => {
+    const arr: any = []
+    flatArr.forEach((y: any) => {
+      if (y.year === item) {
+        arr.push(y.value || 0)
+      }
+    })
+    obj[item] = reduceArr(arr).toFixed(5)
+  })
+  return obj
 }
 
 const queryModlueNumber = () => {
