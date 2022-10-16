@@ -136,6 +136,7 @@
             :key="item.year"
             :label="item.year"
             :prop="`sop${index}.value`"
+            :formatter="formatMarketingQuotationDatas"
           />
         </el-table>
       </el-card>
@@ -229,6 +230,11 @@ const data = reactive<any>({
   mode: 1,
   sopData: []
 })
+
+const formatMarketingQuotationDatas = (record: any, _row: any, cellValue: any) => {
+  if (record.messageName.includes("%")) return `${cellValue.toFixed(2)} %`
+  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
+}
 
 const handleChangeMode = (val: number) => {
   data.mode = val
