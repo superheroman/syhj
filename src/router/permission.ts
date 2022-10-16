@@ -79,6 +79,8 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   let roles = []
   if (userInfo?.userDepartment?.name === "财务部") {
     roles = ["finance"]
+  } else if (userInfo?.userName === "admin") {
+    roles = ["admin"]
   } else {
     roles = userStore.roles
   }

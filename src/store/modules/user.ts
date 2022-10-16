@@ -17,7 +17,7 @@ export const useUserStore = defineStore({
   state: (): IUserState => {
     return {
       token: getToken() || "admin-token", //login 获取token accessToken:"admin-token"
-      roles: ["admin"], // 暂时admin为所有人的默认角色，保存角色 ['admin']
+      roles: [], // 暂时admin为所有人的默认角色，保存角色 ['admin']
       userInfo: {}
     }
   },
