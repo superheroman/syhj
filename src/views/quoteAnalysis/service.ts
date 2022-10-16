@@ -32,10 +32,10 @@ export function postSpreadSheetCalculate(productBoards: any, auditFlowId: number
   })
 }
 // 查看年份维度对比
-export function GetYearDimensionalityComparison(data: any): any {
+export function PostYearDimensionalityComparison(data: any): any {
   return request({
-    url: "/api/services/app/AnalyseBoard/GetYearDimensionalityComparison",
-    method: "get",
+    url: "/api/services/app/AnalyseBoard/PostYearDimensionalityComparison",
+    method: "post",
     data
   })
 }
