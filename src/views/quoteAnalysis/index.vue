@@ -278,17 +278,29 @@
     <el-dialog v-model="dialogVisible" title="年份维度对比">
       <div class="table-wrap">
         <el-card :header="item.project" v-for="item in data.dialogTable" m="2" :key="item">
-          <el-table :data="[item]" style="width: 100%">
+          <el-table :data="[item]">
             <template v-for="(yearItem, i) in item.yearList" :key="yearItem">
               <el-table-column
                 :prop="`yearList.${i}.value`"
                 :label="yearItem.year"
-                width="150"
+                :formatter="formatterDialogTable"
+                v-if="item.project.includes('%')"
+              />
+              <el-table-column
+                :prop="`yearList.${i}.value`"
+                :label="yearItem.year"
                 :formatter="formatThousandths"
+                v-else
               />
             </template>
             <!-- <el-table-column prop="grossMargin" label="毛利率" :formatter="getTofixed" width="150" /> -->
-            <el-table-column prop="totak" label="总和" width="150" :formatter="formatThousandths" />
+            <el-table-column
+              v-if="item.project.includes('%')"
+              prop="totak"
+              label="总和"
+              :formatter="formatterDialogTable"
+            />
+            <el-table-column v-else prop="totak" label="总和" :formatter="formatThousandths" />
           </el-table>
         </el-card>
       </div>
@@ -312,7 +324,7 @@ import {
   postSpreadSheetCalculate,
   postIsOffer,
   getDownloadMessage,
-  GetYearDimensionalityComparison,
+  PostYearDimensionalityComparison,
   PostIsOfferSave
 } from "./service"
 import { NreMarketingDepartmentModel } from "./data.type"
@@ -457,6 +469,11 @@ const data = reactive<any>({
   dialogTable: [],
   allGrossMargin: 0
 })
+
+const formatterDialogTable = (_record: any, _row: any, cellValue: any) => {
+  console.log(cellValue, "cellValue")
+  return `${cellValue.toFixed(2) || 0} %`
+}
 
 const formatThousandths = (_record: any, _row: any, cellValue: any) => {
   if (cellValue) {
@@ -671,12 +688,19 @@ const openDialog = () => {
 }
 
 const getDialogData = async () => {
-  const grossMargin = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
-  const unitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
-  const { result } = await GetYearDimensionalityComparison({
-    id: data.auditFlowId,
-    unitPrice,
-    grossMargin
+  // const grossMargin = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
+  // const unitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
+  const productBoards = data.productBoard.map((item: any) => {
+    return {
+      modelCountId: item.modelCountId,
+      unitPrice: item.offerUnitPrice
+    }
+  })
+  console.log(data.productBoard, "")
+  const { result } = await PostYearDimensionalityComparison({
+    auditFlowId: data.auditFlowId,
+    grossMargin: 0,
+    productBoards
   })
   console.log(result, "res")
   data.dialogTable = result

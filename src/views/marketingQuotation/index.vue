@@ -35,7 +35,7 @@
           :key="item.year"
           :label="item.year"
           :prop="`sop[${index}].value`"
-          :formatter="formatThousandths"
+          :formatter="formatMarketingQuotationDatas"
         />
       </el-table>
     </el-card>
@@ -191,6 +191,11 @@ const initFetch = async () => {
 const fetchSopYear = async () => {
   const { result } = (await getYears(auditFlowId)) || {}
   columns.sopData = result || []
+}
+
+const formatMarketingQuotationDatas = (record: any, _row: any, cellValue: any) => {
+  if (record.messageName.includes("%")) return `${cellValue.toFixed(2)} %`
+  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 
 const handleGeneralManagerQuoteCheck = (isAgree: boolean) => {
