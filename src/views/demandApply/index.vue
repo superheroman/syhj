@@ -1148,7 +1148,7 @@ const generateCustomTable = () => {
     if (item.ledTypeSelect !== productTypeMap.recommend) {
       let price = item.ledPrice
       let productName = item.name
-      let main = "led"
+      let main = "其它"
       let type = item.led
       let productType = item.ledTypeSelect === "2" ? "客户指定" : "客户供应"
       specifyTableData.value.push({

@@ -17,6 +17,9 @@
         <el-form-item label="">
           <el-button type="primary" @click="data.setVisible = true">电子料模版下载</el-button>
         </el-form-item>
+        <el-form-item label="">
+          <ProductInfo :auditFlowId="data.auditFlowId" />
+        </el-form-item>
       </el-form>
     </div>
 
@@ -70,6 +73,7 @@ import { ElLoading, ElMessage } from "element-plus"
 import { SaveElectronicBom, DownloadFile, GetElectronicBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+import ProductInfo from "@/components/ProductInfo/index.vue"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 let auditFlowId: any = null
@@ -81,7 +85,8 @@ const data = reactive({
   setVisible: false,
   downloadSetForm: {
     number: 0
-  }
+  },
+  auditFlowId: null as any
 })
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
@@ -135,6 +140,7 @@ onMounted(async () => {
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId) || null
   productId = Number(query.productId) || null
+  data.auditFlowId = Number(query.auditFlowId) || null // 用来做数据绑定
   if (auditFlowId && productId) {
     let resElectronic: any = await GetElectronicBom({ auditFlowId, productId })
     data.tableData = resElectronic.result

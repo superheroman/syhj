@@ -64,6 +64,7 @@
           <el-col :span="6">
             <el-form-item label="TR-主方案:">
               <el-upload
+                v-model:file-list="fileList"
                 :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
                 :on-progress="handleGetUploadProgress"
                 :on-error="handleUploadError"
@@ -91,10 +92,11 @@
 
 <script setup lang="ts">
 // import { ref, reactive, toRefs, onBeforeMount, onMounted, watchEffect, computed } from "vue"
-import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
+
+import { reactive, onBeforeMount, onMounted, watchEffect, ref } from "vue"
 import { SearchDepartMentPerson } from "@/components/SearchDepartMentPerson"
 import { PostManagement, getManagement } from "@/api/partEntry"
-import type { UploadProps } from "element-plus"
+import type { UploadProps, UploadUserFile } from "element-plus"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
@@ -115,6 +117,7 @@ let formData: any = reactive({
   resourceStructId: 0,
   structureEngineerId: undefined
 })
+const fileList = ref<UploadUserFile[]>([])
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   if (res.success) {
@@ -171,6 +174,12 @@ onMounted(async () => {
     keys.forEach((key) => {
       formData[key] = res.result[key]
     })
+    fileList.value = [
+      {
+        name: res.result.fileName,
+        url: res.result.fileId
+      }
+    ]
   }
 })
 watchEffect(() => {})

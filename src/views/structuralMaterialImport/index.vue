@@ -15,9 +15,6 @@
           </el-upload>
         </el-form-item>
         <el-form-item label="">
-          <el-button type="primary" @click="downLoadTemplate">结构料模版下载</el-button>
-        </el-form-item>
-        <el-form-item label="">
           <el-upload
             :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
             :on-success="handleSuccess3D"
@@ -25,6 +22,12 @@
           >
             <el-button type="primary">附件上传：3D爆炸图</el-button>
           </el-upload>
+        </el-form-item>
+        <el-form-item label="">
+          <el-button type="primary" @click="downLoadTemplate">结构料模版下载</el-button>
+        </el-form-item>
+        <el-form-item label="">
+          <ProductInfo :auditFlowId="data.auditFlowId" />
         </el-form-item>
       </el-form>
     </div>
@@ -137,6 +140,7 @@ import {
 } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+import ProductInfo from "@/components/ProductInfo/index.vue"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 let auditFlowId: any = null
@@ -165,6 +169,8 @@ onMounted(async () => {
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId) || 0
   productId = Number(query.productId) || 0
+  data.auditFlowId = Number(query.auditFlowId) || null // 用来做数据绑定
+
   if (auditFlowId && productId) {
     let resStruction: any = await GetStructionBom({ auditFlowId, productId })
     data.tableData = resStruction.result

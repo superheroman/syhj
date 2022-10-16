@@ -105,6 +105,15 @@
             <template #append> PCS/箱</template>
           </el-input>
         </el-form-item>
+        <el-form-item label="包装方式">
+          <el-input v-model="data.logisticsForm.packagingType" readonly />
+        </el-form-item>
+        <el-form-item label="运输方式">
+          <el-input v-model="data.logisticsForm.shippingType" readonly />
+        </el-form-item>
+        <el-form-item label="交货地点">
+          <el-input v-model="data.logisticsForm.placeOfDelivery" type="textarea" readonly />
+        </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="data.logisticsForm.remarks" type="textarea" readonly />
         </el-form-item>
@@ -165,7 +174,10 @@ const data = reactive({
     boxesPerPallet: "",
     quantityPerBox: "",
     remarks: "",
-    pictureId: ""
+    pictureId: "",
+    packagingType: "",
+    shippingType: "",
+    placeOfDelivery: ""
   }
 })
 
