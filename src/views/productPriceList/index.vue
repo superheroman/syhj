@@ -139,10 +139,12 @@
       </el-table>
     </el-card>
     <el-descriptions :column="2" border>
+      <el-descriptions-item label="项目总成本">{{ formatThousandths(data.totalCost) }}</el-descriptions-item>
+    </el-descriptions>
+    <el-descriptions :column="2" border>
       <el-descriptions-item label="编制/日期："> {{ data.preparedDate }} </el-descriptions-item>
       <el-descriptions-item label="审核/日期："> {{ data.auditDate }} </el-descriptions-item>
       <el-descriptions-item label="批准/日期："> {{ data.approvalDate }} </el-descriptions-item>
-      <el-descriptions-item label="项目总成本">{{ data.totalCost }}</el-descriptions-item>
     </el-descriptions>
   </el-card>
 </template>
@@ -240,6 +242,10 @@ const setData = (result: any) => {
   data.preparedDate = formatDateTime(result.preparedDate)
   data.auditDate = formatDateTime(result.auditDate)
   data.approvalDate = formatDateTime(result.approvalDate)
+}
+
+const formatThousandths = (cellValue: any) => {
+  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 
 const fetchPriceEvaluationTable = async (props?: any) => {

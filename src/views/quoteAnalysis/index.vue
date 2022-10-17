@@ -96,9 +96,6 @@
       </el-table>
     </el-card>
     <el-card class="card">
-      <el-row justify="end" m="2">
-        <el-button @click="openDialog" type="primary">年份维度对比</el-button>
-      </el-row>
       <el-table :data="data.productBoard" border>
         <el-table-column label="产品" prop="productName" />
         <el-table-column label="单车产品数量" prop="productNumber" />
@@ -175,6 +172,13 @@
               <div>{{ `${row.oldOffer[index].grossMargin.toFixed(2)} %` }}</div>
             </template>
           </el-table-column>
+        </el-table-column>
+        <el-table-column width="140" label="操作">
+          <template #default="{ row }">
+            <el-row justify="end" m="2">
+              <el-button @click="openDialog(row)" type="primary">年份维度对比</el-button>
+            </el-row>
+          </template>
         </el-table-column>
       </el-table>
       <el-descriptions title="" border :column="1">
@@ -683,20 +687,15 @@ const save = async () => {
 //   })
 // }
 
-const openDialog = () => {
-  getDialogData()
-  dialogVisible.value = true
-}
-
-const getDialogData = async () => {
+const openDialog = async (row: any) => {
   // const grossMargin = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   // const unitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
-  const productBoards = data.productBoard.map((item: any) => {
-    return {
-      modelCountId: item.modelCountId,
-      unitPrice: item.offerUnitPrice
+  const productBoards = [
+    {
+      modelCountId: row.modelCountId,
+      unitPrice: row.offerUnitPrice
     }
-  })
+  ]
   console.log(data.productBoard, "")
   const { result } = await PostYearDimensionalityComparison({
     auditFlowId: data.auditFlowId,
@@ -705,6 +704,7 @@ const getDialogData = async () => {
   })
   console.log(result, "res")
   data.dialogTable = result
+  dialogVisible.value = true
 }
 
 const calculatedValue = (key: string, type?: string) => {

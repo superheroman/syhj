@@ -165,7 +165,8 @@ const initFetch = async () => {
 // 计算含佣金的毛利率
 const changeCommission = (row: any, index: number) => {
   console.log(row, index, "changeCommission")
-  data.marketingQuotationData.biddingStrategy[index].grossMarginCommission = (row.commission + row.cost) / row.price
+  data.marketingQuotationData.biddingStrategy[index].grossMarginCommission =
+    (1 - (row.commission + row.cost) / row.price) * 100
 }
 
 const fetchSopYear = async () => {

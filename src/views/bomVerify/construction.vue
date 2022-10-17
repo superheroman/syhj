@@ -72,6 +72,8 @@
             </template>
           </el-table-column>
         </el-table-column>
+        <el-table-column prop="moq" label="MOQ" width="150" />
+        <el-table-column prop="rebateMoney" label="物料返利金额" />
         <el-table-column prop="remark" label="备注" />
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>

@@ -155,6 +155,9 @@
     <!-- <div style="float: right; margin: 20px 0">
       <el-button type="primary" @click="submit">提交</el-button>
     </div> -->
+    <el-descriptions m="4" border>
+      <el-descriptions-item label="项目总成本">{{ formatThousandths(data.usdAllCost) }}</el-descriptions-item>
+    </el-descriptions>
     <div m="4">编制时间：{{ formatDateTime(new Date()) }}</div>
   </el-card>
 </template>
@@ -199,6 +202,7 @@ const initFetch = async () => {
     data.fixtureCost = result.fixtureCost
     data.productionEquipmentCost = result.productionEquipmentCost
     data.softwareTestingCost = result.softwareTestingCost
+    data.usdAllCost = result.usdAllCost
   } catch (err) {
     console.log(err, "[ GetPricingForm err ]")
   }
@@ -218,6 +222,10 @@ const handleFethNreTableDownload = async () => {
   } catch (err: any) {
     console.log(err, "[ NRE核价表下载 失败 ]")
   }
+}
+
+const formatThousandths = (cellValue: any) => {
+  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 
 onBeforeMount(() => {
