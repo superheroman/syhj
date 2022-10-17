@@ -235,7 +235,7 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column label="本次报价" :formatter="formatThousandths" :prop="`offer.grossMarginNumber`">
+        <el-table-column label="本次报价" :formatter="formatThousandths" prop="offer.grossMarginNumber">
           <template #default="{ row }">
             <span>
               {{
@@ -509,9 +509,10 @@ const calculateFullGrossMargin = debounce(async (row: any, index: number, key1: 
     data.allGrossMargin = result.allGrossMargin
     // const grossMarginValue = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
     // const AllUnitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
-    spreadSheetCalculate(productBoards)
+    spreadSheetCalculate(productBoards, "offer")
   } else {
     data.allClientGrossMargin = result.allGrossMargin
+    spreadSheetCalculate(productBoards, "clientTarget")
   }
   setData()
 }, 300)
@@ -593,10 +594,10 @@ const setData = () => {
   chart2.setOption(RevenueGrossMargin)
 }
 
-const spreadSheetCalculate = async (productBoards: any) => {
+const spreadSheetCalculate = async (productBoards: any, key: string) => {
   let { result }: any = await postSpreadSheetCalculate(productBoards, data.auditFlowId)
   result.forEach((element: any, index: number) => {
-    data.projectBoard[index].offer = {
+    data.projectBoard[index][key] = {
       grossMarginNumber: element.value
     }
   })
