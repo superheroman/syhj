@@ -96,6 +96,9 @@
       </el-table>
     </el-card>
     <el-card class="card">
+      <el-row justify="end" m="2">
+        <el-button @click="openDialog(null)" type="primary">年份维度对比</el-button>
+      </el-row>
       <el-table :data="data.productBoard" border>
         <el-table-column label="产品" prop="productName" />
         <el-table-column label="单车产品数量" prop="productNumber" />
@@ -690,13 +693,25 @@ const save = async () => {
 const openDialog = async (row: any) => {
   // const grossMargin = calculatedValue("offeGrossMargin") // 本次报价整套毛利率
   // const unitPrice = calculatedValue("offerUnitPrice") // 本次报价整套单价
-  const productBoards = [
-    {
-      modelCountId: row.modelCountId,
-      unitPrice: row.offerUnitPrice
-    }
-  ]
-  console.log(data.productBoard, "")
+  let productBoards: any = []
+  if (!row) {
+    productBoards = data.productBoard.map((item: any) => {
+      console.log(item, "123123")
+      return {
+        modelCountId: item.modelCountId,
+        unitPrice: item.offerUnitPrice
+      }
+    })
+  } else {
+    productBoards = [
+      {
+        modelCountId: row.modelCountId,
+        unitPrice: row.offerUnitPrice
+      }
+    ]
+  }
+
+  console.log(productBoards, "data.productBoard")
   const { result } = await PostYearDimensionalityComparison({
     auditFlowId: data.auditFlowId,
     grossMargin: 0,
