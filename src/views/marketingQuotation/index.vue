@@ -1,5 +1,5 @@
 <template>
-  <el-card class="marketingQuotation-page" header="报价审核" m="2">
+  <el-card class="marketingQuotation-page" header="总经理审批" m="2">
     <div style="margin: 20px 0; float: right" v-if="data.isShowBtn">
       <el-button class="m-2" type="primary" @click="downLoadSOR">SOR下载</el-button>
       <el-button class="m-2" type="primary" @click="downLoad3DExploded">3D爆炸图下载</el-button>

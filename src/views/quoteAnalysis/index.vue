@@ -580,22 +580,35 @@ const setData = () => {
       }
       RevenueGrossMarginSeries.push(RevenueGrossMarginData)
     }
-    if (item.projectName === "毛利率") {
-      let RevenueGrossMarginDataY = {
-        yAxisIndex: 1,
-        name: "毛利率",
-        type: "line",
-        tooltip: {
-          formatter: "{a}{b}{c}%"
-        },
-        data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
-      }
-      if (item.offer?.grossMarginNumber) {
-        //这里计算只有grossMarginNumber
-        RevenueGrossMarginDataY.data.push(item.offer.grossMarginNumber)
-      }
-      RevenueGrossMarginSeries.push(RevenueGrossMarginDataY)
-    }
+    // if (item.projectName === "毛利率") {
+    //   let RevenueGrossMarginDataY = {
+    //     yAxisIndex: 1,
+    //     name: "毛利率",
+    //     type: "line",
+    //     tooltip: {
+    //       formatter: "{a}{b}{c}%"
+    //     },
+    //     data: [item.interiorTarget.grossMarginNumber, item.clientTarget.grossMarginNumber]
+    //   }
+    //   if (item.offer?.grossMarginNumber) {
+    //     //这里计算只有grossMarginNumber
+    //     RevenueGrossMarginDataY.data.push(item.offer.grossMarginNumber)
+    //   }
+    //   RevenueGrossMarginSeries.push(RevenueGrossMarginDataY)
+    // }
+    RevenueGrossMarginSeries.push({
+      yAxisIndex: 1,
+      name: "整体毛利率",
+      type: "line",
+      tooltip: {
+        formatter: "{a}{b}{c}%"
+      },
+      data: [
+        Number(data.allClientGrossMargin).toFixed(2),
+        Number(data.allInteriorGrossMargin).toFixed(2),
+        data.allGrossMargin?.toFixed(2) || 0
+      ]
+    })
   })
   RevenueGrossMargin.series = RevenueGrossMarginSeries
   chart2.setOption(RevenueGrossMargin)
@@ -674,10 +687,16 @@ const save = async () => {
       nre: data.nre
     })
     if (res.success) {
-      router.push({
+      // router.push({
+      //   path: "/demandApply/result",
+      //   query
+      // })
+
+      let routeUrl = router.resolve({
         path: "/demandApply/result",
         query
       })
+      window.open(routeUrl.href, "_blank")
       ElMessage.success("操作成功")
     }
   })

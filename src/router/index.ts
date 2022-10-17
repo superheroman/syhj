@@ -425,7 +425,7 @@ export const constantRoutes: Array<RouteRecordRaw> = [
         component: () => import("@/views/marketingQuotation/index.vue"),
         name: "marketingQuotation",
         meta: {
-          title: "营销部报价"
+          title: "总经理审批"
         }
       }
     ]
