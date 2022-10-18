@@ -156,7 +156,7 @@
       <el-button type="primary" @click="submit">提交</el-button>
     </div> -->
     <el-descriptions m="4" border>
-      <el-descriptions-item label="NRE费用合计">{{ formatThousandths(data.usdAllCost) }}</el-descriptions-item>
+      <el-descriptions-item label="NRE费用合计">{{ formatThousandths(data.rmbAllCost) }}</el-descriptions-item>
     </el-descriptions>
     <div m="4">编制时间：{{ formatDateTime(new Date()) }}</div>
   </el-card>
@@ -203,6 +203,7 @@ const initFetch = async () => {
     data.productionEquipmentCost = result.productionEquipmentCost
     data.softwareTestingCost = result.softwareTestingCost
     data.usdAllCost = result.usdAllCost
+    data.rmbAllCost = result.rmbAllCost
   } catch (err) {
     console.log(err, "[ GetPricingForm err ]")
   }
