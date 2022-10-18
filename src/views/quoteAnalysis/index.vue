@@ -225,8 +225,8 @@
             <span>
               {{
                 row.projectName !== "毛利率"
-                  ? row.interiorTarget.grossMarginNumber
-                  : `${row.interiorTarget.grossMarginNumber} %`
+                  ? row.interiorTarget?.grossMarginNumber
+                  : `${row.interiorTarget?.grossMarginNumber} %`
               }}
             </span>
           </template>
@@ -264,8 +264,8 @@
             <span>
               {{
                 row.projectName !== "毛利率"
-                  ? row.oldOffer[index].grossMarginNumber
-                  : `${row.oldOffer[index].grossMarginNumber} %`
+                  ? row.oldOffer[index]?.grossMarginNumber
+                  : `${row.oldOffer[index]?.grossMarginNumber} %`
               }}
             </span>
           </template>

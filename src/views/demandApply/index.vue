@@ -1249,9 +1249,10 @@ onMounted(async () => {
       moduleTableData.value = viewDataRes.result.modelCount
       requireTableData.value = viewDataRes.result.requirement
       fileList.value = viewDataRes.result.files.map((item: any) => {
+        console.log(item, "fileListItem")
         return {
-          name: item.fileName,
-          url: item.fileId
+          name: item.fileName
+          // url: item.fileId
         }
       })
     }
