@@ -176,8 +176,8 @@ onMounted(async () => {
     })
     fileList.value = [
       {
-        name: res.result.fileName,
-        url: res.result.fileId
+        name: res.result.fileName
+        // url: res.result.fileId
       }
     ]
   }
