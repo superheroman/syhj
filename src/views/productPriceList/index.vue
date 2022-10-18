@@ -139,7 +139,7 @@
       </el-table>
     </el-card>
     <el-descriptions :column="2" border>
-      <el-descriptions-item label="项目总成本">{{ formatThousandths(data.totalCost) }}</el-descriptions-item>
+      <el-descriptions-item label="产品总成本">{{ formatThousandths(data.totalCost) }}</el-descriptions-item>
     </el-descriptions>
     <el-descriptions :column="2" border>
       <el-descriptions-item label="编制/日期："> {{ data.preparedDate }} </el-descriptions-item>
@@ -245,7 +245,7 @@ const setData = (result: any) => {
 }
 
 const formatThousandths = (cellValue: any) => {
-  return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
+  return (cellValue + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 
 const fetchPriceEvaluationTable = async (props?: any) => {
