@@ -30,7 +30,7 @@
       <!-- <el-table-column label="用户名" prop="userName" /> -->
       <el-table-column label="姓名" prop="name" />
       <!-- <el-table-column label="surname" prop="surname" /> -->
-      <!-- <el-table-column label="邮箱" prop="emailAddress" /> -->
+      <el-table-column label="邮箱" prop="emailAddress" />
       <el-table-column label="激活状态" prop="isActive">
         <template #default="scope">
           <el-switch
@@ -63,11 +63,11 @@
       />
     </div>
     <el-dialog v-model="data.dialogVisible" title="用户信息" @close="clearForm">
-      <el-form :model="data.userForm" ref="userForm">
-        <el-form-item label="名字" :label-width="data.formLabelWidth">
+      <el-form :model="data.userForm" ref="userForm" :rules="rules">
+        <el-form-item label="名字" :label-width="data.formLabelWidth" prop="name">
           <el-input v-model="data.userForm.name" />
         </el-form-item>
-        <el-form-item label="职位" :label-width="data.formLabelWidth">
+        <el-form-item label="职位" :label-width="data.formLabelWidth" prop="position">
           <el-input v-model="data.userForm.position" />
         </el-form-item>
         <!-- <el-form-item label="部门" :label-width="data.formLabelWidth">
@@ -79,24 +79,24 @@
         <el-form-item label="职位" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.position" />
         </el-form-item> -->
-        <el-form-item label="工号" :label-width="data.formLabelWidth">
+        <el-form-item label="工号" :label-width="data.formLabelWidth" prop="number">
           <el-input v-model="data.userForm.number" />
         </el-form-item>
         <!-- <el-form-item label="用户名" :label-width="data.formLabelWidth">
           <el-input v-model="data.userForm.userName" />
         </el-form-item> -->
-        <!-- <el-form-item label="邮箱" :label-width="data.formLabelWidth">
+        <el-form-item label="邮箱" :label-width="data.formLabelWidth" prop="emailAddress">
           <el-input v-model="data.userForm.emailAddress" />
-        </el-form-item> -->
-        <el-form-item label="密码" :label-width="data.formLabelWidth" v-if="!data.isEdit">
+        </el-form-item>
+        <el-form-item label="密码" :label-width="data.formLabelWidth" v-if="!data.isEdit" prop="password">
           <el-input v-model="data.userForm.password" />
         </el-form-item>
-        <el-form-item label="角色选择" :label-width="data.formLabelWidth">
+        <el-form-item label="角色选择" :label-width="data.formLabelWidth" prop="roleNames">
           <el-select v-model="data.userForm.roleNames" multiple>
             <el-option :value="item.name" v-for="item in data.roleOption" :key="item.id" :label="item.name" />
           </el-select>
         </el-form-item>
-        <el-form-item label="部门" :label-width="data.formLabelWidth">
+        <el-form-item label="部门" :label-width="data.formLabelWidth" prop="departmentId">
           <!-- <el-cascader v-model="data.userForm.departmentId" :options="data.departmentOptions" /> -->
           <el-select v-model="data.userForm.departmentId">
             <el-option v-for="item in data.departmentOptions" :key="item.id" :label="item.name" :value="item.id" />
@@ -106,7 +106,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="data.dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="saveUser">保存</el-button>
+          <el-button type="primary" @click="saveUser(userForm)">保存</el-button>
           <el-button @click="resetForm(userForm)">重置</el-button>
         </span>
       </template>
@@ -150,7 +150,7 @@ import {
   getRoleList
 } from "./service"
 import { getRootDepartment } from "@/api/departmentManage"
-import type { FormInstance } from "element-plus"
+import type { FormInstance, FormRules } from "element-plus"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 const userForm = ref<FormInstance>()
@@ -199,6 +199,21 @@ const data = reactive<any>({
   },
   departmentOptions: [] as any[]
 })
+const rules = reactive<FormRules>({
+  name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+  position: [
+    {
+      required: true,
+      message: "请输入职位",
+      trigger: "blur"
+    }
+  ],
+  number: [{ required: true, message: "请输入工号", trigger: "blur" }],
+  password: [{ required: true, message: "请输入密码", trigger: "blur" }],
+  roleNames: [{ required: true, message: "请输入角色", trigger: "blur" }],
+  departmentId: [{ required: true, message: "请输入部门", trigger: "blur" }],
+  emailAddress: [{ required: true, message: "请输入邮箱", trigger: "blur" }]
+})
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.resetFields()
@@ -209,20 +224,27 @@ const handleEdit = (index: number, row: User) => {
   data.userForm = row
   data.dialogVisible = true
 }
-const saveUser = async () => {
-  let res: any = null
-  if (data.isEdit) {
-    res = await updateUser(data.userForm)
-  } else {
-    res = await createUser(data.userForm)
-  }
-  if (res.success) {
-    ElMessage({
-      type: "success",
-      message: "保存成功"
-    })
-    data.dialogVisible = false
-  }
+const saveUser = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      let res: any = null
+      if (data.isEdit) {
+        res = await updateUser(data.userForm)
+      } else {
+        res = await createUser(data.userForm)
+      }
+      if (res.success) {
+        ElMessage({
+          type: "success",
+          message: "保存成功"
+        })
+        data.dialogVisible = false
+      }
+    } else {
+      console.log("error submit!", fields)
+    }
+  })
 }
 // const handlePsEdit = (index: number, row: User) => {
 //   console.log(index, row)

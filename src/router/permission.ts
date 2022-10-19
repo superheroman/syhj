@@ -1,6 +1,6 @@
 import router from "@/router"
 import { RouteLocationNormalized } from "vue-router"
-import { useUserStoreHook } from "@/store/modules/user"
+// import { useUserStoreHook } from "@/store/modules/user"
 import { usePermissionStoreHook } from "@/store/modules/permission"
 // import { ElMessage } from "element-plus"
 // import { whiteList } from "@/config/white-list"
@@ -9,7 +9,7 @@ import { usePermissionStoreHook } from "@/store/modules/permission"
 import NProgress from "nprogress"
 import "nprogress/nprogress.css"
 
-const userStore = useUserStoreHook()
+// const userStore = useUserStoreHook()
 const permissionStore = usePermissionStoreHook()
 NProgress.configure({ showSpinner: false })
 
@@ -76,13 +76,13 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   // 结合setting里的切换一起使用
   const userStorage = window.localStorage.getItem("user") || "{}"
   const userInfo = JSON.parse(userStorage)
-  let roles = []
+  const userRoles = userInfo?.userRole?.items.map((item: any) => item.name) || []
+  const roles = []
   if (userInfo?.userDepartment?.name === "财务部") {
-    roles = ["finance"]
-  } else if (userInfo?.userName === "admin") {
-    roles = ["admin"]
-  } else {
-    roles = userStore.roles
+    roles.push("finance")
+  }
+  if (userRoles.includes("Admin")) {
+    roles.push("admin")
   }
   permissionStore.setRoutes(roles)
   permissionStore.dynamicRoutes.forEach((route: any) => {
