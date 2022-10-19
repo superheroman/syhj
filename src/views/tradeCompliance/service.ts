@@ -8,7 +8,7 @@ export function GetTradeComplianceCheckFromDateBase(data: { AuditFlowId: number;
   })
 }
 
-export function IsTradeComplianceCheck(data: { AuditFlowId: number; ProductId: number; isAgree: boolean }): any {
+export function IsTradeComplianceCheck(data: any): any {
   return request({
     url: "/api/services/app/FinanceCheck/IsTradeComplianceCheck",
     method: "post",

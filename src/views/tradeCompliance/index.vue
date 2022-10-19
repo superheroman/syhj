@@ -53,7 +53,9 @@ import { TradeComplianceCheck } from "./data.type"
 import { ElMessage, ElMessageBox } from "element-plus"
 
 import getQuery from "@/utils/getQuery"
+import useJump from "@/hook/useJump"
 
+const { jumpTodoCenter } = useJump()
 const { auditFlowId = 1, productId = 1 }: any = getQuery()
 
 /**
@@ -83,22 +85,23 @@ const initFetch = async () => {
   console.log(result, "res")
 }
 const agree = async (isAgree: boolean) => {
-  ElMessageBox.confirm("确定执行该操作?", "提示", {
+  let text = isAgree ? "您确定要同意嘛？" : "请输入拒绝理由"
+  ElMessageBox[!isAgree ? "prompt" : "confirm"](text, "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
-  }).then(async () => {
+  }).then(async (val) => {
     let res: any = await IsTradeComplianceCheck({
       AuditFlowId: auditFlowId,
-      ProductId: productId,
+      opinionDescription: !isAgree ? val.value : "",
       isAgree
     })
-    console.log(res)
-    if (res.result.success) {
+    if (res.success) {
       ElMessage({
         type: "success",
         message: "操作成功"
       })
+      jumpTodoCenter()
     }
   })
 }

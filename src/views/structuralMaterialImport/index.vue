@@ -219,6 +219,13 @@ const downLoadTemplate = async () => {
   }
 }
 const submit = async () => {
+  if (!data.logisticsForm.picture3DFileId) {
+    ElMessage({
+      message: "3d爆炸图必传",
+      type: "error"
+    })
+    return
+  }
   const loading = ElLoading.service({
     lock: true,
     text: "加载中",
