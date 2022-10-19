@@ -40,8 +40,8 @@
       <!-- <el-descriptions-item label="审核/日期"> {{ data.tradeComplianceCheck.deletionTime }} </el-descriptions-item> -->
     </el-descriptions>
     <div style="float: right; margin: 20px 0">
-      <el-button @click="agree(false)" v-havedone>退回</el-button>
-      <el-button type="primary" @click="agree(true)" v-havedone>归档</el-button>
+      <el-button @click="agree(true)" v-havedone>退回</el-button>
+      <el-button type="primary" @click="agree(false)" v-havedone>归档</el-button>
     </div>
   </el-card>
 </template>
@@ -85,15 +85,14 @@ const initFetch = async () => {
   console.log(result, "res")
 }
 const agree = async (isAgree: boolean) => {
-  let text = isAgree ? "您确定要同意嘛？" : "请输入拒绝理由"
-  ElMessageBox[!isAgree ? "prompt" : "confirm"](text, "请审核", {
+  ElMessageBox[isAgree ? "prompt" : "confirm"]("确定执行该操作吗", "请审核", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning"
   }).then(async (val) => {
     let res: any = await IsTradeComplianceCheck({
       AuditFlowId: auditFlowId,
-      opinionDescription: !isAgree ? val.value : "",
+      opinionDescription: isAgree ? val.value : "",
       isAgree
     })
     if (res.success) {
