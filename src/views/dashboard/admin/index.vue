@@ -188,7 +188,7 @@
         <!-- 产品总成本推移图 -->
         <div id="selectCostChart" />
         <div style="float: right; margin: 20px 0" v-havedone>
-          <el-button type="primary" @click="setPriceBoardStateAgree(true)">同意</el-button>
+          <el-button type="primary" :disabled="!data.compliance" @click="setPriceBoardStateAgree(true)">同意</el-button>
           <el-button type="primary" @click="dialogVisible = true">退回</el-button>
         </div>
       </el-card>
@@ -264,7 +264,8 @@ import {
   SetPriceBoardState,
   GetPriceEvaluationTableInputCount,
   SetPriceEvaluationTableInputCount,
-  CreatePriceEvaluationTable
+  CreatePriceEvaluationTable,
+  GetIsTradeCompliance
 } from "../service"
 import getQuery from "@/utils/getQuery"
 import type { UploadProps, UploadUserFile } from "element-plus"
@@ -297,6 +298,7 @@ const data = reactive<Record<string, any>>({
   qualityData: [],
   productInputs: 0,
   createVisible: false,
+  compliance: false,
   priceEvaluationTableInputCount: [] //核价表投入量和年份
 })
 
@@ -330,6 +332,7 @@ onMounted(() => {
   if (!auditFlowId) return false
   init()
   getPriceEvaluationTableInputCount()
+  getIsTradeCompliance()
 })
 
 const toFixedThree = (_recoed: any, _row: any, val: any) => {
@@ -347,6 +350,11 @@ const init = async () => {
   if (!productId) return false
   await fetchAllData()
   await getGoTableChartData()
+}
+
+const getIsTradeCompliance = async () => {
+  const { result }: any = await GetIsTradeCompliance(auditFlowId)
+  data.compliance = result
 }
 
 onBeforeUnmount(() => {

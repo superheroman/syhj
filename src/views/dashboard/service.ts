@@ -150,3 +150,14 @@ export function CreatePriceEvaluationTable(auditFlowId: number) {
     }
   })
 }
+
+// 是否贸易合规
+export function GetIsTradeCompliance(auditFlowId: number) {
+  return request({
+    url: "/api/services/app/TradeCompliance/GetIsTradeCompliance",
+    method: "get",
+    data: {
+      auditFlowId
+    }
+  })
+}
