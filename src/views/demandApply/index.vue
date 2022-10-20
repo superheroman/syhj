@@ -795,7 +795,7 @@ const state = reactive({
     sorFile: [] as any,
     reason: "",
     quoteVersion: "",
-    auditFlowId: 1 //默认先给一个5
+    auditFlowId: null as any
   },
   yearCols: [] as Number[],
   carAnnualTotal: 0, //列年度总量，把sum取出
@@ -853,7 +853,7 @@ const save = async (formEl: FormInstance | undefined) => {
   await formEl.validate(async (valid, fields) => {
     if (valid) {
       let { quoteForm } = state
-      quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : 5
+      quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : null
       quoteForm.pcs = pcsTableData
       quoteForm.modelCount = moduleTableData
       quoteForm.requirement = requireTableData
