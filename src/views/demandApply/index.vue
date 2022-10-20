@@ -599,7 +599,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
-            <el-form-item>
+            <el-form-item prop="sorFile">
               <el-upload
                 v-model:file-list="fileList"
                 :action="$baseUrl + 'api/services/app/FileCommonService/UploadFile'"
@@ -857,6 +857,7 @@ const save = async (formEl: FormInstance | undefined) => {
   let { auditFlowId } = route.query
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
+    console.log(fileList)
     if (valid) {
       saveloading.value = true
       let { quoteForm } = state
@@ -866,16 +867,20 @@ const save = async (formEl: FormInstance | undefined) => {
       quoteForm.requirement = requireTableData
       quoteForm.productInformation = productTableData
       quoteForm.sorFile = fileList.value.map((item: any) => item.response.result.fileId)
-      let res: any = await saveApplyInfo(quoteForm)
-      console.log(res)
-      if (res.success) {
-        ElMessage({
-          type: "success",
-          message: "保存成功"
-        })
-        router.push({
-          path: "/todoCenter/index"
-        })
+      try {
+        let res: any = await saveApplyInfo(quoteForm)
+        console.log(res)
+        if (res.success) {
+          ElMessage({
+            type: "success",
+            message: "保存成功"
+          })
+          router.push({
+            path: "/todoCenter/index"
+          })
+          saveloading.value = false
+        }
+      } catch (error) {
         saveloading.value = false
       }
     } else {
@@ -1074,7 +1079,9 @@ const deletePcs = (i: number) => {
 
 const handleSuccess: UploadProps["onSuccess"] = (res: any) => {
   console.log(res)
+  let { quoteForm } = state
   if (res.success) {
+    quoteForm.sorFile = fileList.value.map((item: any) => item.response.result.fileId)
     ElMessage({
       message: "上传成功",
       type: "success"
