@@ -615,7 +615,13 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-button type="primary" size="large" style="float: right; margin: 20px 0" @click="save(refForm)" v-havedone
+        <el-button
+          type="primary"
+          size="large"
+          style="float: right; margin: 20px 0"
+          @click="save(refForm)"
+          v-havedone
+          :loading="saveloading"
           >提交</el-button
         >
       </el-card>
@@ -742,7 +748,7 @@ const getSummaries = (param: SummaryMethodProps) => {
 let userStorage = window.localStorage.getItem("user")
 let userInfo: any = userStorage ? JSON.parse(userStorage) : {}
 let isEdit = false //是否查看
-
+let saveloading = ref(false)
 const getRowSum = (row: any) => {
   if (Array.isArray(row.pcsYearList) && row.pcsYearList.length > 0) {
     return row.pcsYearList
@@ -852,6 +858,7 @@ const save = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     if (valid) {
+      saveloading.value = true
       let { quoteForm } = state
       quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : null
       quoteForm.pcs = pcsTableData
@@ -869,8 +876,10 @@ const save = async (formEl: FormInstance | undefined) => {
         router.push({
           path: "/todoCenter/index"
         })
+        saveloading.value = false
       }
     } else {
+      saveloading.value = false
       console.log("error submit!", fields)
       console.log(state.quoteForm, "quoteForm")
     }
