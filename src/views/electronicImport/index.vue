@@ -47,7 +47,7 @@
       <el-table-column prop="encapsulationSize" label="封装（需要体现PAD的数量）" />
     </el-table>
     <div style="float: right; margin-top: 20px">
-      <el-button type="primary" @click="submit">提交</el-button>
+      <el-button type="primary" @click="submit" v-havedone>提交</el-button>
     </div>
 
     <el-dialog v-model="data.setVisible">
