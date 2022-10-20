@@ -24,7 +24,10 @@ import { getAuditFlowVersion, downloadFile, setTRMainSolutionState } from "./ser
 import getQuery from "@/utils/getQuery"
 import { ElMessage, ElMessageBox } from "element-plus"
 import { useRoute } from "vue-router"
+import useJump from "@/hook/useJump"
+
 const route = useRoute()
+const { jumpTodoCenter } = useJump()
 
 let { trCheckType, auditFlowId } = getQuery()
 
@@ -65,6 +68,7 @@ const save = async (isAgree: boolean) => {
       })
       if (res.success) {
         ElMessage.success("操作成功")
+        jumpTodoCenter()
       }
     })
   }
