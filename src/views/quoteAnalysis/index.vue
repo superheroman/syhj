@@ -220,56 +220,24 @@
     <el-card class="card">
       <el-table :data="data.projectBoard" style="width: 100%" border>
         <el-table-column label="项目" prop="projectName" />
-        <el-table-column label="目标价（内部）" :formatter="formatThousandths" prop="interiorTarget.grossMarginNumber">
-          <template #default="{ row }">
-            <span>
-              {{
-                row.projectName !== "毛利率"
-                  ? row.interiorTarget?.grossMarginNumber
-                  : `${row.interiorTarget?.grossMarginNumber} %`
-              }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="目标价（客户）" :formatter="formatThousandths">
-          <template #default="{ row }">
-            <span>
-              {{
-                row.projectName !== "毛利率"
-                  ? row.clientTarget.grossMarginNumber
-                  : `${row.clientTarget.grossMarginNumber} %`
-              }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="本次报价" :formatter="formatThousandths" prop="offer.grossMarginNumber">
-          <template #default="{ row }">
-            <span>
-              {{
-                row.projectName !== "毛利率"
-                  ? Number(row.offer?.grossMarginNumber || 0).toFixed(2)
-                  : `${Number(row.offer?.grossMarginNumber || 0).toFixed(2)} %`
-              }}
-            </span>
-          </template>
-        </el-table-column>
+        <el-table-column
+          label="目标价（内部）"
+          :formatter="formatOtherThousandths"
+          prop="interiorTarget.grossMarginNumber"
+        />
+        <el-table-column
+          label="目标价（客户）"
+          :formatter="formatOtherThousandths"
+          prop="clientTarget.grossMarginNumber"
+        />
+        <el-table-column label="本次报价" :formatter="formatOtherThousandths" prop="offer.grossMarginNumber" />
         <el-table-column
           :label="'第' + (index + 1) + '轮'"
           v-for="(_, index) in data.projectBoard.length > 0 ? data.projectBoard[0]?.oldOffer : []"
           :key="index"
-          :formatter="formatThousandths"
+          :formatter="formatOtherThousandths"
           :prop="`oldOffer[${index}].grossMarginNumber`"
-        >
-          <template #default="{ row }">
-            <span>
-              {{
-                row.projectName !== "毛利率"
-                  ? row.oldOffer[index]?.grossMarginNumber
-                  : `${row.oldOffer[index]?.grossMarginNumber} %`
-              }}
-            </span>
-          </template>
-        </el-table-column>
+        />
       </el-table>
     </el-card>
     <el-card m="2">
@@ -338,6 +306,7 @@ import { NreMarketingDepartmentModel } from "./data.type"
 import getQuery from "@/utils/getQuery"
 import debounce from "lodash/debounce"
 import { ElLoading, ElMessageBox, ElMessage } from "element-plus"
+//import { el } from "element-plus/es/locale"
 
 // let mouldInventoryData = ref<NreMarketingDepartmentModel[]>([])
 
@@ -487,6 +456,16 @@ const formatThousandths = (_record: any, _row: any, cellValue: any) => {
     return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
   } else {
     return 0
+  }
+}
+
+const formatOtherThousandths = (_record: any, _row: any, cellValue: any) => {
+  if (!cellValue) {
+    return
+  } else if (_record.projectName === "毛利率") {
+    return `${cellValue?.toFixed(2)}%`
+  } else {
+    return (cellValue?.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
   }
 }
 
