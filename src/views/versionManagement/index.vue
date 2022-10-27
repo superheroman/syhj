@@ -10,7 +10,8 @@
       <el-table :data="data.versionManageData" style="width: 100%">
         <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
           <template #default="{ row }">
-            <el-button type="primary" link>
+            <el-button type="primary" v-if="!!row.versionBasicInfo.finishedTime" link>
+              {{ row.versionBasicInfo.finishedTime }}
               <a
                 target="_blank"
                 :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
@@ -18,6 +19,7 @@
                 {{ row.versionBasicInfo.projectName }}
               </a>
             </el-button>
+            <span v-else>{{ row.versionBasicInfo.projectName }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="versionBasicInfo.version" label="版本号" />
@@ -35,7 +37,17 @@
 
         <el-table-column label="操作" fixed="right">
           <template #default="{ row }">
-            <el-button @click="getPriceEvaluationTableList(row)" type="primary" link> 表单链接 </el-button>
+            <el-button
+              v-if="row.versionBasicInfo.finishedTime"
+              @click="getPriceEvaluationTableList(row)"
+              type="primary"
+              link
+            >
+              表单链接
+            </el-button>
+            <el-tooltip v-else :content="`${!row.versionBasicInfo.finishedTime ? '核价未完成' : ''}`">
+              <el-button type="primary" link> 表单链接 </el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -55,10 +67,8 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { InitVersionFilterValue } from "./common/const"
 import EZFilter from "@/components/EZFilter/index.vue"
 import { GetVersionInfos, GetAllAuditFlowProjectNameAndVersion } from "./service"
-import { useRouter } from "vue-router"
 import { formatDateTime } from "@/utils"
 import versionDetail from "./versionDetail.vue"
-const router = useRouter()
 
 // 获取项目已有核价流程所有项目名称以及对应版本号
 const getAllAuditFlowProjectName = async () => {
@@ -143,11 +153,11 @@ const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable,
   data.visible = true
 }
 
-const pathToOperationRecord = (AuditFlowId: number) => {
-  router.push().catch((err) => {
-    console.warn(err)
-  })
-}
+// const pathToOperationRecord = (AuditFlowId: number) => {
+//   router.push().catch((err) => {
+//     console.warn(err)
+//   })
+// }
 
 onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
