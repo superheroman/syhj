@@ -237,12 +237,12 @@ const fetchInitData = async () => {
 
 // 提交电子料单价行数据
 const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
-  await PostElectronicMaterialEntering({
+  const { success } = await PostElectronicMaterialEntering({
     isSubmit,
     electronicDtoList: [record],
     auditFlowId
   })
-  ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
+  if (success) ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
   // if (isSubmit) {
   //   record.isEntering = true
   // } else {
