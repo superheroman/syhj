@@ -223,12 +223,12 @@ const fetchModuleNumberData = async () => {
 
 // 确认结构料单价行数据
 const handleSubmit = async (record: ConstructionModel, isSubmit: number) => {
-  await PostStructuralMemberEntering({
+  const { success } = await PostStructuralMemberEntering({
     isSubmit,
     structuralMaterialEntering: [{ ...record, productId }],
     auditFlowId
   })
-  ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
+  if (success) ElMessage.success(`${isSubmit ? "提交" : "确认"}成功！`)
   fetchInitData()
   record.isEdit = false
   // if (isSubmit) {
