@@ -48,9 +48,17 @@ export function GetAllAuditFlowVersion(data: { projectName: string }): any {
 // 根据项目名称获取项目已有核价流程所有版本
 export function GetAllAuditFlowProjectNameAndVersion(): any {
   return request({
-    url: "/api/services/app/VersionManagment/GetAllAuditFlowProjectNameAndVersion",
+    url: "/api/services/app/DataTableVersion/GetQuoteProjectNameList",
     method: "get",
     data: {}
+  })
+}
+
+export function GetQuoteProjectInfoListByQuoteProjectName(data: any): any {
+  return request({
+    url: "/api/services/app/DataTableVersion/GetQuoteProjectInfoListByQuoteProjectName",
+    method: "get",
+    data
   })
 }
 
