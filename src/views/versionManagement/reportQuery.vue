@@ -104,28 +104,37 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import EZFilter from "@/components/EZFilter/index.vue"
 import { InitReportFilterValue } from "./common/const"
 import {
-  GetAllAuditFlowProjectNameAndVersion,
+  GetQuoteProjectNameList,
   GetCostDetailVarianceMaterial,
   GetCostDetailVarianceManufacturingCost,
   GetCostDetailVariance,
-  GetProductListByAuditFlowIds
+  GetProductListByAuditFlowIds,
+  GetQuoteProjectInfoListByQuoteProjectName
 } from "./service"
 
-// 获取项目已有核价流程所有项目名称以及对应版本号
-const getAllAuditFlowProjectName = async () => {
-  const { result } = await GetAllAuditFlowProjectNameAndVersion()
-  data.reportfilterNnum[0].options = result.map((item: any) => {
-    let obj: any = {}
-    obj[item.projectName] = item.versions.map((vNo: any) => ({ label: vNo }))
-    data.versionsEnum = obj
-    return { label: item.projectName }
+// 获取项目已有核价流程所有项目名称
+const getQuoteProjectNameList = async () => {
+  const { result } = await GetQuoteProjectNameList()
+  data.reportfilterNnum[0].options = result.items.map((item: any) => {
+    return { label: item, value: item }
   })
 }
 
 // 获取项目名称对应版本号
-const getAllAuditFlowVersion = async (projectName: any) => {
-  data.reportfilterNnum[1].options = data.versionsEnum[projectName]
-  data.reportfilterNnum[2].options = data.versionsEnum[projectName]
+const getAllAuditFlowVersion = async (QuoteProjectName: any) => {
+  const {
+    result: { items }
+  }: any = await GetQuoteProjectInfoListByQuoteProjectName({
+    QuoteProjectName,
+    SkipCount: 0,
+    MaxResultCount: 1000
+  })
+  const options = items.map((item: any) => ({
+    label: item.quoteVersion,
+    value: item.id
+  }))
+  data.reportfilterNnum[1].options = options
+  data.reportfilterNnum[1].options = options
 }
 
 const getVersions = async (val: any, index: number) => {
@@ -220,7 +229,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
-  getAllAuditFlowProjectName()
+  getQuoteProjectNameList()
 })
 
 const queryTable = (formValue: any | undefined) => {

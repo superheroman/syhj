@@ -54,6 +54,23 @@ export function GetAllAuditFlowProjectNameAndVersion(): any {
   })
 }
 
+// 获取所有项目名
+export function GetQuoteProjectNameList(): any {
+  return request({
+    url: "/api/services/app/DataTableVersion/GetQuoteProjectNameList",
+    method: "get",
+    data: {}
+  })
+}
+
+export function GetQuoteProjectInfoListByQuoteProjectName(data: any): any {
+  return request({
+    url: "/api/services/app/DataTableVersion/GetQuoteProjectInfoListByQuoteProjectName",
+    method: "get",
+    data
+  })
+}
+
 // 获取成本明细差异表-bom成本
 export function GetCostDetailVarianceMaterial(data: {
   Product: string
