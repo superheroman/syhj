@@ -10,7 +10,7 @@
       <el-table :data="data.versionManageData" style="width: 100%">
         <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
           <template #default="{ row }">
-            <el-button type="primary" v-if="!!row.versionBasicInfo.finishedTime" link>
+            <el-button type="primary" link>
               {{ row.versionBasicInfo.finishedTime }}
               <a
                 target="_blank"
@@ -19,7 +19,6 @@
                 {{ row.versionBasicInfo.projectName }}
               </a>
             </el-button>
-            <span v-else>{{ row.versionBasicInfo.projectName }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="versionBasicInfo.version" label="版本号" />
