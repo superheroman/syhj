@@ -104,7 +104,7 @@ import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import EZFilter from "@/components/EZFilter/index.vue"
 import { InitReportFilterValue } from "./common/const"
 import {
-  GetAllAuditFlowProjectNameAndVersion,
+  GetQuoteProjectNameList,
   GetCostDetailVarianceMaterial,
   GetCostDetailVarianceManufacturingCost,
   GetCostDetailVariance,
@@ -113,8 +113,8 @@ import {
 } from "./service"
 
 // 获取项目已有核价流程所有项目名称
-const getAllAuditFlowProjectName = async () => {
-  const { result } = await GetAllAuditFlowProjectNameAndVersion()
+const getQuoteProjectNameList = async () => {
+  const { result } = await GetQuoteProjectNameList()
   data.reportfilterNnum[0].options = result.items.map((item: any) => {
     return { label: item, value: item }
   })
@@ -229,7 +229,7 @@ onBeforeMount(() => {
 
 onMounted(() => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
-  getAllAuditFlowProjectName()
+  getQuoteProjectNameList()
 })
 
 const queryTable = (formValue: any | undefined) => {
