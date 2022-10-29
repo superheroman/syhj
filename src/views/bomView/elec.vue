@@ -1,6 +1,8 @@
 <template>
   <div class="bomView">
     <CustomerSpecificity />
+    <TrDownLoad />
+    <ProductInfo :auditFlowId="data.auditFlowId" />
     <div class="bomView__child">
       <h4>电子料</h4>
       <!-- <el-button type="primary" @click="jumpToImport(1)" style="float: right; margin: 10px 0">电子料导入</el-button> -->
@@ -27,6 +29,8 @@ import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
 import { GetElectronicBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+import TrDownLoad from "@/components/TrDownLoad/index.vue"
+import ProductInfo from "@/components/ProductInfo/index.vue"
 import getQuery from "@/utils/getQuery"
 import useJump from "@/hook/useJump"
 
@@ -48,7 +52,8 @@ const { auditFlowId, productId }: any = getQuery()
  */
 const data = reactive({
   electronicData: [],
-  structuralData: []
+  structuralData: [],
+  auditFlowId: auditFlowId
 })
 // const jumpToImport = (type: number) => {
 //   if (type === 1) {

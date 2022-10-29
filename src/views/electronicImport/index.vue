@@ -1,6 +1,7 @@
 <template>
   <div class="electronic-import">
     <CustomerSpecificity />
+    <TrDownLoad />
     <div class="electronic-import__btn-container">
       <el-form :inline="true">
         <el-form-item label="">
@@ -74,6 +75,8 @@ import { SaveElectronicBom, DownloadFile, GetElectronicBom } from "@/api/bom"
 import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import ProductInfo from "@/components/ProductInfo/index.vue"
+import TrDownLoad from "@/components/TrDownLoad/index.vue"
+
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 
 let auditFlowId: any = null
@@ -124,6 +127,11 @@ const submit = async () => {
     text: "加载中",
     background: "rgba(0, 0, 0, 0.7)"
   })
+  if (!productId) {
+    loading.close()
+    ElMessage.error("未选择零件！")
+    return
+  }
   try {
     let { success }: any = await SaveElectronicBom({
       auditFlowId,

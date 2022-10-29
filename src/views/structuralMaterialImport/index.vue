@@ -1,6 +1,7 @@
 <template>
   <div class="electronic-import">
     <CustomerSpecificity />
+    <TrDownLoad />
     <div class="electronic-import__btn-container">
       <el-form :inline="true">
         <el-form-item label="">
@@ -142,6 +143,7 @@ import getQuery from "@/utils/getQuery"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import ProductInfo from "@/components/ProductInfo/index.vue"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+import TrDownLoad from "@/components/TrDownLoad/index.vue"
 
 let auditFlowId: any = null
 let productId: any = null

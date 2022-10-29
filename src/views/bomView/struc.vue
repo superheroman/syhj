@@ -1,6 +1,12 @@
 <template>
   <div class="bomView">
     <CustomerSpecificity />
+    <div class="bomView__btn">
+      <TrDownLoad />
+      <ProductInfo :auditFlowId="data.auditFlowId" />
+      <ThreeDImage style="margin-left: 30px" />
+      <LogisticsInfo style="margin-left: 30px" />
+    </div>
     <div class="bomView__child">
       <h4>结构料</h4>
       <!-- <el-button type="primary" @click="jumpToImport(2)" style="float: right; margin: 10px 0">结构料导入</el-button> -->
@@ -30,8 +36,11 @@
 
 <script lang="ts" setup>
 import { reactive, toRefs, onBeforeMount, onMounted, watchEffect } from "vue"
-// import { useRouter } from "vue-router"
 import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
+import TrDownLoad from "@/components/TrDownLoad/index.vue"
+import ProductInfo from "@/components/ProductInfo/index.vue"
+import ThreeDImage from "@/components/ThreeDImage/index.vue"
+import LogisticsInfo from "@/components/LogisticsInfo/index.vue"
 
 import { GetStructionBom, SetBomState } from "@/api/bom"
 import { ElMessage, ElMessageBox } from "element-plus"
@@ -56,7 +65,8 @@ const { auditFlowId, productId }: any = getQuery()
  */
 const data = reactive({
   electronicData: [],
-  structuralData: []
+  structuralData: [],
+  auditFlowId: auditFlowId
 })
 // const jumpToImport = (type: number) => {
 //   if (type === 1) {
@@ -110,6 +120,9 @@ defineExpose({
 .bomView {
   &__child {
     margin: 20px 0;
+  }
+  &__btn {
+    display: flex;
   }
 }
 </style>

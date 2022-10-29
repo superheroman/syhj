@@ -855,11 +855,28 @@ const modelCountYearListQuantitySum = (row: modelCount) => {
 }
 const save = async (formEl: FormInstance | undefined) => {
   let { auditFlowId } = route.query
+  // 模组走量不能为0
+  let isModuleTableDataQuantity = false
+  moduleTableData.value.forEach((row: any) => {
+    row.modelCountYearList.forEach((item: any) => {
+      if (!item.quantity) {
+        isModuleTableDataQuantity = true
+      }
+    })
+  })
+  if (isModuleTableDataQuantity) {
+    ElMessage({
+      type: "error",
+      message: "模组走量不能为空"
+    })
+    return
+  }
   if (!formEl) return
   await formEl.validate(async (valid, fields) => {
     console.log(fileList)
     if (valid) {
       saveloading.value = true
+
       let { quoteForm } = state
       quoteForm.auditFlowId = auditFlowId ? Number(auditFlowId) : null
       quoteForm.pcs = pcsTableData
