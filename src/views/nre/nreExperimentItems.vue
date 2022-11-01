@@ -176,9 +176,13 @@ const handleFethNreTableDownload = async () => {
 
 // NRE实验费模板上传
 const handleSuccess: UploadProps["onSuccess"] = async (res: any) => {
-  console.log(res, "NRE实验费模板上传")
-  data.experimentItems = res.result || []
-  ElMessage.success("上传成功！")
+  if (!res.error) {
+    data.experimentItems = res.result || []
+    console.log(res, "NRE实验费模板上传")
+    ElMessage.success("上传成功！")
+  } else {
+    ElMessage.error(res.error.message)
+  }
 }
 
 const handleFileChange: UploadProps["onChange"] = (file, uploadFiles) => {
