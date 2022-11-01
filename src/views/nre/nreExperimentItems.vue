@@ -13,7 +13,7 @@
               :on-change="handleFileChange"
               name="fileName"
               :on-progress="handleGetUploadProgress"
-              :on-error="handleUploadError"
+              :on-error="handleUploadTemplateError"
             >
               <el-button style="margin-top: 8px">NRE实验费表单上传</el-button>
             </el-upload>
@@ -107,7 +107,7 @@ import getQuery from "@/utils/getQuery"
 import type { UploadProps, UploadUserFile } from "element-plus"
 import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
-import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+import { handleGetUploadProgress, handleUploadTemplateError } from "@/utils/upload"
 
 const { auditFlowId, productId }: any = getQuery()
 

@@ -13,7 +13,7 @@
               :on-change="handleFileChange"
               name="fileName"
               :on-progress="handleGetUploadProgress"
-              :on-error="handleUploadError"
+              :on-error="handleUploadTemplateError"
             >
               <el-button class="uploadBtn">NRE实验费模板上传</el-button>
             </el-upload>
@@ -135,7 +135,7 @@ import { getLaboratoryFeeSummaries } from "./common/nrePilotprojectsSummaries"
 import getQuery from "@/utils/getQuery"
 import { ElMessage } from "element-plus"
 import { downloadFileExcel } from "@/utils"
-import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
+import { handleGetUploadProgress, handleUploadTemplateError } from "@/utils/upload"
 
 const fileList = ref<UploadUserFile[]>([])
 
