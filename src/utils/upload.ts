@@ -17,6 +17,10 @@ export const handleUploadError = () => {
 
 // NRE实验费模板上传失败
 export const handleUploadTemplateError = async (error: Error) => {
-  const errorMessage: any = JSON.parse(error.message)
-  ElMessage.error(errorMessage.error.message)
+  try {
+    const errorMessage: any = JSON.parse(error.message)
+    ElMessage.error(errorMessage.error.message)
+  } catch (error) {
+    ElMessage.error("上传失败")
+  }
 }
