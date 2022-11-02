@@ -610,7 +610,7 @@
                 :on-progress="handleGetUploadProgress"
                 show-file-list
               >
-                <el-button>SOR文件上传</el-button>
+                <el-button>SOR(中文版)文件上传</el-button>
               </el-upload>
             </el-form-item>
           </el-col>
