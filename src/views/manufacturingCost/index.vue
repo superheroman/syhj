@@ -132,6 +132,23 @@
         </el-table-column>
       </el-table>
     </el-card>
+
+    <el-card header="Other" m="2">
+      <el-table :data="data.other" border style="margin: 20px 0" height="500">
+        <el-table-column prop="year" label="年份" width="180">
+          <template #default="{ row }">
+            <div v-if="row.year">{{ row.year }}</div>
+            <div v-else>全生命周期</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="合计" width="180" prop="cost" fixed="right">
+          <template #default="{ row }">
+            <el-input-number controls-position="right" :min="0" v-model="row.subtotal" placeholder="" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+
     <div style="float: right; margin: 20px 10px">
       <el-button @click="submit" type="primary" v-havedone>提交</el-button>
     </div>
@@ -164,7 +181,8 @@ let { auditFlowId, productId: modelCountId } = getQuery()
 const data = reactive({
   years: [] as number[],
   smt: [] as any[],
-  cob: [] as any[]
+  cob: [] as any[],
+  other: [] as any[]
 })
 // const addsmt = () => {
 //   data.smt.push({})
@@ -181,15 +199,18 @@ onMounted(async () => {
     if (getResData.result) {
       data.smt = getResData.result.smt
       data.cob = getResData.result.cob
+      data.other = getResData.result.other
     } else {
       let { result } = (await getAllYearsFrom(auditFlowId)) as any
       data.years = result
       data.years.forEach((year) => {
         data.smt.push({ year })
         data.cob.push({ year })
+        data.other.push({ year })
       })
       data.smt.push({ year: 0 })
       data.cob.push({ year: 0 })
+      data.other.push({ year: 0 })
     }
   }
 })
@@ -219,12 +240,13 @@ watch(
   { deep: true }
 )
 const submit = async () => {
-  let { smt, cob } = data
+  let { smt, cob, other } = data
   let res: any = await manufacturingCostInput({
     auditFlowId,
     modelCountId,
     smt,
-    cob
+    cob,
+    other
   })
   if (res.success) {
     ElMessage.success("提交成功")
