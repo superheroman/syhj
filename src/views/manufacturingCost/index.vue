@@ -141,6 +141,11 @@
             <div v-else>全生命周期</div>
           </template>
         </el-table-column>
+        <el-table-column label="备注" width="180" prop="cost" fixed="right">
+          <template #default="{ row }">
+            <el-input controls-position="right" v-model="row.remark" placeholder="" />
+          </template>
+        </el-table-column>
         <el-table-column label="合计" width="180" prop="cost" fixed="right">
           <template #default="{ row }">
             <el-input-number controls-position="right" :min="0" v-model="row.subtotal" placeholder="" />
