@@ -193,7 +193,7 @@
           </el-table-column>
           <el-table-column label="产品小类" width="180">
             <template #default="{ row }">
-              <el-select v-model="row.productType" placeholder="Select">
+              <el-select v-model="row.productType" placeholder="产品小类">
                 <el-option
                   v-for="item in state.productTypeOptions"
                   :key="item.id"
@@ -1008,6 +1008,7 @@ const addProduct = () => {
   moduleTableDataNew.modelCountYearList.forEach((item: any) => {
     item.quantity = ""
   })
+  moduleTableDataNew.productType = state.productTypeOptions[0]?.id
   moduleTableData.value.push(moduleTableDataNew)
   // 每次执行添加都对模组上的产品名称进行复制
   // productTableData.value.forEach((item: any, index: any) => {
@@ -1238,6 +1239,7 @@ onMounted(async () => {
 
     let productType: any = await getDictionaryAndDetail("ProductType") // 产品小类
     state.productTypeOptions = productType.result.financeDictionaryDetailList
+    moduleTableData.value[0].productType = state.productTypeOptions[0]?.id
 
     let landingFactory: any = await getDictionaryAndDetail("LandingFactory") //落地工厂
     state.landingFactoryOptions = landingFactory.result.financeDictionaryDetailList
