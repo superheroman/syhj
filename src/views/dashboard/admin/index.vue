@@ -341,7 +341,7 @@ const toFixedThree = (_recoed: any, _row: any, val: any) => {
 }
 
 const toFixedTwo = (_recoed: any, _row: any, val: any) => {
-  return val.toFixed(2)
+  return Number(val) ? Number(val).toFixed(2) : 0
 }
 
 const init = async () => {

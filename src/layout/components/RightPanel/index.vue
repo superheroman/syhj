@@ -103,7 +103,7 @@ const handleChange = (productId: any) => {
       <div class="drawer-container">
         <div>
           <h3 class="drawer-title">零件切换</h3>
-          <el-radio-group v-model="state.productId" size="large" @change="handleChange">
+          <el-radio-group v-model="state.productId" size="large" @change="handleChange" style="display: block">
             <div style="margin-bottom: 10px" v-for="item in productStore.productList" :key="item.id">
               <el-radio :label="item.id" border>{{ item.product }}</el-radio>
             </div>
