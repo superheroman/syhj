@@ -33,6 +33,22 @@
             {{ formatDateTime(row.versionBasicInfo.finishedTime || "") }}
           </template>
         </el-table-column>
+
+        <!-- <el-table-column label="操作" fixed="right">
+          <template #default="{ row }">
+            <el-button
+              v-if="row.versionBasicInfo.finishedTime"
+              @click="getPriceEvaluationTableList(row)"
+              type="primary"
+              link
+            >
+              表单链接
+            </el-button>
+            <el-tooltip v-else :content="`${!row.versionBasicInfo.finishedTime ? '核价未完成' : ''}`">
+              <el-button type="primary" link> 表单链接 </el-button>
+            </el-tooltip>
+          </template>
+        </el-table-column> -->
       </el-table>
     </el-card>
     <el-dialog title="报表汇总" width="80%" v-model="data.visible">
@@ -48,8 +64,10 @@
 <script lang="ts" setup>
 import { reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { InitVersionFilterValue } from "./common/const"
+import EZFilter from "@/components/EZFilter/index.vue"
 import { GetVersionInfos, GetAllAuditFlowProjectNameAndVersion } from "./service"
 import { formatDateTime } from "@/utils"
+import versionDetail from "./versionDetail.vue"
 
 // 获取项目已有核价流程所有项目名称以及对应版本号
 const getAllAuditFlowProjectName = async () => {
@@ -126,6 +144,13 @@ const queryTable = async (formValue: any) => {
   data.versionManageData = result?.versionManageList || []
   console.log(result, "queryTable")
 }
+
+// const getPriceEvaluationTableList = ({ priceEvaluationTableList, quotationTable, auditFlowId }: any) => {
+//   data.priceEvaluationTableList = priceEvaluationTableList
+//   data.marketingQuotationData = quotationTable
+//   data.auditFlowId = auditFlowId
+//   data.visible = true
+// }
 
 // const pathToOperationRecord = (AuditFlowId: number) => {
 //   router.push().catch((err) => {
