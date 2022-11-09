@@ -526,6 +526,15 @@ export const asyncRoutes: Array<RouteRecordRaw> = [
         meta: {
           title: "时效性查询"
         }
+      },
+      {
+        path: "/timeliness/operationRecord",
+        component: () => import("@/views/versionManagement/operationRecord.vue"),
+        name: "timelinessOperationRecord",
+        meta: {
+          title: "时效性管理",
+          hidden: true
+        }
       }
     ]
   },

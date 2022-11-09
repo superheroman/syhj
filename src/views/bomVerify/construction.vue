@@ -11,7 +11,7 @@
         <el-table-column prop="categoryName" label="物料大类" fixed width="150" />
         <el-table-column prop="typeName" label="物料种类" fixed width="150" />
         <el-table-column prop="sapItemNum" label="物料编号" fixed width="150" />
-        <el-table-column prop="drawingNumName" label="图号名称" width="150" />
+        <el-table-column prop="drawingNumName" label="图号名称" fixed width="150" />
         <el-table-column prop="overallDimensionSize" label="外形尺寸" width="150" />
         <el-table-column prop="materialName" label="材料" width="150" />
         <el-table-column prop="weightNumber" label="重量g" width="150" />

@@ -12,10 +12,7 @@
           <template #default="{ row }">
             <el-button type="primary" link>
               {{ row.versionBasicInfo.finishedTime }}
-              <a
-                target="_blank"
-                :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
-              >
+              <a target="_blank" :href="`/timeliness/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`">
                 {{ row.versionBasicInfo.projectName }}
               </a>
             </el-button>
