@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, PropType, ref } from "vue"
+import { reactive, PropType, ref, watch } from "vue"
 import type { FormInstance } from "element-plus"
 import { EnumDataProps } from "./data.type"
 
@@ -92,8 +92,24 @@ const formValue = reactive({
   ...(props.initFilterValue || {})
 })
 
+watch(
+  () => {
+    return formValue.ProjectName
+  },
+  () => {
+    formValue.Version = 1
+  },
+  { deep: true }
+)
+
 const handleSubmit = () => {
-  props.onSubmit && props.onSubmit(formValue)
+  console.log(formValue)
+  const formValueRef = JSON.parse(JSON.stringify(formValue))
+  formValueRef.auditFlowId = formValueRef.auditFlowId ? formValueRef.auditFlowId : 0
+  formValueRef.Version = formValueRef.Version ? formValueRef.Version : 1
+  formValueRef.DraftDate = formValueRef.DraftDate ? formValueRef.DraftDate : []
+  formValueRef.FinishedDate = formValueRef.FinishedDate ? formValueRef.FinishedDate : []
+  props.onSubmit && props.onSubmit(formValueRef)
 }
 
 const reset = (formEl: FormInstance | undefined) => {
