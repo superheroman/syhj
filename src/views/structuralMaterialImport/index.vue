@@ -55,48 +55,48 @@
       <template #header>
         <div>物流基础信息</div>
       </template>
-      <el-form :model="data.logisticsForm" inline>
+      <el-form :model="data.logisticsForm" inline ref="refForm" :rules="rules">
         <!-- <h5>物流基础信息</h5> -->
         <h6>外包装体积</h6>
-        <el-form-item label="外包装长">
+        <el-form-item label="外包装长" prop="outerPackagingLength">
           <el-input v-model="data.logisticsForm.outerPackagingLength">
             <template #append>cm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="外包装宽">
+        <el-form-item label="外包装宽" prop="outerPackagingWidth">
           <el-input v-model="data.logisticsForm.outerPackagingWidth">
             <template #append>cm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="外包装高">
+        <el-form-item label="外包装高" prop="outerPackagingHeight">
           <el-input v-model="data.logisticsForm.outerPackagingHeight">
             <template #append>cm</template>
           </el-input>
         </el-form-item>
         <h6>重量</h6>
-        <el-form-item label="单个产品重量">
+        <el-form-item label="单个产品重量" prop="singleProductWeight">
           <el-input v-model="data.logisticsForm.singleProductWeight">
             <template #append>kg</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="单箱数量">
+        <el-form-item label="单箱数量" prop="singleBoxQuantity">
           <el-input v-model="data.logisticsForm.singleBoxQuantity">
             <template #append>pcs</template>
           </el-input>
         </el-form-item>
         <h5>包装基础信息</h5>
         <h6>内包装体积</h6>
-        <el-form-item label="内包装长">
+        <el-form-item label="内包装长" prop="innerPackagingLength">
           <el-input v-model="data.logisticsForm.innerPackagingLength">
             <template #append>mm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="内包装宽">
+        <el-form-item label="内包装宽" prop="innerPackagingWidth">
           <el-input v-model="data.logisticsForm.innerPackagingWidth">
             <template #append>mm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="内包装高">
+        <el-form-item label="内包装高" prop="innerPackagingHeight">
           <el-input v-model="data.logisticsForm.innerPackagingHeight">
             <template #append>mm</template>
           </el-input>
@@ -107,29 +107,33 @@
             <el-option label="否" value="0" />
           </el-select>
         </el-form-item>
-        <el-form-item label="每托盘箱数">
+        <el-form-item label="每托盘箱数" prop="boxesPerPallet">
           <el-input v-model="data.logisticsForm.boxesPerPallet">
             <template #append> 箱/托</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="单箱包装数量">
+        <el-form-item label="单箱包装数量" prop="quantityPerBox">
           <el-input v-model="data.logisticsForm.quantityPerBox">
             <template #append> PCS/箱</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="备注">
-          <el-input v-model="data.logisticsForm.remarks" type="textarea" />
+        <el-form-item label="备注" prop="remarks">
+          <el-input
+            v-model="data.logisticsForm.remarks"
+            type="textarea"
+            placeholder="若无具体包装数据,填写参考的具体项目及产品"
+          />
         </el-form-item>
       </el-form>
       <div style="float: right; margin: 20px 0">
-        <el-button type="primary" @click="submit" v-havedone>提交</el-button>
+        <el-button type="primary" @click="submit(refForm)" v-havedone>提交</el-button>
       </div>
     </el-card>
   </div>
 </template>
 <script setup lang="ts">
-import { reactive, onMounted } from "vue"
-import type { UploadProps } from "element-plus"
+import { reactive, onMounted, ref } from "vue"
+import type { UploadProps, FormInstance, FormRules } from "element-plus"
 import { ElMessage, ElLoading } from "element-plus"
 import {
   SaveStructionBom,
@@ -144,7 +148,7 @@ import CustomerSpecificity from "@/components/CustomerSpecificity/index.vue"
 import ProductInfo from "@/components/ProductInfo/index.vue"
 import { handleGetUploadProgress, handleUploadError } from "@/utils/upload"
 import TrDownLoad from "@/components/TrDownLoad/index.vue"
-
+const refForm = ref<FormInstance>()
 let auditFlowId: any = null
 let productId: any = null
 const data = reactive<any>({
@@ -166,7 +170,20 @@ const data = reactive<any>({
     picture3DFileId: ""
   }
 })
-
+const rules = reactive<FormRules>({
+  outerPackagingLength: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  outerPackagingWidth: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  outerPackagingHeight: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  singleProductWeight: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  singleBoxQuantity: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  innerPackagingLength: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  innerPackagingWidth: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  innerPackagingHeight: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  boxesPerPallet: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  quantityPerBox: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  remarks: [{ required: true, message: "请输入该值", trigger: "blur" }],
+  picture3DFileId: [{ required: true, message: "请输入该值", trigger: "blur" }]
+})
 onMounted(async () => {
   let query = getQuery()
   auditFlowId = Number(query.auditFlowId) || 0
@@ -220,36 +237,47 @@ const downLoadTemplate = async () => {
     a.remove() //将a标签移除
   }
 }
-const submit = async () => {
-  if (!data.logisticsForm.picture3DFileId) {
-    ElMessage({
-      message: "3d爆炸图必传",
-      type: "error"
-    })
-    return
-  }
-  const loading = ElLoading.service({
-    lock: true,
-    text: "加载中",
-    background: "rgba(0, 0, 0, 0.7)"
-  })
-  try {
-    let params: SaveBOM = Object.assign(
-      { auditFlowId, productId, structureBomDtos: data.tableData },
-      data.logisticsForm
-    )
-    let res: any = await SaveStructionBom(params)
-    let resO: any = await SaveProductDevelopmentInput(params)
-    loading.close()
-    if (res.success && resO.success) {
-      ElMessage({
-        message: "保存成功",
-        type: "success"
+const submit = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  await formEl.validate(async (valid, fields) => {
+    if (valid) {
+      if (!data.logisticsForm.picture3DFileId) {
+        ElMessage({
+          message: "3d爆炸图必传",
+          type: "error"
+        })
+        return
+      }
+      const loading = ElLoading.service({
+        lock: true,
+        text: "加载中",
+        background: "rgba(0, 0, 0, 0.7)"
       })
+      try {
+        let params: SaveBOM = Object.assign(
+          { auditFlowId, productId, structureBomDtos: data.tableData },
+          data.logisticsForm
+        )
+        let res: any = await SaveStructionBom(params)
+        let resO: any = await SaveProductDevelopmentInput(params)
+        loading.close()
+        if (res.success && resO.success) {
+          ElMessage({
+            message: "保存成功",
+            type: "success"
+          })
+        }
+      } catch (error) {
+        loading.close()
+      }
+    } else {
+      ElMessage({
+        message: "有必填项没有填写",
+        type: "error"
+      })
+      console.log("error submit!", fields)
     }
-  } catch (error) {
-    loading.close()
-  }
+  })
 }
 </script>
 <style lang="scss" scoped>
