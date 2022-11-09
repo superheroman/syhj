@@ -84,6 +84,9 @@ router.beforeEach(async (to: RouteLocationNormalized, _: RouteLocationNormalized
   if (userRoles.includes("Admin")) {
     roles.push("admin")
   }
+  if (userRoles.includes("Timeliness")) {
+    roles.push("timeliness")
+  }
   permissionStore.setRoutes(roles)
   permissionStore.dynamicRoutes.forEach((route: any) => {
     router.addRoute(route)
