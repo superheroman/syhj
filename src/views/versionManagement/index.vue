@@ -11,7 +11,6 @@
         <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
           <template #default="{ row }">
             <el-button type="primary" link>
-              {{ row.versionBasicInfo.finishedTime }}
               <a
                 target="_blank"
                 :href="`/versionManagement/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`"
@@ -68,6 +67,7 @@ import EZFilter from "@/components/EZFilter/index.vue"
 import { GetVersionInfos, GetAllAuditFlowProjectNameAndVersion } from "./service"
 import { formatDateTime } from "@/utils"
 import versionDetail from "./versionDetail.vue"
+import { version } from "process"
 
 // 获取项目已有核价流程所有项目名称以及对应版本号
 const getAllAuditFlowProjectName = async () => {
