@@ -37,6 +37,11 @@
             <el-input v-model="row.perTotalLogisticsCost" />
           </template> -->
         </el-table-column>
+        <el-table-column label="备注">
+          <template #default="{ row }">
+            <el-input v-model="row.remarks" />
+          </template>
+        </el-table-column>
       </el-table>
       <div style="float: right; margin: 20px 0">
         <el-button @click="submit" type="primary" v-havedone>提交</el-button>

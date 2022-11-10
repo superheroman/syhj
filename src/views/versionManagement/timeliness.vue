@@ -11,7 +11,6 @@
         <el-table-column prop="versionBasicInfo.projectName" label="项目名称">
           <template #default="{ row }">
             <el-button type="primary" link>
-              {{ row.versionBasicInfo.finishedTime }}
               <a target="_blank" :href="`/timeliness/operationRecord?AuditFlowId=${row.versionBasicInfo?.auditFlowId}`">
                 {{ row.versionBasicInfo.projectName }}
               </a>
