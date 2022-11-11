@@ -102,7 +102,7 @@
               >
                 提交
               </el-button>
-              <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary">
+              <el-button v-if="!scope.row.isEdit" :disabled="scope.row.isSubmit" link @click="handleEdit(scope.row, true)" type="primary">
                 修改
               </el-button>
               <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>

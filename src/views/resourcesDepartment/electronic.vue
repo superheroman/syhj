@@ -192,8 +192,19 @@ const fetchInitData = async () => {
 
 // 提交电子料单价行数据
 const handleSubmit = async (record: ElectronicDto, isSubmit: number, index: number) => {
-  //判断是根据年将率计算还是根据原币计算
-  var iszero = false
+  if(isSubmit)
+  {
+    //提交
+    await submitFun(record,isSubmit,index)
+  }else
+  {
+    await handleSubmitcalculate(record,isSubmit,index);
+  }
+}
+
+const handleSubmitcalculate =async (record: ElectronicDto, isSubmit: number, index: number) => {
+ //判断是根据年将率计算还是根据原币计算
+ var iszero = false
   electronicBomList.value[index].iginalCurrency
     ?.map((item: any) => { return item.value })?.forEach((a) => {
       if (a) {
@@ -204,22 +215,18 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: number, index: numb
   if (iszero) {
     //根据原币计算
     await handleCalculationIginalCurrency(record, index).then(async () => {
-      const { success } = await PostElectronicMaterialEntering({
-        isSubmit,
-        electronicDtoList: [electronicBomList.value[index]],
-        auditFlowId
-      })
-      if (success) ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
-      // if (isSubmit) {
-      //   record.isEntering = true
-      // } else {
-      //   record.isSubmit = true
-      // }
-      fetchInitData()
+      await submitFun(record,isSubmit,index)
     })
   } else {
     await handleCalculation(record, index).then(async () => {
-      const { success } = await PostElectronicMaterialEntering({
+     await submitFun(record,isSubmit,index)
+    })
+    //根据年将率计算
+  }
+}
+
+const submitFun=async (record: ElectronicDto, isSubmit: number, index: number)=>{
+  const { success } = await PostElectronicMaterialEntering({
         isSubmit,
         electronicDtoList: [electronicBomList.value[index]],
         auditFlowId
@@ -231,9 +238,6 @@ const handleSubmit = async (record: ElectronicDto, isSubmit: number, index: numb
       //   record.isSubmit = true
       // }
       fetchInitData()
-    })
-    //根据年将率计算
-  }
 }
 
 // 修改
