@@ -7,50 +7,27 @@
         <el-table-column prop="sapItemNum" label="物料编号" width="180" fixed="left" />
         <el-table-column prop="sapItemName" label="材料名称" width="180" fixed="left" />
         <el-table-column prop="materialsUseCount" label="项目物料的使用量">
-          <el-table-column
-            v-for="(item, index) in allColums?.materialsUseCountYears"
-            :key="item"
-            :label="`${item}`"
-            :prop="`materialsUseCount[${index}].value`"
-            width="180"
-          />
+          <el-table-column v-for="(item, index) in allColums?.materialsUseCountYears" :key="item" :label="`${item}`"
+            :prop="`materialsUseCount[${index}].value`" width="180" />
         </el-table-column>
         <el-table-column prop="currency" label="币种" width="150">
           <template #default="scope">
             <el-select v-if="scope.row.isEdit" v-model="scope.row.currency" placeholder="选择币种">
-              <el-option
-                v-for="item in exchangeSelectOptions"
-                :key="item.id"
-                :label="item.exchangeRateKind"
-                :value="item.exchangeRateKind"
-              />
+              <el-option v-for="item in exchangeSelectOptions" :key="item.id" :label="item.exchangeRateKind"
+                :value="item.exchangeRateKind" />
             </el-select>
           </template>
         </el-table-column>
         <el-table-column prop="systemiginalCurrency" label="系统单价（原币）">
-          <el-table-column
-            v-for="(item, index) in allColums?.systemiginalCurrencyYears"
-            :key="item"
-            :label="`${item}`"
-            :prop="`systemiginalCurrency[${index}].value`"
-            width="180"
-          />
+          <el-table-column v-for="(item, index) in allColums?.systemiginalCurrencyYears" :key="item" :label="`${item}`"
+            :prop="`systemiginalCurrency[${index}].value`" width="180" />
         </el-table-column>
         <el-table-column prop="inTheRate" label="年降率">
-          <el-table-column
-            v-for="(item, index) in allColums?.inTheRateYears"
-            :key="item"
-            :label="`${item}`"
-            :prop="`inTheRate[${index}].value`"
-            width="180"
-          >
+          <el-table-column v-for="(item, index) in allColums?.inTheRateYears" :key="item" :label="`${item}`"
+            :prop="`inTheRate[${index}].value`" width="180">
             <template #default="scope">
-              <el-input
-                v-if="scope.row.isEdit"
-                v-model="scope.row.inTheRate[index].value"
-                @keyup.enter="handleCalculation(scope.row, scope.$index)"
-                type="number"
-              >
+              <el-input v-if="scope.row.isEdit" v-model="scope.row.inTheRate[index].value"
+                @keyup.enter="handleCalculation(scope.row, scope.$index)" type="number">
                 <template #append> % </template>
               </el-input>
               <span v-else>{{ scope.row?.inTheRate[index]?.value }}</span>
@@ -58,33 +35,19 @@
           </el-table-column>
         </el-table-column>
         <el-table-column prop="iginalCurrency" label="原币">
-          <el-table-column
-            v-for="(item, index) in allColums?.iginalCurrencyYears"
-            :key="item"
-            :label="`${item?.toString()}`"
-            :prop="`iginalCurrency[${index}].value`"
-            width="180"
-          >
+          <el-table-column v-for="(item, index) in allColums?.iginalCurrencyYears" :key="item"
+            :label="`${item?.toString()}`" :prop="`iginalCurrency[${index}].value`" width="180">
             <template #default="scope">
-              <el-input-number
-                v-if="scope.row.isEdit"
-                v-model="scope.row.iginalCurrency[index].value"
-                controls-position="right"
-                :min="0"
-                @keyup.enter="handleCalculationIginalCurrency(scope.row, scope.$index)"
-              />
+              <el-input-number v-if="scope.row.isEdit" v-model="scope.row.iginalCurrency[index].value"
+                controls-position="right" :min="0"
+                @keyup.enter="handleCalculationIginalCurrency(scope.row, scope.$index)" />
               <span v-if="!scope.row.isEdit">{{ scope.row.iginalCurrency[index].value }}</span>
             </template>
           </el-table-column>
         </el-table-column>
         <el-table-column prop="standardMoney" label="本位币">
-          <el-table-column
-            v-for="(item, index) in allColums?.standardMoneyYears"
-            :key="item"
-            :label="`${item?.toString()}`"
-            :prop="`standardMoney[${index}].value`"
-            width="180"
-          >
+          <el-table-column v-for="(item, index) in allColums?.standardMoneyYears" :key="item"
+            :label="`${item?.toString()}`" :prop="`standardMoney[${index}].value`" width="180">
             <template #default="{ row }">
               {{ row.standardMoney[index]?.value?.toFixed(5) || 0 }}
             </template>
@@ -111,20 +74,14 @@
         <el-table-column prop="peopleName" label="确认人" />
         <el-table-column label="操作" fixed="right" width="180">
           <template #default="scope">
-            <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0)" type="danger" v-havedone
-              >确认</el-button
-            >
-            <el-button
-              v-if="scope.row.isEntering"
-              link
-              :disabled="scope.row.isSubmit"
-              @click="handleSubmit(scope.row, 1)"
-              type="warning"
-              v-havedone
-            >
+            <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0, scope.$index)"
+              type="danger" v-havedone>确认</el-button>
+            <el-button v-if="scope.row.isEntering" link :disabled="scope.row.isSubmit"
+              @click="handleSubmit(scope.row, 1, scope.$index)" type="warning" v-havedone>
               提交
             </el-button>
-            <el-button v-if="!scope.row.isEdit" link @click="handleEdit(scope.row, true)" type="primary" v-havedone>
+            <el-button v-if="!scope.row.isEdit" :disabled="scope.row.isSubmit" link @click="handleEdit(scope.row, true)"
+              type="primary" v-havedone>
               修改
             </el-button>
             <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)" v-havedone>取消</el-button>
@@ -144,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed } from "vue"
+import { ref, reactive, onBeforeMount, onMounted, watchEffect, computed, nextTick } from "vue"
 import { useUserStore } from "@/store/modules/user"
 import { ElectronicDto } from "./data.type"
 import { ElMessage } from "element-plus"
@@ -209,12 +166,10 @@ const fetchOptionsData = async () => {
 }
 
 onBeforeMount(() => {
-  console.log(store.userInfo, "store")
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
 onMounted(() => {
-  console.log(electronicBomList.value, "electronicBomList")
   fetchInitData()
   fetchOptionsData()
 })
@@ -236,19 +191,49 @@ const fetchInitData = async () => {
 }
 
 // 提交电子料单价行数据
-const handleSubmit = async (record: ElectronicDto, isSubmit: number) => {
-  const { success } = await PostElectronicMaterialEntering({
-    isSubmit,
-    electronicDtoList: [record],
-    auditFlowId
-  })
-  if (success) ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
-  // if (isSubmit) {
-  //   record.isEntering = true
-  // } else {
-  //   record.isSubmit = true
-  // }
-  fetchInitData()
+const handleSubmit = async (record: ElectronicDto, isSubmit: number, index: number) => {
+  //判断是根据年将率计算还是根据原币计算
+  var iszero = false
+  electronicBomList.value[index].iginalCurrency
+    ?.map((item: any) => { return item.value })?.forEach((a) => {
+      if (a) {
+        iszero = true
+      }
+      return iszero
+    })
+  if (iszero) {
+    //根据原币计算
+    await handleCalculationIginalCurrency(record, index).then(async () => {
+      const { success } = await PostElectronicMaterialEntering({
+        isSubmit,
+        electronicDtoList: [electronicBomList.value[index]],
+        auditFlowId
+      })
+      if (success) ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
+      // if (isSubmit) {
+      //   record.isEntering = true
+      // } else {
+      //   record.isSubmit = true
+      // }
+      fetchInitData()
+    })
+  } else {
+    await handleCalculation(record, index).then(async () => {
+      const { success } = await PostElectronicMaterialEntering({
+        isSubmit,
+        electronicDtoList: [electronicBomList.value[index]],
+        auditFlowId
+      })
+      if (success) ElMessage.success(`${isSubmit ? "提交" : "确认"}成功`)
+      // if (isSubmit) {
+      //   record.isEntering = true
+      // } else {
+      //   record.isSubmit = true
+      // }
+      fetchInitData()
+    })
+    //根据年将率计算
+  }
 }
 
 // 修改
@@ -263,10 +248,8 @@ const handleCalculation = async (row: any, index: number) => {
     const { success, result } = await PostElectronicMaterialCalculate(row)
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result || {}), isEdit: true }
-    console.log(success, "handleSubmit")
     tableLoading.value = false
   } catch (err) {
-    console.log
     ElMessage.error("计算失败~")
     tableLoading.value = false
   }
@@ -280,7 +263,6 @@ const handleCalculationIginalCurrency = async (row: any, index: number) => {
     if (!success && !result.length) throw Error()
     electronicBomList.value[index] = { ...(result || {}), isEdit: true }
     tableLoading.value = false
-    console.log(success, "handleSubmit")
   } catch (err) {
     console.log(err, "[根据原币计算 计算失败]")
     tableLoading.value = false
@@ -288,7 +270,7 @@ const handleCalculationIginalCurrency = async (row: any, index: number) => {
   }
 }
 
-watchEffect(() => {})
+watchEffect(() => { })
 </script>
 <style lang="scss">
 .margin-top {
