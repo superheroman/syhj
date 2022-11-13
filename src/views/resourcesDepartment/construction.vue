@@ -2,6 +2,7 @@
   <div class="margin-top">
     <el-row justify="end">
       <el-button m="2" type="primary" @click="queryModlueNumber">查看项目走量</el-button>
+      <ThreeDImage m="2" />
     </el-row>
     <div v-for="(item, bomIndex) in constructionBomList" :key="item.superTypeName">
       <el-card m="2" :header="item.superTypeName" v-loading="item.loading">
@@ -90,19 +91,29 @@
           <el-table-column prop="peopleName" label="确认人" />
           <el-table-column label="操作" fixed="right" width="200">
             <template #default="scope">
-              <el-button link :disabled="scope.row.isSubmit" @click="handleSubmit(scope.row, 0,bomIndex,scope.$index)" type="danger"
+              <el-button
+                link
+                :disabled="scope.row.isSubmit"
+                @click="handleSubmit(scope.row, 0, bomIndex, scope.$index)"
+                type="danger"
                 >确认</el-button
               >
               <el-button
                 v-if="scope.row.isEntering"
                 :disabled="scope.row.isSubmit"
                 link
-                @click="handleSubmit(scope.row, 1,bomIndex,scope.$index)"
+                @click="handleSubmit(scope.row, 1, bomIndex, scope.$index)"
                 type="warning"
               >
                 提交
               </el-button>
-              <el-button v-if="!scope.row.isEdit" :disabled="scope.row.isSubmit" link @click="handleEdit(scope.row, true)" type="primary">
+              <el-button
+                v-if="!scope.row.isEdit"
+                :disabled="scope.row.isSubmit"
+                link
+                @click="handleEdit(scope.row, true)"
+                type="primary"
+              >
                 修改
               </el-button>
               <el-button v-if="scope.row.isEdit" link @click="handleEdit(scope.row, false)">取消</el-button>
@@ -126,6 +137,8 @@
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount, onMounted, watchEffect } from "vue"
 import { ConstructionModel } from "./data.type"
+import ThreeDImage from "@/components/ThreeDImage/index.vue"
+
 import {
   GetStructural,
   PostStructuralMemberEntering,
@@ -222,22 +235,30 @@ const fetchModuleNumberData = async () => {
 }
 
 // 确认结构料单价行数据
-const handleSubmit = async (record: ConstructionModel, isSubmit: number, bomIndex: number,iginalCurrencyIndex: number) => {
-  if(isSubmit)
-  {
+const handleSubmit = async (
+  record: ConstructionModel,
+  isSubmit: number,
+  bomIndex: number,
+  iginalCurrencyIndex: number
+) => {
+  if (isSubmit) {
     //提交
-    await submitFun(record,isSubmit,bomIndex,iginalCurrencyIndex);
-  }else
-  {
+    await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
+  } else {
     //确认 先计算然后再提交
-    await handleCalculationIginalCurrency(record,bomIndex,iginalCurrencyIndex).then(async()=>{
-      await submitFun(record,isSubmit,bomIndex,iginalCurrencyIndex);
+    await handleCalculationIginalCurrency(record, bomIndex, iginalCurrencyIndex).then(async () => {
+      await submitFun(record, isSubmit, bomIndex, iginalCurrencyIndex)
     })
   }
 }
 
-const submitFun =  async (record: ConstructionModel, isSubmit: number,bomIndex: number,iginalCurrencyIndex: number) => {
-  const row=constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex];
+const submitFun = async (
+  record: ConstructionModel,
+  isSubmit: number,
+  bomIndex: number,
+  iginalCurrencyIndex: number
+) => {
+  const row = constructionBomList.value[bomIndex].structureMaterial[iginalCurrencyIndex]
   const { success } = await PostStructuralMemberEntering({
     isSubmit,
     structuralMaterialEntering: [{ ...row, productId }],
@@ -251,7 +272,6 @@ const submitFun =  async (record: ConstructionModel, isSubmit: number,bomIndex: 
   // } else {
   //   record.isSubmit = true
   // }
-
 }
 
 const fetchSopYear = async () => {

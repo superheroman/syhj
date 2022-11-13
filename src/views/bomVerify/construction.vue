@@ -1,5 +1,8 @@
 <template>
   <el-card class="wrap m-2" header="结构bom单价审核">
+    <div>
+      <ThreeDImage style="margin-left: 30px" />
+    </div>
     <el-card
       v-for="item in constructionBomList"
       :header="item.superTypeName"
@@ -102,6 +105,7 @@ import { getYears } from "../pmDepartment/service"
 import getQuery from "@/utils/getQuery"
 import { ElMessageBox } from "element-plus"
 import useJump from "@/hook/useJump"
+import ThreeDImage from "@/components/ThreeDImage/index.vue"
 
 const { jumpTodoCenter } = useJump()
 
