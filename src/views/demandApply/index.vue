@@ -225,7 +225,8 @@
           </el-table-column>
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.modelCountYearList[index].quantity" @input="modelCountYearListQuantitySum(row)" />
+              <el-input v-model="row.modelCountYearList[index].quantity" @input="modelCountYearListQuantitySum(row)"
+              oninput="value=value.replace(/[^\d]/g,'')" />
             </template>
           </el-table-column>
           <el-table-column label="模组总量" prop="modelTotal" width="180" :formatter="formatThousandths">
