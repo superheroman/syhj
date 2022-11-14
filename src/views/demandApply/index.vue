@@ -159,7 +159,8 @@
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="150">
             <template #default="{ row }">
               <!-- {{ row.pcsYearList[index] }} -->
-              <el-input v-model="row.pcsYearList[index].quantity" @change="pcsYearQuantitySum(row)" />
+              <el-input v-model="row.pcsYearList[index].quantity" @change="pcsYearQuantitySum(row)"
+               oninput="value=value.replace(/[^\d]/g,'')" />
             </template>
           </el-table-column>
           <el-table-column prop="rowSum" label="合计" width="150">
@@ -205,21 +206,21 @@
           </el-table-column>
           <el-table-column label="市场份额" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.marketShare">
+              <el-input  v-model="row.marketShare" oninput="value=value.replace(/[^0-9.]/g,'')">
                 <template #append>%</template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="模组搭载率" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.moduleCarryingRate">
+              <el-input v-model="row.moduleCarryingRate" oninput="value=value.replace(/[^0-9.]/g,'')">
                 <template #append>%</template>
               </el-input>
             </template>
           </el-table-column>
           <el-table-column label="单车产品数量" width="180">
             <template #default="{ row }">
-              <el-input v-model="row.singleCarProductsQuantity" />
+              <el-input v-model="row.singleCarProductsQuantity" oninput="value=value.replace(/[^\d]/g,'')" />
             </template>
           </el-table-column>
           <el-table-column :label="year + ''" v-for="(year, index) in state.yearCols" :key="year + ''" width="180">
@@ -335,7 +336,7 @@
           </el-table-column>
           <el-table-column label="目标价" width="180" fixed="left">
             <template #default="{ row }">
-              <el-input v-model="row.customerTargetPrice">
+              <el-input v-model="row.customerTargetPrice" oninput="value=value.replace(/[^0-9.]/g,'')">
                 <template #append>元</template>
               </el-input>
             </template>
@@ -351,7 +352,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.sensorPrice" placeholder="单价">
+                  <el-input v-model="row.sensorPrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -369,7 +370,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.lensPrice" placeholder="单价">
+                  <el-input v-model="row.lensPrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -387,7 +388,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.ispPrice" placeholder="单价">
+                  <el-input v-model="row.ispPrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -405,7 +406,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.serialChipPrice" placeholder="单价">
+                  <el-input v-model="row.serialChipPrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -423,7 +424,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.cablePrice" placeholder="单价">
+                  <el-input v-model="row.cablePrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -441,7 +442,7 @@
                   </el-select>
                 </template>
                 <template #append>
-                  <el-input v-model="row.ledPrice" placeholder="单价">
+                  <el-input v-model="row.ledPrice" placeholder="单价" oninput="value=value.replace(/[^0-9.]/g,'')">
                     <template #append>元</template>
                   </el-input>
                 </template>
@@ -522,7 +523,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="客户目标价（整套）:" prop="customerTargetPrice">
-              <el-input v-model="state.quoteForm.customerTargetPrice" />
+              <el-input v-model="state.quoteForm.customerTargetPrice" oninput="value=value.replace(/[^0-9.]/g,'')"/>
             </el-form-item>
           </el-col>
           <el-col :span="6">
