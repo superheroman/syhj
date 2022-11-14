@@ -27,7 +27,7 @@ import { useRoute } from "vue-router"
 import useJump from "@/hook/useJump"
 
 const route = useRoute()
-const { jumpTodoCenter } = useJump()
+const { closeSelectedTag } = useJump()
 
 let { trCheckType, auditFlowId } = getQuery()
 
@@ -68,7 +68,7 @@ const save = async (isAgree: boolean) => {
       })
       if (res.success) {
         ElMessage.success("操作成功")
-        jumpTodoCenter()
+        closeSelectedTag(route.path)
       }
     })
   }
