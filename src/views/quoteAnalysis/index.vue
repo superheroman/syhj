@@ -766,6 +766,8 @@ const init = async () => {
     data.allClientUnitPrice = productBoard.allClientUnitPrice
     data.allClientGrossMargin = productBoard.allClientGrossMargin
     data.projectBoard = projectBoard
+    data.allGrossMargin = productBoard.allOfferGrossMargin
+
     setData()
     fullscreenLoading.value = false
     loading.close()
