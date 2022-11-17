@@ -89,6 +89,23 @@
         <el-table-column prop="remark" label="备注" />
       </el-table>
     </el-card>
+
+    <el-card class="margin-top" header="检具费用">
+      <el-table
+        :data="data.qaqcDepartments"
+        style="width: 100%"
+        border
+        :summary-method="(val: any) => getMouldSummaries(val, '检具费用', 'cost')"
+        show-summary
+      >
+        <el-table-column type="index" width="50" />
+        <el-table-column prop="qc" label="检具名称" />
+        <el-table-column prop="unitPrice" label="检具单价" />
+        <el-table-column prop="count" label="检具数量" />
+        <el-table-column prop="cost" label="费用" />
+        <el-table-column prop="remark" label="备注" />
+      </el-table>
+    </el-card>
     <el-card class="margin-top" header="生产设备费用">
       <el-table
         :data="data.productionEquipmentCost"

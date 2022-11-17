@@ -30,13 +30,17 @@
         </el-table-column>
         <el-table-column label="报价金额" width="180" prop="offerMoney">
           <template #default="scope">
-            {{
+            <!-- {{
               (scope.row.offerMoney = formatThousandths(
                 null,
                 null,
                 scope.row.offerCoefficient * scope.row.pricingMoney
               ))
-            }}
+            }} -->
+            <div v-show="false">
+              {{ (scope.row.offerMoney = (scope.row.offerCoefficient * scope.row.pricingMoney).toFixed(2)) }}
+            </div>
+            {{ formatThousandths(null, null, scope.row.offerCoefficient * scope.row.pricingMoney) }}
           </template>
         </el-table-column>
         <el-table-column label="备注">

@@ -88,7 +88,7 @@
         <el-table-column label="含佣金的毛利率" prop="grossMarginCommission" :formatter="formatterP" />
       </el-table>
     </el-card>
-    <el-card header="费用表：" m="2">
+    <el-card header="NRE报价策略：" m="2">
       <el-table :data="data.marketingQuotationData.expensesStatement" border>
         <el-table-column type="index" width="100" />
         <el-table-column label="费用类别" prop="formName" />
@@ -98,6 +98,14 @@
         <el-table-column label="备注" prop="remark" />
       </el-table>
     </el-card>
+    <el-descriptions title="" border :column="2">
+      <el-descriptions-item label="核价金额合计">
+        {{ calculationNre("pricingMoney") }}
+      </el-descriptions-item>
+      <el-descriptions-item label="报价金额合计">
+        {{ calculationNre("offerMoney") }}
+      </el-descriptions-item>
+    </el-descriptions>
     <el-row justify="end" style="margin-top: 20px">
       <div v-if="data.userInfo.userJobs === '总经理'">
         <el-button type="primary" @click="handleGeneralManagerQuoteCheck(true)" v-havedone>同意</el-button>
@@ -132,7 +140,8 @@ const data = reactive<any>({
   developmentPlan: "",
   userInfo: JSON.parse(window.localStorage.getItem("user") || ""),
   marketingQuotationData: {
-    motionMessage: []
+    motionMessage: [],
+    expensesStatement: []
   },
   motionMessageSop: [],
   isShowBtn: false,
@@ -165,7 +174,7 @@ onBeforeMount(() => {
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
 })
 
-onMounted(() => {
+onMounted(async () => {
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
   initFetch()
   fetchSopYear()
@@ -300,6 +309,14 @@ const downLoad3DExploded = async () => {
     a.remove() //将a标签移除
   }
   // data.setVisible = false
+}
+// nre 合计
+const calculationNre = (key: string) => {
+  data.marketingQuotationData
+  const count = data.marketingQuotationData.expensesStatement.map((item: any) => item[key]) || []
+  if (!count.length) return 0
+  const total = count.reduce((a: number, b: number) => a + b)
+  return formatThousandths(null, null, total)
 }
 
 const toNREPriceList = () => {
