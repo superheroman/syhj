@@ -27,14 +27,8 @@
       </el-table-column>
     </el-table>
     <div class="role__btn-container">
-      <el-pagination
-        background
-        layout="prev, pager, next"
-        :total="data.total"
-        :page-size="data.pageSize"
-        v-model:currentPage="data.pageNo"
-        @update:current-page="handlePageChange"
-      />
+      <el-pagination background layout="prev, pager, next" :total="data.total" :page-size="data.pageSize"
+        v-model:currentPage="data.pageNo" @update:current-page="handlePageChange" />
     </div>
 
     <el-dialog v-model="data.dialogVisible" title="角色信息" @close="clearRoleForm">
@@ -47,12 +41,8 @@
         </el-form-item>
         <el-form-item label="权限选择" :label-width="data.formLabelWidth">
           <el-select v-model="data.roleForm.grantedPermissions" multiple>
-            <el-option
-              :value="item.name"
-              v-for="item in data.permissionList"
-              :key="item.name"
-              :label="item.displayName"
-            />
+            <el-option :value="item.name" v-for="item in data.permissionList" :key="item.name"
+              :label="item.displayName" />
           </el-select>
         </el-form-item>
       </el-form>
@@ -119,20 +109,36 @@ const data = reactive({
 })
 
 const saveUser = async () => {
-  let res: any = null
-  if (data.isEdit) {
-    res = await updateRole(data.roleForm)
-  } else {
-    res = await createRole(data.roleForm)
-  }
-  if (res.success) {
-    ElMessage({
-      type: "success",
-      message: "保存成功"
+  ElMessageBox.confirm(
+    '【如果有 待办未处理，要处理完再更改，否则系统流程会出错】',
+    '警告',
+    {
+      confirmButtonText: '仍然保存',
+      cancelButtonText: '取消',
+      type: 'warning',
+      center: true,
+    }
+  )
+    .then(async() => {
+      ElMessage({
+        type: 'success',
+        message: '保存成功',
+      })
+      let res: any = null
+      if (data.isEdit) {
+        res = await updateRole(data.roleForm)
+      } else {
+        res = await createRole(data.roleForm)
+      }
+      if (res.success) {
+        ElMessage({
+          type: "success",
+          message: "保存成功"
+        })
+        data.dialogVisible = false
+        search()
+      }
     })
-    data.dialogVisible = false
-    search()
-  }
 }
 const handleEdit = (index: number, row: role) => {
   data.isEdit = true
@@ -219,7 +225,7 @@ onMounted(async () => {
   search()
   //console.log('3.-组件挂载到页面之后执行-------onMounted')
 })
-watchEffect(() => {})
+watchEffect(() => { })
 // 使用toRefs解构
 // let { } = { ...toRefs(data) }
 defineExpose({
