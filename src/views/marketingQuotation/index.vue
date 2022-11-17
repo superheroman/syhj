@@ -155,7 +155,11 @@ const formatThousandths = (_record: any, _row: any, cellValue: any) => {
   return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 onBeforeMount(() => {
-  if (data.userInfo.userJobs === "总经理" || data.userInfo.userJobs === "运营") {
+  if (data.userInfo.userJobs === "总经理") {
+    data.isShowBtn = true
+  }
+  let userRole = data.userInfo.userRole.items.map((item: any) => item.name)
+  if (userRole.includes("财务部-财务参数录入员")) {
     data.isShowBtn = true
   }
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
