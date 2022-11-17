@@ -29,8 +29,8 @@
           </template>
         </el-table-column>
         <el-table-column label="报价金额" width="180" prop="offerMoney">
-          <template #default="{ row }">
-            {{ formatThousandths(null, null, row.offerCoefficient * row.pricingMoney) }}
+          <template #default="scope">
+            {{ scope.row.offerMoney=formatThousandths(null, null, scope.row.offerCoefficient * scope.row.pricingMoney) }}
           </template>
         </el-table-column>
         <el-table-column label="备注">
