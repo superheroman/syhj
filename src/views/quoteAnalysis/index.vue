@@ -30,7 +30,13 @@
         </el-table-column>
         <el-table-column label="报价金额" width="180" prop="offerMoney">
           <template #default="scope">
-            {{ scope.row.offerMoney=formatThousandths(null, null, scope.row.offerCoefficient * scope.row.pricingMoney) }}
+            {{
+              (scope.row.offerMoney = formatThousandths(
+                null,
+                null,
+                scope.row.offerCoefficient * scope.row.pricingMoney
+              ))
+            }}
           </template>
         </el-table-column>
         <el-table-column label="备注">
@@ -452,7 +458,7 @@ const formatterDialogTable = (_record: any, _row: any, cellValue: any) => {
 }
 
 const formatThousandths = (_record: any, _row: any, cellValue: any) => {
-  if (cellValue) {
+  if (typeof cellValue === "number") {
     return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
   } else {
     return 0
@@ -677,6 +683,7 @@ const save = async () => {
       })
       window.open(routeUrl.href, "_blank")
       ElMessage.success("操作成功")
+      router.go(0)
     }
   })
 }

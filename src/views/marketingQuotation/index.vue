@@ -99,8 +99,10 @@
       </el-table>
     </el-card>
     <el-row justify="end" style="margin-top: 20px">
-      <el-button type="primary" @click="handleGeneralManagerQuoteCheck(true)" v-havedone>同意</el-button>
-      <el-button type="danger" @click="handleGeneralManagerQuoteCheck(false)" v-havedone>拒绝</el-button>
+      <div v-if="data.userInfo.userJobs === '总经理'">
+        <el-button type="primary" @click="handleGeneralManagerQuoteCheck(true)" v-havedone>同意</el-button>
+        <el-button type="danger" @click="handleGeneralManagerQuoteCheck(false)" v-havedone>拒绝</el-button>
+      </div>
     </el-row>
   </el-card>
 </template>
@@ -128,6 +130,7 @@ const { auditFlowId = 1 }: any = getQuery()
 const data = reactive<any>({
   projectName: "",
   developmentPlan: "",
+  userInfo: JSON.parse(window.localStorage.getItem("user") || ""),
   marketingQuotationData: {
     motionMessage: []
   },
@@ -152,8 +155,7 @@ const formatThousandths = (_record: any, _row: any, cellValue: any) => {
   return (cellValue.toFixed(2) + "").replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, "$&,")
 }
 onBeforeMount(() => {
-  let userInfo = JSON.parse(window.localStorage.getItem("user") || "")
-  if (userInfo.userJobs === "总经理") {
+  if (data.userInfo.userJobs === "总经理" || data.userInfo.userJobs === "运营") {
     data.isShowBtn = true
   }
   //console.log('2.组件挂载页面之前执行----onBeforeMount')
