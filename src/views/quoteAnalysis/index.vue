@@ -543,8 +543,8 @@ const setData = () => {
       formatter: "{a}{b}{c}%"
     },
     data: [
-      Number(data.allClientGrossMargin).toFixed(2),
       Number(data.allInteriorGrossMargin).toFixed(2),
+      Number(data.allClientGrossMargin).toFixed(2),
       data.allGrossMargin?.toFixed(2) || 0
     ]
   })
@@ -593,8 +593,8 @@ const setData = () => {
         formatter: "{a}{b}{c}%"
       },
       data: [
-        Number(data.allClientGrossMargin).toFixed(2),
         Number(data.allInteriorGrossMargin).toFixed(2),
+        Number(data.allClientGrossMargin).toFixed(2),
         data.allGrossMargin?.toFixed(2) || 0
       ]
     })
