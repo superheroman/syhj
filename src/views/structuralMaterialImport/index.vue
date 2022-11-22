@@ -59,45 +59,45 @@
         <!-- <h5>物流基础信息</h5> -->
         <h6>外包装体积</h6>
         <el-form-item label="外包装长" prop="outerPackagingLength">
-          <el-input v-model="data.logisticsForm.outerPackagingLength">
+          <el-input v-model="data.logisticsForm.outerPackagingLength" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>cm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="外包装宽" prop="outerPackagingWidth">
-          <el-input v-model="data.logisticsForm.outerPackagingWidth">
+        <el-form-item label="外包装宽" prop="outerPackagingWidth" >
+          <el-input v-model="data.logisticsForm.outerPackagingWidth" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>cm</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="外包装高" prop="outerPackagingHeight">
+        <el-form-item label="外包装高" prop="outerPackagingHeight" oninput="value=value.replace(/[^0-9.]/g,'')">
           <el-input v-model="data.logisticsForm.outerPackagingHeight">
             <template #append>cm</template>
           </el-input>
         </el-form-item>
         <h6>重量</h6>
-        <el-form-item label="单个产品重量" prop="singleProductWeight">
-          <el-input v-model="data.logisticsForm.singleProductWeight">
+        <el-form-item label="单个产品重量" prop="singleProductWeight" >
+          <el-input v-model="data.logisticsForm.singleProductWeight" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>kg</template>
           </el-input>
         </el-form-item>
         <el-form-item label="单箱数量" prop="singleBoxQuantity">
-          <el-input v-model="data.logisticsForm.singleBoxQuantity">
+          <el-input v-model="data.logisticsForm.singleBoxQuantity"  oninput="value=value.replace(/[^\d]/g,'')">
             <template #append>pcs</template>
           </el-input>
         </el-form-item>
         <h5>包装基础信息</h5>
         <h6>内包装体积</h6>
         <el-form-item label="内包装长" prop="innerPackagingLength">
-          <el-input v-model="data.logisticsForm.innerPackagingLength">
+          <el-input v-model="data.logisticsForm.innerPackagingLength" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>mm</template>
           </el-input>
         </el-form-item>
         <el-form-item label="内包装宽" prop="innerPackagingWidth">
-          <el-input v-model="data.logisticsForm.innerPackagingWidth">
+          <el-input v-model="data.logisticsForm.innerPackagingWidth" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>mm</template>
           </el-input>
         </el-form-item>
         <el-form-item label="内包装高" prop="innerPackagingHeight">
-          <el-input v-model="data.logisticsForm.innerPackagingHeight">
+          <el-input v-model="data.logisticsForm.innerPackagingHeight" oninput="value=value.replace(/[^0-9.]/g,'')">
             <template #append>mm</template>
           </el-input>
         </el-form-item>
@@ -107,13 +107,13 @@
             <el-option label="否" value="0" />
           </el-select>
         </el-form-item>
-        <el-form-item label="每托盘箱数" prop="boxesPerPallet">
-          <el-input v-model="data.logisticsForm.boxesPerPallet">
+        <el-form-item label="每托盘箱数" prop="boxesPerPallet" >
+          <el-input v-model="data.logisticsForm.boxesPerPallet" oninput="value=value.replace(/[^\d]/g,'')">
             <template #append> 箱/托</template>
           </el-input>
         </el-form-item>
-        <el-form-item label="单箱包装数量" prop="quantityPerBox">
-          <el-input v-model="data.logisticsForm.quantityPerBox">
+        <el-form-item label="单箱包装数量" prop="quantityPerBox" >
+          <el-input v-model="data.logisticsForm.quantityPerBox" oninput="value=value.replace(/[^\d]/g,'')">
             <template #append> PCS/箱</template>
           </el-input>
         </el-form-item>
