@@ -82,6 +82,7 @@
         <el-table-column prop="moq" label="MOQ" width="150" />
         <el-table-column prop="rebateMoney" label="物料返利金额" width="150" />
         <el-table-column prop="remark" label="备注" />
+        <el-table-column label="ENCC码" prop="ECCNCode" />
         <el-table-column prop="peopleName" fixed="right" />
       </el-table>
       <el-descriptions :column="2" border>
